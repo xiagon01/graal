@@ -635,22 +635,20 @@ $(document).ready(function(){
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
                 <h2 id="graalvm-native-image">GraalVM Native Image</h2>
 
-<p><strong>GraalVM Native Image</strong> is the technology to ahead-of-time compile Java code to a
-standalone executable, called a <strong>native image</strong>. This executable – native
-image – includes the application, the libraries, the JDK and does not run on
-the Java VM, but includes necessary components like memory management and
-thread scheduling from a different virtual machine, called “Substrate VM”.
-<a href="https://github.com/oracle/graal/blob/master/substratevm/README.md">“Substrate VM”</a> is the
-name for the runtime components (like the garbage collector, thread scheduling
-etc.). The resulting program has faster startup time and lower runtime memory
-overhead compared to a Java VM.</p>
+<p><strong>GraalVM Native Image</strong> allows you to ahead-of-time compile Java code to a standalone executable,
+ called a <strong>native image</strong>. This executable includes the application, the
+ libraries, the JDK and does not run on the Java VM, but includes necessary
+ components like memory management and thread scheduling from a different
+ virtual machine, called “Substrate VM”. Substrate VM is the name for the
+ runtime components (like the deoptimizer, garbage collector, thread scheduling
+ etc.). The resulting program has faster startup time and lower runtime memory
+ overhead compared to a Java VM.</p>
 
-<p><strong>Native Image Generator</strong> or <code>native-image</code> is a utility that processes all the classes of your application,
-the classes of its dependencies, and the classes from the JDK standard library
-and statically analyses them to figure out which classes and methods are
-reachable and used during application execution. Then it passes all this
-reachable code as the input to the GraalVM compiler which ahead-of-time compiles
-it to the native binary.</p>
+<p><strong>Native Image Generator</strong> or <code>native-image</code> is a utility that processes all the classes of your application and their
+dependencies, including those from the JDK. It statically analyses these classes
+to determine which classes and methods are reachable and used during application
+execution. Then it passes all this reachable code as the input to the GraalVM
+compiler which ahead-of-time compiles it to the native binary.</p>
 
 <p>GraalVM <code>native-image</code> supports JVM-based languages, e.g., Java, Scala,
 Clojure, Kotlin. The resulting native image can, optionally, execute dynamic
@@ -788,7 +786,7 @@ and fields at run time when they are accessed the first time, instead of as an e
 
 <h3 id="non-standard-options">Non-standard Options</h3>
 
-<p>Get acquainted with the non-standard native image building options, that are subject to change without notice:</p>
+<p>Get acquainted with the non-standard native image building options, that are subject to change through a deprecation cycle:</p>
 
 <ul>
   <li>
@@ -834,12 +832,11 @@ and fields at run time when they are accessed the first time, instead of as an e
 properties file, a native image will use the defaults defined in there on each
 invocation.</p>
 
-<!-- Here is an example of configuration file (saved as `~/.native-image/default.properties`) :
+<p>Here is an example of configuration file (saved as <code>~/.native-image/default.properties</code>) :</p>
 
-```
-NativeImageArgs = --configurations-path /home/user/custom-image-configs \
-                  -g
-``` -->
+<pre><code>NativeImageArgs = --configurations-path /home/user/custom-image-configs \
+                  -O1
+</code></pre>
 
 <p>If the user has a configuration file and export <code>NATIVE_IMAGE_CONFIG_FILE=$HOME/.native-image/default.properties</code> in <code>~/.bash_profile</code>, every time the native image gets used, it will implicitly use the arguments
 specified as <code>NativeImageArgs</code>, plus the arguments specified on command line.</p>

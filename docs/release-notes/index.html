@@ -559,11 +559,10 @@ in the <code>bin</code> directory, as for the previous releases.</p>
 
 <p>The performance and startup impact of this change is negligible on all benchmarks that we have.</p>
 
-<p>This change was made to improve user experience: there is no need to
-to write substitutions and to deal with instances of unsupported
-classes ending up in the image heap. Their applications, given the right
-configuration for reflection, proxies, etc., should work without performance
-degradation.</p>
+<p>This change was made to improve user experience: there is no need to write
+substitutions and to deal with instances of unsupported classes ending up in the
+image heap. Their applications, given the right configuration for reflection,
+proxies, etc., should work without performance degradation.</p>
 
 <p>To allow framework authors and end users to keep the startup time at minimum we
 improved functionality of <code>--initialize-at-build-time</code> and

@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../index-all.html">Index</a></li>
 <li><a href="../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>1.0.0-rc18-dev</b><br>6a18d9ddacd8eecb0ae4877f687e171889939c0d</div>
+<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>1.0.0-rc18-dev</b><br>0dfbb44b282933acb6eebe90998228703a98a24d</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -348,7 +348,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
  for details about pre-initialization for language implementers.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -519,7 +519,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Graal <a href="../../../org/graalvm/polyglot/Engine.html" title="class in org.graalvm.polyglot"><code>Engine</code></a> being used by this context</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -557,7 +557,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the language of the given source is not installed or the
              <a href="../../../org/graalvm/polyglot/Source.html#getMimeType--"><code>MIME type</code></a> is not supported with the language.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -591,7 +591,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is already closed and the current thread is not
              allowed to access it, or if the given language is not installed.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -617,7 +617,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if context is already closed.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -640,7 +640,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="../../../org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></code> - in case the lazy initialization failed due to a guest language
              error.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -664,7 +664,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the language does not exist or is not accessible.</dd>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is already closed.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -801,7 +801,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is already closed</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/Value.html#as-java.lang.Class-"><code>Value.as(Class)</code></a></dd>
 </dl>
@@ -825,7 +825,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is already <a href="../../../org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</dd>
 <dd><code><a href="../../../org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></code> - if a language has denied execution on the current thread.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/Context.html#leave--"><code>leave a context.</code></a></dd>
 </dl>
@@ -842,7 +842,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -857,7 +857,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -874,7 +874,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is already closed or if the context was not
              <a href="../../../org/graalvm/polyglot/Context.html#enter--"><code>entered</code></a> on the current thread.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/Context.html#enter--"><code>enter a context.</code></a></dd>
 </dl>
@@ -909,7 +909,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is still running and cancelIfExecuting is
              <code>false</code></dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/Engine.html#close--"><code>close an engine.</code></a></dd>
 </dl>
@@ -939,7 +939,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dd><code><a href="../../../org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></code> - in case the close failed due to a guest language error.</dd>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if the context is currently executing on another thread.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/Engine.html#close--"><code>close an engine.</code></a></dd>
 </dl>
@@ -977,7 +977,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if no context is currently entered.</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -996,7 +996,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new context</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -1015,7 +1015,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a builder that can create a context</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>1.0</dd>
+<dd>19.0</dd>
 </dl>
 </li>
 </ul>
@@ -1043,7 +1043,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoClose
 <li><a href="../../../index-all.html">Index</a></li>
 <li><a href="../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>1.0.0-rc18-dev</b><br>6a18d9ddacd8eecb0ae4877f687e171889939c0d</div>
+<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>1.0.0-rc18-dev</b><br>0dfbb44b282933acb6eebe90998228703a98a24d</div>
 </div>
 <div class="subNav">
 <ul class="navList">

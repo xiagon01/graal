@@ -657,7 +657,7 @@ itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
 <code>native-image</code> of guest languages used by an application, specify
 <code>--language:&lt;languageId&gt;</code> for each guest language used (e.g., <code>--language:js</code>).</p>
 
-<p><strong>Important</strong>: GraalVM Native Image is available as an early access feature. This means its
+<p><strong>Important</strong>: GraalVM Native Image is available as an early adopter plugin. This means its
 functionality is subject to change while its specification is being developed by
 the Java community.</p>
 
@@ -668,17 +668,15 @@ This functionality can be added to the core installation with <a href="/docs/ref
 <pre><code>gu install native-image
 </code></pre>
 <p>After this additional step, the <code>native-image</code> executable will be in the <code>bin</code>
-directory, as for the previous releases. Use it normally.</p>
+directory, as for the previous releases.</p>
 
 <p>Take a look at the <a href="/docs/examples/native-list-dir/">native image generation</a> or <a href="/docs/examples/java-kotlin-aot/">compiling a Java and Kotlin app ahead-of-time</a> samples.</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
 
-<p>To build a native image of your program use the <code>native-image</code> utility located
-in the <code>bin</code> directory of the GraalVM distribution. For compilation
-<code>native-image</code> depends on the local toolchain, so please make sure:
-<code>glibc-devel</code>, <code>zlib-devel</code> (header files for the C library and <code>zlib</code>) and
-<code>gcc</code> are available on your system.</p>
+<p>For compilation <code>native-image</code> depends on the local toolchain, so please make
+sure: <code>glibc-devel</code>, <code>zlib-devel</code> (header files for the C library and <code>zlib</code>)
+and <code>gcc</code> are available on your system.</p>
 
 <p>Another prerequisite to consider is the maximum heap size. Physical memory for
 running a JVM-based application may be insufficient to build a native image. For

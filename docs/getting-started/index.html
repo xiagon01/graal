@@ -544,29 +544,22 @@ package. GraalVM environment can be extended with:</p>
 note, unlike Java HotSpot VM or OpenJDK distributions for macOS that come as a
 <em>.dmg</em> file, GraalVM does not provide the installation wizard.</p>
 
-<ul>
+<ol>
   <li>Navigate to <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">Oracle Technology Network</a> Downloads page and accept the license agreement.</li>
-  <li>Select and download <strong>GraalVM based on JDK8, preview for macOS</strong>.</li>
-  <li>Extract the archive to your file system. To extract the file to the current
-directory from the console, type:
+  <li>Select and download <strong>Oracle GraalVM Enterprise Edition based on JDK8 for macOS (19.0.0)</strong>.</li>
+  <li>Extract the archive to your file system. To extract the file to the current directory from the console, type:
 <code>$ tar -xvf archive.tar.gz</code></li>
-  <li>There can be multiple JDKs installed on the macOS system and the final step is
-to configure the runtime environment.
+  <li>There can be multiple JDKs installed on the macOS system and the final step is to configure the runtime environment.
     <ul>
-      <li>Add the GraalVM <code>bin</code> folder to the <code>PATH</code> environment variable:
-<code>$ export PATH=&lt;path to GraalVM&gt;/Contents/Home/bin:$PATH</code></li>
-    </ul>
-
-    <p>Verify whether you are using GraalVM with the echo command: <code>$ echo $PATH</code>.</p>
-    <ul>
+      <li>Add the GraalVM <code>bin</code> folder to the <code>PATH</code> environment variable: <code>$ export PATH=&lt;path to GraalVM&gt;/Contents/Home/bin:$PATH</code>. Verify whether you are using GraalVM with the echo command: <code>$ echo $PATH</code>.</li>
       <li>Set the <code>JAVA_HOME</code> environment variable to resolve to the GraalVM installation directory:
-<code>$ export JAVA_HOME=&lt;path to GraalVM&gt;/Contents/Home</code></li>
+  <code>$ export JAVA_HOME=&lt;path to GraalVM&gt;/Contents/Home</code>.</li>
     </ul>
   </li>
   <li>You can also specify GraalVM as the JRE or JDK installation in your Java IDE.</li>
-</ul>
+</ol>
 
-<p>Optionally set the JAVA_HOME environment variable to resolve to the GraalVM installation directory. You can also specify GraalVM as the JRE or JDK installation in your Java IDE.</p>
+<p>Optionally set the <code>JAVA_HOME</code> environment variable to resolve to the GraalVM installation directory. You can also specify GraalVM as the JRE or JDK installation in your Java IDE.</p>
 
 <p><strong>Note on macOS java_home command</strong></p>
 

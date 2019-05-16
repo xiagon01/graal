@@ -1849,7 +1849,7 @@ host languages. As a result, you can pass Java objects to guest languages.</p>
 guest languages can access primitive Java values, objects, arrays, and
 functional interfaces.</p>
 
-<p>To permit guest languages to access any public method or field of a Java 
+<p>To permit guest languages to access any public method or field of a Java
 object, set <code>allowAllAccess(true)</code> when the context is built. In this mode, the guest
 language code must be fully trusted, as it can access other not explicitly exported Java methods
 using reflection. A <a href="/docs/reference-manual/embed#run-less-trusted-code">later section</a> describes how to run less trusted code with the Polyglot API.</p>
@@ -3283,12 +3283,8 @@ The following access parameters may be configured:</p>
 <h4 id="reliable-timeouts">Reliable Timeouts</h4>
 
 <p>The Polyglot API lets you reliably cancel guest language execution after a
-timeout interval to protect against malicious code. Note that a similar security
-feature for memory allocation is planned for a future version of the Polyglot
-API.</p>
-
-<p>Use the code example in this section with your polyglot application to see how
-malicious code can be reliably canceled.</p>
+timeout interval. Use the code example in this section with your polyglot
+application to see how less trusted code, e.g. an infinite while loop, can be reliably canceled.</p>
 
 <div class="tabs-below">
 
@@ -3324,7 +3320,7 @@ malicious code can be reliably canceled.</p>
 <span class="c1">// BEGIN-SNIPPET</span>
 <span class="k">try</span> <span class="o">(</span><span class="n">Context</span> <span class="n">context</span> <span class="o">=</span> <span class="n">Context</span><span class="o">.</span><span class="na">create</span><span class="o">())</span> <span class="o">{</span>
     <span class="n">context</span><span class="o">.</span><span class="na">initialize</span><span class="o">(</span><span class="s">"js"</span><span class="o">);</span>
-    
+
     <span class="n">Timer</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
     <span class="n">timer</span><span class="o">.</span><span class="na">schedule</span><span class="o">(</span><span class="k">new</span> <span class="n">TimerTask</span><span class="o">()</span> <span class="o">{</span>
         <span class="nd">@Override</span>
@@ -3332,10 +3328,10 @@ malicious code can be reliably canceled.</p>
             <span class="n">context</span><span class="o">.</span><span class="na">close</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span> <span class="mi">1000</span><span class="o">);</span>
-    
+
     <span class="k">try</span> <span class="o">{</span>
-        <span class="n">String</span> <span class="n">maliciousCode</span> <span class="o">=</span> <span class="s">"while(true);"</span><span class="o">;</span>
-        <span class="n">context</span><span class="o">.</span><span class="na">eval</span><span class="o">(</span><span class="s">"js"</span><span class="o">,</span> <span class="n">maliciousCode</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">lessTrustedCode</span> <span class="o">=</span> <span class="s">"while(true);"</span><span class="o">;</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">eval</span><span class="o">(</span><span class="s">"js"</span><span class="o">,</span> <span class="n">lessTrustedCode</span><span class="o">);</span>
         <span class="k">assert</span> <span class="kc">false</span><span class="o">;</span>
     <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">PolyglotException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="na">isCancelled</span><span class="o">();</span>
@@ -3416,7 +3412,7 @@ the execution from being canceled during context initialization.</li>
   <li>To close the context, a new <code>TimerTask</code> is scheduled to run after one
 second. The <code>true</code> parameter to <code>close</code> indicates that the execution should be
 canceled if it is currently running.</li>
-  <li>Malicious code, an infinite while loop, is evaluated. The malicious code will
+  <li>An infinite while loop is evaluated. This code will
 never complete. For this reason, the timer task closes and cancels the
 execution. This scenario causes a <code>PolyglotException</code> to be thrown.</li>
   <li>Finally, in the exception catch block, the exception is verified as
@@ -3443,7 +3439,7 @@ $ ./HelloPolyglot
 <p>Accessing host Java code from the guest application requires Java reflection in order to work.
 When reflection is used within a native image, the <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">reflection configuration file</a> is required.</p>
 
-<p>For this example we use JavaScript to show host access with native images. 
+<p>For this example we use JavaScript to show host access with native images.
 Copy the following code in a new file named <code>AccessJavaFromJS.java</code>.</p>
 
 <pre><code class="language-java">import org.graalvm.polyglot.*;
@@ -3470,7 +3466,7 @@ public class AccessJavaFromJS {
                    " &amp;&amp; javaObj.arr[1]     == 42"          +
                    " &amp;&amp; javaObj.ret42()    == 42")
                .asBoolean();
-            System.out.println("Valid " + valid); 
+            System.out.println("Valid " + valid);
         }
     }
 }
@@ -3580,7 +3576,7 @@ for (;;) {
 
 <h2 id="step-through-with-execution-listeners">Step through with Execution Listeners</h2>
 <p>GraalVM Polyglot API allows to instrument the execution of guest languages through <a href="http://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/management/ExecutionListener.html">ExecutionListener class</a>. For example, it lets you attach an execution listener that is invoked for every statement of the guest language program. Execution listeners
-are designed as simple API for polyglot embedders and may become handy in, e.g., single-stepping through the program to detect potentially malicious code by counting the number of statements executed.</p>
+are designed as simple API for polyglot embedders and may become handy in, e.g., single-stepping through the program to detect less trusted code by counting the number of statements executed.</p>
 
 <pre><code class="language-java">import org.graalvm.polyglot.*;
 import org.graalvm.polyglot.management.*;

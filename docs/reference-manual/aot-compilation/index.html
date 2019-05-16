@@ -694,18 +694,22 @@ baseline. This mode respects <code>-Xmx</code> arguments additionally.</p>
 using the familiar option from the <code>java</code> launcher: <code>-cp</code> is followed by a list
 of directories or .jar files, separated by <code>:</code>. The name of the class containing
 the <code>main</code> method is the last argument; or you can use <code>-jar</code> and provide a .jar
-file that specifies the main method in its manifest.</p>
-
-<p>Go over the <code>native-image</code> command line options that may be useful:</p>
+file that specifies the main method in its manifest. The syntax of the <code>native-image</code> command is:</p>
 
 <ul>
   <li>
-    <p><code>native-image [options] class</code> builds an executable file for a class in the current working directory. Invoking it executes the native-compiled code of that class.</p>
+    <p><code>native-image [options] class</code> to build an executable file for a class in the
+current working directory. Invoking it executes the native-compiled code of that
+class.</p>
   </li>
   <li>
-    <p><code>native-image [options] -jar jarfile</code> builds an image for a jar file.</p>
+    <p><code>native-image [options] -jar jarfile</code> to build an image for a jar file.</p>
   </li>
 </ul>
+
+<p>There is a command-line help available. Run <code>native-image --help</code> to get
+commands overview and <code>native-image --help-extra</code> to print help on non-standard
+options.</p>
 
 <p>You may provide additional options to the native image building:</p>
 
@@ -715,47 +719,66 @@ file that specifies the main method in its manifest.</p>
 help to search for class files through separated list of directories, JAR archives, and ZIP archives;</p>
   </li>
   <li>
+    <p><code>-D&lt;name&gt;=&lt;value&gt;</code> sets a system property for the JVM running the image generator;</p>
+  </li>
+  <li>
+    <p><code>-J&lt;flag&gt;</code> passes <code>&lt;flag&gt;</code> directly to the JVM running the image generator;</p>
+  </li>
+  <li>
+    <p><code>-O&lt;level&gt;</code> 0 – no optimizations, 1 – basic optimizations (default);</p>
+  </li>
+  <li>
+    <p><code>-ea</code> and <code>-da</code> enables or disables assertions in the generated image;</p>
+  </li>
+  <li>
+    <p><code>--allow-incomplete-classpath</code> allows image building with an incomplete class path and reports type resolution errors at run time when they are accessed the first time, instead of during image building;</p>
+  </li>
+  <li>
+    <p><code>--auto-fallback</code> builds a stand-alone image if possible, which is a default setting, <code>--no-fallback</code> builds a stand-alone image or reports a failure, and <code>--force-fallback</code> forces building of a fallback image;</p>
+  </li>
+  <li>
+    <p><code>--enable-all-security-services</code> adds all security service classes to the generated image;</p>
+  </li>
+  <li>
+    <p><code>--enable-http</code> or <code>--enable-https</code> enables http or https support in the generated image;</p>
+  </li>
+  <li>
+    <p><code>--enable-url-protocols</code> provides  a list of comma separated URL protocols to enable;</p>
+  </li>
+  <li>
+    <p><code>--features</code> provides a comma-separated list of fully qualified feature implementation classes;</p>
+  </li>
+  <li>
+    <p><code>--initialize-at-build-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses during image building;</p>
+  </li>
+  <li>
+    <p><code>--initialize-at-run-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses at run time and not during image building;</p>
+  </li>
+  <li>
+    <p><code>--report-unsupported-elements-at-runtime</code> reports usage of unsupported methods
+and fields at run time when they are accessed the first time, instead of as an error during image building;</p>
+  </li>
+  <li>
     <p><code>--shared</code>  builds shared library;</p>
   </li>
   <li>
     <p><code>--static</code>  builds statically linked executable (requires static libc and zlib) (since 1.0-rc2);</p>
   </li>
   <li>
-    <p><code>--initialize-at-build-time=&lt;comma separated list of class/package names&gt;</code> initializes classes during image building;</p>
+    <p><code>--verbose</code> enables verbose output.</p>
+  </li>
+</ul>
+
+<p><strong>Important:</strong> The following native image options are available only with GraalVM Enterprise Edition:</p>
+<ul>
+  <li>
+    <p><code>-g</code> enables the debugging info generation;</p>
   </li>
   <li>
-    <p><code>--initialize-at-run-time=&lt;comma separated list of class/package names&gt;</code> initializes classes at run time;</p>
+    <p><code>--pgo-instrument</code> builds an instrumented native image with profile-guided optimization data collected in the  <code>default.iprof</code> file, if nothing else is specified;</p>
   </li>
   <li>
-    <p><code>-D&lt;name&gt;=&lt;value&gt;</code>  sets a system property;</p>
-  </li>
-  <li>
-    <p><code>-J&lt;flag&gt; passes &lt;flag&gt;</code> directly to the JVM running the image generator;</p>
-  </li>
-  <li>
-    <p><code>-g</code> enables debug info generation;</p>
-  </li>
-  <li>
-    <p><code>-O&lt;level&gt;</code> 0 - no optimizations, 1 - basic optimizations (default);</p>
-  </li>
-  <li>
-    <p><code>-ea</code>  enables assertions in the generated image;</p>
-  </li>
-  <li>
-    <p><code>--verbose</code> enables verbose output;</p>
-  </li>
-  <li>
-    <p><code>--version</code> prints product version and exits;</p>
-  </li>
-  <li>
-    <p><code>--help</code> prints the help message;</p>
-  </li>
-  <li>
-    <p><code>--help-extra</code> prints the help message on non-standard options;</p>
-  </li>
-  <li>
-    <p><code>--report-unsupported-elements-at-runtime</code> reports usage of unsupported methods
-and fields at run time when they are accessed the first time, instead of as an error during image building.</p>
+    <p><code>--pgo</code> provides a comma-separated list of files from which to read the data collected for profile-guided optimization of ahead-of-time compiled code.</p>
   </li>
 </ul>
 
@@ -764,6 +787,13 @@ and fields at run time when they are accessed the first time, instead of as an e
 <p>Macro-options are mainly helpful for polyglot capabilities of native images:</p>
 
 <ul>
+  <li>
+    <p><code>--language:nfi</code> to make Truffle Native Function Interface language available;</p>
+  </li>
+  <li>
+    <p><code>--language:regex</code> to make Truffle Regular Expression engine available that
+  exposes regular expression functionality in GraalVM supported languages;</p>
+  </li>
   <li>
     <p><code>--language:python</code> to make sure Python is available as a language for the image;</p>
   </li>
@@ -777,20 +807,28 @@ and fields at run time when they are accessed the first time, instead of as an e
     <p><code>--language:ruby</code> to make sure Ruby is available as a language for the image;</p>
   </li>
   <li>
-    <p><code>--tool:chromeinspector</code>  adds truffle debugging support to a truffle-language image;</p>
+    <p><code>--language:R</code>  to make sure R is available as a language for the image;</p>
   </li>
   <li>
-    <p><code>--tool:profiler</code> adds truffle profiling support to a truffle-language image.</p>
+    <p><code>--tool:chromeinspector</code>  adds debugging support to a Truffle framework based language image;</p>
+  </li>
+  <li>
+    <p><code>--tool:profiler</code> adds profiling support to a Truffle framework based language image.</p>
   </li>
 </ul>
 
+<p>Please note, the <code>--language:python</code>, <code>--language:ruby</code> and <code>--language:R</code> polyglot macro options become available once the corresponding languages engines are added to the base GraalVM installation with GraalVM Updater tool:</p>
+<pre><code>gu install python
+gu install ruby
+gu install R
+</code></pre>
 <h3 id="non-standard-options">Non-standard Options</h3>
 
 <p>Get acquainted with the non-standard native image building options, that are subject to change through a deprecation cycle:</p>
 
 <ul>
   <li>
-    <p><code>--no-server</code> tells to not use image-build server;</p>
+    <p><code>--no-server</code> tells to not use server-based image building;</p>
   </li>
   <li>
     <p><code>--server-list</code> lists current image-build servers;</p>
@@ -802,15 +840,23 @@ and fields at run time when they are accessed the first time, instead of as an e
     <p><code>--server-cleanup</code> removes stale image-build servers entries;</p>
   </li>
   <li>
-    <p><code>--server-shutdown</code> shutdowns image-build servers under current session ID;</p>
+    <p><code>--server-shutdown</code> shuts down image-build servers under current session ID;</p>
   </li>
   <li>
-    <p><code>--server-shutdown-all</code> shutdown all image-build servers;</p>
+    <p><code>--server-shutdown-all</code> shuts down all image-build servers;</p>
   </li>
   <li>
     <p><code>--server-session=&lt;custom-session-name&gt;</code> uses custom session name instead
    of system provided session ID of the calling process;</p>
   </li>
+  <li>
+    <p><code>--verbose-server</code> enables verbose output for image-build server handling.</p>
+  </li>
+</ul>
+
+<h3 id="server-side-options">Server-side Options</h3>
+
+<ul>
   <li>
     <p><code>--debug-attach[=&lt;port&gt;]</code> attaches to debugger during image building (default  port is 8000);</p>
   </li>
@@ -824,7 +870,10 @@ and fields at run time when they are accessed the first time, instead of as an e
     <p><code>--expert-options-all</code>  lists all image build options for experts (to be used at your own risk);</p>
   </li>
   <li>
-    <p><code>--configurations-path &lt;search path of option-configuration directories&gt;</code> a separated list of directories to be treated as option-configuration directories.</p>
+    <p><code>--configurations-path &lt;search path of option-configuration directories&gt;</code> a separated list of directories to be treated as option-configuration directories;</p>
+  </li>
+  <li>
+    <p><code>-V&lt;key&gt;=&lt;value&gt;</code> provides values for placeholders in native-image.properties files.</p>
   </li>
 </ul>
 

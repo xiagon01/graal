@@ -720,7 +720,7 @@ tunes the polyglot engine towards latency or throughput.
   <code>economy</code> if not specified otherwise.</li>
     </ul>
   </li>
-  <li><code>-XX:-UseJVMCINative Library</code>: Disables use of <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a>. Instead, the GraalVM compiler is executed as classes loaded into
+  <li><code>-XX:-UseJVMCINativeLibrary</code>: Disables use of <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a>. Instead, the GraalVM compiler is executed as classes loaded into
 the HotSpot heap. This will delay the time to reach peak performance as the compiler
 itself needs to be compiled before it produces code quickly. This mode allows you to
 <a href="/docs/reference-manual/languages/jvm/#troubleshooting-graal">debug the GraalVM compiler with a Java debugger</a>.</li>

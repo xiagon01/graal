@@ -55,7 +55,7 @@ tunes the polyglot engine towards latency or throughput.
     startup but less optimal throughput. This mode uses the compiler configuration
     `economy` if not specified otherwise.
 
-* `-XX:-UseJVMCINative Library`: Disables use of [libgraal](https://github.com/oracle/graal/tree/master/compiler#libgraal). Instead, the GraalVM compiler is executed as classes loaded into
+* `-XX:-UseJVMCINativeLibrary`: Disables use of [libgraal](https://github.com/oracle/graal/tree/master/compiler#libgraal). Instead, the GraalVM compiler is executed as classes loaded into
 the HotSpot heap. This will delay the time to reach peak performance as the compiler
 itself needs to be compiled before it produces code quickly. This mode allows you to
 [debug the GraalVM compiler with a Java debugger]({{ "/docs/reference-manual/languages/jvm/#troubleshooting-graal" | relative_url }}).
@@ -64,7 +64,7 @@ itself needs to be compiled before it produces code quickly. This mode allows yo
 
 * `-Dgraal.UsePriorityInlining=true`: This can be used to disable use of the advanced inlining
 algorithm that favors throughput over compilation speed. **This option is only available in
-GraalVM EE**.   
+GraalVM EE**.
 * `-Dgraal.Vectorization=true`: This can be used to disable the auto vectorization optimization.
 **This option is only available in GraalVM EE**.
 * `-Dgraal.TraceInlining=false`: Enables tracing of inlining decisions. This can be used

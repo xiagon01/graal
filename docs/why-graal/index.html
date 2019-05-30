@@ -566,6 +566,19 @@ to run JavaScript, using browserify to execute Node.js modules, and to write
 extensions in Python. Note, the current Python implementation is experimental at
 the moment.</p>
 
+<h2 id="for-microservices-frameworks">For Microservices Frameworks</h2>
+
+<p>GraalVM <a href="/docs/reference-manual/aot-compilation/">Native Image</a>, currently available as an early adopter capability, works with many different Java microservices frameworks.
+Several projects have already accepted this technology as a platform for their
+applications: <a href="https://quarkus.io/get-started/">Quarkus</a>, <a href="https://docs.micronaut.io/latest/guide/index.html#graal">Micronaut</a>, <a href="https://medium.com/oracledevs/helidon-flies-faster-with-graalvm-eea85287d2dc">Helidon</a>. For these frameworks GraalVM native
+images significantly reduce the runtime memory requirements compared to running
+on HotSpot. We believe that GraalVM Native Image technology can become the best
+way for deploying cloud native applications.</p>
+
+<p><img src="/resources/img/ms_memory_footprint.png" alt="microservices" /></p>
+
+<p><img src="/resources/img/ms_startup_time.png" alt="microservices" /></p>
+
 <h2 id="for-your-platform">For Your Platform</h2>
 
 <p>We encourage the development of GraalVM embeddings similar to our own
@@ -623,6 +636,7 @@ via connecting their own programming languages, tools, or platforms.</p>
             <ul class="footer-list">
               <li class="footer-list__item"><a href="/docs/getting-started">Getting Started</a></li>
               <li class="footer-list__item"><a href="/docs/reference-manual">Reference Manual</a></li>
+              <li class="footer-list__item"><a href="https://www.graalvm.org/sdk/javadoc/">GraalVM SDK Javadoc</a></li>
               <li class="footer-list__item"><a href="/docs/release-notes/">Release Notes</a></li>
               <li class="footer-list__item"><a href="/downloads">Downloads</a></li>
             </ul>

@@ -9,7 +9,7 @@
 
   <title>
     
-      JVM Languages Reference
+      Scala
     
   </title>
   <meta
@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/languages/jvm/">
+  <link rel="canonical" href="https://www.graalvm.org/scala/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -255,767 +255,160 @@
 
 
       <main  class="content"   aria-label="Content">
-        <div class="wrapper wrapper-content">
-  <article class="docs">
-
-  <div class="container-fluid container-fluid--custom-sm">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-          <div class="row d-flex flex-wrap">
-            <div class="col-sm-3 col-bg">
-              <div class="sidebar-wrap">
-                <div class="sidebar">
-                  
-<div class="toc-floating">
-
-
-<script>
-var sidebar = document.currentScript.parentElement;
-
-// 
-//   $(document).ready(function(){
-//     $('.sidebar-wrap').stickySidebar({
-//       topSpacing: 74,
-//       bottomSpacing: 40
-//     });
-//   });
-//
-// 
-
-
-$(document).ready(function(){
-  var header = $('.header').height();
-  var invisibleBlock;
-
-  $("#content-wrapper h1, #content-wrapper h2").each(function() {
-    invisibleBlock = $(this).before("<div class='anchor' id="+ $(this).attr("id") +"></div>");
-  });
-
-  $(window).scroll(function() {
-    var lastitem = null;
-    $("#content-wrapper h1, #content-wrapper h2").each(function() {
-      var heading = $(this);
-      var position = (heading.position().top - heading.height()) - $(window).scrollTop();
-      var listitem = $(sidebar).find("li").filter(function() {
-        return $(this).find("a").attr("href") == "#" + heading.attr("id");
-      });
-      listitem.removeClass("toc-bullets-focused");
-      if (position <= 0) {
-        lastitem = listitem;
-      }
-    });
-    if (lastitem != null) lastitem.addClass("toc-bullets-focused");
-  });
-});
-
-</script>
-
-<ul class="toc-bullets">
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/why-graal/">
-            Why GraalVM?
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/getting-started/">
-            Getting Started
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/examples/">
-            Examples
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/reference-manual/compatibility/">
-            Compatibility
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/release-notes/">
-            Release Notes
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/reference-manual/">
-            Reference Manual
-          </a>
-        </li>
-
-
-        
-
-
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/graal-updater/">
-              GraalVM Updater
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/languages/js/">
-              JavaScript &amp; Node.js
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub toc-bullets-highlight">
-          
-            
-            <a href="/docs/reference-manual/languages/jvm/">
-              JVM Languages Reference
-            </a>
-          </li>
-
-          
-            <div>
-    <script>
-      var scriptElement = document.currentScript;
-      var div = $(scriptElement.parentElement);
-      $(window).on("load", function() {
-        $("#content-wrapper h1, #content-wrapper h2").each(function() {
-          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
-          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
-          a.text($(this).text());
-          li.append(a);
-          div.append(li);
-        });
-      });
-    </script>
+        <div class="home-banner" style="background-image: url(/resources/img/unite.svg); background-size: cover">
+  <div class="home-banner__content">
+    <div class="row align-items-center">
+      <div class="col-md-4 text-center mb-3 mb-md-0">
+        <div class="scala"><svg height="64" width="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a"><stop offset="0" stop-color="#656565"/><stop offset="1" stop-color="#010101"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="13.528" x2="88.264" xlink:href="#a" y1="-36.176" y2="-36.176"/><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="13.528" x2="88.264" xlink:href="#a" y1="3.91" y2="3.91"/><linearGradient id="d"><stop offset="0" stop-color="#9f1c20"/><stop offset="1" stop-color="#ed2224"/></linearGradient><linearGradient id="e" gradientUnits="userSpaceOnUse" x1="13.528" x2="88.264" xlink:href="#d" y1="-55.974" y2="-55.974"/><linearGradient id="f" gradientUnits="userSpaceOnUse" x1="13.528" x2="88.264" xlink:href="#d" y1="-15.87" y2="-15.87"/><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="13.528" x2="88.264" xlink:href="#d" y1="24.22" y2="24.22"/><g transform="matrix(.492308 0 0 .492308 6.941539 39.876923)"><path d="m13.4-31s75 7.5 75 20v-30s0-12.5-75-20z" fill="url(#b)"/><path d="m13.4 9s75 7.5 75 20v-30s0-12.5-75-20z" fill="url(#c)"/><path d="m88.4-81v30s0 12.5-75 20v-30s75-7.5 75-20" fill="url(#e)"/><path d="m13.4-21s75-7.5 75-20v30s0 12.5-75 20z" fill="url(#f)"/><path d="m13.4 49v-30s75-7.5 75-20v30s0 12.5-75 20" fill="url(#g)"/></g></svg></div>
+      </div>
+      <div class="col-md-8">
+        <div class="page-heading text-center text-md-left">
+          <h2 class="page-heading__title">Run Scala up to 35% faster with GraalVM</h2>
+          <p class="text-center text-md-left">Speed up your application development</p>
+        </div>
+      </div>
+    </div>
   </div>
-  
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/languages/llvm/">
-              LLVM Languages Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/languages/python/">
-              Python Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/languages/r/">
-              R Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/languages/ruby/">
-              Ruby Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/scala/">
-              Scala Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/polyglot/">
-              Polyglot Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/embed/">
-              Embedding Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/tools/">
-              Tools Reference
-            </a>
-          </li>
-
-          
-        
-          
-          <li class="toc-bullets-sub dsdsd">
-          
-            
-            <a href="/docs/reference-manual/aot-compilation/">
-              Native Image
-            </a>
-          </li>
-
-          
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/graalvm-as-a-platform/">
-            GraalVM as a Platform
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/support/">
-            Support
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-      
-        
-          <li class="toc-bullets-main">
-        
-          
-          <a href="/docs/faq/">
-            FAQ
-          </a>
-        </li>
-
-
-        
-
-
-        
-      
-    
-  
-
-  
-
-  
-
-  
-
-</ul>
 
 </div>
 
-                </div>
-              </div>
-            </div>
-    
-            <div class="col-sm-9">
-              <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h2 id="running-jvm-based-apps">Running JVM-based Apps</h2>
-<p>GraalVM gives you an enhanced performance for JVM-based applications written
-in languages such as Java, Scala, Groovy, Clojure or Kotlin. It uses a dynamic
-compiler that dramatically improves the efficiency and the speed of applications
-through unique approaches to code analysis and optimization.</p>
+<section class="content-section">
+  <div class="container-fluid container-fluid--custom-sm">
+    <h2 class="title-section text-center">Get Started for Scala</h2>
 
-<h3 id="interoperability">Interoperability</h3>
-<p>In addition to running JVM-based languages, you can also call any other language
-implemented with GraalVM <a href="https://github.com/oracle/graal/blob/master/truffle/README.md">Language Implementation Framework</a> directly from Java.
-See the <a href="/docs/reference-manual/polyglot/">Polyglot Reference</a> and the
-<a href="/docs/graalvm-as-a-platform/embed/">Embedding documentation</a>
-for more information about interoperability with other programming languages.</p>
-
-<h3 id="compiler-performance">Compiler Performance</h3>
-<p>The GraalVM compiler achieves excellent performance for modern workloads
-such as Scala or usage of the Java Streams API. For examples, see the
-<a href="/docs/examples/java-performance-examples">Java performance examples</a>.</p>
-
-<h2 id="compiler-configuration-on-jvm">Compiler Configuration on JVM</h2>
-
-<p>The options for configuring the GraalVM compiler on the JVM are in 3 categories.</p>
-
-<h3 id="general-options">General options</h3>
-
-<p>These are general options for setting/getting configuration details.</p>
-
-<ul>
-  <li><code>-XX:+UseJVMCICompiler</code>: This disables use of the GraalVM compiler as the top tier JIT.
-This is useful when wanting to compare performance of the GraalVM compiler against the native
-JIT compilers.</li>
-  <li>
-    <p><code>-Dgraal.CompilerConfiguration=&lt;name&gt;</code>: Selects the GraalVM compiler configuration to use. If omitted, the compiler
-configuration with the highest auto-selection priority is used. To see the set
-of available configurations, supply the value help to this option.</p>
-
-    <p>The current configurations and their semantics are:</p>
-    <ul>
-      <li><code>enterprise</code>: To produce highly optimized code with a possible trade-off to compilation time.
-<strong>This value is only available in GraalVM EE.</strong></li>
-      <li><code>community</code>: To produce reasonably optimized code with a faster compilation time.</li>
-      <li><code>economy</code>: To compile as fast as possible with less optimal throughput of the generated code.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code>-Dgraal.ShowConfiguration=none</code>: Prints information about the GraalVM compiler configuration selected.
-  This option only produces output when the compiler is initialized. By default, the GraalVM compiler is
-  initialized on the first top-tier compilation. For this reason, the way to use this option
-  is as follows: <code>java -XX:+EagerJVMCI -Dgraal.ShowConfiguration=info -version</code>.</p>
-
-    <p>The accepted values for this option are:</p>
-    <ul>
-      <li><code>none</code>: To show no information.</li>
-      <li><code>info</code>: To print one line of output showing the name of the compiler configuration in use
- and the location it is loaded from.</li>
-      <li><code>verbose</code>: To print detailed compiler configuration information.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code>-Dgraal.MitigateSpeculativeExecutionAttacks=None</code>: Selects a strategy to mitigate speculative
-  execution attacks (e.g., SPECTRE).</p>
-
-    <p>Accepted values are:</p>
-    <ul>
-      <li><code>None</code>: No mitigations are used in JIT compiled code.</li>
-      <li><code>AllTargets</code>: All branches are protected against speculative attacks. This has a large
-performance impact.</li>
-      <li><code>GuardTargets</code>: Only branches that preserve Java memory safety are protected. This has
-reduced performance impact.</li>
-      <li><code>NonDeoptGuardTargets</code>: Same as GuardTargets except that branches which deoptimize are
-not protected since they can not be executed repeatedly.</li>
-    </ul>
-  </li>
-  <li><code>--engine.Mode=default</code>: Configures the execution mode of the engine. The execution mode automatically
-tunes the polyglot engine towards latency or throughput.
-    <ul>
-      <li><code>throughput</code>: To collect the maximum amount of profiling information and compile using the
-  maximum number of optimizations. This mode results in slower application startup
-  but better throughput. This mode uses the compiler configuration <code>community</code> or
-  <code>enterprise</code> if not specified otherwise.</li>
-      <li><code>default</code>: To use a balanced engine configuration. This mode uses the compiler configuration <code>community</code> or
-  <code>enterprise</code> if not specified otherwise.</li>
-      <li><code>latency</code>: To collect only minimal profiling information and compile as fast as possible
-  with less optimal generated code. This mode results in faster application
-  startup but less optimal throughput. This mode uses the compiler configuration
-  <code>economy</code> if not specified otherwise.</li>
-    </ul>
-  </li>
-  <li><code>-XX:-UseJVMCINativeLibrary</code>: Disables use of <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a>. Instead, the GraalVM compiler is executed as classes loaded into
-the HotSpot heap. This will delay the time to reach peak performance as the compiler
-itself needs to be compiled before it produces code quickly. This mode allows you to
-<a href="/docs/reference-manual/languages/jvm/#troubleshooting-graal">debug the GraalVM compiler with a Java debugger</a>.</li>
-</ul>
-
-<h3 id="performance-tuning-options">Performance tuning options</h3>
-
-<ul>
-  <li><code>-Dgraal.UsePriorityInlining=true</code>: This can be used to disable use of the advanced inlining
-algorithm that favors throughput over compilation speed. <strong>This option is only available in
-GraalVM EE</strong>.</li>
-  <li><code>-Dgraal.Vectorization=true</code>: This can be used to disable the auto vectorization optimization.
-<strong>This option is only available in GraalVM EE</strong>.</li>
-  <li>
-    <p><code>-Dgraal.TraceInlining=false</code>: Enables tracing of inlining decisions. This can be used
-  for advanced tuning where it may be possible to change the source code of the program.
-  The output format is shown below:</p>
-
-    <pre><code>compilation of 'Signature of the compilation root method':
-at 'Sig of the root method' ['Bytecode index']: &lt;'Phase'&gt; 'Child method signature': 'Decision made about this callsite'
-  at 'Signature of the child method' ['Bytecode index']:
-     |--&lt;'Phase 1'&gt; 'Grandchild method signature': 'First decision made about this callsite'
-     \--&lt;'Phase 2'&gt; 'Grandchild method signature': 'Second decision made about this callsite'
-  at 'Signature of the child method' ['Bytecode index']: &lt;'Phase'&gt; 'Another grandchild method signature': 'The only decision made about this callsite.'
-</code></pre>
-
-    <p>For example:</p>
-    <pre><code>compilation of java.lang.Character.toUpperCaseEx(int):
-at java.lang.Character.toUpperCaseEx(Character.java:7138) [bci: 22]:
-   ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterData.of(int): no, bytecode parser did not replace invoke
-   └──&lt;PriorityInliningPhase&gt; java.lang.CharacterData.of(int): yes, worth inlining according to the cost-benefit analysis.
-at java.lang.Character.toUpperCaseEx(Character.java:7138) [bci: 26]:
-   ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterDataLatin1.toUpperCaseEx(int): no, bytecode parser did not replace invoke
-   └──&lt;PriorityInliningPhase&gt; java.lang.CharacterDataLatin1.toUpperCaseEx(int): yes, worth inlining according to the cost-benefit analysis.
-  at java.lang.CharacterDataLatin1.toUpperCaseEx(CharacterDataLatin1.java:223) [bci: 4]:
-     ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterDataLatin1.getProperties(int): no, bytecode parser did not replace invoke
-     └──&lt;PriorityInliningPhase&gt; java.lang.CharacterDataLatin1.getProperties(int): yes, worth inlining according to the cost-benefit analysis.
-</code></pre>
-  </li>
-</ul>
-
-<h3 id="diagnostic-options">Diagnostic options</h3>
-
-<ul>
-  <li>
-    <p><code>-Dgraal.CompilationFailureAction=Silent</code>: Specifies the action to take when compilation fails by
-  throwing an exception.</p>
-
-    <p>The accepted values are:</p>
-    <ul>
-      <li><code>Silent</code>: Print nothing to the console.</li>
-      <li><code>Print</code>: Print a stack trace to the console.</li>
-      <li><code>Diagnose</code>: Retry the compilation with extra diagnostics enabled. On VM exit, the collected
- diagnostics are saved to a zip file that can be submitted along with a bug report. A message
- is printed to the console describing where the diagnostics file is saved:
-        <pre><code>Graal diagnostic output saved in /Users/graal/graal_dumps/1549459528316/graal_diagnostics_22774.zip
-</code></pre>
-      </li>
-      <li><code>ExitVM</code>: Same as <code>Diagnose</code> except that the VM process exits after retrying.</li>
-    </ul>
-
-    <p>For all values except for <code>ExitVM</code>, the VM continues executing.</p>
-  </li>
-  <li><code>-Dgraal.CompilationBailoutAsFailure=false</code>: The compiler may not complete compilation of a method due
- to some property or code shape in the method (e.g. exotic uses of the jsr and ret bytecodes). In this
- case the compilation <em>bails out</em>. If you want to be informed of such bailouts, this option makes GraalVM
- treat bailouts as failures and thus be subject to the action specified by the
- <code>-Dgraal.CompilationFailureAction</code> option.</li>
-  <li><code>-Dgraal.PrintCompilation=false</code>: Prints an informational line to the console for each completed compilation.
-For example:
-    <pre><code>HotSpotCompilation-11  Ljava/lang/Object;                            wait          ()V       |  591ms    12B    92B  4371kB
-HotSpotCompilation-175 Ljava/lang/String;                            lastIndexOf   (II)I     |  590ms   126B   309B  4076kB
-HotSpotCompilation-184 Ljava/util/concurrent/ConcurrentHashMap;      setTabAt      ([Ljava/util/concurrent/ConcurrentHashMap$Node;ILjava/util/concurrent/ConcurrentHashMap$Node;)V  |  591ms    38B    67B  3411kB
-HotSpotCompilation-136 Lsun/nio/cs/UTF_8$Encoder;                    encode        ([CII[B)I |  591ms   740B   418B  4921
-</code></pre>
-  </li>
-</ul>
-
-<h2 id="setting-compiler-options-with-language-launchers">Setting Compiler Options with Language Launchers</h2>
-
-<p>The GraalVM compiler properties above are usable with some other GraalVM launchers such as
-<code>node</code>, <code>js</code> and <code>lli</code>. The prefix for specifying the properties is slightly different.
-For example:</p>
-
-<pre><code>$ java -XX:+EagerJVMCI -Dgraal.ShowConfiguration=info -version
-</code></pre>
-
-<p>Becomes:</p>
-
-<pre><code>$ js --jvm --vm.Dgraal.ShowConfiguration=info -version
-</code></pre>
-
-<p>Note the <code>-D</code> prefix is replaced by <code>--vm.D</code>.</p>
-
-<h2 id="jvm-operations-manual">JVM Operations Manual</h2>
-
-<h3 id="difference-between-running-the-graalvm-compiler-in-a-native-image-vs-on-the-jvm">Difference between running the GraalVM compiler in a Native Image vs on the JVM</h3>
-
-<p>When running the GraalVM compiler on the JVM, it goes through the same warmup phase that the
-rest of Java application does. That is, it is first interpreted before
-its hot methods are compiled. This can translate into slightly longer times
-until the application reaches peak performance when compared to the native compilers
-in the JVM such as C1 and C2.</p>
-
-<p>To address the issue of taking longer to reach to peak performance,
-both GraalVM Enterprise and Community images now include <strong>libgraal</strong> –
-a shared library, produced using <a href="https://github.com/oracle/graal/blob/master/substratevm/README.md">Native Image</a> framework to ahead-of-time compile the compiler itself.
-That means the GraalVM compiler can now be deployed as a native shared library.
-In this mode, the compiler uses memory separate from the HotSpot heap and it runs compiled from the start.
-That is, it has execution properties similar to other native HotSpot compilers such as C1 and C2.
-Currently, this is the <strong>default mode</strong> of operation. It can be disabled with <code>-XX:-UseJVMCINativeLibrary</code>.</p>
-
-<h2 id="measuring-performance">Measuring Performance</h2>
-
-<p>The first thing to be sure of when measuring the performance is to ensure the JVM is using the GraalVM compiler.
-In the GraalVM binary, the JVM is configured to use the GraalVM compiler
-as the top tier compiler by default. You can confirm this by adding <code>-Dgraal.ShowConfiguration=info</code>
-to the command line. It will produce a line of output similar to the one below
-when the compiler is initialized:</p>
-<pre><code>Using Graal compiler configuration 'community' provided by org.graalvm.compiler.hotspot.CommunityCompilerConfigurationFactory loaded from jar:file:/Users/dsimon/graal/graal/compiler/mxbuild/dists/graal.jar!/org/graalvm/compiler/hotspot/CommunityCompilerConfigurationFactory.class
-</code></pre>
-<p>Note that the GraalVM compiler is only initialized on the first top tier JIT compilation request
-so if your application is short lived, you may not see this output.</p>
-
-<p>Optimizing JVM-based applications is a science in itself. The compilation may not
-even be a factor in the case of poor performance as the problem may
-lie in any other part of the VM (I/O, garbage collection, threading etc) or in
-poorly written application or 3rd party library code. For this reason, it’s
-worth using profilers such as <a href="http://www.oracle.com/technetwork/java/javaseproducts/mission-control/java-mission-control-1998576.html">Java Mission Control</a> to
-diagnose application behavior.</p>
-
-<p>You can also compare performance against the native top tier compiler in the JVM by
-adding <code>-XX:-UseJVMCICompiler</code> to the command line.</p>
-
-<p>If you observe a significant performance regression when using the GraalVM compiler, please
-open an issue on GitHub. Attaching a Java Flight Recorder log and instructions
-to reproduce the issue makes investigation easier and thus
-chances of a fix higher. Even better is if you can submit a <a href="http://openjdk.java.net/projects/code-tools/jmh/">JMH</a>
-benchmark that represents the hottest parts of your application (as identified
-by a profiler). This allows us to very quickly pinpoint missing optimization
-opportunities or to offer suggestions on how to restructure the code to
-avoid or reduce performance bottlenecks.</p>
-
-<h2 id="troubleshooting-the-graalvm-compiler">Troubleshooting the GraalVM Compiler</h2>
-
-<p>Like all software, the GraalVM compiler is not guaranteed to be bug free so it is useful to
-know how to diagnose and submit useful bug reports if you encounter issues.</p>
-
-<p>If you spot a security vulnerability, please do <strong>not</strong> report it via GitHub Issues or the public mailing lists,
-but via the process outlined at <a href="https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html">Reporting Vulnerabilities guide</a>.</p>
-
-<h3 id="compilation-exceptions">Compilation Exceptions</h3>
-
-<p>One advantage of the compiler being written in Java is that runtime exceptions during
-compilation are not fatal VM errors. Instead, each compilation has an exception
-handler that takes an action based on the <code>graal.CompilationFailureAction</code>
-property.</p>
-
-<p>The default value is <code>Silent</code>. Specifying <code>Diagnose</code> causes failing compilations to be retried
-with extra diagnostics enabled. Just before the VM exits, all diagnostic output
-captured during retried compilations is written to a <code>.zip</code> file and its location
-is printed on the console:</p>
-<pre><code>Graal diagnostic output saved in /Users/demo/graal-dumps/1499768882600/graal_diagnostics_64565.zip
-</code></pre>
-
-<p>You can then attach the .zip file to an issue on <a href="https://github.com/oracle/graal">GitHub</a>.</p>
-
-<p>Apart from <code>Silent</code> and <code>Diagnose</code> the following values for <code>graal.CompilationFailureAction</code>
-are supported:</p>
-<ul>
-  <li><code>Print</code>: Prints a message and stack trace to the console but does not do the re-compilation.</li>
-  <li><code>ExitVM</code>: Same as <code>Diagnose</code> but the VM process exits after the re-compilation.</li>
-</ul>
-
-<h3 id="code-generation-errors">Code Generation Errors</h3>
-
-<p>The other type of error compilers can have is producing incorrect machine code.
-This error can cause a VM crash, which should produce a file that starts with
-<code>hs_err_pid</code> in the current working directory of the VM process. In most cases,
-there is a section in the file that shows the stack at the time of the crash,
-including the type of code for each frame in the stack, as in the following
-example:</p>
-
-<pre><code>Stack: [0x00007000020b1000,0x00007000021b1000],  sp=0x00007000021af7a0,  free space=1017k
-Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
-J 761 JVMCI org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V (299 bytes) @ 0x0000000108a2fc01 [0x0000000108a2fac0+0x141] (null)
-j  org.graalvm.compiler.core.gen.NodeLIRBuilder.doBlock(Lorg/graalvm/compiler/nodes/cfg/Block;Lorg/graalvm/compiler/nodes/StructuredGraph;Lorg/graalvm/compiler/core/common/cfg/BlockMap;)V+211
-j  org.graalvm.compiler.core.LIRGenerationPhase.emitBlock(Lorg/graalvm/compiler/nodes/spi/NodeLIRBuilderTool;Lorg/graalvm/compiler/lir/gen/LIRGenerationResult;Lorg/graalvm/compiler/nodes/cfg/Block;Lorg/graalvm/compiler/nodes/StructuredGraph;Lorg/graalvm/compiler/core/common/cfg/BlockMap;)V+65
-</code></pre>
-
-<p>This example shows that the top frame was compiled (J) by the JVMCI compiler,
-which is the GraalVM compiler. The crash occurred at offset 0x141 in the machine
-code produced for:</p>
-<pre><code>org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V
-</code></pre>
-
-<p>The next two frames in the stack were executing in the interpreter (j). The
-location of the crash is also often indicated near the top of the file with
-something like this:</p>
-<pre><code># Problematic frame:
-# J 761 JVMCI org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V (299 bytes) @ 0x0000000108a2fc01 [0x0000000108a2fac0+0x141] (null)
-</code></pre>
-
-<p>In this example, there is likely an error in the code produced by the GraalVM compiler for <code>NodeLIRBuilder.matchComplexExpressions</code>.</p>
-
-<p>When filing an issue on <a href="https://github.com/oracle/graal">GitHub</a>
-for such a crash, you should first attempt to reproduce the crash with extra
-diagnostics enabled for the compilation of the problematic method.
-In this example, you would add the following to your command line:</p>
-<pre><code>-Dgraal.MethodFilter=NodeLIRBuilder.matchComplexExpressions, -Dgraal.Dump=:2
-</code></pre>
-
-<p>These options are described in more detail <a href="https://github.com/oracle/graal/blob/master/compiler/docs/Debugging.md">here</a>.
-In brief, these options tell the compiler to capture snapshots of the compiler state at
-verbosity level 2 while compiling any method named <code>matchComplexExpressions</code> in
-a class with a simple name of <code>NodeLIRBuilder</code>. The complete format of the
-<code>MethodFilter</code> option is described in the output of <code>java -XX:+JVMCIPrintProperties</code>.</p>
-
-<p>Quite often, the crash location does not exist directly in the problematic method
-mentioned in the crash log but comes from an inlined method.</p>
-
-<p>In such a case, simply filtering for the problematic method might not capture an
-erroneous compilation causing a crash.</p>
-
-<p>To improve the likelihood of capturing an erroneous compilation, you need to
-broaden the <code>MethodFilter</code> value. To guide this, add <code>-Dgraal.PrintCompilation=true</code>
-when trying to reproduce the crash so you can see what was compiled just before
-the crash.</p>
-
-<p>The following shows sample output from the console:</p>
-<pre><code>HotSpotCompilation-1218        Lorg/graalvm/compiler/core/amd64/AMD64NodeLIRBuilder;                  peephole                                      (Lorg/graalvm/compiler/nodes/ValueNode;)Z           |   87ms   428B   447B  1834kB
-HotSpotCompilation-1212        Lorg/graalvm/compiler/lir/LIRInstructionClass;                         forEachState                                  (Lorg/graalvm/compiler/lir/LIRInstruction;Lorg/graalvm/compiler/lir/InstructionValueProcedure;)V  |  359ms    92B   309B  6609kB
-HotSpotCompilation-1221        Lorg/graalvm/compiler/hotspot/amd64/AMD64HotSpotLIRGenerator;          getResult                                     ()Lorg/graalvm/compiler/hotspot/HotSpotLIRGenerationResult;  |   54ms    18B   142B  1025kB
-#
-# A fatal error has been detected by the Java Runtime Environment:
-#
-#  SIGSEGV (0xb) at pc=0x000000010a6cafb1, pid=89745, tid=0x0000000000004b03
-#
-# JRE version: OpenJDK Runtime Environment (8.0_121-b13) (build 1.8.0_121-graalvm-olabs-b13)
-# Java VM: OpenJDK 64-Bit GraalVM (25.71-b01-internal-jvmci-0.30 mixed mode bsd-amd64 compressed oops)
-# Problematic frame:
-# J 1221 JVMCI org.graalvm.compiler.hotspot.amd64.AMD64HotSpotLIRGenerator.getResult()Lorg/graalvm/compiler/hotspot/HotSpotLIRGenerationResult; (18 bytes) @ 0x000000010a6cafb1 [0x000000010a6caf60+0x51] (null)
-#
-# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
-</code></pre>
-<p>Here we see that the crash happened in a different method than the first crash.
-As such, we expand the filter argument to be <code>-Dgraal.MethodFilter=
-NodeLIRBuilder.matchComplexExpressions,AMD64HotSpotLIRGenerator.getResult</code>
-and run again.</p>
-
-<p>When the VM crashes in this way, it does not execute the shutdown code that
-archives the GraalVM compiler diagnostic output or delete the directory it was written to.
-This must be done manually after the crash.</p>
-
-<p>By default, the directory is <code>$PWD/graal-dumps/&lt;timestamp&gt;</code>; for example, <code>./graal-dumps/1499938817387</code>.
-However, you can set the directory with <code>-Dgraal.DumpPath=&lt;path&gt;</code>.</p>
-
-<p>A message, such as the following, is printed to the console when this
-directory is first used by the compiler:</p>
-<pre><code>Dumping debug output in /Users/demo/graal-dumps/1499768882600
-</code></pre>
-
-<p>This directory should contain content related to the crashing method, such as:</p>
-<pre><code>$ ls -l /Users/demo/graal-dumps/1499768882600
--rw-r--r--  1 demo  staff    144384 Jul 13 11:46 HotSpotCompilation-1162[AMD64HotSpotLIRGenerator.getResult()].bgv
--rw-r--r--  1 demo  staff     96925 Jul 13 11:46 HotSpotCompilation-1162[AMD64HotSpotLIRGenerator.getResult()].cfg
--rw-r--r--  1 demo  staff  12600725 Jul 13 11:46 HotSpotCompilation-791[NodeLIRBuilder.matchComplexExpressions(List)].bgv
--rw-r--r--  1 demo  staff   1727409 Jul 13 11:46 HotSpotCompilation-791[NodeLIRBuilder.matchComplexExpressions(List)].cfg
-</code></pre>
-<p>You should attach a zip of this directory to an issue on <a href="https://github.com/oracle/graal">GitHub</a>.</p>
-
-
-              </div>
-    
-              <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
-                <div class="hamburger"><div class="inner"></div></div>
-              </div>
-            </div>
-          </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-5 offset-md-1 mb-4 mb-sm-0">
+        <div class="card card--hovered">
+          <h4 class="card__title">Efficiency</h4>
+          <p>
+            Compile Scala applications up to 35% faster  with the GraalVM compiler
+          </p>
+          <a href="https://medium.com/graalvm/compiling-scala-faster-with-graalvm-86c5c0857fa3" class="link-main">LEARN MORE</a>
         </div>
+      </div>
+
+      <div class="col-sm-6 col-md-5">
+        <div class="card card--hovered">
+          <h4 class="card__title">Fast Startup</h4>
+          <p>
+            Get instant startup of scalac compiler and other projects with GraalVM Native Image
+          </p>
+          <a href='/docs/reference-manual/languages/scala/getting-started/' class="link-main">LEARN MORE</a>
+        </div>
+      </div>
     </div>
   </div>
-</article>
+</section>
 
+<section class="content-section">
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-lg-10 offset-lg-1">
+        <div class="row row--mb align-items-center">
+          <div class="col-md-5 order-md-2">
+            <h4 class="title-article">Example program</h4>
+            <p class="text-md mb-0">
+              Speedup the cold start up to <strong>10x</strong> with GraalVM Native Image
+            </p>
+          </div>
+          <div class="col-md-6 offset-md-1">
+            
+            <pre><code class="language-scala">time ./scalac-native HelloWorld.scala
+
+real  0m0.177ms
+user  0m0.179ms
+sys   0m0.144mx
+</code></pre>
+
+          </div>
+
+        </div>
+
+        <div class="button-group justify-content-center">
+          <a href='/downloads/' target="_blank" class="btn btn-primary">TRY NOW</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-div"></div>
+</section>
+
+<section class="content-section">
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+        <h2 class="title-section text-center">
+          Benchmarks
+        </h2>
+
+        <img src="/resources/img/scala-performance.png" alt="scala performance">
+
+        <p class="text-md text-center mt-4">
+            Scala performance improvement based on the new JVM benchmark suite - <a href="https://renaissance.dev" target="_blank">Renaissance</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-div"></div>
+</section>
+
+<section class="content-section">
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-lg-10 offset-lg-1">
+          <h2 class="title-section text-center">
+              SBT Plugin for Native Image Generation
+            </h2>
+            <p class="text-md text-center mb-4 pb-4">
+              GraalVM Native Image compiles Java programs AOT (ahead-of-time) into native binaries. This plugin allows you to simplify the generation process.
+              </p>
+
+        <div class="button-group justify-content-center">
+          <a href='https://www.scala-sbt.org/sbt-native-packager/formats/graalvm-native-image.html' target="_blank" class="btn btn-primary text-uppercase">Native Image Plugin</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="content-section content-section--blue">
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+        <h2 class="title-section title-section--white text-center">
+          Scala on GraalVM in Production
+        </h2>
+        <div class="row  align-items-center">
+          <div class="col-sm-6 offset-sm-1">
+            <div class="vlog__video">
+              <img src="/resources/img/voxxed_video_preview.png" alt="">
+              <a href="#" data-video="W-5kUG8_mbk" class="btn btn-primary btn-primary--filled js-popup">watch video</a>
+            </div>
+          </div>
+          <div class="col-sm-5">
+            <p class="text-md">
+              Discover how Twitter uses the GraalVM compiler on its Scala microservices to
+  save time and cost.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="video-view" class="modal-window">
+  <div class="modal-window__content">
+    <button type="button" title="Close" id="js-close" class="modal-window__close"><img src="/resources/img/btn-close.svg"
+        alt=""></button>
+    <div class="modal-window__video">
+      <div id="player"></div>
+    </div>
+  </div>
 </div>
 
       </main>

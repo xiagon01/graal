@@ -16,9 +16,6 @@
     name="GraalVM website: documentation, tutorials, news and general information."
     content="GraalVM is an ecosystem for programming languages and set of next generation tools for high performance applications."
   >
-
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-
   <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/resources/img/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/resources/img/favicon/favicon-16x16.png">
@@ -529,9 +526,13 @@ $(document).ready(function(){
 </div>
 
                 </div>
+                  <form class="search-container" action="/docs/search" autocomplete="on" method="get">
+                    <input type="text" id="search-box" name="query" placeholder="Search">
+                    <button type="submit" class="searchbttn"></button>
+                  </form>
               </div>
             </div>
-    
+
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
                 <h3 id="getting-started-with-instruments-in-graalvm">Getting started with Instruments in GraalVM</h3>
@@ -803,7 +804,7 @@ public static class UniversalAnswerInstrument extends TruffleInstrument {
 <p>When enabled, the instrument will execute its <code>onReturnValue</code> callback each time a function call returns. The callback reads the associated source section (using <code>getInstrumentedSourceSection</code>) and looks for a specific source code pattern (the function call <code>inc(c)</code>, in this case). As soon as such code pattern is found, the instrument throws a special runtime exception, called <code>UnwindException</code>, that instructs the Instrumentation framework about a change in the current application’s execution flow. The exception is intercepted by the <code>onUnwind</code> callback of the instrumentation agent, which can be used to return <em>any</em> arbitrary value to the original instrumented application. In the example, all calls to <code>inc(c)</code> will return <code>42</code> regardless of any application-specific data. A more realistic instrument might access and monitor several aspects of an application, and might not rely on source code locations, but rather on object instances or other application-specific data.</p>
 
               </div>
-    
+
               <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
                 <div class="hamburger"><div class="inner"></div></div>
               </div>

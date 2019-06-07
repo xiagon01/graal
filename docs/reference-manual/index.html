@@ -16,9 +16,6 @@
     name="GraalVM website: documentation, tutorials, news and general information."
     content="GraalVM is an ecosystem for programming languages and set of next generation tools for high performance applications."
   >
-
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-
   <link rel="apple-touch-icon" sizes="180x180" href="/resources/img/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/resources/img/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/resources/img/favicon/favicon-16x16.png">
@@ -639,9 +636,13 @@ $(document).ready(function(){
 </div>
 
                 </div>
+                  <form class="search-container" action="/docs/search" autocomplete="on" method="get">
+                    <input type="text" id="search-box" name="query" placeholder="Search">
+                    <button type="submit" class="searchbttn"></button>
+                  </form>
               </div>
             </div>
-    
+
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
                 <h3 id="graalvm-reference-manual">GraalVM Reference Manual</h3>
@@ -672,7 +673,7 @@ binaries with GraalVM please refer to the <a href="/docs/reference-manual/aot-co
 <p>More information on GraalVM Updater, the utility used to install language packs into the GraalVM distribution, for example Ruby, R, or Python, can be found on the <a href="/docs/reference-manual/graal-updater/">GraalVM Updater page</a>.</p>
 
               </div>
-    
+
               <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
                 <div class="hamburger"><div class="inner"></div></div>
               </div>

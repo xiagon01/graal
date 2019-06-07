@@ -139,7 +139,7 @@ $(document).ready(function () {
     hljs.highlightBlock(block);
   });
 
-  // slick slider init
+  //slick slider init
   (function () {
     $('.video-carousel').slick({
       dots: true,
@@ -231,7 +231,7 @@ $(document).ready(function () {
   };
   twitterFetcher.fetch(configProfile);
 
-  (function () {
+(function () {
     var topBanner = $('.home-banner');
     var header = $('.header');
     var topBannerHeight = topBanner.innerHeight();
@@ -957,6 +957,217 @@ function initialize() {
         }, 1000 );
         elem.toggleClass('active');
       });
+    }
+  }
+}
+// Search Feature
+
+// III. Display the results
+(function() {
+  function displaySearchResults(results, store) {
+    var searchResults = document.getElementById('search-results');
+
+    if (results.length) { // Are there any results?
+      for (var i = 0; i < results.length; i++) {  // Iterate over the results
+        var result = results[i];
+        var item = store[result.ref];
+
+        var li = document.createElement("li");
+        var link = document.createElement("a");
+        var linkTitle = document.createElement("h3");
+        var linkText = document.createElement("p");
+
+        link.href = item.url;
+        linkTitle.textContent = item.title;
+        linkText.textContent = item.content.substring(0, 150);
+
+        linkTitle.dataset.field = 'title';
+        linkText.dataset.field = 'content';
+
+        // Append an ellipsis if the link text needed to be truncated.
+        if (item.content.length > 150) {
+          linkText.insertAdjacentHTML('beforeend', '&hellip;');
+        }
+
+        link.appendChild(linkTitle);
+        li.appendChild(link);
+        li.appendChild(linkText);
+
+        Object.keys(result.matchData.metadata).forEach(function (term) {
+          Object.keys(result.matchData.metadata[term]).forEach(function (fieldName) {
+            var field = li.querySelector('[data-field=' + fieldName + ']'),
+                positions = result.matchData.metadata[term][fieldName].position
+
+            wrapper(field, positions)
+          })
+        })
+
+        searchResults.appendChild(li);
+      }
+    } else {
+      searchResults.innerHTML = '<li>No results found</li>';
+    }
+  }
+
+ // I. Get the search term
+  function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+
+      if (pair[0] === variable) {
+        return decodeURIComponent(pair[1].replace(/\+/g, '%20'));
+      }
+    }
+  }
+
+  var searchTerm = getQueryVariable('query');
+
+  // II. Perform the search
+  if (searchTerm) {
+    document.getElementById('search-box').setAttribute("value", searchTerm);
+
+    var synonyms = new Map([
+      // Synonyms for GraalVM JavaScript related terms.
+      ['js', ['javascript']],
+      ['javascript', ['js']],
+
+      // Synonyms for TruffleRuby related terms.
+      ['ruby', ['truffleruby']],
+      ['truffleruby', ['ruby']],
+
+      // Synonyms for FastR related terms.
+      ['r', ['fastr']],
+      ['fastr', ['r']],
+
+      // Synonyms for Sulong related terms.
+      ['llvm', ['sulong']],
+      ['sulong', ['llvm']]
+    ]);
+
+    var normalizeGraalNames = function (builder) {
+
+      // Match common terms to Graal-specific equivalents.
+      var synonymMapper = function (token) {
+        var toUpdate = synonyms.get(token.toString());
+
+        if (toUpdate) {
+          var mappedSynonyms = toUpdate.map(function(str) {
+            return token.clone(function() { return str });
+          });
+
+          mappedSynonyms.push(token); // A token should always match against its original value, too.
+
+          return mappedSynonyms;
+        }
+
+        return token;
+      }
+
+      // Register the pipeline function so the index can be serialized.
+      lunr.Pipeline.registerFunction(synonymMapper, 'normalizeGraalNames')
+
+      // Add the pipeline function to the indexing pipeline.
+      builder.pipeline.before(lunr.stemmer, synonymMapper)
+    };
+
+    // Initalize lunr with the fields it will be searching on.
+    // Boost of 10 to indicate matches on this field are more important.
+    var idx = lunr(function () {
+          this.ref('id');
+          this.field('title', { boost: 10 });
+          this.field('content');
+          this.use(normalizeGraalNames);
+          this.metadataWhitelist = ['position'];
+          for (var key in window.store) {
+              this.add({
+                  'id': key,
+                  'title': window.store[key].title,
+                  'content': window.store[key].content
+              });
+          }
+      });
+
+      if (searchTerm.toLowerCase() == "ruby") {
+        searchTerm += " truffleruby";
+      }
+
+    var results = idx.search(searchTerm); // Get lunr to perform a search
+    displaySearchResults(results, window.store); // We'll write this in the next sections
+  }
+})();
+
+// IV. Highlight matching words
+/**
+ * Represents the location of a match within a
+ * larger string. Extracted from a lunr.Index~Result.
+ *
+ * @typedef {number[]} MatchLocation
+ * @property {number} 0 - Starting index of the match
+ * @property {number} 1 - Length of the match
+ */
+
+/**
+ * Highlights text within a dom element.
+ *
+ * Specifically this is designed to work with the output
+ * positions of terms returned from a lunr search.
+ */
+ // @param {HTMLElement} element - the element that contains text to highlight.
+ // @param {MatchLocation[]} matches - the list of matches to highlight.
+function wrapper(element, matches) {
+
+  var nodeFilter = {
+    acceptNode: function (node) {
+      if (/^[\t\n\r ]*$/.test(node.nodeValue)) {
+        return NodeFilter.FILTER_SKIP
+      }
+      return NodeFilter.FILTER_ACCEPT
+    }
+  }
+
+  var index = 0,
+      matches = matches.sort(function (a, b) { return a[0] - b[0] }).slice(),
+      previousMatch = [-1, -1]
+      match = matches.shift(),
+      walker = document.createTreeWalker(
+        element,
+        NodeFilter.SHOW_TEXT,
+        nodeFilter,
+        false
+      )
+
+  while (node = walker.nextNode()) {
+    if (match == undefined) break
+    if (match[0] == previousMatch[0]) continue
+
+    var text = node.textContent,
+        nodeEndIndex = index + node.length;
+
+    if (match[0] < nodeEndIndex) {
+      var range = document.createRange(),
+          tag = document.createElement('mark'),
+          rangeStart = match[0] - index,
+          rangeEnd = rangeStart + match[1];
+
+      tag.dataset.rangeStart = rangeStart
+      tag.dataset.rangeEnd = rangeEnd
+
+      range.setStart(node, rangeStart)
+      range.setEnd(node, rangeEnd)
+      range.surroundContents(tag)
+
+      index = match[0] + match[1]
+
+      // the next node will now actually be the text we just wrapped, so
+      // we need to skip it
+      walker.nextNode()
+      previousMatch = match
+      match = matches.shift()
+    } else {
+      index = nodeEndIndex
     }
   }
 }

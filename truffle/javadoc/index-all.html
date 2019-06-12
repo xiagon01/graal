@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.0.1-dev</b><br>aa51aaa1b2f8ade884b210e8d066c8286cec64a7</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-beta.02-dev</b><br>cb3515791f948a45fa5ea37e085385e4917f8be9</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -394,9 +394,17 @@
 <div class="block">Allows the guest application to access arrays as values with
  <a href="org/graalvm/polyglot/Value.html#hasArrayElements--"><code>array elements</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowCreateProcess-boolean-">allowCreateProcess(boolean)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">If <code>true</code>, allows guest language to execute external processes.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowCreateThread-boolean-">allowCreateThread(boolean)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
 <div class="block">If <code>true</code>, allows guest languages to create new threads.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowEnvironmentAccess-org.graalvm.polyglot.EnvironmentAccess-">allowEnvironmentAccess(EnvironmentAccess)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Allow environment access using the provided policy.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowExperimentalOptions-boolean-">allowExperimentalOptions(boolean)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
@@ -1267,6 +1275,10 @@
 <dd>
 <div class="block">Removes all of the elements from this set.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#clearEnvironment-boolean-">clearEnvironment(boolean)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">If <code>true</code> the environment variables are not inherited by the subprocess.</div>
+</dd>
 <dt><a href="org/graalvm/nativeimage/c/function/CLibrary.html" title="annotation in org.graalvm.nativeimage.c.function"><span class="typeNameLink">CLibrary</span></a> - Annotation Type in <a href="org/graalvm/nativeimage/c/function/package-summary.html">org.graalvm.nativeimage.c.function</a></dt>
 <dd>
 <div class="block">Denotes an external library that needs to be linked in.</div>
@@ -1409,6 +1421,11 @@
 <div class="block">This package contains classes that specify the contract for inter-operability between Truffle
  guest languages and tools.</div>
 </dd>
+<dt><a href="com/oracle/truffle/api/io/package-summary.html">com.oracle.truffle.api.io</a> - package com.oracle.truffle.api.io</dt>
+<dd>
+<div class="block">This package contains I/O related classes used by <a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage</code></a>
+ implementations.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/library/package-summary.html">com.oracle.truffle.api.library</a> - package com.oracle.truffle.api.library</dt>
 <dd>
 <div class="block">Truffle Libraries allow language implementations to use polymorphic dispatch for receiver types
@@ -1442,6 +1459,14 @@
 <dd>
 <div class="block">Various utility classes that aim to make the development of TruffleLanguage guest languages
  easier.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#command-java.util.List-">command(List&lt;String&gt;)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the executable and arguments.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#command-java.lang.String...-">command(String...)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the executable and arguments.</div>
 </dd>
 <dt><a href="org/graalvm/word/ComparableWord.html" title="interface in org.graalvm.word"><span class="typeNameLink">ComparableWord</span></a> - Interface in <a href="org/graalvm/word/package-summary.html">org.graalvm.word</a></dt>
 <dd>
@@ -1952,6 +1977,10 @@
 <dd>
 <div class="block">Creates an identity function.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/LanguageProvider.html#createIdentityFunctionSnippet-org.graalvm.polyglot.Context-">createIdentityFunctionSnippet(Context)</a></span> - Method in interface org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/LanguageProvider.html" title="interface in org.graalvm.polyglot.tck">LanguageProvider</a></dt>
+<dd>
+<div class="block">Creates a <a href="org/graalvm/polyglot/tck/Snippet.html" title="class in org.graalvm.polyglot.tck"><code>Snippet</code></a> for an identity function.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/profiles/ByteValueProfile.html#createIdentityProfile--">createIdentityProfile()</a></span> - Static method in class com.oracle.truffle.api.profiles.<a href="com/oracle/truffle/api/profiles/ByteValueProfile.html" title="class in com.oracle.truffle.api.profiles">ByteValueProfile</a></dt>
 <dd>
 <div class="block">Returns a value profile that profiles the exact value of a <code>byte</code>.</div>
@@ -2198,6 +2227,10 @@
 </a>
 <h2 class="title">D</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html#DARWIN_AArch64--">DARWIN_AArch64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AArch64</a></dt>
+<dd>
+<div class="block">Instantiates a marker instance of this platform.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.DARWIN_AMD64.html#DARWIN_AMD64--">DARWIN_AMD64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.DARWIN_AMD64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AMD64</a></dt>
 <dd>
 <div class="block">Instantiates a marker instance of this platform.</div>
@@ -2346,6 +2379,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/DirectCallNode.html#DirectCallNode-com.oracle.truffle.api.CallTarget-">DirectCallNode(CallTarget)</a></span> - Constructor for class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/DirectCallNode.html" title="class in com.oracle.truffle.api.nodes">DirectCallNode</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#directory-com.oracle.truffle.api.TruffleFile-">directory(TruffleFile)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets this process current working directory.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/DynamicDispatchLibrary.html#dispatch-java.lang.Object-">dispatch(Object)</a></span> - Method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/DynamicDispatchLibrary.html" title="class in com.oracle.truffle.api.library">DynamicDispatchLibrary</a></dt>
 <dd>
 <div class="block">Returns a class that <a href="com/oracle/truffle/api/library/ExportLibrary.html" title="annotation in com.oracle.truffle.api.library"><code>exports</code></a> at least one library with an explicit
@@ -2496,6 +2533,28 @@
 <dd>
 <div class="block">Logs entry into method with multiple parameters.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#environment-java.lang.String-java.lang.String-">environment(String, String)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the subprocess environment variable.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#environment-java.util.Map-">environment(Map&lt;String, String&gt;)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Shortcut for setting multiple <a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#environment-java.lang.String-java.lang.String-"><code>environment variables</code></a>
+ using a map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#environment-java.lang.String-java.lang.String-">environment(String, String)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Sets an environment variable.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#environment-java.util.Map-">environment(Map&lt;String, String&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Shortcut for setting multiple <a href="org/graalvm/polyglot/Context.Builder.html#environment-java.lang.String-java.lang.String-"><code>environment variables</code></a>
+ using a map.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/EnvironmentAccess.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">EnvironmentAccess</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">Represents an access policy to the process environment for the guest languages of a context.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/word/ComparableWord.html#equal-org.graalvm.word.ComparableWord-">equal(ComparableWord)</a></span> - Method in interface org.graalvm.word.<a href="org/graalvm/word/ComparableWord.html" title="interface in org.graalvm.word">ComparableWord</a></dt>
 <dd>
 <div class="block">Compares this word with the specified value.</div>
@@ -2541,6 +2600,7 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/SourceSection.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/SourceSection.html" title="class in org.graalvm.polyglot">SourceSection</a></dt>
@@ -3610,6 +3670,10 @@
 <dd>
 <div class="block">Given a 0-based character offset, return the 1-based number of the column at the position.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getCommand--">getCommand()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the subprocess executable and arguments as an immutable list.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RootNode.html#getCompilerOptions--">getCompilerOptions()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes">RootNode</a></dt>
 <dd>
 <div class="block">Get compiler options specific to this <code>RootNode</code>.</div>
@@ -3748,6 +3812,10 @@
 <dd>
 <div class="block">Returns all available options.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getDirectory--">getDirectory()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the subprocess working directory.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/frame/Frame.html#getDouble-com.oracle.truffle.api.frame.FrameSlot-">getDouble(FrameSlot)</a></span> - Method in interface com.oracle.truffle.api.frame.<a href="com/oracle/truffle/api/frame/Frame.html" title="interface in com.oracle.truffle.api.frame">Frame</a></dt>
 <dd>
 <div class="block">Read access to a local variable of type double.</div>
@@ -3800,6 +3868,18 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/UnmodifiableEconomicMap.html#getEntries--">getEntries()</a></span> - Method in interface org.graalvm.collections.<a href="org/graalvm/collections/UnmodifiableEconomicMap.html" title="interface in org.graalvm.collections">UnmodifiableEconomicMap</a></dt>
 <dd>
 <div class="block">Returns a <a href="org/graalvm/collections/UnmodifiableMapCursor.html" title="interface in org.graalvm.collections"><code>UnmodifiableMapCursor</code></a> view of the mappings contained in this map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getEnvironment--">getEnvironment()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns an unmodifiable map of the process environment.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getEnvironment--">getEnvironment()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the subprocess environment as an immutable map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getErrorRedirect--">getErrorRedirect()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the standard error output destination.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/SuspendedEvent.html#getException--">getException()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/SuspendedEvent.html" title="class in com.oracle.truffle.api.debug">SuspendedEvent</a></dt>
 <dd>
@@ -3986,6 +4066,10 @@
 <dd>
 <div class="block">Retrieve the current set of all the identifiers associated with this frame descriptor.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/ResultVerifier.html#getIdentityFunctionDefaultResultVerifier--">getIdentityFunctionDefaultResultVerifier()</a></span> - Static method in interface org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/ResultVerifier.html" title="interface in org.graalvm.polyglot.tck">ResultVerifier</a></dt>
+<dd>
+<div class="block">Creates a default <a href="org/graalvm/polyglot/tck/ResultVerifier.html" title="interface in org.graalvm.polyglot.tck"><code>ResultVerifier</code></a> for the <code>IdentityFunctionTest</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.html#getIgnoreCount--">getIgnoreCount()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug">Breakpoint</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.AfterImageWriteAccess.html#getImagePath--">getImagePath()</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.AfterImageWriteAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.AfterImageWriteAccess</a></dt>
@@ -4013,6 +4097,10 @@
 <dd>
 <div class="block">Returns the total number of instrumented input nodes that may produce
  <a href="com/oracle/truffle/api/instrumentation/ExecutionEventNode.html#onInputValue-com.oracle.truffle.api.frame.VirtualFrame-com.oracle.truffle.api.instrumentation.EventContext-int-java.lang.Object-"><code>input events</code></a> when executed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getInputRedirect--">getInputRedirect()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the standard input source.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/SuspendedEvent.html#getInputValues--">getInputValues()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/SuspendedEvent.html" title="class in com.oracle.truffle.api.debug">SuspendedEvent</a></dt>
 <dd>
@@ -4597,6 +4685,10 @@
 <dd>
 <div class="block">Get the original language that created the value, if any.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#getOutputRedirect--">getOutputRedirect()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Returns the standard output destination.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#getOwner-java.nio.file.LinkOption...-">getOwner(LinkOption...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
 <div class="block">Returns the owner of the file.</div>
@@ -4654,6 +4746,14 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#getPath--">getPath()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dd>
 <div class="block">The fully qualified name of the source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPathSeparator--">getPathSeparator()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns the path separator used to separate filenames in a path list.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#getPathSeparator--">getPathSeparator()</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
+<dd>
+<div class="block">Returns the path separator used to separate filenames in a path list.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPolyglotBindings--">getPolyglotBindings()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
@@ -5151,6 +5251,11 @@
 <dd>
 <div class="block">Returns the uncached version of the profile.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/NodeFactory.html#getUncachedInstance--">getUncachedInstance()</a></span> - Method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/NodeFactory.html" title="interface in com.oracle.truffle.api.dsl">NodeFactory</a></dt>
+<dd>
+<div class="block">Returns the uncached version of this node or <code>null</code> if <a href="com/oracle/truffle/api/dsl/GenerateUncached.html" title="annotation in com.oracle.truffle.api.dsl"><code>GenerateUncached</code></a>
+ was not applied to the node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/UnknownIdentifierException.html#getUnknownIdentifier--">getUnknownIdentifier()</a></span> - Method in exception com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/UnknownIdentifierException.html" title="class in com.oracle.truffle.api.interop">UnknownIdentifierException</a></dt>
 <dd>
 <div class="block">Returns the identifier that could not be accessed.</div>
@@ -5349,6 +5454,7 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#hashCode--">hashCode()</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/SourceSection.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/SourceSection.html" title="class in org.graalvm.polyglot">SourceSection</a></dt>
@@ -5607,6 +5713,20 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLogger.html#info-java.util.function.Supplier-">info(Supplier&lt;String&gt;)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></dt>
 <dd>
 <div class="block">Logs a message with <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html?is-external=true#INFO" title="class or interface in java.util.logging"><code>info level</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/EnvironmentAccess.html#INHERIT">INHERIT</a></span> - Static variable in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/EnvironmentAccess.html" title="class in org.graalvm.polyglot">EnvironmentAccess</a></dt>
+<dd>
+<div class="block">Provides guest languages read access to process environment.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#INHERIT">INHERIT</a></span> - Static variable in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
+<dd>
+<div class="block">Indicates that subprocess I/O source or destination will be the same as those of the
+ current process.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#inheritIO-boolean-">inheritIO(boolean)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">If <code>true</code> the subprocess standard input, output and error output are the same as those
+ of the current Java process.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/ImageInfo.html#inImageBuildtimeCode--">inImageBuildtimeCode()</a></span> - Static method in class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/ImageInfo.html" title="class in org.graalvm.nativeimage">ImageInfo</a></dt>
 <dd>
@@ -6051,6 +6171,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html#isCounted-com.oracle.truffle.api.nodes.Node-">isCounted(Node)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html" title="interface in com.oracle.truffle.api.nodes">NodeUtil.NodeCountFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isCreateProcessAllowed--">isCreateProcessAllowed()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if the creation of a sub-process is allowed in the current
+ environment.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isCreateThreadAllowed--">isCreateThreadAllowed()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if the creation of new threads is allowed in the current
@@ -6496,6 +6621,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#isReadable--">isReadable()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
 <div class="block">Tests if a file is readable.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html#isRedirectErrorStream--">isRedirectErrorStream()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io">ProcessHandler.ProcessCommand</a></dt>
+<dd>
+<div class="block">Return whether the standard error output should be merged into standard output.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#isRegularFile-java.nio.file.LinkOption...-">isRegularFile(LinkOption...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
@@ -7401,6 +7530,10 @@
 <dd>
 <div class="block">Opens a file for writing returning an <a href="http://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io"><code>OutputStream</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#newProcessBuilder-java.lang.String...-">newProcessBuilder(String...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Creates a new process builder with the specified operating program and arguments.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html#NO_FILTER">NO_FILTER</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html" title="interface in com.oracle.truffle.api.nodes">NodeUtil.NodeCountFilter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">Node</span></a> - Class in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
@@ -7486,6 +7619,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.html#nonAtomicReplace-com.oracle.truffle.api.nodes.Node-T-java.lang.CharSequence-">nonAtomicReplace(Node, T, CharSequence)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.html" title="class in com.oracle.truffle.api.nodes">NodeUtil</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/EnvironmentAccess.html#NONE">NONE</a></span> - Static variable in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/EnvironmentAccess.html" title="class in org.graalvm.polyglot">EnvironmentAccess</a></dt>
+<dd>
+<div class="block">Provides guest languages no access to process environment.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/HostAccess.html#NONE">NONE</a></span> - Static variable in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/HostAccess.html" title="class in org.graalvm.polyglot">HostAccess</a></dt>
 <dd>
 <div class="block">Predefined host access policy that disallows any access to public host methods or fields.</div>
@@ -8034,6 +8171,10 @@
 <dd>
 <div class="block">Holder for a pinned object, such that the object doesn't move until the pin is removed.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#PIPE">PIPE</a></span> - Static variable in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
+<dd>
+<div class="block">Indicates that subprocess I/O will be connected to the current Java process using a pipe.</div>
+</dd>
 <dt><a href="org/graalvm/nativeimage/Platform.html" title="interface in org.graalvm.nativeimage"><span class="typeNameLink">Platform</span></a> - Interface in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
 <div class="block">Root of the interface hierarchy for architectures, OS, and supported combinations of them.</div>
@@ -8049,6 +8190,10 @@
 <dt><a href="org/graalvm/nativeimage/Platform.DARWIN.html" title="interface in org.graalvm.nativeimage"><span class="typeNameLink">Platform.DARWIN</span></a> - Interface in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
 <div class="block">Supported operating system: Darwin (MacOS).</div>
+</dd>
+<dt><a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.DARWIN_AArch64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
+<dd>
+<div class="block">Supported leaf platform: Darwin (MacOS) on AArch 64-bit.</div>
 </dd>
 <dt><a href="org/graalvm/nativeimage/Platform.DARWIN_AMD64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.DARWIN_AMD64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
@@ -8209,6 +8354,23 @@
 <div class="block">
  Represents an event sink for instrumentation events that is embedded in the AST using wrappers if
  needed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#processHandler-org.graalvm.polyglot.io.ProcessHandler-">processHandler(ProcessHandler)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Installs a <a href="org/graalvm/polyglot/io/ProcessHandler.html" title="interface in org.graalvm.polyglot.io"><code>ProcessHandler</code></a> responsible for external process creation.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/io/ProcessHandler.html" title="interface in org.graalvm.polyglot.io"><span class="typeNameLink">ProcessHandler</span></a> - Interface in <a href="org/graalvm/polyglot/io/package-summary.html">org.graalvm.polyglot.io</a></dt>
+<dd>
+<div class="block">Service-provider for guest languages process builder.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/io/ProcessHandler.ProcessCommand.html" title="class in org.graalvm.polyglot.io"><span class="typeNameLink">ProcessHandler.ProcessCommand</span></a> - Class in <a href="org/graalvm/polyglot/io/package-summary.html">org.graalvm.polyglot.io</a></dt>
+<dd>
+<div class="block">Subprocess attributes passed to
+ <a href="org/graalvm/polyglot/io/ProcessHandler.html#start-org.graalvm.polyglot.io.ProcessHandler.ProcessCommand-"><code>start</code></a> method.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io"><span class="typeNameLink">ProcessHandler.Redirect</span></a> - Class in <a href="org/graalvm/polyglot/io/package-summary.html">org.graalvm.polyglot.io</a></dt>
+<dd>
+<div class="block">Represents a source of subprocess input or a destination of subprocess output.</div>
 </dd>
 <dt><a href="org/graalvm/nativeimage/ProcessProperties.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">ProcessProperties</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
@@ -8684,6 +8846,22 @@
 <dd>
 <div class="block">Set a receiver object of this scope.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#redirectError-org.graalvm.polyglot.io.ProcessHandler.Redirect-">redirectError(ProcessHandler.Redirect)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the standard error output destination.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#redirectErrorStream-boolean-">redirectErrorStream(boolean)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">If <code>true</code> the standard error output is merged into standard output.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#redirectInput-org.graalvm.polyglot.io.ProcessHandler.Redirect-">redirectInput(ProcessHandler.Redirect)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the standard input source.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#redirectOutput-org.graalvm.polyglot.io.ProcessHandler.Redirect-">redirectOutput(ProcessHandler.Redirect)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Sets the standard output destination.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/library/ReflectionLibrary.html" title="class in com.oracle.truffle.api.library"><span class="typeNameLink">ReflectionLibrary</span></a> - Class in <a href="com/oracle/truffle/api/library/package-summary.html">com.oracle.truffle.api.library</a></dt>
 <dd>
 <div class="block">The reflection library allows to send to and proxy messages of receivers.</div>
@@ -9137,6 +9315,10 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#setArrayElement-long-java.lang.Object-">setArrayElement(long, Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
 <div class="block">Sets the value at a given index.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#setAttribute-com.oracle.truffle.api.TruffleFile.AttributeDescriptor-T-java.nio.file.LinkOption...-">setAttribute(TruffleFile.AttributeDescriptor&lt;T&gt;, T, LinkOption...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
+<dd>
+<div class="block">Sets a single file's attribute.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#setAttribute-java.nio.file.Path-java.lang.String-java.lang.Object-java.nio.file.LinkOption...-">setAttribute(Path, String, Object, LinkOption...)</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
 <dd>
@@ -9609,6 +9791,14 @@
 <dd>
 <div class="block">Marks program locations to be considered as try blocks, that are followed by catch.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#start--">start()</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
+<dd>
+<div class="block">Starts a new subprocess using the attributes of this builder.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.html#start-org.graalvm.polyglot.io.ProcessHandler.ProcessCommand-">start(ProcessHandler.ProcessCommand)</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.html" title="interface in org.graalvm.polyglot.io">ProcessHandler</a></dt>
+<dd>
+<div class="block">A request to start a new subprocess with given attributes.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html#startServer-java.net.URI-org.graalvm.polyglot.io.MessageEndpoint-">startServer(URI, MessageEndpoint)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument.Env</a></dt>
 <dd>
 <div class="block">Start a server at the provided URI via the <a href="org/graalvm/polyglot/io/MessageTransport.html" title="interface in org.graalvm.polyglot.io"><code>MessageTransport</code></a> service.</div>
@@ -9943,6 +10133,7 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionType.html#toString--">toString()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionType.html" title="class in org.graalvm.options">OptionType</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/HostAccess.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/HostAccess.html" title="class in org.graalvm.polyglot">HostAccess</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionEvent.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionEvent.html" title="class in org.graalvm.polyglot.management">ExecutionEvent</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.StackFrame.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.StackFrame.html" title="class in org.graalvm.polyglot">PolyglotException.StackFrame</a></dt>
 <dd>
@@ -10095,6 +10286,10 @@
 <dt><a href="com/oracle/truffle/api/TruffleOptions.html" title="class in com.oracle.truffle.api"><span class="typeNameLink">TruffleOptions</span></a> - Class in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
 <div class="block">Class containing general Truffle options.</div>
+</dd>
+<dt><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io"><span class="typeNameLink">TruffleProcessBuilder</span></a> - Class in <a href="com/oracle/truffle/api/io/package-summary.html">com.oracle.truffle.api.io</a></dt>
+<dd>
+<div class="block">A builder used to create an external subprocess.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/TruffleRuntime.html" title="interface in com.oracle.truffle.api"><span class="typeNameLink">TruffleRuntime</span></a> - Interface in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
@@ -10924,7 +11119,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.0.1-dev</b><br>aa51aaa1b2f8ade884b210e8d066c8286cec64a7</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-beta.02-dev</b><br>cb3515791f948a45fa5ea37e085385e4917f8be9</div>
 </div>
 <div class="subNav">
 <ul class="navList">

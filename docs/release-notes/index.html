@@ -528,6 +528,31 @@ repositories for the project closest related to the issue:</p>
 
 <p>On this page, we would like to highlight the most important changes in the <strong>GraalVM</strong> releases. There are different components to GraalVM, so we highlight the changes to these separately.</p>
 
+<h2 id="1902">19.0.2</h2>
+<p>(2019-06-13)</p>
+
+<p>This is a bug fix release for 19.0 and we recommend upgrading for all 19.0.x users.</p>
+
+<h3 id="java">Java</h3>
+<ul>
+  <li>Improved compilation performance of scheduler phase.</li>
+  <li>Support retrieving annotations from class initializers <a href="https://github.com/oracle/graal/issues/1320">1320</a></li>
+  <li>Fixed problems related to the freetype library: <a href="https://github.com/oracle/graal/issues/1269">1269</a>, <a href="https://github.com/oracle/graal/issues/1270">1270</a>, <a href="https://github.com/oracle/graal/issues/1305">1305</a>.</li>
+  <li>Fixed Version string reporting (it was missing <code>64-Bit</code> in the string).</li>
+</ul>
+
+<h3 id="native-image">Native image</h3>
+<ul>
+  <li>Fixed IllegalArgumentException: Cannot create Method for class initializer <a href="https://github.com/oracle/graal/issues/1320">1320</a></li>
+  <li>Fixed an issue when the build would loop forever when <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code></li>
+  <li>Fixed the issue where fallback image generation wouldn’t respect the <code>--no-server</code> argument.</li>
+  <li>Fix <code>native-image-agent=restrict</code> configuration detection.</li>
+  <li>Added <code>-agentlib:native-image-agent=build</code> configuration option.</li>
+</ul>
+
+<h3 id="llvm-interpreter">LLVM interpreter</h3>
+<p>Allow LLVM interpreter Context to run without <code>allowIO(true)</code>.</p>
+
 <h2 id="1900">19.0.0</h2>
 <p>(2019-05-09)</p>
 
@@ -538,13 +563,13 @@ GraalVM’s JavaScript engine and the developer tools: Chrome inspector based
 debugger, Profiler etc.. Currently there is no <code>gu</code> utility or the ability to
 add support for the other GraalVM languages.</p>
 
-<h3 id="java">Java</h3>
+<h3 id="java-1">Java</h3>
 
 <ul>
   <li>We updated the base JDK to 8u212. You can find the JDK release notes at the <a href="https://www.oracle.com/technetwork/java/javase/8u212-relnotes-5292913.html">Oracle Technology Network website</a>.</li>
 </ul>
 
-<h3 id="native-image">Native Image</h3>
+<h3 id="native-image-1">Native Image</h3>
 
 <p>Native Image was extracted from the base GraalVM distribution. Currently it is
 available as an early adopter plugin. To install it, run: <code>gu install
@@ -615,12 +640,12 @@ packages or individual classes. For example, if we have classes <code>p.C1</code
 <h2 id="10-rc16">1.0-RC16</h2>
 <p>(2019-04-23)</p>
 
-<h3 id="java-1">Java</h3>
+<h3 id="java-2">Java</h3>
 
 <p>We addressed several benchmarks that had slower performance when running with the GraalVM compiler built as a native library, also known as <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a>, a mode selected as the default in the last release candidate. We fixed an issue causing a delay when shutting down the virtual machine process at the end of the execution of an application
 (see <a href="https://github.com/oracle/graal/issues/1140">#1140</a>).</p>
 
-<h3 id="native-image-1">Native Image</h3>
+<h3 id="native-image-2">Native Image</h3>
 <p>We improved the structure of the <code>org.graalvm.nativeimage</code> API: classes that can
 only be used during image generation are now in the package
 <code>org.graalvm.nativeimage.hosted</code>, to clearly separate them from the classes that
@@ -682,7 +707,7 @@ GNU-R behavior.</li>
 <h2 id="10-rc15">1.0-RC15</h2>
 <p>(2019-04-05)</p>
 
-<h3 id="java-2">Java</h3>
+<h3 id="java-3">Java</h3>
 
 <p>By default,
 <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a> is now
@@ -765,13 +790,13 @@ Here is a short list of the most notable ones:</p>
 
 <p>More details can be found in the <a href="https://github.com/graalvm/graalpython/blob/master/CHANGELOG.md#version-100-rc15">project changelog on GitHub</a>.</p>
 
-<h3 id="llvm-interpreter">LLVM Interpreter</h3>
+<h3 id="llvm-interpreter-1">LLVM Interpreter</h3>
 
 <ul>
   <li>Added  a preliminary support for bitcode produced by LLVM 8.</li>
 </ul>
 
-<h3 id="native-image-2">Native Image</h3>
+<h3 id="native-image-3">Native Image</h3>
 
 <p>Based on the feedback and bug reports, we improved the agent that traces reflection
 and JNI usage on the JavaHotSpot VM. We also changed the implementation language
@@ -843,7 +868,7 @@ pages. It is not part of GraalVM Community or Enterprise editions.</p>
 <p>We introduced a uniform <code>--vm.&lt;option&gt;</code> which allows to pass options in a uniform way, without knowing which VM mode (<code>--jvm</code>, or <code>--native</code>) will be used. It replaces  <code>--jvm.&lt;option&gt;</code> and <code>--native.&lt;option&gt;</code> command line options, e.g. the option to configure the maximum amount of memory used for the heap <code>--jvm.Xmx=5G</code> becomes <code>--vm.Xmx=5G</code>.
 This applies to all languages.</p>
 
-<h3 id="java-3">Java</h3>
+<h3 id="java-4">Java</h3>
 <h5 id="libgraal">libgraal</h5>
 <p>This is the first release to include a prebuilt <a href="https://github.com/oracle/graal/tree/master/compiler#libgraal">libgraal</a> shared library. This shared library is produced by the native-image and contains a pre-compiled version of the Graal compiler. In addition to improving startup, libgraal completely avoids interfering with the heap usage and profiling of the application code. That is, it has execution properties similar to other native HotSpot compilers such as C1 and C2. To try it out, add <code>-XX:+UseJVMCINativeLibrary</code> to your <code>java</code> command line. Note that this is still a work in progress and we are focusing on improving its stability and ensuring it does not compromise peak performance.</p>
 

@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>20.0.0-beta.02-dev</b><br>428c6a6a6bbc3edcd70ae4f39ba7aa64c3b4303e</div>
+<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>20.0.0-beta.02-dev</b><br>923f55239289e0514daf26ad769e2861c4145574</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -2040,8 +2040,9 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionValues.html#hasBeenSet-org.graalvm.options.OptionKey-">hasBeenSet(OptionKey&lt;?&gt;)</a></span> - Method in interface org.graalvm.options.<a href="org/graalvm/options/OptionValues.html" title="interface in org.graalvm.options">OptionValues</a></dt>
 <dd>
-<div class="block">Determines if a value for <code>optionKey</code> has been <a href="org/graalvm/options/OptionValues.html#set-org.graalvm.options.OptionKey-T-"><code>OptionValues.set(org.graalvm.options.OptionKey&lt;T&gt;, T)</code></a> in this set of option
- values.</div>
+<div class="block">Determines if a value for <code>optionKey</code> has been set explicitly by the <code>Context</code> or
+ <code>Engine</code>, and therefore <a href="org/graalvm/options/OptionValues.html#get-org.graalvm.options.OptionKey-"><code>OptionValues.get(OptionKey)</code></a> does not call
+ <a href="org/graalvm/options/OptionKey.html#getDefaultValue--"><code>OptionKey.getDefaultValue()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#hasBytes--">hasBytes()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dd>
@@ -2098,7 +2099,7 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionValues.html#hasSetOptions--">hasSetOptions()</a></span> - Method in interface org.graalvm.options.<a href="org/graalvm/options/OptionValues.html" title="interface in org.graalvm.options">OptionValues</a></dt>
 <dd>
 <div class="block">Determines if a value for any of the option keys in <a href="org/graalvm/options/OptionValues.html#getDescriptors--"><code>option
- descriptors</code></a> has been <a href="org/graalvm/options/OptionValues.html#set-org.graalvm.options.OptionKey-T-"><code>OptionValues.set(org.graalvm.options.OptionKey&lt;T&gt;, T)</code></a> in this set of option values.</div>
+ descriptors</code></a> <a href="org/graalvm/options/OptionValues.html#hasBeenSet-org.graalvm.options.OptionKey-"><code>has been set</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.Builder.html#help-java.lang.String-">help(String)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.Builder.html" title="class in org.graalvm.options">OptionDescriptor.Builder</a></dt>
 <dd>
@@ -3653,10 +3654,6 @@
 <dd>
 <div class="block">Set the value of the option with the provided name to the new value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionValues.html#set-org.graalvm.options.OptionKey-T-">set(OptionKey&lt;T&gt;, T)</a></span> - Method in interface org.graalvm.options.<a href="org/graalvm/options/OptionValues.html" title="interface in org.graalvm.options">OptionValues</a></dt>
-<dd>
-<div class="block">Sets the value of <code>optionKey</code> to <code>value</code>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyArray.html#set-long-org.graalvm.polyglot.Value-">set(long, Value)</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyArray.html" title="interface in org.graalvm.polyglot.proxy">ProxyArray</a></dt>
 <dd>
 <div class="block">Sets the element at the given index.</div>
@@ -4452,7 +4449,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>20.0.0-beta.02-dev</b><br>428c6a6a6bbc3edcd70ae4f39ba7aa64c3b4303e</div>
+<div class="aboutLanguage"><b>GraalVM SDK Java API Reference<br>20.0.0-beta.02-dev</b><br>923f55239289e0514daf26ad769e2861c4145574</div>
 </div>
 <div class="subNav">
 <ul class="navList">

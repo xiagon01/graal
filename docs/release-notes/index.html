@@ -536,16 +536,16 @@ repositories for the project closest related to the issue:</p>
 <h3 id="java">Java</h3>
 <ul>
   <li>Improved compilation performance of scheduler phase.</li>
-  <li>Support retrieving annotations from class initializers <a href="https://github.com/oracle/graal/issues/1320">1320</a></li>
+  <li>Support retrieving annotations from class initializers (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
   <li>Fixed problems related to the freetype library: <a href="https://github.com/oracle/graal/issues/1269">1269</a>, <a href="https://github.com/oracle/graal/issues/1270">1270</a>, <a href="https://github.com/oracle/graal/issues/1305">1305</a>.</li>
   <li>Fixed Version string reporting (it was missing <code>64-Bit</code> in the string).</li>
 </ul>
 
 <h3 id="native-image">Native image</h3>
 <ul>
-  <li>Fixed IllegalArgumentException: Cannot create Method for class initializer <a href="https://github.com/oracle/graal/issues/1320">1320</a></li>
-  <li>Fixed an issue when the build would loop forever when <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code></li>
-  <li>Fixed the issue where fallback image generation wouldn’t respect the <code>--no-server</code> argument.</li>
+  <li>Fixed <code>IllegalArgumentException: Cannot create Method for class initializer</code> (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
+  <li>Fixed an issue when the build would loop forever if <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code>.</li>
+  <li>Fixed the issue where fallback image generation would not respect the <code>--no-server</code> argument.</li>
   <li>Fix <code>native-image-agent=restrict</code> configuration detection.</li>
   <li>Added <code>-agentlib:native-image-agent=build</code> configuration option.</li>
 </ul>

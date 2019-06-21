@@ -771,6 +771,15 @@ component. By default, it will not alter anything. You can also use <code>-f</co
 (<code>--force</code>) option, which disables most of the checks and allows you to install
 non-matching versions.</p>
 
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<p>If a language component is not installed running the code that tries to initialize the language context can result in an exception like this:</p>
+<pre><code>java.lang.ExceptionInInitializerError
+Caused by: com.oracle.truffle.polyglot.PolyglotIllegalArgumentException: A language with id '$language' is not installed. Installed languages are: [js, llvm].
+</code></pre>
+
+<p>If you see a problem like that, install the language component as explained on this page above.</p>
+
               </div>
 
               <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">

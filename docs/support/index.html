@@ -252,16 +252,288 @@
 
 
       <main  class="content"   aria-label="Content">
-        <main class="content content--home" aria-label="Content">
-  <div class="support-banner" style="background-image: url(/resources/img/unite.svg); background-color: #02677d; height: 77vh; position: relative; display: flex; align-items: center;">
-    <div class="home-banner__content">
-        <a href="/docs" class="link-back" style="color:#f29110"><em>←</em>Back</a>
-        <p style="font-size:20px; text-align:center">GraalVM Enterprise Edition (EE) will  be commercially supported at the time EE 1.0 will be GA release.
-          Community Edition is community supported as it is open source project.
-        </p>
+        <div class="wrapper wrapper-content">
+  <article class="docs">
+
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+          <div class="row d-flex flex-wrap">
+            <div class="col-sm-3 col-bg">
+              <div class="sidebar-wrap">
+                <div class="sidebar">
+                  
+<div class="toc-floating">
+
+
+<script>
+var sidebar = document.currentScript.parentElement;
+
+// 
+//   $(document).ready(function(){
+//     $('.sidebar-wrap').stickySidebar({
+//       topSpacing: 74,
+//       bottomSpacing: 40
+//     });
+//   });
+//
+// 
+
+
+$(document).ready(function(){
+  var header = $('.header').height();
+  var invisibleBlock;
+
+  $("#content-wrapper h1, #content-wrapper h2").each(function() {
+    invisibleBlock = $(this).before("<div class='anchor' id="+ $(this).attr("id") +"></div>");
+  });
+
+  $(window).scroll(function() {
+    var lastitem = null;
+    $("#content-wrapper h1, #content-wrapper h2").each(function() {
+      var heading = $(this);
+      var position = (heading.position().top - heading.height()) - $(window).scrollTop();
+      var listitem = $(sidebar).find("li").filter(function() {
+        return $(this).find("a").attr("href") == "#" + heading.attr("id");
+      });
+      listitem.removeClass("toc-bullets-focused");
+      if (position <= 0) {
+        lastitem = listitem;
+      }
+    });
+    if (lastitem != null) lastitem.addClass("toc-bullets-focused");
+  });
+});
+
+</script>
+
+<ul class="toc-bullets">
+
+  
+    
+
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/why-graal/">
+            Why GraalVM?
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/getting-started/">
+            Getting Started
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/examples/">
+            Examples
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/reference-manual/compatibility/">
+            Compatibility
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/release-notes/">
+            Release Notes
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/reference-manual/">
+            Reference Manual
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/graalvm-as-a-platform/">
+            GraalVM as a Platform
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+        <li class="toc-bullets-main toc-bullets-highlight">
+        
+          
+          <a href="/docs/support/">
+            Support
+          </a>
+        </li>
+
+
+        
+          <div>
+  <script>
+    var scriptElement = document.currentScript;
+    var div = $(scriptElement.parentElement);
+    $(window).on("load", function() {
+      $("#content-wrapper h1, #content-wrapper h2").each(function() {
+        var li = $("<li></li>", { class: "toc-bullets-sub" });
+        var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+        a.text($(this).text());
+        li.append(a);
+        div.append(li);
+      });
+    });
+  </script>
+</div>
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/faq/">
+            FAQ
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</ul>
+
+</div>
+
+                </div>
+                  <form class="search-container" action="/docs/search" autocomplete="on" method="get">
+                    <input type="text" id="search-box" name="query" placeholder="Search">
+                    <button type="submit" class="searchbttn"></button>
+                  </form>
+              </div>
+            </div>
+
+            <div class="col-sm-9">
+              <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
+                <p>Oracle GraalVM Enterprise Edition is currently in <strong>Pricing in advance of availability</strong> phase with 24/7 support provided by <a href="https://support.oracle.com">My Oracle Support</a>. Please verify if <a href="https://shop.oracle.com/apex/f?p=dstore:1002:0::::P1002_HELP_TOPIC_ID:114206114249751725703093">support services</a> are activated with your account.</p>
+
+<p>For inquiries related to sales, support terms, product and/or licensing, please contact us at
+<a href="https://oracle.com/contact">https://oracle.com/contact</a>.</p>
+
+<p>GraalVM Community Edition is <a href="/community/">community supported</a> as it is an open source project.
+Subscribe and post to <a href="https://oss.oracle.com/mailman/listinfo/graalvm-users">graalvm-users@oss.oracle.com</a> for usability questions or open an issue on <a href="https://github.com/oracle/graal/issues">GitHub</a>.</p>
+
+              </div>
+
+              <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
+                <div class="hamburger"><div class="inner"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
-</main>
+</article>
+
+</div>
 
       </main>
 
@@ -313,6 +585,7 @@
               <li class="footer-list__item"><a href="https://docs.oracle.com/en/graalvm/">Oracle Help Center</a></li>
               <li class="footer-list__item"><a href="https://www.oracle.com/tools/graalvm-enterprise-edition.html">Oracle GraalVM</a></li>
               <li class="footer-list__item"><a href="https://labs.oracle.com/">Oracle Labs</a></li>
+              <li class="footer-list__item"><a href="/docs/support/">Support</a></li>
             </ul>
           </div>
         </div>

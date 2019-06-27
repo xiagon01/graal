@@ -34,7 +34,7 @@ The information property file, _Info.plist_, is in the top level _Contents_
 folder. This means that GraalVM participates in the macOS specific
 `/usr/libexec/java_home` mechanism. Depending on other JDK 8 installation(s)
 available, it is now possible that `/usr/libexec/java_home -v1.8` returns
-`/Library/Java/JavaVirtualMachines/graalvm-ee-19.0.2/Contents/Home`.
+`/Library/Java/JavaVirtualMachines/graalvm-ee-{{ site.product_version }}/Contents/Home`.
 You can run `/usr/libexec/java_home -v1.8 -V` to see the complete list of 1.8
 JVMs available to the `java_home` command. This command appears to sort the JVMs
 in decreasing version order and chooses the top one as the default for the

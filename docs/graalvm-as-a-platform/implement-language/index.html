@@ -543,29 +543,42 @@ extending an existing SimpleLanguage.
 language built using the <a href="https://www.graalvm.org/truffle/javadoc/com/oracle/truffle/api/package-summary.html">Truffle API</a>.
 The SimpleLanguage project provides a showcase on how to use the Truffle APIs
 for writing your own language. It aims to use most of the available Truffle
-Framework features and documents their use extensively with inline source
+framework features and documents their use extensively with inline source
 documentation.</p>
 
-<p>Make sure your system meets the prerequisites:</p>
-
-<ul>
-  <li><a href="https://maven.apache.org/download.cgi">maven3</a></li>
-</ul>
+<p>To start, please ensure <a href="https://maven.apache.org/download.cgi">maven3</a> and
+<a href="/docs/getting-started/">GraalVM</a> are available in your
+system.</p>
 
 <ol>
-  <li>Ensure you set up GraalVM before you begin. See <a href="/docs/getting-started/">Get Started</a>.</li>
   <li>Clone the SimpleLanguage repository using
     <pre><code class="language-shell">$ git clone https://github.com/graalvm/simplelanguage
 </code></pre>
   </li>
-  <li>Set the environment variable <code>JAVA_HOME</code> to the GraalVM home folder using a command-line shell for Linux.
+  <li>Set the <code>JAVA_HOME</code> and <code>PATH</code> environment variables to the GraalVM home and bin folders using a command-line shell for Linux:
     <pre><code class="language-shell">$ export JAVA_HOME=/path/to/graalvm
+$ export PATH=/path/to/graalvm/bin:$PATH
 </code></pre>
-    <p>and for Mac OS X:</p>
+    <p>and for macOS X:</p>
     <pre><code class="language-shell">$ export JAVA_HOME=/path/to/graalvm/Contents/Home
+$ export PATH=/path/to/graalvm/Contents/Home/bin:$PATH
 </code></pre>
   </li>
-  <li>Execute <code>mvn package</code> from SimpleLanguage folder to build the language.</li>
+  <li>Execute <code>mvn package</code> from SimpleLanguage folder to build the language.
+The command also builds a <code>slnative</code> executable in the <code>simplelanguage/native</code>
+directory and <code>sl-component.jar</code> language component which later can be installed
+into GraalVM using the <a href="/docs/reference-manual/graal-updater/">GraalVM
+Updater</a> tool.
+Please verify if <code>native-image</code> plugin is available in your GraalVM distribution
+to avoid the build failure:
+    <pre><code>$ gu list
+$ gu install native-image
+</code></pre>
+    <p>You can disable the SimpleLanguage native image build during the packaging phase by running:</p>
+    <pre><code>$ export SL_BUILD_NATIVE=false
+$ mvn package
+</code></pre>
+  </li>
   <li>Run in the simplelanguage root folder:
     <pre><code class="language-shell">$ ./sl ./language/tests/HelloWorld.sl
 </code></pre>
@@ -575,7 +588,7 @@ documentation.</p>
 <p>The SimpleLanguage demonstration language is licensed under the <a href="https://opensource.org/licenses/UPL">Universal Permissive License</a> (UPL).</p>
 
 <h2 id="ide-setup">IDE Setup</h2>
-<p>The Truffle Language Implementation Framework provides language-agnostic infrastructure to realize standard IDE features by providing additional APIs. If you would like to experiment with your language and get the benefits of an IDE, consider the import of SimpleLanguage as an example.</p>
+<p>The Truffle Language Implementation framework provides language-agnostic infrastructure to realize standard IDE features by providing additional APIs. If you would like to experiment with your language and get the benefits of an IDE, consider the import of SimpleLanguage as an example.</p>
 
 <h3 id="eclipse">Eclipse</h3>
 <p>The SimpleLanguage teaching project has been tested with Eclipse Neon.2 Release 4.6.2 and Eclipse Oxygen.3A. To import the project folder to the desirable Eclipse environment:</p>
@@ -589,9 +602,9 @@ documentation.</p>
 <p>NetBeans provides GUI support for debugging arbitrary languages. In order to upload SimpleLanguage to NetBeans interface, proceed to File -&gt; Open Project -&gt; select <code>simplelanguage</code> folder -&gt; check “Open Required Projects” -&gt; open Project.</p>
 
 <h3 id="intellij-idea">IntelliJ IDEA</h3>
-<p>SimpleLanguage project has been tested with IntelliJ IDEA 2018.2. Open IntelliJ IDEA and, from the main menu bar, select  File -&gt; Open -&gt; Navigate to and select the <code>simplelanguage</code> folder -&gt; Press “OK”.  All dependencies will be included automatically.</p>
+<p>SimpleLanguage project has been tested with IntelliJ IDEA 2018.3. Open IntelliJ IDEA and, from the main menu bar, select  File -&gt; Open -&gt; Navigate to and select the <code>simplelanguage</code> folder -&gt; Press “OK”.  All dependencies will be included automatically.</p>
 
-<h2 id="running">Running</h2>
+<h2 id="run-simplelanguage">Run SimpleLanguage</h2>
 <p>To run a SimpleLanguage source file, execute</p>
 <pre><code class="language-shell">$ ./sl language/tests/HelloWorld.sl
 </code></pre>
@@ -599,7 +612,7 @@ documentation.</p>
 <pre><code>$ ./sl -disassemble language/tests/SumPrint.sl
 </code></pre>
 
-<h2 id="igv">IGV</h2>
+<h2 id="dump-graphs">Dump Graphs</h2>
 
 <p>To investigate performance issues, we recommend the Ideal Graph Visualizer (here
 and after “IGV”) – an essential tool for any language implementer building on
@@ -611,11 +624,11 @@ It is available as a separate download on <a href="https://www.oracle.com/techne
 <pre><code class="language-shell">$ cd idealgraphvisualizer/bin
 $ idealgraphvisualizer
 </code></pre>
-<p>2.Execute the following to dump graphs to IGV from the second console window:</p>
+<p>2.Execute the following from simplelanguage root folder to dump graphs to IGV:</p>
 <pre><code class="language-shell">$ ./sl -dump language/tests/SumPrint.sl
 </code></pre>
 
-<h2 id="debugging">Debugging</h2>
+<h2 id="debug">Debug</h2>
 <p>To start debugging the SimpleLanguage implementation with a Java debugger, pass the <code>-debug</code> option to the command-line launcher of your program:</p>
 <pre><code class="language-shell">$ ./sl -debug language/tests/HelloWorld.sl
 </code></pre>
@@ -623,25 +636,25 @@ $ idealgraphvisualizer
 
 <h2 id="simplelanguage-component-for-graalvm">SimpleLanguage Component for GraalVM</h2>
 
-<p>Languages implemented with <a href="https://github.com/oracle/graal/tree/master/truffle">Truffle Language Implementation Framework</a> can be packaged as <em>Components</em> which later can be installed into
+<p>Languages implemented with <a href="https://github.com/oracle/graal/tree/master/truffle">Truffle Language Implementation framework</a> can be packaged as <em>Components</em> which later can be installed into
 GraalVM using the <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a>.
 Running <code>mvn package</code> in the simplelanguage folder also builds a
 <code>sl-component.jar</code>.
 This file is the SimpleLanguage component for GraalVM and can be installed by
 running:</p>
 
-<pre><code class="language-shell">$ /path/to/graalvm/bin/gu -L install /path/to/sl-component.jar
+<pre><code class="language-shell">$ gu -L install /path/to/sl-component.jar
 </code></pre>
-<h3 id="simplelanguage-native-image">SimpleLanguage native image</h3>
+<h2 id="simplelanguage-native-image">SimpleLanguage Native Image</h2>
 
-<p>A language implemented with Truffle Language Implementation Framework can be AOT compiled using the GraalVM
-<a href="/docs/reference-manual/aot-compilation/">native-image</a>
-tool. Running <code>mvn package</code> in the simplelanguage folder also builds a
-<code>slnative</code> executable in the <code>native</code> directory. This executable is the full
-SimpleLanguage implementation as a single native application, and has no need
-for a GraalVM in order to execute SimpleLanguage code. Besides this, a big advantage
-of using the native image when compared to running on the GraalVM is the greatly
-faster startup time as shown bellow.</p>
+<p>A language implemented with Truffle Language Implementation framework can be AOT
+compiled using the <a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a>. Running
+<code>mvn package</code> in the simplelanguage folder also builds a <code>slnative</code> executable
+in the <code>native</code> directory. This executable is the full SimpleLanguage
+implementation as a single native application, and has no need for a GraalVM in
+order to execute SimpleLanguage code. Besides this, a big advantage of using the
+native image when compared to running on the GraalVM is the greatly faster
+startup time as shown bellow.</p>
 
 <pre><code class="language-shell">$ time ./sl language/tests/HelloWorld.sl
 == running on org.graalvm.polyglot.Engine@2db0f6b2
@@ -673,7 +686,7 @@ GraalVM.</p>
 <p>For more information on the <code>native-image</code> tool consider reading the <a href="/docs/reference-manual/aot-compilation/">reference
 manual</a>.</p>
 
-<h3 id="disabling-the-simplelanguage-native-image-build">Disabling the SimpleLanguage native image build</h3>
+<h3 id="disable-simplelanguage-native-image-build">Disable SimpleLanguage Native Image Build</h3>
 
 <p>Building the native image through maven is attached to the maven <code>package</code>
 phase. Since the native image build can take a bit of time, we provide the
@@ -693,21 +706,17 @@ Skipping the native image build because SL_BUILD_NATIVE is set to false.
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.514 s
-[INFO] Finished at: 2018-07-16T11:23:56+02:00
-[INFO] Final Memory: 22M/428M
-[INFO] ------------------------------------------------------------------------
 ...
 </code></pre>
 
-<h3 id="running-simplelanguage-with-the-newest-version-of-the-compiler">Running SimpleLanguage with the newest version of the compiler</h3>
+<h2 id="run-simplelanguage-with-the-newest-compiler-version">Run SimpleLanguage with the Newest Compiler Version</h2>
 
 <p>In the outstanding case that you need to execute SimpleLanguage with the newest
 version of the GraalVM compiler, please follow these instructions:</p>
 
 <ol>
-  <li>Download the latest JVMCI JDK 8 from <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network Downloads</a> and point JAVA_HOME at it:
-    <pre><code class="language-shell">$ export JAVA_HOME=/path/to/labsjdk1.8.0_192-jvmci-0.52
+  <li>Download the latest <a href="https://github.com/graalvm/openjdk8-jvmci-builder/releases">JVMCI JDK 8</a> and point JAVA_HOME at it:
+    <pre><code class="language-shell">$ export JAVA_HOME=/path/to/openjdk1.8.0_212-jvmci-20-b04
 </code></pre>
   </li>
   <li>Clone the “Graal” repository from SimpleLanguage folder:
@@ -723,7 +732,7 @@ $ git clone https://github.com/oracle/graal.git
     <pre><code class="language-shell">$ export PATH=/path/to/mx:$PATH
 </code></pre>
   </li>
-  <li>Navigate to the compiler folder in “Graal” repository:
+  <li>Navigate to the compiler folder:
     <pre><code class="language-shell">$ cd /path/to/graal/compiler
 </code></pre>
   </li>
@@ -732,12 +741,12 @@ $ git clone https://github.com/oracle/graal.git
 </code></pre>
   </li>
   <li>Run SimpleLanguage using the mx command:
-    <pre><code class="language-shell">$ mx -v --jdk=jvmci vm -cp /path/to/simplelanguage/launcher/target/launcher-1.0.0-rc16-SNAPSHOT.jar:/path/to/simplelanguage/language/target/simplelanguage.jar com.oracle.truffle.sl.launcher.SLMain  /path/to/simplelanguage/language/tests/SlScript.sl
+    <pre><code class="language-shell">$ mx -v --jdk=jvmci vm -cp /path/to/simplelanguage/launcher/target/launcher-19.0.2-SNAPSHOT.jar:/path/to/simplelanguage/language/target/simplelanguage.jar com.oracle.truffle.sl.launcher.SLMain  /path/to/simplelanguage/language/tests/SlScript.sl
 </code></pre>
   </li>
 </ol>
 
-<h2 id="running-simplelanguage-using-command-line">Running SimpleLanguage Using Command Line</h2>
+<h2 id="run-simplelanguage-using-command-line">Run SimpleLanguage Using Command Line</h2>
 
 <p>Executing SimpleLanguage code is normally done with the <code>sl</code> script which sets
 up the necessary command line depending on whether <code>JAVA_HOME</code> points to the
@@ -750,8 +759,8 @@ command line for both cases.</p>
 working directory is the <code>simplelanguage</code> directory, to run SimpleLanguage one
 should execute the following command:</p>
 
-<pre><code class="language-shell">$JAVA_HOME/bin/java \
-    -cp launcher/target/launcher-1.0.0-rc16-SNAPSHOT.jar \
+<pre><code class="language-shell">$ JAVA_HOME/bin/java \
+    -cp launcher/target/launcher-19.0.2-SNAPSHOT.jar \
     -Dtruffle.class.path.append=language/target/simplelanguage.jar \
     com.oracle.truffle.sl.launcher.SLMain language/tests/Add.sl
 </code></pre>
@@ -763,7 +772,7 @@ language jar. Having the language on a separate class path ensures a strong
 separation between the language implementation and its embedding context (in
 this case, the launcher).</p>
 
-<h4 id="disabling-class-path-separation">Disabling class path separation</h4>
+<h4 id="disable-class-path-separation">Disable Class Path Separation</h4>
 
 <p><em>NOTE! This should only be used during development.</em></p>
 
@@ -774,16 +783,16 @@ option. This disables the class path isolation, enabling the language
 implementation to be placed on the application class path. The command line can
 then look like the following.</p>
 
-<pre><code class="language-shell">$JAVA_HOME/bin/java \
+<pre><code class="language-shell">$ JAVA_HOME/bin/java \
     -XX:-UseJVMCIClassLoader \
-    -cp launcher/target/launcher-1.0.0-rc16-SNAPSHOT.jar:language/target/simplelanguage.jar \
+    -cp launcher/target/launcher-19.0.2-SNAPSHOT.jar:language/target/simplelanguage.jar \
     com.oracle.truffle.sl.launcher.SLMain language/tests/Add.sl
 </code></pre>
 
-<h3 id="other-jvm-implementations">Other JVM implementations</h3>
+<h3 id="other-jvm-implementations">Other JVM Implementations</h3>
 
 <p>Unlike GraalVM, which includes all the dependencies needed to run a language
-implemented with Truffle Framework, other JVM implementations need additional
+implemented with Truffle framework, other JVM implementations need additional
 jars to be present on the class path. These are the Truffle API and GraalVM SDK
 jars available from Maven Central.</p>
 
@@ -792,8 +801,8 @@ working directory is the <code>simplelanguage</code> directory and the Truffle A
 GraalVM SDK jars are present in that directory, one can execute SimpleLanguage
 with the following command:</p>
 
-<pre><code class="language-shell">$JAVA_HOME/bin/java \
-    -cp graal-sdk-1.0.0-rc16.jar:truffle-api-1.0.0-rc16.jar:launcher/target/launcher-1.0.0-rc16-SNAPSHOT.jar:language/target/simplelanguage.jar \
+<pre><code class="language-shell">$ JAVA_HOME/bin/java \
+    -cp graal-sdk-19.0.2.jar:truffle-api-19.0.2.jar:launcher/target/launcher-19.0.2-SNAPSHOT.jar:language/target/simplelanguage.jar \
     com.oracle.truffle.sl.launcher.SLMain language/tests/Add.sl
 </code></pre>
 
@@ -840,7 +849,7 @@ with the following command:</p>
             <ul class="footer-list">
               <li class="footer-list__item"><a href="/community">Get support</a></li>
               <li class="footer-list__item"><a href="https://github.com/oracle/graal/issues">Report a Bug</a></li>
-              <li class="footer-list__item"><a href="https://medium.com/graalvm">Developers Blog</a></li>
+              <li class="footer-list__item"><a href="/blog/">Team Blog</a></li>
               <li class="footer-list__item"><a href="/community/press/">In the Press</a></li>
             </ul>
           </div>

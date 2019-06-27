@@ -5,7 +5,7 @@ The official Docker images for GraalVM CE are available from the Docker Hub:
 
 If you want to use the Docker container with GraalVM CE, use the `docker pull` command:
 ```
-docker pull oracle/graalvm-ce:19.0.2
+docker pull oracle/graalvm-ce:{{ site.product_version }}
 ```
 
 The image is based on Oracle Linux and has GraalVM CE downloaded, unzipped and made available.
@@ -13,22 +13,22 @@ It means that Java, JavaScript, Node and the LLVM interpreter are available out 
 
 You can start a container and enter the `bash` session with the following run command:
 ```
-docker run -it oracle/graalvm-ce:19.0.2 bash
+docker run -it oracle/graalvm-ce:{{ site.product_version }} bash
 ```
 
 Check that `java`, `js` and other commands work as expected.
 ```
-→ docker run -it oracle/graalvm-ce:19.0.2 bash
+→ docker run -it oracle/graalvm-ce:{{ site.product_version }} bash
 bash-4.2# java -version
 openjdk version "1.8.0_212"
 OpenJDK Runtime Environment (build 1.8.0_212-20190523183630.graal2.jdk8u-src-tar-gz-b03)
-OpenJDK 64-Bit GraalVM CE 19.0.2 (build 25.212-b03-jvmci-19-b04, mixed mode)
+OpenJDK 64-Bit GraalVM CE {{ site.product_version }} (build 25.212-b03-jvmci-19-b04, mixed mode)
 bash-4.2# node
 > 1 + 1
 2
 > process.exit()
 bash-4.2# lli --version
-LLVM (GraalVM CE Native 19.0.2)
+LLVM (GraalVM CE Native {{ site.product_version }})
 bash-4.2#
 ```
 
@@ -38,7 +38,7 @@ You can install the support for additional languages like Ruby, R, or Python at 
 For example, the following command installs the Ruby support (the output below is truncated for brevity):
 
 ```
-docker run -it oracle/graalvm-ce:19.0.2 bash
+docker run -it oracle/graalvm-ce:{{ site.product_version }} bash
 bash-4.2# gu install ruby
 Downloading: Component catalog
 Processing component archive: Component ruby
@@ -53,13 +53,13 @@ use [Docker volumes](https://docs.docker.com/storage/volumes/#choose-the--v-or--
 Here is a sample command that maps the `/absolute/path/to/dir/no/trailing/slash` directory from the host system to the `/path/inside/container` inside the container.
 
 ```
-docker run -it -v /absolute/path/to/dir/no/trailing/slash:/path/inside/container oracle/graalvm-ce:19.0.2 bash
+docker run -it -v /absolute/path/to/dir/no/trailing/slash:/path/inside/container oracle/graalvm-ce:{{ site.product_version }} bash
 ```
 
-If you want to create docker images that contain GraalVM Ruby, R, or Python implementation, you can use dockerfiles like the example below, which uses `oracle/graalvm-ce:19.0.2` as the base image, installs Ruby support using the `gu` utility, then creates and runs a sample Ruby program.
+If you want to create docker images that contain GraalVM Ruby, R, or Python implementation, you can use dockerfiles like the example below, which uses `oracle/graalvm-ce:{{ site.product_version }}` as the base image, installs Ruby support using the `gu` utility, then creates and runs a sample Ruby program.
 
 ```
-FROM oracle/graalvm-ce:19.0.2
+FROM oracle/graalvm-ce:{{ site.product_version }}
 RUN gu install ruby
 WORKDIR /workdir
 RUN echo 'puts "Hello from Truffleruby!\nVersion: #{RUBY_DESCRIPTION}"' > app.rb
@@ -74,5 +74,5 @@ docker build -t truffleruby-demo .
 ...
 $ docker run -it --rm truffleruby-demo
 Hello from Truffleruby!
-Version: truffleruby 19.0.2, like ruby 2.6.2, GraalVM CE Native [x86_64-darwin]
+Version: truffleruby {{ site.product_version }}, like ruby 2.6.2, GraalVM CE Native [x86_64-darwin]
 ```

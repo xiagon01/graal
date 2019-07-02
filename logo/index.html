@@ -9,7 +9,7 @@
 
   <title>
     
-      GraalVM in the Press
+      GraalVM Logo
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/community/press/">
+  <link rel="canonical" href="https://www.graalvm.org/logo/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -253,239 +253,292 @@
 
       <main  class="content"   aria-label="Content">
         <div class="wrapper wrapper-content">
-  <!--
-<section class="section-heading">
+  <article class="docs">
+
   <div class="container-fluid container-fluid--custom-sm">
     <div class="row">
       <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="page-heading">
-              <h2 class="page-heading__title">Community</h2>
-              <p class="page-heading__description">
-                Become a GraalVM contributor
-              </p>
-            </div>
+          <div class="row d-flex flex-wrap">
+            <div class="col-sm-3 col-bg">
+              <div class="sidebar-wrap">
+                <div class="sidebar">
+                  
+<div class="toc-floating">
 
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
--->
-<section>
-  <div class="container-fluid container-fluid--custom-sm">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-        <div class="row d-flex flex-wrap">
-          <div class="col-sm-3 col-bg">
-            <div class="sidebar-wrap">
-              <div class="sidebar">
-                <div class="toc-floating">
-                  <ul class="toc-bullets">
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                      
 
-                      
-                      <a href="/community/">
-                        Community
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+<script>
+var sidebar = document.currentScript.parentElement;
 
-                      
-                      <a href="/community/events/">
-                        Events
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+// 
+//   $(document).ready(function(){
+//     $('.sidebar-wrap').stickySidebar({
+//       topSpacing: 74,
+//       bottomSpacing: 40
+//     });
+//   });
+//
+// 
 
-                      
-                      <a href="/blog/">
-                        Team Blog
-                      </a>
-                    </li>
-                    
-                    
-                    <li class="toc-bullets-highlight">
-                      
 
-                      
-                      <a href="/community/press/">
-                        GraalVM in the Press
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+$(document).ready(function(){
+  var header = $('.header').height();
+  var invisibleBlock;
 
-                      
-                      <a href="/community/publications/">
-                        Publications
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+  $("#content-wrapper h1, #content-wrapper h2").each(function() {
+    invisibleBlock = $(this).before("<div class='anchor' id="+ $(this).attr("id") +"></div>");
+  });
 
-                      
-                      <a href="/community/videos/">
-                        Videos
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+  $(window).scroll(function() {
+    var lastitem = null;
+    $("#content-wrapper h1, #content-wrapper h2").each(function() {
+      var heading = $(this);
+      var position = (heading.position().top - heading.height()) - $(window).scrollTop();
+      var listitem = $(sidebar).find("li").filter(function() {
+        return $(this).find("a").attr("href") == "#" + heading.attr("id");
+      });
+      listitem.removeClass("toc-bullets-focused");
+      if (position <= 0) {
+        lastitem = listitem;
+      }
+    });
+    if (lastitem != null) lastitem.addClass("toc-bullets-focused");
+  });
+});
 
-                      
-                      <a href="/community/contributors/">
-                        Contributors
-                      </a>
-                    </li>
-                    
-                    
-                    <li>
-                      
+</script>
 
-                      
-                      <a href="/community/conduct/">
-                        Code of Conduct
-                      </a>
-                    </li>
-                    
-                    
-                    
-                    
-                  </ul>
+<ul class="toc-bullets">
+
+  
+    
+
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/why-graal/">
+            Why GraalVM?
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/getting-started/">
+            Getting Started
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/examples/">
+            Examples
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/reference-manual/compatibility/">
+            Compatibility
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/release-notes/">
+            Release Notes
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/reference-manual/">
+            Reference Manual
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/graalvm-as-a-platform/">
+            GraalVM as a Platform
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/support/">
+            Support
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+      
+        
+          <li class="toc-bullets-main">
+        
+          
+          <a href="/docs/faq/">
+            FAQ
+          </a>
+        </li>
+
+
+        
+
+
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</ul>
+
+</div>
+
                 </div>
+                  <form class="search-container" action="/docs/search" autocomplete="on" method="get">
+                    <input type="text" id="search-box" name="query" placeholder="Search">
+                    <button type="submit" class="searchbttn"></button>
+                  </form>
               </div>
-              <form class="search-container" action="/docs/search" autocomplete="on" method="get">
-                <input type="text" id="search-box" name="query" placeholder="Search">
-                <button type="submit" class="searchbttn"></button>
-              </form>
-            </div>
-          </div>
-
-          <div class="col-sm-9">
-            <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-              <h2 id="in-case-you-missed">In Case You Missed</h2>
-<p><a href="https://blog.softwaremill.com/small-fast-docker-images-using-graalvms-native-image-99c0bc92e70b">Small &amp; fast Docker images using GraalVM’s native-image</a>
-(English) (May 30, 2019)<br />
-<a href="https://medium.com/codestar-blog/sharing-is-caring-domain-objects-in-both-scala-and-r-with-graalvm-polyglot-bindings-b561e8cfbcfa">Sharing is Caring! Domain objects in BOTH Scala and R with GraalVM Polyglot bindings</a>
-(English) (May 1, 2019)<br />
-<a href="https://medium.com/@john_freeman/native-javac-with-graalvm-ddcc18a53edb">Learn how you can reduce Maven build time by compiling javac as a GraalVM native image</a>
-(English) (Apr 29, 2019)<br />
-<a href="https://dmitrykornilov.net/2019/04/17/helidon-flies-faster-with-graalvm/">Helidon flies faster with GraalVM</a>
-(English) (Apr 17, 2019)<br />
-<a href="">Mixing NodeJS and OpenJDK</a>
-(English) (Apr 4, 2019)<br />
-<a href="https://e.printstacktrace.blog/2019/01/graalvm-groovy-grape-creating-native-image-of-standalone-script">GraalVM with Groovy and Grape - creating native image of a standalone script</a>
-(English) (Jan 16, 2019)<br />
-<a href="https://blog.transposit.com/graalvm-the-holy-graal-of-polyglot-jvm-c6dc9a83015b">GraalVM: the holy Graal of polyglot JVM?</a>
-(English) (Jan 3, 2019)<br />
-<a href="https://www.javaadvent.com/2018/12/comparing-kotlin-performance-with-graal-and-c2.html">Comparing Kotlin Performance with Graal and C2</a>
-(English) (Dec 9, 2018)<br />
-<a href="https://medium.freecodecamp.org/how-to-make-beautiful-ruby-plots-with-galaaz-320848058857">How to make Beautiful Ruby Plots with Galaaz</a>
-(English) (Nov 26, 2018)<br />
-<a href="https://technology.amis.nl/2018/11/01/running-reactive-spring-boot-on-graalvm-in-docker/">Running Reactive Spring Boot on GraalVM in Docker</a>
-(English) (Nov 1, 2018)<br />
-<a href="https://towardsdatascience.com/ruby-plotting-with-galaaz-an-example-of-tightly-coupling-ruby-and-r-in-graalvm-520b69e21021">Ruby Plotting with Galaaz: An example of tightly coupling Ruby and R in GraalVM</a>
-(English) (Oct 19, 2018)<br />
-<a href="https://e.printstacktrace.blog/2018/10/graalvm-and-groovy-how-to-start">GraalVM and Groovy - how to start?</a>
-(English) (Oct 3, 2018)<br />
-<a href="https://objectcomputing.com/news/2018/09/30/micronaut-1-rc1">Micronaut 1.0 RC1 and the power of ahead-of-time compilation</a>
-(English) (Sep 30, 2018)<br />
-<a href="http://royvanrijn.com/blog/2018/09/part-2-native-microservice-in-graalvm/">Part 2: Native microservice in GraalVM</a>
-(English) (Sep 24, 2018)<br />
-<a href="http://royvanrijn.com/blog/2018/09/part-1-java-to-native-using-graalvm/">Part 1: Java to native using GraalVM</a>
-(English) (Sep 20, 2018)<br />
-<a href="https://medium.com/@jponge/the-graalvm-frenzy-f54257f5932c">The GraalVM frenzy</a>
-(English) (Sep 6, 2018)<br />
-<a href="https://www.infoq.com/articles/Graal-Java-JIT-Compiler">Getting to Know Graal, the New Java JIT Compiler</a>
-(English) (Jul 16, 2018)<br />
-<a href="https://medium.com/@leonardopanga/serverless-native-java-functions-using-graalvm-and-fn-project-c9b10a4a4859">Serverless Native Java Functions using GraalVM and Fn Project</a>
-(English) (Jun 24, 2018)<br />
-<a href="https://engineering.opsgenie.com/run-native-java-using-graalvm-in-aws-lambda-with-golang-ba86e27930bf">Using GraalVM to run Native Java in AWS Lambda with Golang</a>
-(English) (Jun 11, 2018)<br />
-<a href="https://www.heise.de/developer/meldung/GraalVM-Virtuelle-Maschine-der-besonderen-Art-4035112.html">Evaluating JavaScript in Java with GraalVM</a>
-(English) (Jun 8, 2018)<br />
-<a href="https://medium.com/@levyeran/why-the-java-community-should-embrace-graalvm-abd3ea9121b5">Why the Java community should embrace GraalVM</a>
-(English) (Jun 5, 2018)<br />
-<a href="https://vertx.io/blog/eclipse-vert-x-goes-native/">Eclipse Vert.x goes Native</a>
-(English) (Jun 4, 2018)<br />
-<a href="https://zeringue.io/post/graalvm-gradle-docker/">Java Web Server in a 20 MB Docker Image</a>
-(English) (Jun 4, 2018)<br />
-<a href="https://sites.google.com/a/athaydes.com/renato-athaydes/posts/a7mbnative-imagejavaappthatrunsin30msandusesonly4mbofram">A 7MB native-image Java app that runs in 30ms and uses only 4MB of RAM!</a>
-(English) (May 28, 2018)<br />
-<a href="https://habr.com/post/358700/">GraalVM: смешались в кучу C и Scala</a>
-(Russian) (May 18, 2018)<br />
-<a href="https://blog.playframework.com/play-on-graal">Running PlayFramework on GraalVM</a>
-(English) (May 10, 2018)<br />
-<a href="https://www.innoq.com/en/blog/native-clojure-and-graalvm">Native Clojure with GraalVM</a>
-(English) (Apr 28, 2018)<br />
-<a href="https://www.nikostotz.de/blog/high-performance-interpreters-for-jetbrains-mps">High-Performance Interpreters for JetBrains MPS</a>
-(English) (Apr 27, 2018)<br />
-<a href="https://www.infoq.com/news/2018/04/oracle-graalvm-v1">Oracle Releases GraalVM 1.0, a Polyglot Virtual Machine and Platform</a>
-(English) (Apr 27, 2018)<br />
-<a href="https://www.heise.de/developer/meldung/GraalVM-Virtuelle-Maschine-der-besonderen-Art-4035112.html">GraalVM: Virtuelle Maschine der besonderen Art</a>
-(German) (Apr 26, 2018)<br />
-<a href="https://www.innoq.com/de/blog/native-java-graalvm">Oracles GraalVM für “Native Java”?</a>
-(German) (Apr 25, 2018)<br />
-<a href="https://www.publickey1.jp/blog/18/javajavascriptrubypythongraalvmtwitter.html">オラクル、JavaやJavaScript、Ruby、Pythonなど多言語対応を単一ランタイムで実現する「GraalVM」をオープンソースで公開。Twitterが本番環境で採用</a>
-(Japanese) (Apr 20, 2018)<br />
-<a href="https://jaxenter.com/meet-graalvm-universal-vm-polyglot-143574.html">Meet GraalVM, Oracle’s polyglot virtual machine</a>
-(English) (Apr 18, 2018)<br />
-<a href="https://www.javaworld.com/article/3268977/java-language/whats-new-in-oracles-graalvm-multilanguage-virtual-machine.html">What’s new in Oracle’s GraalVM multilanguage virtual machine</a>
-(English) (Apr 18, 2018)<br />
-<a href="https://www.forbes.com/sites/oracle/2018/04/18/graalvm-1-0-gives-developers-a-speedy-polyglot-runtime-and-helps-twitter-save-money/#4b7617322393">GraalVM 1.0 Gives Developers a Speedy Polyglot Runtime–And Helps Twitter Save Money</a>
-(English) (Apr 18, 2018)<br />
-<a href="https://sdtimes.com/java/oracle-announces-polyglot-virtual-machine-graalvm">Oracle announces polyglot virtual machine, GraalVM</a>
-(English) (Apr 17, 2018)<br />
-<a href="https://habr.com/company/jugru/blog/353624/">JavaScript, Java, какая теперь разница?</a>
-(Russian) (Apr 17, 2018)<br />
-<a href="http://stefan-marr.de/2018/04/a-truffle-specialization-pitfall/">A Typical Truffle Specialization Pitfall</a>
-(English) (Apr 17, 2018)</p>
-
             </div>
 
-            <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
-              <div class="hamburger"><div class="inner"></div></div>
+            <div class="col-sm-9">
+              <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
+                <p>The purpose of this page is to provide GraalVM community with quality images and
+usage guidance for events, social media, online content, and other possible use
+cases. All open source logos stewarded by Oracle should follow the same
+systematic branding principles.</p>
+
+<h2 id="graalvm-logo">GraalVM Logo</h2>
+<p>We welcome and encourage GraalVM users to download and use our official logo files, available in <a href="/resources/img/download/GraalVM-PNG.zip">PNG</a>, <a href="/resources/img/download/GraalVM-EPS.zip">EPS</a> or <a href="/resources/img/download/GraalVM-SVG.zip">SVG</a> formats.</p>
+
+<p><img src="/resources/img/graalvm_logo_large.png" alt="" /></p>
+
+<p>Use the logo you need as displayed on the website. You may scale it
+to fit your placement, but please avoid changing colors, design, or altering the
+graphics in any way. While placing the logo on dark backgrounds, please use the
+version with white background.</p>
+
+<h2 id="color-scheme">Color Scheme</h2>
+
+<p>The official color palette for open source community logo is comprised of
+OSC Blue and OSC Orange.</p>
+
+<p><img src="/resources/img/color_scheme.png" alt="" /></p>
+
+<h2 id="typeface">Typeface</h2>
+
+<p>If you want to follow GraalVM logo typeface in your slides or banner design, the
+typeface you are looking for is Sun Sans SemiBold.</p>
+
+<p><img src="/resources/img/font-family.png" alt="" /></p>
+
+<p>If you have some questions or requests regarding GraalVM branding, please reach
+us via this <a href="mailto:alina.yurenko@oracle.com">email</a>.</p>
+
+              </div>
+
+              <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
+                <div class="hamburger"><div class="inner"></div></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
-</section>
+</article>
 
 </div>
 

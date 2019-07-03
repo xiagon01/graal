@@ -529,9 +529,9 @@ repositories for the project closest related to the issue:</p>
 <p>On this page, we would like to highlight the most important changes in the <strong>GraalVM</strong> releases. There are different components to GraalVM, so we highlight the changes to these separately.</p>
 
 <h2 id="1910">19.1.0</h2>
-<p>(2019-01-07)</p>
+<p>(2019-07-02)</p>
 
-<p>This is feature release, we recommend upgrading to it from the 19.0.x releases.</p>
+<p>This is a feature release, we recommend upgrading to it from the 19.0.x releases.</p>
 
 <h3 id="java">Java</h3>
 
@@ -547,8 +547,8 @@ improves the performance on medium length workloads.</li>
 
 <h3 id="javascript">JavaScript</h3>
 <ul>
-  <li>Added (experimental) option <code>js.locale</code> to set the default locale for locale-sensitive operations.</li>
-  <li>Allow making evaluated sources internal using the <code>sourceURL</code> directive by prefixing the URL with <code>internal</code>:, e.g. <code>//# sourceURL=internal:myname.js</code>.</li>
+  <li>Added an experimental option <code>js.locale</code> to set the default locale for locale-sensitive operations.</li>
+  <li>Allow making evaluated sources internal using the <code>sourceURL</code> directive by prefixing the URL with <code>internal:</code>, e.g. <code>//# sourceURL=internal:myname.js</code>.</li>
   <li>Enabled code sharing across threads using <code>ContextPolicy.SHARED</code>.</li>
 </ul>
 
@@ -578,10 +578,9 @@ attached, an error is reported when the source file can’t be accessed.</li>
 <h3 id="r">R</h3>
 
 <ul>
-  <li>Strings <code>-Inf</code>, <code>+NaN</code>, and <code>-NaN</code> are correctly parsed to doubles including ignoring leading and trailing whitespace
-avoid unhandled exceptions in <code>dev.set</code> (<a href="https://github.com/oracle/fastr/issues/76">#76</a>).</li>
+  <li>Strings <code>-Inf</code>, <code>+NaN</code>, and <code>-NaN</code> are correctly parsed to doubles including ignoring leading and trailing whitespaces.</li>
   <li>For loop creates and initializes the control variable even if there are no iterations (<a href="https://github.com/oracle/fastr/issues/77">#77</a>).</li>
-  <li>Updated the output of the capabilities builtin ([#78]https://github.com/oracle/fastr/issues/78)).</li>
+  <li>Updated the output of the capabilities builtin (<a href="https://github.com/oracle/fastr/issues/78">#78</a>).</li>
   <li><code>is.function</code> returns <code>true</code> for foreign executables.</li>
 </ul>
 

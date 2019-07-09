@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>d2c4de1137059b9385d5c523f04e597e7f080d9c</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>1d625a7dea5037264279a54b59afc98534281a66</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -1723,6 +1723,10 @@
 <dd>
 <div class="block">Converts a string value, validates it, and converts it to an object of this type.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionType.html#convert-java.lang.Object-java.lang.String-java.lang.String-">convert(Object, String, String)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionType.html" title="class in org.graalvm.options">OptionType</a></dt>
+<dd>
+<div class="block">Converts a string value, validates it, and converts it to an object of this type.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/frame/FrameDescriptor.html#copy--">copy()</a></span> - Method in class com.oracle.truffle.api.frame.<a href="com/oracle/truffle/api/frame/FrameDescriptor.html" title="class in com.oracle.truffle.api.frame">FrameDescriptor</a></dt>
 <dd>
 <div class="block">Deeper copy of the descriptor.</div>
@@ -2552,6 +2556,10 @@
 <dd>
 <div class="block">An empty set of option descriptors.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#empty--">empty()</a></span> - Static method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
+<dd>
+<div class="block">Returns an empty option map (immutable).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/source/Source.LiteralBuilder.html#encoding-java.nio.charset.Charset-">encoding(Charset)</a></span> - Method in class com.oracle.truffle.api.source.<a href="com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></dt>
 <dd>
 <div class="block">Explicitly assigns an encoding used to read the file content.</div>
@@ -2616,6 +2624,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLogger.html#entering-java.lang.String-java.lang.String-java.lang.Object:A-">entering(String, String, Object[])</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></dt>
 <dd>
 <div class="block">Logs entry into method with multiple parameters.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#entrySet--">entrySet()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
+<dd>
+<div class="block">Returns an unmodifiable <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> view of the mappings contained in this map.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#environment-java.lang.String-java.lang.String-">environment(String, String)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
 <dd>
@@ -2683,6 +2695,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
@@ -3543,6 +3557,11 @@
 <dd>
 <div class="block">Gets the <a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options"><code>OptionDescriptor</code></a> matching a given option name or <code>null</code> if this option
  descriptor set does not contain a matching option name.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#get-java.lang.String-">get(String)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
+<dd>
+<div class="block">Returns the value to which the specified key is mapped, or <code>null</code> if this option map
+ contains no mapping for the key.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionValues.html#get-org.graalvm.options.OptionKey-">get(OptionKey&lt;T&gt;)</a></span> - Method in interface org.graalvm.options.<a href="org/graalvm/options/OptionValues.html" title="interface in org.graalvm.options">OptionValues</a></dt>
 <dd>
@@ -5566,6 +5585,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#hashCode--">hashCode()</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
@@ -6724,6 +6745,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.html#isOneShot--">isOneShot()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug">Breakpoint</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#isOptionMap--">isOptionMap()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if this option is an option map.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerDirectives.html#isPartialEvaluationConstant-java.lang.Object-">isPartialEvaluationConstant(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerDirectives.html" title="class in com.oracle.truffle.api">CompilerDirectives</a></dt>
 <dd>
 <div class="block">Returns a boolean indicating whether or not a given value is seen as constant during the
@@ -7397,6 +7422,10 @@
 <dt><a href="org/graalvm/collections/MapCursor.html" title="interface in org.graalvm.collections"><span class="typeNameLink">MapCursor</span></a>&lt;<a href="org/graalvm/collections/MapCursor.html" title="type parameter in MapCursor">K</a>,<a href="org/graalvm/collections/MapCursor.html" title="type parameter in MapCursor">V</a>&gt; - Interface in <a href="org/graalvm/collections/package-summary.html">org.graalvm.collections</a></dt>
 <dd>
 <div class="block">Cursor to iterate over a mutable map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionKey.html#mapOf-java.lang.Class-">mapOf(Class&lt;V&gt;)</a></span> - Static method in class org.graalvm.options.<a href="org/graalvm/options/OptionKey.html" title="class in org.graalvm.options">OptionKey</a></dt>
+<dd>
+<div class="block">Constructs a new option key to group/accumulate options with common prefixes.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerDirectives.html#materialize-java.lang.Object-">materialize(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerDirectives.html" title="class in com.oracle.truffle.api">CompilerDirectives</a></dt>
 <dd>
@@ -8124,6 +8153,10 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionKey.html#OptionKey-T-org.graalvm.options.OptionType-">OptionKey(T, OptionType&lt;T&gt;)</a></span> - Constructor for class org.graalvm.options.<a href="org/graalvm/options/OptionKey.html" title="class in org.graalvm.options">OptionKey</a></dt>
 <dd>
 <div class="block">Constructs a new option key given a default value and option key.</div>
+</dd>
+<dt><a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options"><span class="typeNameLink">OptionMap</span></a>&lt;<a href="org/graalvm/options/OptionMap.html" title="type parameter in OptionMap">T</a>&gt; - Class in <a href="org/graalvm/options/package-summary.html">org.graalvm.options</a></dt>
+<dd>
+<div class="block">Represents a mapping between <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a> keys and values.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#options-java.util.Map-">options(Map&lt;String, String&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
@@ -11335,7 +11368,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>d2c4de1137059b9385d5c523f04e597e7f080d9c</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>1d625a7dea5037264279a54b59afc98534281a66</div>
 </div>
 <div class="subNav">
 <ul class="navList">

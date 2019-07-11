@@ -669,9 +669,11 @@ itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
 <code>native-image</code> of guest languages used by an application, specify
 <code>--language:&lt;languageId&gt;</code> for each guest language used (e.g., <code>--language:js</code>).</p>
 
-<p><strong>Important</strong>: GraalVM Native Image is available as an early adopter plugin. This means its
-functionality is subject to change while its specification is being developed by
-the Java community.</p>
+<p><strong>Important:</strong> GraalVM Native Image is
+available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
+and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
+subscription, but is not covered by Oracle’s standard
+warranty.</p>
 
 <h2 id="install-native-image">Install Native Image</h2>
 
@@ -902,7 +904,7 @@ specified as <code>NativeImageArgs</code>, plus the arguments specified on comma
 
 <p>For a more comprehensive list of options please check the <a href="https://github.com/oracle/graal/blob/master/substratevm/OPTIONS.md">documentation on Github</a>.</p>
 
-<p><strong>Important:</strong>
+<p><strong>Disclaimer:</strong>
 Python source code or LLVM bitcode interpreted or compiled with GraalVM
 Community Edition will not have the same security characteristics as the same
 code interpreted or compiled using GraalVM Enterprise Edition. There is a

@@ -535,11 +535,13 @@ The base installation includes the JVM, the GraalVM compiler, the LLVM bitcode
 interpreter, and the JavaScript runtime with Node.js support – all in one
 package. GraalVM environment can be extended with:</p>
 <ul>
-  <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> – a technology to compile an application ahead-of-time into a binary that runs natively on the system.</li>
-  <li>R, Ruby and Python languages interpreters.</li>
+  <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> – a technology to compile an application ahead-of-time into a binary that runs natively on the system. <strong>Disclaimer:</strong> GraalVM Native Image is
+available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
+and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
+subscription, but is not covered by Oracle’s standard
+warranty.</li>
+  <li>R, Ruby and Python languages interpreters. <strong>Disclaimer:</strong> The support for Ruby, R and Python languages is currently experimental.</li>
 </ul>
-
-<p><strong>Disclaimer:</strong> The support for Ruby, R and Python languages is currently experimental.</p>
 
 <p>Getting GraalVM installed and ready-to-go should only take a few minutes. Please
 note, unlike Java HotSpot VM or OpenJDK distributions for macOS that come as a

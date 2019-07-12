@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":9,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":9,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>25509f4c5b336da4537015a7a3d07beb6dd2d3f9</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -157,10 +157,30 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isNull-java.lang.Object-"><code>Null</code></a>
  <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isBoolean-java.lang.Object-"><code>Boolean</code></a>
  <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isString-java.lang.Object-"><code>String</code></a>
- <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isExecutable-java.lang.Object-"><code>Executable</code></a> or <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstantiable-java.lang.Object-"><code>Instantiable</code></a>
  <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isNumber-java.lang.Object-"><code>Number</code></a>
+ <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>Date</code></a>, <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>Time</code></a> or <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>TimeZone</code></a>
+ <li><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>Duration</code></a>
  </ul>
- All receiver values may be <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isPointer-java.lang.Object-"><code>pointers</code></a>, have <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasMembers-java.lang.Object-"><code>members</code></a> or <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasArrayElements-java.lang.Object-"><code>array elements</code></a> at the same time.
+ All receiver values may be <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isExecutable-java.lang.Object-"><code>executable</code></a>,
+ <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstantiable-java.lang.Object-"><code>instantiable</code></a>, <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isPointer-java.lang.Object-"><code>pointers</code></a>, have
+ <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasMembers-java.lang.Object-"><code>members</code></a> or <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasArrayElements-java.lang.Object-"><code>array elements</code></a> at the
+ same time.
+ <p>
+ <h3>Naive and aware dates and times</h3>
+ <p>
+ If a date or time value has a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a> then it is called <i>aware</i>
+ , otherwise <i>naive</i>
+ <p>
+ An aware time and date has sufficient knowledge of applicable algorithmic and political time
+ adjustments, such as time zone and daylight saving time information, to locate itself relative to
+ other aware objects. An aware object is used to represent a specific moment in time that is not
+ open to interpretation.
+ <p>
+ A naive time and date does not contain enough information to unambiguously locate itself relative
+ to other date/time objects. Whether a naive object represents Coordinated Universal Time (UTC),
+ local time, or time in some other timezone is purely up to the program, just like it is up to the
+ program whether a particular number represents metres, miles, or mass. Naive objects are easy to
+ understand and to work with, at the cost of ignoring some aspects of reality.
  <p>
  Interop messages throw <a href="../../../../../com/oracle/truffle/api/interop/InteropException.html" title="class in com.oracle.truffle.api.interop"><code>checked exceptions</code></a> to indicate error states. The
  target language is supposed to always catch those exceptions and translate them into guest
@@ -238,152 +258,182 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html?is-external=true" title="class or interface in java.time">LocalDate</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asDate-java.lang.Object-">asDate</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns the receiver as date if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>date</code></a>.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asDouble-java.lang.Object-">asDouble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the receiver value as Java double primitive if the number fits without loss of
  precision.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asDuration-java.lang.Object-">asDuration</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns the receiver as duration if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>duration</code></a>.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asFloat-java.lang.Object-">asFloat</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the receiver value as Java float primitive if the number fits without loss of
  precision.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Instant.html?is-external=true" title="class or interface in java.time">Instant</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asInstant-java.lang.Object-">asInstant</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns the receiver as instant if this object represents an <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-"><code>instant</code></a>.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asInt-java.lang.Object-">asInt</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the receiver value as Java int primitive if the number fits without loss of
  precision.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asLong-java.lang.Object-">asLong</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the receiver value as Java long primitive if the number fits without loss of
  precision.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asPointer-java.lang.Object-">asPointer</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the pointer value as long value if the receiver represents a pointer like value.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#assertAdopted--">assertAdopted</a></span>()</code>
 <div class="block">Utility for libraries to require adoption before cached versions of nodes can be executed.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>short</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asShort-java.lang.Object-">asShort</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the receiver value as Java short primitive if the number fits without loss of
  precision.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asString-java.lang.Object-">asString</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the Java boolean value if the receiver represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isBoolean-java.lang.Object-"><code>boolean</code></a> like value.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html?is-external=true" title="class or interface in java.time">LocalTime</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asTime-java.lang.Object-">asTime</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns the receiver as time if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>time</code></a>.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html?is-external=true" title="class or interface in java.time">ZoneId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asTimeZone-java.lang.Object-">asTimeZone</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns the receiver as timestamp if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#execute-java.lang.Object-java.lang.Object...-">execute</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;arguments)</code>
 <div class="block">Executes an executable value with the given arguments.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInByte-java.lang.Object-">fitsInByte</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java byte primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInDouble-java.lang.Object-">fitsInDouble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java double primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInFloat-java.lang.Object-">fitsInFloat</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java float primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInInt-java.lang.Object-">fitsInInt</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java int primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInLong-java.lang.Object-">fitsInLong</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java long primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#fitsInShort-java.lang.Object-">fitsInShort</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> and its value fits
  in a Java short primitive without loss of precision, else <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#getArraySize-java.lang.Object-">getArraySize</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns the array size of the receiver.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../com/oracle/truffle/api/library/LibraryFactory.html" title="class in com.oracle.truffle.api.library">LibraryFactory</a>&lt;<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#getFactory--">getFactory</a></span>()</code>
 <div class="block">Returns the library factory for the interop library.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#getMembers-java.lang.Object-">getMembers</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Short-cut for <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#getMembers-java.lang.Object-"><code>getMembers(receiver, false)</code></a>.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#getMembers-java.lang.Object-boolean-">getMembers</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
           boolean&nbsp;includeInternal)</code>
 <div class="block">Returns an array of member name strings.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasArrayElements-java.lang.Object-">hasArrayElements</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver may have array elements.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasMemberReadSideEffects-java.lang.Object-java.lang.String-">hasMemberReadSideEffects</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns <code>true</code> if reading a member may cause a side-effect.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasMembers-java.lang.Object-">hasMembers</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver may have members.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#hasMemberWriteSideEffects-java.lang.Object-java.lang.String-">hasMemberWriteSideEffects</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
@@ -391,14 +441,14 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  operation of the member.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#instantiate-java.lang.Object-java.lang.Object...-">instantiate</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;arguments)</code>
 <div class="block">Instantiates the receiver value with the given arguments.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#invokeMember-java.lang.Object-java.lang.String-java.lang.Object...-">invokeMember</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
             <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member,
@@ -406,14 +456,14 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
 <div class="block">Invokes a member for a given receiver and arguments.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementExisting-java.lang.Object-long-">isArrayElementExisting</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                       long&nbsp;index)</code>
 <div class="block">Returns true if the array element is existing.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementInsertable-java.lang.Object-long-">isArrayElementInsertable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                         long&nbsp;index)</code>
@@ -421,7 +471,7 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeArrayElement-java.lang.Object-long-java.lang.Object-"><code>insertable</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementModifiable-java.lang.Object-long-">isArrayElementModifiable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                         long&nbsp;index)</code>
@@ -429,14 +479,14 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeArrayElement-java.lang.Object-long-java.lang.Object-"><code>writable</code></a>.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementReadable-java.lang.Object-long-">isArrayElementReadable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                       long&nbsp;index)</code>
 <div class="block">Returns <code>true</code> if a given array element is <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#readArrayElement-java.lang.Object-long-"><code>readable</code></a>.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementRemovable-java.lang.Object-long-">isArrayElementRemovable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                        long&nbsp;index)</code>
@@ -444,42 +494,60 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#removeArrayElement-java.lang.Object-long-"><code>removable</code></a>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementWritable-java.lang.Object-long-">isArrayElementWritable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                       long&nbsp;index)</code>
 <div class="block">Returns true if the array element is <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementModifiable-java.lang.Object-long-"><code>modifiable</code></a> or <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isArrayElementInsertable-java.lang.Object-long-"><code>insertable</code></a>.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isBoolean-java.lang.Object-">isBoolean</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>boolean</code> like value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i39" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-">isDate</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns <code>true</code> if this object represents a date, else <code>false</code>.</div>
+</td>
+</tr>
+<tr id="i40" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-">isDuration</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
+</td>
+</tr>
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isExecutable-java.lang.Object-">isExecutable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents an <code>executable</code> value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i42" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-">isInstant</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns <code>true</code> if the receiver represents an instant.</div>
+</td>
+</tr>
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstantiable-java.lang.Object-">isInstantiable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents an <code>instantiable</code> value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberExisting-java.lang.Object-java.lang.String-">isMemberExisting</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns true if the member is existing.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberInsertable-java.lang.Object-java.lang.String-">isMemberInsertable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
@@ -487,21 +555,21 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeMember-java.lang.Object-java.lang.String-java.lang.Object-"><code>writable</code></a>.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberInternal-java.lang.Object-java.lang.String-">isMemberInternal</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns true if a member is internal.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberInvocable-java.lang.Object-java.lang.String-">isMemberInvocable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns <code>true</code> if a given member is invocable.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberModifiable-java.lang.Object-java.lang.String-">isMemberModifiable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
@@ -509,21 +577,21 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeMember-java.lang.Object-java.lang.String-java.lang.Object-"><code>writable</code></a>.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberReadable-java.lang.Object-java.lang.String-">isMemberReadable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns <code>true</code> if a given member is <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#readMember-java.lang.Object-java.lang.String-"><code>readable</code></a>.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberRemovable-java.lang.Object-java.lang.String-">isMemberRemovable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Returns <code>true</code> if a given member is existing and removable.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberWritable-java.lang.Object-java.lang.String-">isMemberWritable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
@@ -531,68 +599,80 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
  <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isMemberInsertable-java.lang.Object-java.lang.String-"><code>insertable</code></a>.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isNull-java.lang.Object-">isNull</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>null</code> like value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isNumber-java.lang.Object-">isNumber</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>number</code> value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isPointer-java.lang.Object-">isPointer</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver value represents a native pointer.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isString-java.lang.Object-">isString</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Returns <code>true</code> if the receiver represents a <code>string</code> value, else
  <code>false</code>.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i56" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-">isTime</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns <code>true</code> if this object represents a time, else <code>false</code>.</div>
+</td>
+</tr>
+<tr id="i57" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-">isTimeZone</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
+<div class="block">Returns <code>true</code> if this object represents a timezone, else <code>false</code>.</div>
+</td>
+</tr>
+<tr id="i58" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#readArrayElement-java.lang.Object-long-">readArrayElement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                 long&nbsp;index)</code>
 <div class="block">Reads the value of an array element by index.</div>
 </td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i59" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#readMember-java.lang.Object-java.lang.String-">readMember</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
           <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Reads the value of a given member.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i60" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#removeArrayElement-java.lang.Object-long-">removeArrayElement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                   long&nbsp;index)</code>
 <div class="block">Remove an array element from the receiver object.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i61" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#removeMember-java.lang.Object-java.lang.String-">removeMember</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
             <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member)</code>
 <div class="block">Removes a member from the receiver object.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i62" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#toNative-java.lang.Object-">toNative</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</code>
 <div class="block">Transforms a <a href="../../../../../com/oracle/truffle/api/interop/TruffleObject.html" title="interface in com.oracle.truffle.api.interop"><code>receiver</code></a> to a value that represents a raw native pointer.</div>
 </td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i63" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeArrayElement-java.lang.Object-long-java.lang.Object-">writeArrayElement</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
                  long&nbsp;index,
@@ -600,7 +680,7 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
 <div class="block">Writes the value of an array element by index.</div>
 </td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i64" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#writeMember-java.lang.Object-java.lang.String-java.lang.Object-">writeMember</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver,
            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;member,
@@ -1802,6 +1882,231 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
 </dl>
 </li>
 </ul>
+<a name="asInstant-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asInstant</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Instant.html?is-external=true" title="class or interface in java.time">Instant</a>&nbsp;asInstant(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)
+                  throws <a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></pre>
+<div class="block">Returns the receiver as instant if this object represents an <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-"><code>instant</code></a>. If a value is an instant then it is also a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>date</code></a>,
+ <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>time</code></a> and <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>. Using this method may
+ be more efficient than reconstructing the timestamp from the date, time and timezone data.
+ <p>
+ Implementers should implement this method if they can provide a more efficient conversion to
+ Instant than reconstructing it from date, time and timezone date. Implementers must ensure
+ that the following Java code snippet always holds:
+
+ <pre>
+ ZoneId zone = getTimeZone(receiver);
+ LocalDate date = getDate(receiver);
+ LocalTime time = getTime(receiver);
+ assert ZonedDateTime.of(date, time, zone).toInstant().equals(getInstant(receiver));
+ </pre></div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></code> - if <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-"><code>InteropLibrary.isInstant(Object)</code></a> returns <code>false</code>.</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>InteropLibrary.isTimeZone(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="isInstant-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isInstant</h4>
+<pre>public final&nbsp;boolean&nbsp;isInstant(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</pre>
+<div class="block">Returns <code>true</code> if the receiver represents an instant. If a value is an instant
+ then it is also a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>date</code></a>, <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>time</code></a> and
+ <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>.
+
+ This method is short-hand for:
+
+ <pre>
+ <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-">isDate</a>(v) && <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>isTime</code></a>(v) && <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>isTimeZone</code></a>(v)
+ </pre></div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-"><code>InteropLibrary.isInstant(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asInstant-java.lang.Object-"><code>InteropLibrary.asInstant(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="isTimeZone-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isTimeZone</h4>
+<pre>public&nbsp;boolean&nbsp;isTimeZone(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</pre>
+<div class="block">Returns <code>true</code> if this object represents a timezone, else <code>false</code>. The
+ interpretation of timezone objects may vary:
+ <ul>
+ <li>If <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a> and <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a> return <code>true</code>, then the
+ returned date or time information is aware of this timezone.
+ <li>If <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a> and <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a> returns <code>false</code>, then
+ it represents just timezone information.
+ </ul>
+ Objects with only time or only date information must not have timezone information attached,
+ as aware date or time information always consist of both date and time. If this rule is
+ violated then an <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AssertionError.html?is-external=true" title="class or interface in java.lang"><code>AssertionError</code></a> is thrown if assertions are enabled.
+ <p>
+ If this method is implemented then also <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asTimeZone-java.lang.Object-"><code>InteropLibrary.asTimeZone(Object)</code></a> must be implemented.</div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asTimeZone-java.lang.Object-"><code>InteropLibrary.asTimeZone(Object)</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asInstant-java.lang.Object-"><code>InteropLibrary.asInstant(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="asTimeZone-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asTimeZone</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html?is-external=true" title="class or interface in java.time">ZoneId</a>&nbsp;asTimeZone(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)
+                  throws <a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></pre>
+<div class="block">Returns the receiver as timestamp if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></code> - if <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>InteropLibrary.isTimeZone(Object)</code></a> returns <code>false</code>
+             .</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>InteropLibrary.isTimeZone(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="isDate-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDate</h4>
+<pre>public&nbsp;boolean&nbsp;isDate(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</pre>
+<div class="block">Returns <code>true</code> if this object represents a date, else <code>false</code>. If the
+ receiver is also a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a> then the date is aware, otherwise it
+ is naive.</div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asDate-java.lang.Object-"><code>InteropLibrary.asDate(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="asDate-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asDate</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html?is-external=true" title="class or interface in java.time">LocalDate</a>&nbsp;asDate(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)
+                 throws <a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></pre>
+<div class="block">Returns the receiver as date if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>date</code></a>. The
+ returned date is either aware if the receiver has a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>
+ otherwise it is naive.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></code> - if <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a> returns <code>false</code>.</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>InteropLibrary.isDate(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="isTime-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isTime</h4>
+<pre>public&nbsp;boolean&nbsp;isTime(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</pre>
+<div class="block">Returns <code>true</code> if this object represents a time, else <code>false</code>. If the
+ receiver is also a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a> then the time is aware, otherwise it
+ is naive.</div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asTime-java.lang.Object-"><code>InteropLibrary.asTime(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="asTime-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asTime</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html?is-external=true" title="class or interface in java.time">LocalTime</a>&nbsp;asTime(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)
+                 throws <a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></pre>
+<div class="block">Returns the receiver as time if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>time</code></a>. The
+ returned time is either aware if the receiver has a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>
+ otherwise it is naive.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></code> - if <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a> returns <code>false</code>.</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>InteropLibrary.isTime(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="isDuration-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isDuration</h4>
+<pre>public&nbsp;boolean&nbsp;isDuration(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)</pre>
+<div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time"><code>Duration</code></a>, 
+<a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#asDate-java.lang.Object-"><code>InteropLibrary.asDate(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a name="asDuration-java.lang.Object-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asDuration</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a>&nbsp;asDuration(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;receiver)
+                    throws <a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></pre>
+<div class="block">Returns the receiver as duration if this object represents a <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>duration</code></a>.</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/interop/UnsupportedMessageException.html" title="class in com.oracle.truffle.api.interop">UnsupportedMessageException</a></code> - if <a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>InteropLibrary.isDuration(Object)</code></a> returns <code>false</code>
+             .</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0.0 beta 2</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>InteropLibrary.isDuration(Object)</code></a></dd>
+</dl>
+</li>
+</ul>
 <a name="getFactory--">
 <!--   -->
 </a>
@@ -1858,7 +2163,7 @@ extends <a href="../../../../../com/oracle/truffle/api/library/Library.html" tit
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>25509f4c5b336da4537015a7a3d07beb6dd2d3f9</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
 </div>
 <div class="subNav">
 <ul class="navList">

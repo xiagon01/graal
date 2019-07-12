@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>2ca3a72f46e2db9008acce04ad4f926219405176</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>41a03b449e9c70c160e7d08eb748feee0e7963fd</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -285,52 +285,46 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/ExecutableNode.html
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#getName--">getName</a></span>()</code>
-<div class="block">Returns a simple name of the AST (expected to be a method or procedure name in most
- languages) that identifies the AST for the benefit of guest language programmers using tools;
- it might appear, for example in the context of a stack dump or trace and is not expected to
- be called often.</div>
+<div class="block">A description of the AST (expected to be a method or procedure name in most languages) that
+ identifies the AST for the benefit of guest language programmers using tools; it might
+ appear, for example in the context of a stack dump or trace and is not expected to be called
+ often.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#getQualifiedName--">getQualifiedName</a></span>()</code>
-<div class="block">Returns a qualified name of the AST that in the best case uniquely identifiers the method.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#isCaptureFramesForTrace--">isCaptureFramesForTrace</a></span>()</code>
 <div class="block">Returns <code>true</code> if a TruffleException leaving this node should capture
  <a href="../../../../../com/oracle/truffle/api/frame/Frame.html" title="interface in com.oracle.truffle.api.frame"><code>Frame</code></a> objects in its stack trace in addition to the default information.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#isCloneUninitializedSupported--">isCloneUninitializedSupported</a></span>()</code>
 <div class="block">Returns <code>true</code> if <a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#cloneUninitialized--"><code>RootNode.cloneUninitialized()</code></a> can be used to create
  uninitialized copies of an already initialized / executed root node.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#isCloningAllowed--">isCloningAllowed</a></span>()</code>
 <div class="block">Returns <code>true</code> if this <a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes"><code>RootNode</code></a> is allowed to be cloned.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#isInstrumentable--">isInstrumentable</a></span>()</code>
 <div class="block">Does this contain AST content that it is possible to instrument.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#isInternal--">isInternal</a></span>()</code>
 <div class="block">Returns <code>true</code> if this root node should be considered internal and not be shown to
  a guest language programmer.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#setCallTarget-com.oracle.truffle.api.RootCallTarget-">setCallTarget</a></span>(<a href="../../../../../com/oracle/truffle/api/RootCallTarget.html" title="interface in com.oracle.truffle.api">RootCallTarget</a>&nbsp;callTarget)</code>&nbsp;</td>
 </tr>
@@ -440,23 +434,6 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/ExecutableNode.html
 </dl>
 </li>
 </ul>
-<a name="getQualifiedName--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getQualifiedName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getQualifiedName()</pre>
-<div class="block">Returns a qualified name of the AST that in the best case uniquely identifiers the method. If
- the qualified name is not specified by the root, then the <a href="../../../../../com/oracle/truffle/api/nodes/RootNode.html#getName--"><code>name</code></a> is used by
- default. A root node that represents a Java method could consist of the package name, the
- class name and the method name. E.g. <code>mypackage.MyClass.myMethod</code></div>
-<dl>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>20.0.0 beta 1</dd>
-</dl>
-</li>
-</ul>
 <a name="getName--">
 <!--   -->
 </a>
@@ -464,12 +441,10 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/ExecutableNode.html
 <li class="blockList">
 <h4>getName</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getName()</pre>
-<div class="block">Returns a simple name of the AST (expected to be a method or procedure name in most
- languages) that identifies the AST for the benefit of guest language programmers using tools;
- it might appear, for example in the context of a stack dump or trace and is not expected to
- be called often. Can be called on any thread and without a language context. The name of a
- root node that represents a Java method could consist of the method name. E.g.
- <code>myMethod</code>
+<div class="block">A description of the AST (expected to be a method or procedure name in most languages) that
+ identifies the AST for the benefit of guest language programmers using tools; it might
+ appear, for example in the context of a stack dump or trace and is not expected to be called
+ often. Can be called on any thread and without a language context.
  <p>
  In some languages AST "compilation units" may have no intrinsic names. When no information is
  available, language implementations might simply use the first few characters of the code,
@@ -746,7 +721,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/ExecutableNode.html
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>2ca3a72f46e2db9008acce04ad4f926219405176</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>41a03b449e9c70c160e7d08eb748feee0e7963fd</div>
 </div>
 <div class="subNav">
 <ul class="navList">

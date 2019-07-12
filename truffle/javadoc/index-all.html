@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>54dbcd89ff89bb112fa39bf38781c050bac892c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -340,8 +340,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.html#ALL">ALL</a></span> - Static variable in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.html" title="class in org.graalvm.polyglot">PolyglotAccess</a></dt>
 <dd>
-<div class="block">Provides guest languages full access to other languages using polyglot evaluation and binding
- builtins.</div>
+<div class="block">Provides guest languages full access to other languages using polyglot builtins.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/instrumentation/AllocationEvent.html" title="class in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">AllocationEvent</span></a> - Class in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
@@ -395,10 +394,6 @@
 <div class="block">Allows the guest application to access arrays as values with
  <a href="org/graalvm/polyglot/Value.html#hasArrayElements--"><code>array elements</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#allowBindingsAccess-java.lang.String-">allowBindingsAccess(String)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Allows access to polyglot bindings for a language.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowCreateProcess-boolean-">allowCreateProcess(boolean)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
 <div class="block">If <code>true</code>, allows guest language to execute external processes.</div>
@@ -410,14 +405,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowEnvironmentAccess-org.graalvm.polyglot.EnvironmentAccess-">allowEnvironmentAccess(EnvironmentAccess)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
 <div class="block">Allow environment access using the provided policy.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#allowEval-java.lang.String-java.lang.String-">allowEval(String, String)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Allows evaluation of code by one language of another.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#allowEvalBetween-java.lang.String...-">allowEvalBetween(String...)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Allows bidirectional evaluation of code between the given languages.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#allowExperimentalOptions-boolean-">allowExperimentalOptions(boolean)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
@@ -627,22 +614,6 @@
 <dd>
 <div class="block">Creates a <a href="http://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio"><code>ByteBuffer</code></a> that refers to the native memory at the specified address.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asDate-java.lang.Object-">asDate(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns the receiver as date if this object represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-"><code>date</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyDate.html#asDate--">asDate()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyDate.html" title="interface in org.graalvm.polyglot.proxy">ProxyDate</a></dt>
-<dd>
-<div class="block">Returns the date information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyInstant.html#asDate--">asDate()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy">ProxyInstant</a></dt>
-<dd>
-<div class="block">Returns the date information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asDate--">asDate()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns the receiver as date if this object represents a <a href="org/graalvm/polyglot/Value.html#isDate--"><code>date</code></a>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asDouble-java.lang.Object-">asDouble(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
 <dd>
 <div class="block">Returns the receiver value as Java double primitive if the number fits without loss of
@@ -651,18 +622,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asDouble--">asDouble()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
 <div class="block">Returns a <code>double</code> representation of this value if it is <a href="org/graalvm/polyglot/Value.html#isNumber--"><code>number</code></a> and the value <a href="org/graalvm/polyglot/Value.html#fitsInDouble--"><code>fits</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asDuration-java.lang.Object-">asDuration(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns the receiver as duration if this object represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-"><code>duration</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyDuration.html#asDuration--">asDuration()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyDuration.html" title="interface in org.graalvm.polyglot.proxy">ProxyDuration</a></dt>
-<dd>
-<div class="block">Returns the duration information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asDuration--">asDuration()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns the receiver as duration if this object represents a <a href="org/graalvm/polyglot/Value.html#isDuration--"><code>duration</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asFloat-java.lang.Object-">asFloat(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
 <dd>
@@ -703,18 +662,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#asInLanguage-com.oracle.truffle.api.nodes.LanguageInfo-">asInLanguage(LanguageInfo)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
 <dd>
 <div class="block">Returns a debug value that presents itself as seen by the provided language.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asInstant-java.lang.Object-">asInstant(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns the receiver as instant if this object represents an <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-"><code>instant</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyInstant.html#asInstant--">asInstant()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy">ProxyInstant</a></dt>
-<dd>
-<div class="block">Returns the instant information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asInstant--">asInstant()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns the receiver as instant if this object represents an <a href="org/graalvm/polyglot/Value.html#isInstant--"><code>instant</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asInt-java.lang.Object-">asInt(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
 <dd>
@@ -790,38 +737,6 @@
 <dd>
 <div class="block">An assumption is a global boolean flag that starts with the value true (i.e., the assumption is
  valid) and can subsequently be invalidated (using <a href="com/oracle/truffle/api/Assumption.html#invalidate--"><code>Assumption.invalidate()</code></a>).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asTime-java.lang.Object-">asTime(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns the receiver as time if this object represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-"><code>time</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyInstant.html#asTime--">asTime()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy">ProxyInstant</a></dt>
-<dd>
-<div class="block">Returns the time information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyTime.html#asTime--">asTime()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyTime.html" title="interface in org.graalvm.polyglot.proxy">ProxyTime</a></dt>
-<dd>
-<div class="block">Returns the time information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asTime--">asTime()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns the receiver as time if this object represents a <a href="org/graalvm/polyglot/Value.html#isTime--"><code>time</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asTimeZone-java.lang.Object-">asTimeZone(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns the receiver as timestamp if this object represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-"><code>timezone</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyInstant.html#asTimeZone--">asTimeZone()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy">ProxyInstant</a></dt>
-<dd>
-<div class="block">Returns the timezone information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html#asTimeZone--">asTimeZone()</a></span> - Method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html" title="interface in org.graalvm.polyglot.proxy">ProxyTimeZone</a></dt>
-<dd>
-<div class="block">Returns the timezone information.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asTimeZone--">asTimeZone()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns the receiver as timestamp if this object represents a <a href="org/graalvm/polyglot/Value.html#isTimeZone--"><code>timezone</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#asValue-java.lang.Object-">asValue(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dd>
@@ -1049,10 +964,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/HostAccess.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/HostAccess.Builder.html" title="class in org.graalvm.polyglot">HostAccess.Builder</a></dt>
 <dd>
 <div class="block">Creates an instance of the custom host access configuration.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Creates an instance of the custom polyglot access configuration.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.Builder.html" title="class in org.graalvm.polyglot">Source.Builder</a></dt>
 <dd>
@@ -1740,10 +1651,6 @@
 <dd>
 <div class="block">Converts a string value, validates it, and converts it to an object of this type.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionType.html#convert-java.lang.Object-java.lang.String-java.lang.String-">convert(Object, String, String)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionType.html" title="class in org.graalvm.options">OptionType</a></dt>
-<dd>
-<div class="block">Converts a string value, validates it, and converts it to an object of this type.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/frame/FrameDescriptor.html#copy--">copy()</a></span> - Method in class com.oracle.truffle.api.frame.<a href="com/oracle/truffle/api/frame/FrameDescriptor.html" title="class in com.oracle.truffle.api.frame">FrameDescriptor</a></dt>
 <dd>
 <div class="block">Deeper copy of the descriptor.</div>
@@ -2163,10 +2070,6 @@
 <div class="block">Returns a value profile that profiles the exact value of a <code>float</code> using
  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html?is-external=true#floatToRawIntBits-float-" title="class or interface in java.lang"><code>Float.floatToRawIntBits(float)</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#createRedirectToStream-java.io.OutputStream-">createRedirectToStream(OutputStream)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
-<dd>
-<div class="block">Creates a redirect to write into the given <a href="http://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io"><code>OutputStream</code></a>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#createRight-R-">createRight(R)</a></span> - Static method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dd>
 <div class="block">Constructs a pair with its right value being <code>right</code>, or returns an empty pair if
@@ -2332,10 +2235,6 @@
 <dd>
 <div class="block">Instantiates a marker instance of this platform.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#DATE">DATE</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
-<dd>
-<div class="block">Type descriptor for date.</div>
-</dd>
 <dt><a href="com/oracle/truffle/api/debug/DebugContext.html" title="class in com.oracle.truffle.api.debug"><span class="typeNameLink">DebugContext</span></a> - Class in <a href="com/oracle/truffle/api/debug/package-summary.html">com.oracle.truffle.api.debug</a></dt>
 <dd>
 <div class="block">Representation of a polyglot context in a guest language execution.</div>
@@ -2449,18 +2348,6 @@
 <dd>
 <div class="block">Prevents access to members of given class.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#denyBindingsAccess-java.lang.String-">denyBindingsAccess(String)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Denies access to polyglot bindings for a language.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#denyEval-java.lang.String-java.lang.String-">denyEval(String, String)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Denies evaluation of code by one language of another.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#denyEvalBetween-java.lang.String...-">denyEvalBetween(String...)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
-<dd>
-<div class="block">Denies bidirectional evaluation of code between the given languages.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.Builder.html#deprecated-boolean-">deprecated(boolean)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.Builder.html" title="class in org.graalvm.options">OptionDescriptor.Builder</a></dt>
 <dd>
 <div class="block">Defines if this option is deprecated.</div>
@@ -2530,10 +2417,6 @@
 <div class="block">
  Specialized value profile to capture certain properties of <code>double</code> runtime values.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#DURATION">DURATION</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
-<dd>
-<div class="block">Type descriptor for duration.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-">duringAnalysis(Feature.DuringAnalysisAccess)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.html" title="interface in org.graalvm.nativeimage.hosted">Feature</a></dt>
 <dd>
 <div class="block">Handler for performing operations during the static analysis.</div>
@@ -2584,10 +2467,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptors.html#EMPTY">EMPTY</a></span> - Static variable in interface org.graalvm.options.<a href="org/graalvm/options/OptionDescriptors.html" title="interface in org.graalvm.options">OptionDescriptors</a></dt>
 <dd>
 <div class="block">An empty set of option descriptors.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#empty--">empty()</a></span> - Static method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
-<dd>
-<div class="block">Returns an empty option map (immutable).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/source/Source.LiteralBuilder.html#encoding-java.nio.charset.Charset-">encoding(Charset)</a></span> - Method in class com.oracle.truffle.api.source.<a href="com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></dt>
 <dd>
@@ -2653,10 +2532,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLogger.html#entering-java.lang.String-java.lang.String-java.lang.Object:A-">entering(String, String, Object[])</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></dt>
 <dd>
 <div class="block">Logs entry into method with multiple parameters.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#entrySet--">entrySet()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
-<dd>
-<div class="block">Returns an unmodifiable <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> view of the mappings contained in this map.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html#environment-java.lang.String-java.lang.String-">environment(String, String)</a></span> - Method in class com.oracle.truffle.api.io.<a href="com/oracle/truffle/api/io/TruffleProcessBuilder.html" title="class in com.oracle.truffle.api.io">TruffleProcessBuilder</a></dt>
 <dd>
@@ -2724,8 +2599,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
@@ -3387,26 +3260,6 @@
 <dd>
 <div class="block">Frees unmanaged memory that was previously allocated using methods of this class.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyDate.html#from-java.time.LocalDate-">from(LocalDate)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyDate.html" title="interface in org.graalvm.polyglot.proxy">ProxyDate</a></dt>
-<dd>
-<div class="block">Creates a proxy date from a local date.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyDuration.html#from-java.time.Duration-">from(Duration)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyDuration.html" title="interface in org.graalvm.polyglot.proxy">ProxyDuration</a></dt>
-<dd>
-<div class="block">Creates a proxy duration from a duration.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyInstant.html#from-java.time.Instant-">from(Instant)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy">ProxyInstant</a></dt>
-<dd>
-<div class="block">Creates a new proxy instant from a Java instant value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyTime.html#from-java.time.LocalTime-">from(LocalTime)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyTime.html" title="interface in org.graalvm.polyglot.proxy">ProxyTime</a></dt>
-<dd>
-<div class="block">Creates a proxy time from a local time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html#from-java.time.ZoneId-">from(ZoneId)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html" title="interface in org.graalvm.polyglot.proxy">ProxyTimeZone</a></dt>
-<dd>
-<div class="block">Creates a proxy timezone from a ZoneId.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/proxy/ProxyArray.html#fromArray-java.lang.Object...-">fromArray(Object...)</a></span> - Static method in interface org.graalvm.polyglot.proxy.<a href="org/graalvm/polyglot/proxy/ProxyArray.html" title="interface in org.graalvm.polyglot.proxy">ProxyArray</a></dt>
 <dd>
 <div class="block">Creates a proxy array backed by a Java array.</div>
@@ -3586,11 +3439,6 @@
 <dd>
 <div class="block">Gets the <a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options"><code>OptionDescriptor</code></a> matching a given option name or <code>null</code> if this option
  descriptor set does not contain a matching option name.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#get-java.lang.String-">get(String)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
-<dd>
-<div class="block">Returns the value to which the specified key is mapped, or <code>null</code> if this option map
- contains no mapping for the key.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionValues.html#get-org.graalvm.options.OptionKey-">get(OptionKey&lt;T&gt;)</a></span> - Method in interface org.graalvm.options.<a href="org/graalvm/options/OptionValues.html" title="interface in org.graalvm.options">OptionValues</a></dt>
 <dd>
@@ -4303,10 +4151,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Location.html#getInternal-com.oracle.truffle.api.object.DynamicObject-">getInternal(DynamicObject)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Location.html" title="class in com.oracle.truffle.api.object">Location</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getInternalLanguages--">getInternalLanguages()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns all languages that are installed and internally accessible in the environment.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.Provider.html#getIntrospectionData--">getIntrospectionData()</a></span> - Method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.Provider.html" title="interface in com.oracle.truffle.api.dsl">Introspection.Provider</a></dt>
 <dd>
 <div class="block">Returns internal reflection data in undefined format.</div>
@@ -4393,6 +4237,11 @@
 <dd>
 <div class="block">Returns a map <a href="com/oracle/truffle/api/nodes/LanguageInfo.html#getId--"><code>language id</code></a> to <a href="com/oracle/truffle/api/nodes/LanguageInfo.html" title="class in com.oracle.truffle.api.nodes"><code>language
  info</code></a> of all languages that are installed in the environment.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getLanguages--">getLanguages()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a map mime-type to language instance of all languages that are installed in the
+ environment.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Engine.html#getLanguages--">getLanguages()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Engine.html" title="class in org.graalvm.polyglot">Engine</a></dt>
 <dd>
@@ -4662,10 +4511,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RootNode.html#getName--">getName()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes">RootNode</a></dt>
 <dd>
-<div class="block">Returns a simple name of the AST (expected to be a method or procedure name in most
- languages) that identifies the AST for the benefit of guest language programmers using tools;
- it might appear, for example in the context of a stack dump or trace and is not expected to
- be called often.</div>
+<div class="block">A description of the AST (expected to be a method or procedure name in most languages) that
+ identifies the AST for the benefit of guest language programmers using tools; it might
+ appear, for example in the context of a stack dump or trace and is not expected to be called
+ often.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/HiddenKey.html#getName--">getName()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/HiddenKey.html" title="class in com.oracle.truffle.api.object">HiddenKey</a></dt>
 <dd>&nbsp;</dd>
@@ -4977,17 +4826,9 @@
 <dd>
 <div class="block">Returns all (also hidden) property objects in this shape.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicLanguages--">getPublicLanguages()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns all languages that are installed and publicly accessible in the environment.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/Message.html#getQualifiedName--">getQualifiedName()</a></span> - Method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/Message.html" title="class in com.oracle.truffle.api.library">Message</a></dt>
 <dd>
 <div class="block">Returns a qualified and unique name of this message.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RootNode.html#getQualifiedName--">getQualifiedName()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes">RootNode</a></dt>
-<dd>
-<div class="block">Returns a qualified name of the AST that in the best case uniquely identifiers the method.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/TypeLiteral.html#getRawType--">getRawType()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/TypeLiteral.html" title="class in org.graalvm.polyglot">TypeLiteral</a></dt>
 <dd>
@@ -5306,10 +5147,6 @@
 <dd>
 <div class="block">Get source code location where this exception was thrown from.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getTimeZone--">getTimeZone()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns the default time zone of this environment.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebuggerSession.html#getTopScope-java.lang.String-">getTopScope(String)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebuggerSession.html" title="class in com.oracle.truffle.api.debug">DebuggerSession</a></dt>
 <dd>
 <div class="block">Returns a language top scope.</div>
@@ -5617,8 +5454,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/ProcessHandler.Redirect.html" title="class in org.graalvm.polyglot.io">ProcessHandler.Redirect</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotException.html#hashCode--">hashCode()</a></span> - Method in exception org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot">PolyglotException</a></dt>
@@ -6347,14 +6182,6 @@
 <div class="block">Returns <code>true</code> if the creation of new threads is allowed in the current
  environment.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isDate-java.lang.Object-">isDate(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a date, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isDate--">isDate()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a date, else <code>false</code>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Location.html#isDeclared--">isDeclared()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Location.html" title="class in com.oracle.truffle.api.object">Location</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if this is a declared value location.</div>
@@ -6374,14 +6201,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/frame/Frame.html#isDouble-com.oracle.truffle.api.frame.FrameSlot-">isDouble(FrameSlot)</a></span> - Method in interface com.oracle.truffle.api.frame.<a href="com/oracle/truffle/api/frame/Frame.html" title="interface in com.oracle.truffle.api.frame">Frame</a></dt>
 <dd>
 <div class="block">Check whether the given <a href="com/oracle/truffle/api/frame/FrameSlot.html" title="class in com.oracle.truffle.api.frame"><code>FrameSlot</code></a> is of type double.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isDuration-java.lang.Object-">isDuration(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isDuration--">isDuration()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/DynamicObject.html#isEmpty--">isEmpty()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/DynamicObject.html" title="class in com.oracle.truffle.api.object">DynamicObject</a></dt>
 <dd>
@@ -6536,14 +6355,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/DirectCallNode.html#isInliningForced--">isInliningForced()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/DirectCallNode.html" title="class in com.oracle.truffle.api.nodes">DirectCallNode</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if the <a href="com/oracle/truffle/api/CallTarget.html" title="interface in com.oracle.truffle.api"><code>CallTarget</code></a> is forced to be inlined.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isInstant-java.lang.Object-">isInstant(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if the receiver represents an instant.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isInstant--">isInstant()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if the receiver represents an instant.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isInstantiable-java.lang.Object-">isInstantiable(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
 <dd>
@@ -6777,10 +6588,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.html#isOneShot--">isOneShot()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug">Breakpoint</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#isOptionMap--">isOptionMap()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this option is an option map.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerDirectives.html#isPartialEvaluationConstant-java.lang.Object-">isPartialEvaluationConstant(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerDirectives.html" title="class in com.oracle.truffle.api">CompilerDirectives</a></dt>
 <dd>
 <div class="block">Returns a boolean indicating whether or not a given value is seen as constant during the
@@ -6790,14 +6597,9 @@
 <dd>
 <div class="block">Returns <code>true</code> if the receiver value represents a native pointer.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isPolyglotBindingsAccessAllowed--">isPolyglotBindingsAccessAllowed()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isPolyglotAccessAllowed--">isPolyglotAccessAllowed()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
-<div class="block">Returns <code>true</code> if polyglot bindings access is allowed, else <code>false</code>
- .</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isPolyglotEvalAllowed--">isPolyglotEvalAllowed()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if polyglot evaluation is allowed, else <code>false</code>.</div>
+<div class="block">Returns <code>true</code> if polyglot access is allowed, else <code>false</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#isPreInitialization--">isPreInitialization()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
@@ -6812,21 +6614,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isProxyObject--">isProxyObject()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if this value represents a <a href="org/graalvm/polyglot/proxy/Proxy.html" title="interface in org.graalvm.polyglot.proxy"><code>Proxy</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html#isReachable-java.lang.Class-">isReachable(Class&lt;?&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.AfterAnalysisAccess</a></dt>
-<dd>
-<div class="block">Returns true if the static analysis determined that the provided class is reachable at
- run time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html#isReachable-java.lang.reflect.Field-">isReachable(Field)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.AfterAnalysisAccess</a></dt>
-<dd>
-<div class="block">Returns true if the static analysis determined that the provided field is reachable at
- run time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html#isReachable-java.lang.reflect.Executable-">isReachable(Executable)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.AfterAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.AfterAnalysisAccess</a></dt>
-<dd>
-<div class="block">Returns true if the static analysis determined that the provided method is reachable at
- run time.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#isReadable--">isReadable()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
 <dd>
@@ -6908,22 +6695,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#isThreadAccessAllowed-java.lang.Thread-boolean-">isThreadAccessAllowed(Thread, boolean)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if code of this language is allowed to be executed on this thread.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isTime-java.lang.Object-">isTime(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a time, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isTime--">isTime()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a time, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isTimeZone-java.lang.Object-">isTimeZone(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a timezone, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isTimeZone--">isTimeZone()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object represents a timezone, else <code>false</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeCost.html#isTrivial--">isTrivial()</a></span> - Method in enum com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeCost.html" title="enum in com.oracle.truffle.api.nodes">NodeCost</a></dt>
 <dd>&nbsp;</dd>
@@ -7460,10 +7231,6 @@
 <dd>
 <div class="block">Cursor to iterate over a mutable map.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/options/OptionKey.html#mapOf-java.lang.Class-">mapOf(Class&lt;V&gt;)</a></span> - Static method in class org.graalvm.options.<a href="org/graalvm/options/OptionKey.html" title="class in org.graalvm.options">OptionKey</a></dt>
-<dd>
-<div class="block">Constructs a new option key to group/accumulate options with common prefixes.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerDirectives.html#materialize-java.lang.Object-">materialize(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerDirectives.html" title="class in com.oracle.truffle.api">CompilerDirectives</a></dt>
 <dd>
 <div class="block">Ensures that the given object is not virtual, i.e., not removed by Escape Analysis at the
@@ -7655,10 +7422,6 @@
 <dd>
 <div class="block">Creates new character based literal source from a reader.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/source/Source.html#newBuilder-com.oracle.truffle.api.source.Source-">newBuilder(Source)</a></span> - Static method in class com.oracle.truffle.api.source.<a href="com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source">Source</a></dt>
-<dd>
-<div class="block">Creates a new source builder that inherits from the given Source.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#newBuilder-org.graalvm.options.OptionKey-java.lang.String-">newBuilder(OptionKey&lt;T&gt;, String)</a></span> - Static method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dd>
 <div class="block">Creates a new option descriptor builder by key.</div>
@@ -7683,10 +7446,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionListener.html#newBuilder--">newBuilder()</a></span> - Static method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionListener.html" title="class in org.graalvm.polyglot.management">ExecutionListener</a></dt>
 <dd>
 <div class="block">Creates a builder that can be used to attach execution listeners.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.html#newBuilder--">newBuilder()</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.html" title="class in org.graalvm.polyglot">PolyglotAccess</a></dt>
-<dd>
-<div class="block">Creates a new custom polyglot access configuration builder.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#newBuilder-java.lang.String-java.lang.CharSequence-java.lang.String-">newBuilder(String, CharSequence, String)</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dd>
@@ -7871,8 +7630,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.html#NONE">NONE</a></span> - Static variable in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.html" title="class in org.graalvm.polyglot">PolyglotAccess</a></dt>
 <dd>
-<div class="block">Provides guest languages no access to other languages using polyglot builtins evaluation and
- binding builtins.</div>
+<div class="block">Provides guest languages no access to other languages using polyglot builtins.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#normalize--">normalize()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
@@ -8200,10 +7958,6 @@
 <dd>
 <div class="block">Constructs a new option key given a default value and option key.</div>
 </dd>
-<dt><a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options"><span class="typeNameLink">OptionMap</span></a>&lt;<a href="org/graalvm/options/OptionMap.html" title="type parameter in OptionMap">T</a>&gt; - Class in <a href="org/graalvm/options/package-summary.html">org.graalvm.options</a></dt>
-<dd>
-<div class="block">Represents a mapping between <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a> keys and values.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#options-java.util.Map-">options(Map&lt;String, String&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
 <dd>
 <div class="block">Shortcut for setting multiple <a href="org/graalvm/polyglot/Context.Builder.html#option-java.lang.String-java.lang.String-"><code>options</code></a> using a map.</div>
@@ -8378,6 +8132,10 @@
  <code>source</code> to reference the actual parameters passed to
  <a href="com/oracle/truffle/api/CallTarget.html#call-java.lang.Object...-"><code>CallTarget.call(java.lang.Object...)</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#parse-com.oracle.truffle.api.source.Source-java.lang.String...-">parse(Source, String...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Evaluates source of (potentially different) language.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#parse-com.oracle.truffle.api.TruffleLanguage.ParsingRequest-">parse(TruffleLanguage.ParsingRequest)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
 <dd>
 <div class="block">Parses the <a href="com/oracle/truffle/api/TruffleLanguage.ParsingRequest.html#getSource--"><code>provided source</code></a> and generates its appropriate
@@ -8393,11 +8151,6 @@
 <dd>
 <div class="block">Parses source snippet of the node's language at the provided node location.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#parseInternal-com.oracle.truffle.api.source.Source-java.lang.String...-">parseInternal(Source, String...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Parses the source of a public or internal language and returns the parse result as
- <a href="com/oracle/truffle/api/CallTarget.html" title="interface in com.oracle.truffle.api"><code>CallTarget</code></a>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#parsePath-java.net.URI-">parsePath(URI)</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
 <dd>
 <div class="block">Parses a path from an <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
@@ -8405,11 +8158,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#parsePath-java.lang.String-">parsePath(String)</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
 <dd>
 <div class="block">Parses a path from a <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#parsePublic-com.oracle.truffle.api.source.Source-java.lang.String...-">parsePublic(Source, String...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Parses the source of a public language and returns the parse result as <a href="com/oracle/truffle/api/CallTarget.html" title="interface in com.oracle.truffle.api"><code>CallTarget</code></a>
- .</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-java.lang.Object-">partialEvaluationConstant(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
 <dd>
@@ -8503,10 +8251,6 @@
 <dt><a href="org/graalvm/polyglot/PolyglotAccess.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">PolyglotAccess</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
 <dd>
 <div class="block">Represents an access policy for polyglot builtins in the guest languages.</div>
-</dd>
-<dt><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">PolyglotAccess.Builder</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
-<dd>
-<div class="block">A builder for a polyglot access configuration.</div>
 </dd>
 <dt><a href="org/graalvm/polyglot/PolyglotException.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">PolyglotException</span></a> - Exception in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
 <dd>
@@ -8729,21 +8473,9 @@
 <dd>
 <div class="block">Interface to be implemented to mimic guest language arrays.</div>
 </dd>
-<dt><a href="org/graalvm/polyglot/proxy/ProxyDate.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyDate</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
-<dd>
-<div class="block">Interface to be implemented to mimic guest language objects that represents dates.</div>
-</dd>
-<dt><a href="org/graalvm/polyglot/proxy/ProxyDuration.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyDuration</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
-<dd>
-<div class="block">Interface to be implemented to mimic guest language objects that represents durations.</div>
-</dd>
 <dt><a href="org/graalvm/polyglot/proxy/ProxyExecutable.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyExecutable</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
 <dd>
 <div class="block">Interface to be implemented to mimic guest language objects that are executable.</div>
-</dd>
-<dt><a href="org/graalvm/polyglot/proxy/ProxyInstant.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyInstant</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
-<dd>
-<div class="block">Interface to be implemented to mimic guest language objects that represents timestamps.</div>
 </dd>
 <dt><a href="org/graalvm/polyglot/proxy/ProxyInstantiable.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyInstantiable</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
 <dd>
@@ -8756,14 +8488,6 @@
 <dt><a href="org/graalvm/polyglot/proxy/ProxyObject.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyObject</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
 <dd>
 <div class="block">Interface to be implemented to mimic guest language objects that contain members.</div>
-</dd>
-<dt><a href="org/graalvm/polyglot/proxy/ProxyTime.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyTime</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
-<dd>
-<div class="block">Interface to be implemented to mimic guest language objects that represents times.</div>
-</dd>
-<dt><a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html" title="interface in org.graalvm.polyglot.proxy"><span class="typeNameLink">ProxyTimeZone</span></a> - Interface in <a href="org/graalvm/polyglot/proxy/package-summary.html">org.graalvm.polyglot.proxy</a></dt>
-<dd>
-<div class="block">Interface to be implemented to mimic guest language objects that represents timezones.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.html#pushEncapsulatingNode-com.oracle.truffle.api.nodes.Node-">pushEncapsulatingNode(Node)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.html" title="class in com.oracle.truffle.api.nodes">NodeUtil</a></dt>
 <dd>
@@ -9207,26 +8931,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.DuringSetupAccess.html#registerObjectReplacer-java.util.function.Function-">registerObjectReplacer(Function&lt;Object, Object&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.DuringSetupAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.DuringSetupAccess</a></dt>
 <dd>
 <div class="block">Registers the provided function to replace objects.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerReachabilityHandler-java.util.function.Consumer-java.lang.Class-">registerReachabilityHandler(Consumer&lt;Feature.DuringAnalysisAccess&gt;, Class&lt;?&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
-<dd>
-<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
- when the provided class is determined to be reachable at run time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerReachabilityHandler-java.util.function.Consumer-java.lang.reflect.Field-">registerReachabilityHandler(Consumer&lt;Feature.DuringAnalysisAccess&gt;, Field)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
-<dd>
-<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
- when the provided field is determined to be reachable at run time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerReachabilityHandler-java.util.function.Consumer-java.lang.reflect.Executable-">registerReachabilityHandler(Consumer&lt;Feature.DuringAnalysisAccess&gt;, Executable)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
-<dd>
-<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
- when the provided method or constructor is determined to be reachable at run time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerReachabilityHandler-java.util.function.Consumer-java.lang.Object...-">registerReachabilityHandler(Consumer&lt;Feature.DuringAnalysisAccess&gt;, Object...)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
-<dd>
-<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
- when any of the provided elements is determined to be reachable at run time.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Threading.html#registerRecurringCallback-long-java.util.concurrent.TimeUnit-org.graalvm.nativeimage.Threading.RecurringCallback-">registerRecurringCallback(long, TimeUnit, Threading.RecurringCallback)</a></span> - Static method in class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Threading.html" title="class in org.graalvm.nativeimage">Threading</a></dt>
 <dd>
@@ -10072,10 +9776,6 @@
 <dd>
 <div class="block">Marks program locations as to be considered expressions of the languages.</div>
 </dd>
-<dt><a href="com/oracle/truffle/api/instrumentation/StandardTags.RootBodyTag.html" title="class in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">StandardTags.RootBodyTag</span></a> - Class in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
-<dd>
-<div class="block">Marks program locations as bodies of a function, method or closure.</div>
-</dd>
 <dt><a href="com/oracle/truffle/api/instrumentation/StandardTags.RootTag.html" title="class in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">StandardTags.RootTag</span></a> - Class in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
 <div class="block">Marks program locations as root of a function, method or closure.</div>
@@ -10288,18 +9988,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLogger.html#throwing-java.lang.String-java.lang.String-T-">throwing(String, String, T)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></dt>
 <dd>
 <div class="block">Logs throwing an exception.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#TIME">TIME</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
-<dd>
-<div class="block">Type descriptor for time.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#TIME_ZONE">TIME_ZONE</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
-<dd>
-<div class="block">Type descriptor for time zone.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#timeZone-java.time.ZoneId-">timeZone(ZoneId)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
-<dd>
-<div class="block">Sets the default time zone to be used for this context.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#toAbsolutePath-java.nio.file.Path-">toAbsolutePath(Path)</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
 <dd>
@@ -11428,7 +11116,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>54dbcd89ff89bb112fa39bf38781c050bac892c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">

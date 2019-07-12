@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>54dbcd89ff89bb112fa39bf38781c050bac892c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -630,11 +630,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  <p>
  This method shouldn't perform any complex operations. The runtime system is just being
  initialized and for example making
- <a href="../../../../com/oracle/truffle/api/TruffleLanguage.Env.html#parsePublic-com.oracle.truffle.api.source.Source-java.lang.String...-"><code>calls into
- other languages</code></a> and assuming your language is already initialized and others can see it
- would be wrong - until you return from this method, the initialization isn't over. The same
- is true for instrumentation, the instruments cannot receive any meta data about code executed
- during context creation. Should there be a need to perform complex initialization, do it by
+ <a href="../../../../com/oracle/truffle/api/TruffleLanguage.Env.html#parse-com.oracle.truffle.api.source.Source-java.lang.String...-"><code>calls into other
+ languages</code></a> and assuming your language is already initialized and others can see it would be
+ wrong - until you return from this method, the initialization isn't over. The same is true
+ for instrumentation, the instruments cannot receive any meta data about code executed during
+ context creation. Should there be a need to perform complex initialization, do it by
  overriding the <a href="../../../../com/oracle/truffle/api/TruffleLanguage.html#initializeContext-C-"><code>TruffleLanguage.initializeContext(java.lang.Object)</code></a> method.
  <p>
  Additional services provided by the language must be
@@ -684,7 +684,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
         <a href="../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a> source = <a href="../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.newBuilder(<em>"js"</em>,
                             <em>"function(x, y) x * y"</em>,
                             <em>"mul.js"</em>).build();
-        context.mul = context.env.parsePublic(source);
+        context.mul = context.env.parse(source);
     }
 }
 </pre></div>
@@ -1551,7 +1551,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>5ba376e47daf9dc19992f83b8e69954157721813</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>54dbcd89ff89bb112fa39bf38781c050bac892c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">

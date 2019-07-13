@@ -38,7 +38,7 @@
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>41a03b449e9c70c160e7d08eb748feee0e7963fd</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>7598cb130feffc434a99a065daa087a28406b8a7</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -497,6 +497,10 @@ public static @interface <span class="memberNameLabel">TruffleLanguage.Registrat
  Therefore by default non-internal languages are disposed and finalized before internal
  languages.
  <p>
+ Dependent languages should be parsed with <a href="../../../../com/oracle/truffle/api/TruffleLanguage.Env.html#parseInternal-com.oracle.truffle.api.source.Source-java.lang.String...-"><code>TruffleLanguage.Env.parseInternal(Source, String...)</code></a> as
+ the embedder might choose to disable access to it for
+ <a href="../../../../com/oracle/truffle/api/TruffleLanguage.Env.html#parsePublic-com.oracle.truffle.api.source.Source-java.lang.String...-"><code>TruffleLanguage.Env.parsePublic(Source, String...)</code></a>.
+ <p>
  Dependent languages references are optional. If a dependent language is not installed and
  the language needs to fail in such a case then the language should fail on
  <a href="../../../../com/oracle/truffle/api/TruffleLanguage.html#initializeContext-C-"><code>context initialization</code></a>. Cycles in
@@ -625,7 +629,7 @@ public static @interface <span class="memberNameLabel">TruffleLanguage.Registrat
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.1.1-dev</b><br>41a03b449e9c70c160e7d08eb748feee0e7963fd</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>7598cb130feffc434a99a065daa087a28406b8a7</div>
 </div>
 <div class="subNav">
 <ul class="navList">

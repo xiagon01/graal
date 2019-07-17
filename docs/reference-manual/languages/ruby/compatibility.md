@@ -140,7 +140,7 @@ is UTF-8 or a subset of UTF-8, as the JVM has already decoded arguments by the
 time we get them.
 
 `--jit` options and the `jit` feature are not supported because TruffleRuby
-uses Graal as a JIT.
+uses the GraalVM compiler as a JIT.
 
 #### Time is limited to millisecond precision
 

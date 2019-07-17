@@ -14,7 +14,7 @@ The necessary components can be added, e.g., by installing [https://www.xquartz.
 
 ### GraalVM for Java Developers (GraalVM + compiler)
 
-* 1.0-RC5 includes JVMCI changes necessary to support compiling Graal ahead of time and deploying as a shared library alongside `libjvm.so` (i.e., libgraal). Note that the implementation of _libgraal_ itself is not a part of this release as it is still under development.
+* 1.0-RC5 includes JVMCI changes necessary to support compiling the GraalVM compiler ahead of time and deploying as a shared library alongside `libjvm.so` (i.e., libgraal). Note that the implementation of _libgraal_ itself is not a part of this release as it is still under development.
 
 ### Native Image Generation
 

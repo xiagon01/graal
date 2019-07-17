@@ -35,7 +35,7 @@
 All service implementation classes, listed in the `META-INF` directory, are available automatically as soon as the service interface is used. This eliminates the need to manually register resources and reflection support for such classes. The automatic registration can be disabled with the `-H:-UseServiceLoaderFeature` option.
 * Finished the support for isolates (starting multiple independent VM instances at run time) and compressed references (to reduce memory footprint; Enterprise Edition only). More details are in an upcoming blog article.
 * A new Maven plugin allows native image generation from within a Maven build.
-* All components necessary for native image generation (Substrate VM and the Graal compiler) are now available on Maven Central. The dependency for that is:
+* All components necessary for native image generation (Substrate VM and the GraalVM compiler) are now available on Maven Central. The dependency for that is:
 ```
     <dependency>
       <groupId>com.oracle.substratevm</groupId>

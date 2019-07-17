@@ -20,9 +20,9 @@ Check that `java`, `js` and other commands work as expected.
 ```
 → docker run -it oracle/graalvm-ce:{{ site.product_version }} bash
 bash-4.2# java -version
-openjdk version "1.8.0_212"
-OpenJDK Runtime Environment (build 1.8.0_212-20190523183630.graal2.jdk8u-src-tar-gz-b03)
-OpenJDK 64-Bit GraalVM CE {{ site.product_version }} (build 25.212-b03-jvmci-19-b04, mixed mode)
+openjdk version "1.8.0_222"
+OpenJDK Runtime Environment (build 1.8.0_222-20190711112007.graal.jdk8u-src-tar-gz-b08)
+OpenJDK 64-Bit GraalVM CE 19.1.1 (build 25.222-b08-jvmci-19.1-b01, mixed mode)
 bash-4.2# node
 > 1 + 1
 2

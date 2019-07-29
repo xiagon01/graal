@@ -8,13 +8,15 @@ its hot methods are compiled. This can translate into slightly longer times
 until the application reaches peak performance when compared to the native compilers
 in the JVM such as C1 and C2.
 
-To address the issue of taking longer to reach to peak performance,
-both GraalVM Enterprise and Community images now include **libgraal** --
-a shared library, produced using [Native Image](https://github.com/oracle/graal/blob/master/substratevm/README.md) framework to ahead-of-time compile the compiler itself.
-That means the GraalVM compiler can now be deployed as a native shared library.
-In this mode, the compiler uses memory separate from the HotSpot heap and it runs compiled from the start.
-That is, it has execution properties similar to other native HotSpot compilers such as C1 and C2.
-Currently, this is the **default mode** of operation. It can be disabled with `-XX:-UseJVMCINativeLibrary`.
+To address the issue of taking longer to reach to peak performance, **libgraal**
+was introduced -- a shared library, produced using [Native Image](https://github.com/oracle/graal/blob/master/substratevm/README.md)
+framework to ahead-of-time compile the compiler itself. That means the GraalVM
+compiler is deployed as a native shared library. In this mode, the
+compiler uses memory separate from the HotSpot heap and it runs compiled from
+the start. That is, it has execution properties similar to other native HotSpot
+compilers such as C1 and C2. Currently, this is the **default mode** of
+operation in both GraalVM Community and Enterprise images. It can be disabled
+with `-XX:-UseJVMCINativeLibrary`.
 
 ## Measuring Performance
 

@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>39fcc9189e95034221dd8b2391e9de9cf5632df9</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>22f49a52f86bbeb0405bef1c25b38cdd969ebea8</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -4312,6 +4312,14 @@
 <dd>
 <div class="block">Returns all languages that are installed and internally accessible in the environment.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getInternalTruffleFile-java.lang.String-">getInternalTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public or internal <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getInternalTruffleFile-java.net.URI-">getInternalTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public or internal <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.Provider.html#getIntrospectionData--">getIntrospectionData()</a></span> - Method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.Provider.html" title="interface in com.oracle.truffle.api.dsl">Introspection.Provider</a></dt>
 <dd>
 <div class="block">Returns internal reflection data in undefined format.</div>
@@ -4986,6 +4994,14 @@
 <dd>
 <div class="block">Returns all languages that are installed and publicly accessible in the environment.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicTruffleFile-java.lang.String-">getPublicTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicTruffleFile-java.net.URI-">getPublicTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/Message.html#getQualifiedName--">getQualifiedName()</a></span> - Method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/Message.html" title="class in com.oracle.truffle.api.library">Message</a></dt>
 <dd>
 <div class="block">Returns a qualified and unique name of this message.</div>
@@ -5328,14 +5344,6 @@
 <div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html#getTruffleFile-java.net.URI-">getTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument.Env</a></dt>
-<dd>
-<div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getTruffleFile-java.lang.String-">getTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getTruffleFile-java.net.URI-">getTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
 </dd>
@@ -11440,7 +11448,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>39fcc9189e95034221dd8b2391e9de9cf5632df9</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>22f49a52f86bbeb0405bef1c25b38cdd969ebea8</div>
 </div>
 <div class="subNav">
 <ul class="navList">

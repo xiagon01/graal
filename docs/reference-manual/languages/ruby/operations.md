@@ -77,6 +77,8 @@ For logging of TruffleRuby internals, standard Java logging is used. The logging
 level can be set with `--log.level=INFO`, `=FINEST`, or so on.
 
 ### Troubleshooting TruffleRuby
-The GraalVM implementation of Ruby is experimental and we cannot guarantee it to be bug free.
+**Warning:** The GraalVM implementation of Ruby is experimental and we cannot guarantee it to be bug free. Experimental features might
+never be included in a production version, or might change significantly before
+being considered production-ready.
 TruffleRuby uses sophisticated techniques to optimise a Ruby program and its users are strongly encouraged to submit useful bug reports to [Truffleruby issues](https://github.com/oracle/truffleruby/issues).
- If you encounter a performance problem, please  consider the recommendations in [Reporting Performance Problems](https://github.com/oracle/truffleruby/blob/master/doc/user/reporting-performance-problems.md) document  .
+ If you encounter a performance problem, please consider the recommendations in [Reporting Performance Problems](https://github.com/oracle/truffleruby/blob/master/doc/user/reporting-performance-problems.md) document  .

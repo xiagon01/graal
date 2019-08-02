@@ -650,6 +650,10 @@ can run R code at <a href="#high-performance">unparalleled performance</a>,
 <a href="#graalvm-integration">integrates with the GraalVM</a>
 ecosystem and provides <a href="#graalvm-r-engine-additional-features">additional R level features</a>.</p>
 
+<p><strong>Warning:</strong> The support for R is experimental.
+Experimental features might never be included in a production version, or might
+change significantly before being considered production-ready.</p>
+
 <h2 id="installing-r">Installing R</h2>
 
 <p>The R language can be installed to a GraalVM build with the <code>gu</code> command.
@@ -701,9 +705,6 @@ but for the sake of future compatibility the Java interoperability will not be a
 <p>Users can optionally build the native image using:</p>
 <pre><code class="language-shell">jre/languages/R/bin/install_r_native_image
 </code></pre>
-<p>Note that the Native Image is not stable yet and is intended for experimental use. Some features
-may not work properly or at all. The Native Image can be uninstalled using the installation script
-with ‘uninstall’ argument.</p>
 
 <h2 id="graalvm-r-engine-compatibility">GraalVM R Engine Compatibility</h2>
 

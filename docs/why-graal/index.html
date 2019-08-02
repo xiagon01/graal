@@ -554,7 +554,9 @@ Some of versatile GraalVM capabilities, that might be missing on this page are t
 
 <h2 id="for-ruby-r-or-python">For Ruby, R, or Python</h2>
 
-<p>Support for Ruby, R, or Python is still experimental in GraalVM. We are actively working on stability and support for all modules for those languages. At this point in time, we can run simpler applications of Ruby and R, but we do not have the same full compatibility we provide for Java and Node.js applications. Our Python implementation was just recently started and can only run small examples.</p>
+<p><strong>Warning:</strong> Support for Ruby, R, or Python is experimental in GraalVM. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.</p>
+
+<p>We are actively working on stability and support for all modules for those languages. At this point in time, we can run simpler applications of Ruby and R, but we do not have the same full compatibility we provide for Java and Node.js applications. Our Python implementation was just recently started and can only run small examples.</p>
 
 <p>Apart from the standard GraalVM benefits such as language interoperability (e.g., use Java or JavaScript from those applications), GraalVM can achieve high speedups of 10x or more for those languages. We are happy to assist with making existing Ruby and R applications work with GraalVM, but we cannot guarantee out-of-the-box compatibility for these languages yet.</p>
 
@@ -564,8 +566,7 @@ Some of versatile GraalVM capabilities, that might be missing on this page are t
 prototype of the Oracle Database Multilingual Engine (MLE) is available
 <a href="https://oracle.github.io/oracle-db-mle/">here</a>. It allows Oracle Database users
 to run JavaScript, using browserify to execute Node.js modules, and to write
-extensions in Python. Note, the current Python implementation is experimental at
-the moment.</p>
+extensions in Python.</p>
 
 <h2 id="for-microservices-frameworks">For Microservices Frameworks</h2>
 

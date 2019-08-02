@@ -65,8 +65,10 @@ TruffleRuby options are set via `--option=value`, or you can use
 `--ruby.option=value` from any launcher. You can omit `=value` to set to `true`.
 
 Available options and documentation can be seen with `--help:languages`.
-Additionally set `--help:expert` and `--help:internal` to see those categories of
-options. All options all experimental and subject to change at any time.
+Additionally set `--help:expert` and `--help:internal` to see those categories
+of options. **Warning:** All options are experimental and subject to change at
+any time. Experimental features might never be included in a production version,
+or might change significantly before being considered production-ready.
 
 Options can also be set as JVM system properties, where they have a prefix
 `polyglot.ruby.`. For example `--vm.Dpolyglot.ruby.cexts.remap=true`, or via

@@ -264,9 +264,8 @@ is false.
 
 ### Memory Tracer Command Options
 
-**Disclaimer**: The memory tracer tool is experimental at the moment and likely
-its options are subject to change without notice.
-Make sure to prepend  `--experimental-options` flag to enable `--memtracer`.
+**Warning**: The memory tracer tool is experimental. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.
+Make sure to prepend `--experimental-options` flag to enable `--memtracer`.
 
 - `--experimental-options --memtracer`: enables the memory tracer. Disabled by default.
 - `--memtracer.FilterFile=<Expression>`: applies a wildcard filter for source file paths. For example, `*program*.sl`. The default is &lowast;.

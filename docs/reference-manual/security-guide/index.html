@@ -9,7 +9,7 @@
 
   <title>
     
-      Reference Manual for LLVM
+      Security Guide
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/languages/llvm/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/security-guide/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -455,7 +455,7 @@ $(document).ready(function(){
           
         
           
-          <li class="toc-bullets-sub toc-bullets-highlight">
+          <li class="toc-bullets-sub dsdsd">
           
             
             <a href="/docs/reference-manual/languages/llvm/">
@@ -463,23 +463,6 @@ $(document).ready(function(){
             </a>
           </li>
 
-          
-            <div>
-    <script>
-      var scriptElement = document.currentScript;
-      var div = $(scriptElement.parentElement);
-      $(window).on("load", function() {
-        $("#content-wrapper h1, #content-wrapper h2").each(function() {
-          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
-          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
-          a.text($(this).text());
-          li.append(a);
-          div.append(li);
-        });
-      });
-    </script>
-  </div>
-  
           
         
           
@@ -571,7 +554,7 @@ $(document).ready(function(){
           
         
           
-          <li class="toc-bullets-sub dsdsd">
+          <li class="toc-bullets-sub toc-bullets-highlight">
           
             
             <a href="/docs/reference-manual/security-guide/">
@@ -579,6 +562,23 @@ $(document).ready(function(){
             </a>
           </li>
 
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
           
         
       
@@ -656,538 +656,292 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h2 id="running-llvm-on-graalvm">Running LLVM on GraalVM</h2>
-<p>GraalVM provides an implementation of the <code>lli</code> tool to directly execute
-programs from LLVM bitcode.</p>
+                <h3 id="security-guide">Security Guide</h3>
 
-<p>In contrast to static compilation that is normally used for LLVM based
-languages, LLI first interprets the bitcode and then dynamically compiles the
-hot parts of the program using the GraalVM compiler. This allows seamless
-interoperability with the dynamic languages supported by GraalVM.</p>
+<p>This security guide provides developers and embedders with information on the
+security model and features of GraalVM, such that they can build a secure
+application on top of it. It assumes that readers are familiar with the GraalVM
+architecture.  This guide does not replace but rather supplements the Java
+security documentation with aspects unique to GraalVM. It also provides security
+researchers with information on GraalVM’s security model.</p>
 
-<p>Run programs in LLVM bitcode format:</p>
-<pre><code class="language-shell">lli [LLI Options] [GraalVM Options] [Polyglot Options] filename.bc [program args]
+<p>This guide does not (yet) cover security aspects specific to a language
+implementation, usage of the Instrument API or any APIs other than the Polyglot
+API.</p>
+
+<h2 id="security-model">Security Model</h2>
+<p>GraalVM is a shared runtime. It accepts instructions in a higher-level
+programming language (or an intermediate representation thereof) as input, which
+is executed at some point. Developers that implement security controls for their
+applications (such as access control) in code that is being run by GraalVM can
+rely on the correct execution of instructions. Incorrect execution of
+security-critical code running on top of GraalVM that allows to bypass such a
+security control is regarded a security vulnerability.</p>
+
+<p>Using the Truffle Language Implementation framework,
+interpreters for guest languages can be implemented to execute guest
+applications written in languages such as Javascript, Python, Ruby or R on top of
+GraalVM. The execution context for these guest applications can be created with
+restricted privileges, to allow for the execution of less trusted guest
+applications. For example, an embedder writes an application server (the host
+application) that runs JavaScript guest applications from a less trusted source.
+GraalVM offers features to limit the privileges of the guest
+application to some extent.</p>
+
+<p>For every guest language shipped with GraalVM, a launcher, e.g. (interactive)
+shell, is provided. These launchers behave in the same way and come with the
+same security guarantees as their “original” counterparts.</p>
+
+<p><strong>Warning:</strong> GraalVM provides only <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a> support for Python, R and Ruby languages. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.</p>
+
+<p>We appreciate reports of bugs that break the security model via the process
+outlined in the <a href="https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html">Reporting Vulnerabilities guide</a>.</p>
+
+<h2 id="guest-application-context">Guest Application Context</h2>
+<p>GraalVM allows a host application written in a JVM-based language to create an
+execution context to run code written in one or multiple guest language(s). When
+creating a context, the host application can control which resources the guest
+can access. By default access to all managed resources is denied and needs to be
+granted explicitly.</p>
+
+<p>Beyond controlling access to these resources, the execution context also enables
+timeboxing of guest applications: a watchdog thread that runs in the host
+application can be configured to close a context after a given amount of time
+specified by the host application, freeing up the computing resources used by
+the context.</p>
+
+<h3 id="file-io">File I/O</h3>
+<p>Access to files can be controlled via two means. The <code>allowIO</code> privilege grants
+the guest application unrestricted access to the host file system:</p>
+<pre><code>Context context = Context.newBuilder().allowIO(true).build();
 </code></pre>
-<p>Where <code>filename.bc</code> is a single program source file in LLVM bitcode format.</p>
+<p>Alternatively the Truffle framework virtual file system that all guest file I/O will be routed through can be installed:</p>
+<pre><code>Context context = Context.newBuilder().fileSystem(FileSystem fs).build();
+</code></pre>
 
-<p><strong>Note:</strong> LLVM bitcode is platform dependent. The program must be compiled to
-bitcode for the appropriate platform.</p>
+<h3 id="threading">Threading</h3>
+<p>A guest application can only create new threads, if the context is created with the corresponding privilege:</p>
+<pre><code>Context context = Context.newBuilder().allowCreateThread(true).build()
+</code></pre>
 
-<h3 id="compiling-to-llvm-bitcode">Compiling to LLVM Bitcode</h3>
-<p>GraalVM can execute C/C++, Rust, and other languages that can be compiled to
-LLVM bitcode. As a first step, you have to compile the program to LLVM bitcode
-using an LLVM frontend such as <code>clang</code>. C/C++ code can be compiled to LLVM
-bitcode using <code>clang</code> with the <code>-emit-llvm</code> option.</p>
+<h3 id="native-access">Native Access</h3>
+<p>The Truffle framework native interface allows access to privileged native code.
+It needs to be granted to a guest application context via:</p>
+<pre><code>Context context = Context.newBuilder().allowNativeAccess(true).build()
+</code></pre>
 
-<p>Here is some example C code named <code>hello.c</code>:</p>
+<h3 id="host-interoperability">Host Interoperability</h3>
+<p>GraalVM allows exchanging objects between the host and the guest
+application. Since the guest application is potentially less trusted than the
+host application, multiple controls exist to tune the degree of interoperability
+between the guest and the host:</p>
 
-<pre><code class="language-c">#include &lt;stdio.h&gt;
+<ul>
+  <li><code>allowHostAccess(policy)</code> – configures which public constructors, methods or fields of public classes of the host can be accessed by the guest</li>
+  <li><code>allowHostClassLookup(Predicate&lt;String&gt; classFilter)</code> – allows the guest application to look up the host application classes specified in the classFilter via <code>Java.type</code>. For example, a Javascript context can create a Java ArrayList, provided that ArrayList is whitelisted by the classFilter and access is permitted by the host access policy: <code>context.eval("js", "var array = Java.type('java.util.ArrayList')")</code></li>
+  <li><code>allowHostClassLoading(true/false)</code> - allows the guest application to access the host’s class loader to load new classes. Classes are only accessible if access to them is granted by the host access policy.</li>
+</ul>
 
-int main() {
-    printf("Hello from GraalVM!\n");
-    return 0;
+<p>The host access policy has three different options:</p>
+
+<ul>
+  <li><code>ALL</code> - all public constructors, methods or fields of public classes of the host can be accessed by the guest.</li>
+  <li><code>NONE</code> - no constructors, methods or fields of the host can be accessed by the guest.</li>
+  <li><code>EXPLICIT</code> - only public constructors, methods and fields of public classes that are annotated with <code>@HostAccess.Export</code> can be accessed by the guest.</li>
+</ul>
+
+<p>The following example demonstrates how these configuration options work together:</p>
+
+<pre><code> public class MyClass {
+     @HostAccess.Export
+     public int accessibleMethod() {
+         return 42;
+     }
+
+     public static void main(String[] args) {
+         try (Context context = Context.newBuilder() //
+                         .allowHostClassLookup(c -&gt; c.equals("myPackage.MyClass")) //
+                         .build()) {
+             int result = context.eval("js", "" +
+                             "var MyClass = Java.type('myPackage.MyClass');" +
+                             "new MyClass().accessibleMethod()").asInt();
+             assert result == 42;
+         }
+     }
+ }
+</code></pre>
+
+<p>This Java/JavaScript example</p>
+<ul>
+  <li>creates a new context with the permission to look up the class <code>myPackage.MyClass</code> in the guest application
+evaluates a JavaScript code snippet that accesses the Java class <code>myPackage.MyClass</code> using the <code>Java.type</code> builtin provided by the JavaScript language implementation</li>
+  <li>creates a new instance of the Java class <code>MyClass</code> by using the JavaScript <code>new</code> keyword</li>
+  <li>calls the method <code>accessibleMethod()</code> which returns “42”. The method is accessible to the guest language because because the enclosing class and the declared method are public, as well as annotated with the <code>@HostAccess.Export</code> annotation.</li>
+</ul>
+
+<p>The guest can also pass objects back to the host. This is implemented by functions that return a value. For example,</p>
+<pre><code>Value a = Context.create().eval("js", "21 + 21");
+</code></pre>
+<p>returns a guest object representing the value “42”. When executing less trusted
+guest code, application developers need to take care when processing objects
+returned from the guest application – the host application should treat them as
+less trusted input and sanitize accordingly.</p>
+
+<h2 id="managed-execution-of-native-code">Managed Execution of Native Code</h2>
+<p>The Truffle framework also supports the LLVM intermediate representation (IR) as
+a guest language. Several native system programming languages, above all C/C++,
+can be compiled to LLVM IR with the LLVM compiler toolchain. Typically, these
+languages are not memory safe by themselves and violations of memory safety
+being a frequent cause for security vulnerabilities.</p>
+
+<p>The GraalVM Enterprise Edition adds support for a managed execution mode for LLVM IR
+code. In managed mode, all ties to the native level are abstracted and routed
+through GraalVM. In particular this means that:</p>
+
+<ul>
+  <li>Temporal and spatial memory safety. Memory is allocated from the Java heap. This
+means that memory allocations are managed objects and all accesses are performed
+in a memory-safe manner (no arbitrary pointer arithmetics, no unchecked
+out-of-bounds accesses).</li>
+  <li>Type safety. It is not possible to reinterpret a data pointer into a function
+pointer and execute arbitrary instructions (since these are distinct pointer
+types for LLVM Runtime).</li>
+  <li>System calls are intercepted and routed to the corresponding Truffle framework
+APIs. For example, file IO is mapped to the Truffle framework FileSystem API.
+The set of currently supported system calls is very limited – only syscalls
+that can safely be mapped to the Truffle API level are available. Since LLVM
+runtime in managed mode always runs bitcode compiled for Linux/x86, it only
+needs to implement system calls for this platform.</li>
+  <li>All dependent libraries are executed in managed mode as well, removing all
+references to natively executed system libraries. This includes libraries that
+are provided by the LLVM Runtime, such as <em>muslibc</em>.</li>
+</ul>
+
+<p>Managed mode can be selected when creating a context <code>(Context.create())</code> or
+when calling the <code>bin/lli</code> binary by specifying the <code>--llvm.managed</code> option. A
+“managed” context will adhere to any restrictions (e.g., <code>allowIO</code>) passed
+during context creation and does not need the <code>allowNativeAccess</code> privilege.</p>
+
+<h2 id="security-caveats">Security Caveats</h2>
+<p>In this section we address security caveats that are specific to GraalVM Enterprise Edition.</p>
+
+<h3 id="sharing-execution-engines">Sharing Execution Engines</h3>
+<p>Application developers may choose to share execution engines among execution
+contexts for performance reasons. While the context holds the state of the
+executed code, the engine holds the code itself. Sharing of an execution engine
+among multiple contexts needs to be set up explicitly and can increase
+performance in scenarios where a number of contexts execute the same code. In
+scenarios where contexts that share an execution engine for common code also
+execute sensitive (i.e., private) code, the corresponding source objects can opt
+out from code sharing with:</p>
+<pre><code>Source.newBuilder(…).cached(false).build()
+</code></pre>
+
+<h3 id="scriptengine-compatibility">ScriptEngine Compatibility</h3>
+<p>For reasons of backward compatibility, certain guest languages also support
+Java’s ScriptEngine interface. For example, this allows GraalVM JavaScript to be
+used as a drop-in replacement for Nashorn. However, to maintain compatibility,
+the Nashorn GraalVM JavaScript ScriptEngine interface will create an context
+with all privileges granted to the script and should be used with extreme
+caution and only for trusted code.</p>
+
+<h3 id="untrusted-code">Untrusted Code</h3>
+<p>The GraalVM Polyglot API supports running less trusted code from a third-party
+source. By default a polyglot context evaluates code in a less trusted mode. If
+the code is fully trusted, then <code>allowAllAccess</code> can be set to <code>true</code> in order
+to avoid any further configuration. The Polyglot API also allow to reliably
+cancel guest language execution after a timeout interval.</p>
+
+<p><strong>Warning:</strong> GraalVM supports running less trusted code only with JavaScript.</p>
+
+<h4 id="configuring-host-access">Configuring Host Access</h4>
+<p>Running less trusted applications requires special attention to which host
+methods are exposed to the guest application. For example, if a Java method is
+exposed that calls <code>System.exit</code> then the guest application will be able to exit
+the host process. In order to avoid accidentally exposed methods, no host access
+is allowed by default and every public method or field needs to be annotated
+with <code>@HostAccess.Export</code> explicitly.</p>
+
+<pre><code>public class Employee {
+    private final String name;
+    Employee(String name) {this.name = name;}
+
+    @HostAccess.Export
+    public String getName() {
+        return name;
+    }
 }
-</code></pre>
 
-<p>You can compile <code>hello.c</code> to an LLVM bitcode file named <code>hello.bc</code> as follows:</p>
-<pre><code class="language-shell">$ clang -c -O1 -emit-llvm hello.c
-</code></pre>
+public class Services {
+    @HostAccess.Export
+    public Employee createEmployee(String name) {
+        return new Employee(name);
+    }
 
-<p>You can then run <code>hello.bc</code> on GraalVM like this:</p>
-<pre><code class="language-shell">$ lli hello.bc
-Hello from GraalVM!
-</code></pre>
-
-<h3 id="external-library-dependencies">External library dependencies</h3>
-<p>If the bitcode file depends on external libraries, they can be loaded using the
-<code>--lib</code> argument.</p>
-
-<p>For example:</p>
-<pre><code class="language-c">#include &lt;unistd.h&gt;
-#include &lt;ncurses.h&gt;
-
-int main() {
-    initscr();
-    printw("Hello, Curses!");
-    refresh();
-    sleep(1);
-    endwin();
-    return 0;
-}
-</code></pre>
-
-<p>This can be run with:</p>
-<pre><code class="language-shell">$ clang -c -O1 -emit-llvm hello-curses.c
-$ lli --lib /usr/lib/libncursesw.so hello-curses.bc
-</code></pre>
-<p>For Mac OS users, <code>ncurses</code> library path is <code>/usr/lib/libncurses.dylib</code>.</p>
-
-<h2 id="running-c">Running C++</h2>
-<p>For running C++ code, LLI requires the <code>libc++</code> standard library from the LLVM
-project. If you are using Ubuntu Linux, install the package <code>libc++1</code>.</p>
-
-<pre><code class="language-c++">#include &lt;iostream&gt;
-
-int main() {
-    std::cout &lt;&lt; "Hello, C++ World!" &lt;&lt; std::endl;
-}
-</code></pre>
-
-<p>Make sure you compile your C++ code with the correct standard library:</p>
-
-<pre><code class="language-shell">$ clang++ -c -O1 -emit-llvm -stdlib=libc++ hello-c++.cpp
-$ lli hello-c++.bc
-Hello, C++ World!
-</code></pre>
-
-<h2 id="running-rust">Running Rust</h2>
-<p>LLI does not load the Rust standard libraries automatically.
-To install Rust, run the following in your terminal, then follow the onscreen instructions:</p>
-<pre><code class="language-shell">curl https://sh.rustup.rs -sSf | sh
-</code></pre>
-<p>To run Rust code,
-the required Rust libraries have to be specified manually.</p>
-
-<pre><code>fn main() {
-    println!("Hello Rust!");
-}
-</code></pre>
-
-<p>This can be run with:</p>
-<pre><code class="language-shell">$ rustc --emit=llvm-bc hello-rust.rs
-$ lli --lib $(rustc --print sysroot)/lib/libstd-* hello-rust.bc
-Hello Rust!
-</code></pre>
-
-<h2 id="interoperability">Interoperability</h2>
-<p>GraalVM supports several other programming languages, including JavaScript,
-Python, Ruby, and R. While LLI is designed to run LLVM bitcode, it also provides
-an API for programming language interoperability that lets you execute code from
-any other language that GraalVM supports.</p>
-
-<p>Dynamic languages like JavaScript usually access object members by name. Since
-normally names are not preserved in LLVM bitcode, it must be compiled with debug
-info enabled.</p>
-
-<p>The following example demonstrates how you can use the API for interoperability
-with other programming languages.</p>
-
-<p>Let us define a C struct for points and implement allocation functions:</p>
-
-<pre><code class="language-c">// cpart.c
-#include &lt;polyglot.h&gt;
-
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-
-struct Point {
-    double x;
-    double y;
-};
-
-POLYGLOT_DECLARE_STRUCT(Point)
-
-void *allocNativePoint() {
-    struct Point *ret = malloc(sizeof(*ret));
-    return polyglot_from_Point(ret);
+    public void exitVM() {
+        System.exit(1);
+    }
 }
 
-void *allocNativePointArray(int length) {
-    struct Point *ret = calloc(length, sizeof(*ret));
-    return polyglot_from_Point_array(ret, length);
-}
+public static void main(String[] args) {
+    try (Context context = Context.create()) {
+        Services services = new Services();
+        context.getBindings("js").putMember("services", services);
+        String name = context.eval("js",
+                "let emp = services.createEmployee('John Doe');" +
+                "emp.getName()").asString();
+        assert name.equals("John Doe");
 
-void freeNativePoint(struct Point *p) {
-    free(p);
-}
-
-void printPoint(struct Point *p) {
-    printf("Point&lt;%f,%f&gt;\n", p-&gt;x, p-&gt;y);
-}
-</code></pre>
-
-<p>Make sure <code>GRAALVM_HOME</code> resolves to the GraalVM installation directory, then compile the <em>cpart.c</em> file with:</p>
-<pre><code class="language-shell">$ clang -g -O1 -c -emit-llvm -I$GRAALVM_HOME/jre/languages/llvm/include cpart.c
-</code></pre>
-
-<p>You can access your C/C++ code from other languages like JavaScript:</p>
-
-<pre><code class="language-js">// jspart.js
-
-// Load and parse the LLVM bitcode into GraalVM
-var cpart = Polyglot.evalFile("llvm" ,"cpart.bc");
-
-// Allocate a light-weight C struct
-var point = cpart.allocNativePoint();
-
-// Access it as if it were a JS object
-point.x = 5;
-point.y = 7;
-
-// Pass it back to a native function
-cpart.printPoint(point);
-
-// We can also allocate an array of structs
-var pointArray = cpart.allocNativePointArray(15);
-
-// We can access this array like it was a JS array
-for (var i = 0; i &lt; pointArray.length; i++) {
-    var p = pointArray[i];
-    p.x = i;
-    p.y = 2*i;
-}
-
-cpart.printPoint(pointArray[3]);
-
-// We can also pass a JS object to a native function
-cpart.printPoint({x: 17, y: 42});
-
-// Don't forget to free the unmanaged data objects
-cpart.freeNativePoint(point);
-cpart.freeNativePoint(pointArray);
-</code></pre>
-
-<p>Run this JavaScript file with:</p>
-<pre><code class="language-shell">$ js --polyglot jspart.js
-Point&lt;5.000000,7.000000&gt;
-Point&lt;3.000000,6.000000&gt;
-Point&lt;17.000000,42.000000&gt;
-</code></pre>
-
-<h2 id="polyglot-c-api">Polyglot C API</h2>
-
-<p>There are also lower level API functions for directly accessing polyglot values
-from C. See the <a href="/docs/reference-manual/polyglot/">Polyglot Reference</a>
-and the documentation comments in <code>polyglot.h</code> for more details.</p>
-
-<p>For example, this program allocates and accesses a Java array from C:</p>
-
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;polyglot.h&gt;
-
-int main() {
-    void *arrayType = polyglot_java_type("int[]");
-    void *array = polyglot_new_instance(arrayType, 4);
-    polyglot_set_array_element(array, 2, 24);
-    int element = polyglot_as_i32(polyglot_get_array_element(array, 2));
-    printf("%d\n", element);
-    return element;
-}
-</code></pre>
-
-<p>Compile it to LLVM bitcode:</p>
-
-<pre><code class="language-shell">$ clang -g -O1 -c -emit-llvm -I$GRAALVM_HOME/jre/languages/llvm/include polyglot.c
-</code></pre>
-
-<p>And run it, using the <code>--jvm</code> argument to run GraalVM in the JVM mode, since we are
-using a Java type:</p>
-
-<pre><code class="language-shell">$ lli --jvm polyglot.bc
-24
-</code></pre>
-
-<h2 id="embedding-in-java">Embedding in Java</h2>
-
-<p>GraalVM can also be used to embed LLVM bitcode in Java host programs.</p>
-
-<p>For example, let us write a Java class <code>Polyglot.java</code> that embeds GraalVM to
-run the previous example:</p>
-
-<pre><code class="language-java">import java.io.*;
-import org.graalvm.polyglot.*;
-
-class Polyglot {
-    public static void main(String[] args) throws IOException {
-        Context polyglot = Context.newBuilder().
-        		               allowAllAccess(true).build();
-        File file = new File("polyglot.bc");
-        Source source = Source.newBuilder("llvm", file).build();
-        Value cpart = polyglot.eval(source);
-        cpart.execute();
+        try {
+            context.eval("js", "services.exitVM()");
+            assert false;
+        } catch (PolyglotException e) {
+            assert e.getMessage().endsWith(
+                    "Unknown identifier: exitVM");
+        }
     }
 }
 </code></pre>
 
-<p>Compiling and running it:</p>
-<pre><code class="language-shell">$ javac Polyglot.java
-$ java Polyglot
-24
-</code></pre>
-
-<p>See the <a href="/docs/graalvm-as-a-platform/embed/">Embedding documentation</a>
-for more information.</p>
-
-<h2 id="source-level-debugging">Source-Level Debugging</h2>
-
-<p>You can use <a href="/docs/reference-manual/tools/#debugger">GraalVM’s Debugger</a> to debug the program
-you compiled to LLVM bitcode.
-To use this feature, please make sure to compile your program with debug information by specifying the <code>-g</code>
-argument when compiling with <code>clang</code>.
-This gives you the ability to step through the program’s source code and set breakpoints in it.
-To also be able to inspect the local and global variables of your program you may pass
-<code>--llvm.enableLVI=true</code> as argument to <code>lli</code>.
-This option is not enabled per default as it can significantly decrease your program’s run-time performance.</p>
-
-<h2 id="llvm-compatibility">LLVM Compatibility</h2>
-
-<p>GraalVM works with LLVM bitcode versions 3.8 to 7.0.</p>
-
-<h3 id="optimization-flags">Optimization Flags</h3>
-
-<p>In contrast to the static compilation model of LLVM languages, in GraalVM the
-machine code is not directly produced from the LLVM bitcode, but there is an
-additional dynamic compilation step by the GraalVM compiler.</p>
-
-<p>In this scenario, first the LLVM frontend (e.g. <code>clang</code>) does optimizations on
-the bitcode level, and then the GraalVM compiler does its own optimizations on top of that
-during dynamic compilation. Some optimizations are better when done
-ahead-of-time on the bitcode, while other optimizations are better left for the
-dynamic compilation of the GraalVM compiler, when profiling information is available.</p>
-
-<p>In principle, all optimization levels should work, but for best results we
-suggest compiling the bitcode with optimization level <code>-O1</code>.</p>
-
-<p>Cross-language interoperability will only work when the bitcode is compiled
-with debug information enabled (<code>-g</code>), and the <code>-mem2reg</code> optimization is
-performed on the bitcode (compiled with at least <code>-O1</code>, or explicitly using the
-<code>opt</code> tool).</p>
-
-<h2 id="lli-command-options">LLI Command Options</h2>
-
-<p><code>-L &lt;path&gt;</code>/<code>--llvm.libraryPath=&lt;path&gt;</code>: a list of paths where GraalVM will
-search for library dependencies. Paths are delimited by <code>:</code>.</p>
-
-<p><code>--lib &lt;libs&gt;</code>/<code>--llvm.libraries=&lt;libs&gt;</code>: a list of libraries to load. The list
-can contain precompiled native libraries (<code>*.so</code>/<code>*.dylib</code>) and bitcode
-libraries (<code>*.bc</code>). Files with a relative path are looked up relative to
-<code>llvm.libraryPath</code>. Entries are delimited by <code>:</code>.</p>
-
-<p><code>--llvm.enableLVI=&lt;true/false&gt;</code>: enable source-level symbol inspection in the
-debugger. This defaults to <code>false</code> as it can decrease run-time performance.</p>
-
-<p><code>--llvm.managed</code> enable a managed execution mode for LLVM IR code, which means memory allocations from LLVM bitcode are done on the managed heap. <a href="https://medium.com/graalvm/safe-and-sandboxed-execution-of-native-code-f6096b35c360">This article</a> explains the managed execution in every detail.</p>
-
-<p><code>--version</code> prints the version and exit.</p>
-
-<p><code>--version:graalvm</code> prints GraalVM version information and exit.</p>
-
-<h3 id="expert-and-diagnostic-options">Expert and Diagnostic Options</h3>
-
-<p>Use <code>--help</code> and <code>--help:&lt;topic&gt;</code> to get a full list of options.</p>
-
-<h2 id="limitations-and-differences-to-native-execution">Limitations and Differences to Native Execution</h2>
-
-<p>LLVM code interpreted or compiled with the default configuration of GraalVM
-Community or Enterprise editions will not have the same characteristics as the
-same code interpreted or compiled in a managed environment, enabled
-with the <code>--llvm.managed</code> option on top of GraalVM Enterprise. The
-behavior of the <code>lli</code> interpreter tool used to directly execute programs
-in LLVM bitcode format differs between native and managed modes. The
-difference lies in safety guarantees and cross-language interoperability.</p>
-
-<p>In the default configuration, cross-language interoperability requires bitcode
-to be compiled with the debug information enabled (<code>-g</code>), and the <code>-mem2reg</code>
-optimization is performed on the bitcode (compiled with at least <code>-O1</code>, or
-explicitly using the <code>opt</code> tool). These requirements can be overcome in a
-managed environment of GraalVM EE that allows native code to participate in the
-polyglot programs, passing and receiving the data from any other supported
-language. In terms of security, the execution of native code in a managed
-environment passes with additional safety features: catching illegal pointer
-accesses, accessing arrays outside of the bounds, etc..</p>
-
-<p>There are certain limitations and differences to the native execution depending on the GraalVM edition.
-Consider them respectively.</p>
-
-<h3 id="limitations-and-differences-to-native-execution-on-top-of-graalvm-ce">Limitations and Differences to Native Execution on Top of GraalVM CE</h3>
-
-<p>The LLVM interpreter in GraalVM Community Edition environment allows executing LLVM bitcode within a
-multilingual context. Even though it aspires to be a generic LLVM runtime, there
-are certain fundamental and/or implementational limitations that users need to
-be aware of.</p>
-
-<p>The following restrictions and differences to native execution (i.e., bitcode compiled down to native code) exist when LLVM bitcode is executed with the LLVM interpreter on top of GraalVM CE:</p>
+<p>In this code:</p>
 
 <ul>
-  <li>The GraalVM LLVM interpreter assumes that bitcode was generated to target the x86_64 architecture.</li>
-  <li>Bitcode should be the result of compiling C/C++ code using clang version 7, other compilers/languages, e.g., Rust, might have specific requirements that are not supported.</li>
-  <li>Unsupported functionality – it is not possible to call any of the following functions:
-    <ul>
-      <li><code>clone()</code></li>
-      <li><code>fork()</code></li>
-      <li><code>vfork()</code></li>
-      <li><code>setjmp()</code>, <code>sigsetjmp()</code>, <code>longjmp()</code>, <code>siglongjmp()</code></li>
-      <li>Functions of the <code>exec()</code> function family</li>
-      <li>Pthread functions</li>
-      <li>Code running in the LLVM interpreter needs to be aware that a JVM is running in the same process, so many syscalls such as fork, brk, sbrk, futex, mmap, rt_sigaction, rt_sigprocmask, etc. might not work as expected or cause the JVM to crash.</li>
-      <li>Calling unsupported syscalls or unsupported functionality (listed above) via native code libraries can cause unexpected side effects and crashes.</li>
-    </ul>
-  </li>
-  <li>Thread local variables
-    <ul>
-      <li>Thread local variables from bitcode are not compatible with thread local variables from native code.</li>
-    </ul>
-  </li>
-  <li>Cannot rely on memory layout
-    <ul>
-      <li>Pointers to thread local variables are not stored in specific locations, e.g., the FS segment.</li>
-      <li>The order of globals in memory might be different, consequently no assumptions about their relative locations can be made.</li>
-      <li>Stack frames cannot be inspected or modified using pointer arithmetic (overwrite return address, etc.).</li>
-      <li>Walking the stack is only possible using the Truffle APIs.</li>
-      <li>There is a strict separation between code and data, so that reads, writes and pointer arithmetic on function pointers or pointers to code will lead to undefined behavior.</li>
-    </ul>
-  </li>
-  <li>Signal handlers
-    <ul>
-      <li>Installing signal handlers is not supported.</li>
-    </ul>
-  </li>
-  <li>The stack
-    <ul>
-      <li>The default stack size is not set by the operating system but by the option <code>--llvm.stackSize</code>.</li>
-    </ul>
-  </li>
-  <li>Dynamic linking
-    <ul>
-      <li>Interacting with the LLVM bitcode dynamic linker is not supported, e.g., dlsym/dlopen can only be used for native libraries.</li>
-      <li>The dynamic linking order is undefined if native libraries and LLVM bitcode libraries are mixed.</li>
-      <li>Native libraries cannot import symbols from bitcode libraries.</li>
-    </ul>
-  </li>
-  <li>x86_64 inline assembly is not supported.</li>
-  <li>Undefined behavior according to C spec
-    <ul>
-      <li>While most C compilers map undefined behavior to CPU semantics, the GraalVM LLVM interpreter might map some of this undefined behavior to Java or other semantics. Examples include: signed integer overflow (mapped to the Java semantics of an arithmetic overflow), integer division by zero (will throw an ArithmeticException), oversized shift amounts (mapped to the Java behavior).</li>
-    </ul>
-  </li>
-  <li>Floating point arithmetics
-    <ul>
-      <li>Some floating point operations and math functions will use more precise operations and cast the result to a lower precision (instead of performing the operation at a lower precision).</li>
-      <li>Only the rounding mode FE_TONEAREST is supported.</li>
-      <li>Floating point exceptions are not supported.</li>
-    </ul>
-  </li>
-  <li>NFI limitations (calling real native functions)
-    <ul>
-      <li>Structs, complex numbers, or fp80 values are not supported as by-value arguments or by-value return values.</li>
-      <li>The same limitation applies to calls back from native code into interpreted LLVM bitcode.</li>
-    </ul>
-  </li>
-  <li>Limitations of polyglot interoperability (working with values from other GraalVM languages)
-    <ul>
-      <li>Foreign objects cannot be stored in native memory locations. Native memory locations include:
-        <ul>
-          <li>globals (except the specific case of a global holding exactly one pointer value);</li>
-          <li>malloc’ed memory (including c++ new, etc.);</li>
-          <li>stack (e.g. escaping automatic variables).</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>LLVM instruction set support (based on LLVM 7.0.1)
-    <ul>
-      <li>A set of rarely-used bitcode instructions are not available (va_arg, catchpad, cleanuppad, catchswitch, catchret, cleanupret, fneg, callbr).</li>
-      <li>The instructions with limited support:
-        <ul>
-          <li>atomicrmw (only supports sub, add, and, nand, or, xor, xchg);</li>
-          <li>extract value and insert value (only supports a single indexing operand);</li>
-          <li>cast (missing support for certain rarely-used kinds);</li>
-          <li>atomic ordering and address space attributes of load and store instructions are ignored.</li>
-        </ul>
-      </li>
-      <li>Values – assembly constants are not supported (module-level assembly and any assembly strings).</li>
-      <li>Types:
-        <ul>
-          <li>There is no support for 128-bit floating point types (fp128 and ppc_fp128), x86_mmx, half-precision floats (fp16) and any vectors of unsupported primitive types.</li>
-          <li>The support for fp80 is limited (not all intrinsics are supported for fp80, some intrinsics or instructions might silently fall back to fp64).</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>A number of rarely-used or experimental intrinsics based on LLVM 7.0.1 are not supported because of implementational limitations or because they are out of scope:
-    <ul>
-      <li>experimental intrinsics: <code>llvm.experimental.*</code>, <code>llvm.launder.invariant.group</code>, <code>llvm.strip.invariant.group</code>;</li>
-      <li>trampoline intrinsics: <code>llvm.init.trampoline</code>, <code>llvm.adjust.trampoline</code>;</li>
-      <li>general intrinsics: <code>llvm.var.annotation</code>, <code>llvm.ptr.annotation</code>, <code>llvm.annotation</code>, <code>llvm.codeview.annotation</code>, <code>llvm.trap</code>, <code>llvm.debugtrap</code>, <code>llvm.stackprotector</code>, <code>llvm.stackguard</code>, <code>llvm.ssa_copy</code>, <code>llvm.type.test</code>, <code>llvm.type.checked.load</code>, <code>llvm.load.relative</code>, <code>llvm.sideeffect</code>;</li>
-      <li>specialised arithmetic intrinsics: <code>llvm.canonicalize</code>, <code>llvm.fmuladd</code>;</li>
-      <li>standard c library intrinsics: <code>llvm.fma</code>, <code>llvm.trunc</code>, <code>llvm.nearbyint</code>, <code>llvm.round</code>;</li>
-      <li>code generator intrinsics: <code>llvm.returnaddress</code>, <code>llvm.addressofreturnaddress</code>, <code>llvm.frameaddress</code>, <code>llvm.localescape</code>, <code>llvm.localrecover</code>, <code>llvm.read_register</code>, <code>llvm.write_register</code>, <code>llvm.stacksave</code>, <code>llvm.stackrestore</code>, <code>llvm.get.dynamic.area.offset</code>, <code>llvm.prefetch</code>, <code>llvm.pcmarker</code>, <code>llvm.readcyclecounter</code>, <code>llvm.clear_cache</code>, <code>llvm.instrprof*</code>, <code>llvm.thread.pointer</code>;</li>
-      <li>exact gc intrinsics: <code>llvm.gcroot</code>, <code>llvm.gcread</code>, <code>llvm.gcwrite</code>;</li>
-      <li>element wise atomic memory intrinsics: <code>llvm.*.element.unordered.atomic</code>;</li>
-      <li>masked vector intrinsics: <code>llvm.masked.*</code>;</li>
-      <li>bit manipulation intrinsics: <code>llvm.bitreverse</code>, <code>llvm.fshl</code>, <code>llvm.fshr</code>.</li>
-    </ul>
-  </li>
+  <li>The class <code>Employee</code> is declared with a field <code>name</code> of type <code>String</code>. Access to
+the <code>getName</code> method is explicitly allowed by annotating the method with
+<code>@HostAccess.Export</code>.</li>
+  <li>The <code>Services</code> class exposes two methods: <code>createEmployee</code> and <code>exitVM</code>. The
+<code>createEmployee</code> method takes the name of the employee as an argument and creates
+a new <code>Employee</code> instance. The <code>createEmployee</code> method is annotated with
+<code>@HostAccess.Export</code> and therefore accessible to the guest application. The <code>exitVM</code>
+method is not explicitly exported and therefore not accessible.</li>
+  <li>The <code>main</code> method first creates new polyglot context in default configuration.
+It therefore evaluates code in less trusted mode.</li>
+  <li>A new <code>Services</code> instance is created and put into the context as global variable <code>services</code>.</li>
+  <li>The first evaluated script creates a new employee using the services object and returns its name.</li>
+  <li>The returned name is asserted to equal the expected name <code>John Doe</code>.</li>
+  <li>A second script is evaluated that calls the <code>exitVM</code> method on the <code>services</code> object. This fails with a <code>PolyglotException</code> as the <code>exitVM</code> method is not exposed to the guest application.</li>
 </ul>
 
-<h3 id="limitations-and-differences-to-managed-execution-on-top-of-graalvm-ee">Limitations and Differences to Managed Execution on Top of GraalVM EE</h3>
+<p>Host access is fully customizable by creating a custom <code>HostAccess</code> policy described in <strong>Host Interoperability</strong> section above.</p>
 
-<p>A managed execution for LLVM intermediate representation code is GraalVM
-Enterprise Edition feature  and can be enabled with <code>--llvm.managed</code> command
-line option. In the managed mode, GraalVM LLVM prevents access to unmanaged
-memory and uncontrolled calls to native code and operating system functionality.
-The allocations are performed in the managed Java heap, and accesses to the
-surrounding system are routed through proper Truffle API and Java API calls.</p>
-
-<p>All the restrictions from the default native LLVM execution on GraalVM apply
- to the managed execution, but with the following differences/changes:</p>
+<h4 id="access-privilege-configuration">Access Privilege Configuration</h4>
+<p>It is possible to configure fine-grained access privileges for guest
+applications. The configuration can be provided using the <code>Context.Builder</code>
+class when constructing a new context. The following access parameters may be
+configured:</p>
 
 <ul>
-  <li>Platform independent
-    <ul>
-      <li>Bitcode must be compiled for the a generic <code>linux_x86_64</code> target, using the provided musl libc library, on all platforms, regardless of the actual underlying operating system.</li>
-    </ul>
-  </li>
-  <li>C++
-    <ul>
-      <li>C++ is currently not supported in a managed mode.</li>
-    </ul>
-  </li>
-  <li>Native memory and code
-    <ul>
-      <li>Calls to native functions are not possible, thus only the functionality provided in the supplied musl libc and by the GraalVM LLVM interface is available.</li>
-      <li>Loading native libraries is not possible.</li>
-      <li>Native memory access is not possible.</li>
-    </ul>
-  </li>
-  <li>System calls
-    <ul>
-      <li>System calls with only limited support are read, readv, write, writev, open, close, dup, dup2, lseek, stat, fstat, lstat, chmod, fchmod, ioctl, fcntl, unlink, rmdir, utimensat, uname, set_tid_address, gettid, getppid, getpid, getcwd, exit, exit_group, clock_gettime, arch_prctl.</li>
-      <li>The functionality is limited to common terminal IO, process control and file system operations.</li>
-      <li>Some syscalls are implemented as a noop and/or return errors warning that they are not available, e.g. chown, lchown, fchown, brk, rt_sigaction, sigprocmask, futex.</li>
-    </ul>
-  </li>
-  <li>Musl libc
-    <ul>
-      <li>The musl libc library behaves differently than the more common glibc <a href="https://wiki.musl-libc.org/functional-differences-from-glibc.html">in some cases</a>.</li>
-    </ul>
-  </li>
-  <li>The stack
-    <ul>
-      <li>Accessing the stack pointer directly is not possible.</li>
-      <li>The stack is not contiguous, and accessing memory that is out of the bounds of a stack allocation (e.g., accessing neighboring stack value using pointer arithmetics) is not possible.</li>
-    </ul>
-  </li>
-  <li>Pointers into the managed heap
-    <ul>
-      <li>Reading parts of a managed pointer is not possible.</li>
-      <li>Overwriting parts of a managed pointer (e.g., using bits for pointer tagging) and subsequently dereferencing the destroyed managed pointer is not possible.</li>
-      <li>Undefined behavior in C pointer arithmetics applies.</li>
-      <li>Complex pointer arithmetics (e.g., multiplying pointers) can convert a managed pointer to an i64 value – the i64 value can be used in pointer comparisons but cannot be dereferenced.</li>
-    </ul>
-  </li>
-  <li>Floating point arithmetics
-    <ul>
-      <li>80-bit floating points only use 64-bit floating point precision.</li>
-    </ul>
-  </li>
-  <li>Dynamic linking
-    <ul>
-      <li>The interaction with the LLVM bitcode dynamic linker is not supported, e.g., dlsym/dlopen cannot be used. This does not allow to load native code.</li>
-    </ul>
-  </li>
+  <li>Allow access to other languages using <code>allowPolyglotAccess</code>.</li>
+  <li>Allow and customize access to host objects using <code>allowHostAccess</code>.</li>
+  <li>Allow and customize host lookup to host types using <code>allowHostLookup</code>.</li>
+  <li>Allow host class loading using <code>allowHostClassLoading</code>.</li>
+  <li>Allow the creation of threads using <code>allowCreateThread</code>.</li>
+  <li>Allow access to native APIs using <code>allowNativeAccess</code>.</li>
+  <li>Allow access to IO using allowIO and proxy file accesses using <code>fileSystem</code>.</li>
 </ul>
 
+<p><strong>Important:</strong> Allowing access to class loading, native APIs or host IO must not be enabled for
+less trusted code as these privileges effectively allow all access.</p>
 
               </div>
 

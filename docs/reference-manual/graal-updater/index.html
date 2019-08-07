@@ -664,13 +664,15 @@ be used with newer ones. Add the GraalVM <code>/bin</code> folder to your <code>
 environment variable in order to deploy the <code>gu</code> installer tool.</p>
 
 <p>There is a command-line help available.
-Run <code>gu</code> or <code>gu -h</code> to get command overview.
-Run <code>gu &lt;command&gt; -h</code> to get help specific for the particular command.</p>
+Run <code>gu</code> or <code>gu -h</code> to get commands overview.
+Run <code>gu &lt;command&gt; -h</code> to get help specific for the particular command, for example <code>gu install -h</code>.</p>
 
-<p>Two modes of component installation are supported:</p>
+<h2 id="component-installation-modes">Component Installation Modes</h2>
+<p>Two modes of a component installation are supported:</p>
 
-<p><strong>Manual installation</strong>:
-You download the component package yourself and GraalVM Updater will install it.
+<p><strong>Manual Installation</strong></p>
+
+<p>You download the component package yourself and GraalVM Updater will install it.
 The following pre-built language packages are at your disposal:</p>
 
 <ul>
@@ -680,15 +682,20 @@ The following pre-built language packages are at your disposal:</p>
   <li><em>r-installable.jar</em></li>
 </ul>
 
-<p><strong>Installation from Catalog</strong>: There is a list of components maintained by Oracle, from which you can install a
-component just by name. GraalVM Updater will download the component package for
-you. This is the default mode of operation.</p>
+<p>With the already downloaded component package archive, <code>component.jar</code>,
+the component can be installed as</p>
+<pre><code>gu -L install component.jar
+</code></pre>
+<p>where <code>-L</code> option, equivalent to <code>--local-file</code>, tells to install from a downloaded component archive.</p>
 
-<h2 id="installation-from-catalog">Installation from Catalog</h2>
-<p>GraalVM Updater first downloads the list of components, then uses the
+<p><strong>Installation from Catalog</strong></p>
+
+<p>There is a list of components maintained by Oracle, from which you can install a
+component just by its name. GraalVM Updater first downloads the list of components, then uses the
 information in the list to download the actual component package for you and
-install it.
-To see which components are available in the catalog, use</p>
+install it. This is the default mode of operation.</p>
+
+<p>To see which components are available in the catalog, use</p>
 <pre><code>gu available
 </code></pre>
 <p>to get a list of available components, their IDs, and descriptive names. Then,
@@ -697,14 +704,8 @@ the <code>ComponentId</code> (for example <code>ruby</code>) can be used as</p>
 </code></pre>
 <p>and that is all!</p>
 
-<p>If you want to see more verbose messages during installation, you may use the <code>-v</code>
-switch to see the download progress bar and verbose messages.</p>
-
-<h2 id="manual-installation">Manual Installation</h2>
-<p>With the already downloaded component package archive,  <code>component.jar</code>,
-the component can be installed as</p>
-<pre><code>gu -L install component.jar
-</code></pre>
+<p>If you want to see more verbose messages during installation, you may use the
+<code>-v</code> or <code>--verbose</code> switch to see the download progress bar and verbose messages.</p>
 
 <h2 id="components-list">Components List</h2>
 <p>Installed components can be printed by</p>
@@ -715,7 +716,6 @@ the component can be installed as</p>
 </code></pre>
 
 <h2 id="rebuilding-images">Rebuilding Images</h2>
-
 <p>GraalVM components used to create guest language implementations may change over
 time, requiring a Native Image to be rebuilt. Polyglot native image and polyglot
 native C library may be out of sync, particularly:</p>
@@ -752,12 +752,13 @@ distribution and/or desktop environment documentation for the details.</p>
 <h2 id="replacing-components-and-files">Replacing Components and Files</h2>
 <p>A component may be only installed once. GraalVM Updater refuses to install a
 component if a component with the same ID is already installed. But the
-installed component may be <strong>replaced</strong>. GraalVM Updater first <em>uninstalls</em> the
+installed component may be <strong>replaced</strong>. GraalVM Updater first uninstalls the
 component and then installs the new package. To replace a component, use the
-<code>-r</code> option:</p>
+<code>-r</code> option. The <code>-L</code> option tells to treat parameters as local filename of a packaged component.</p>
 <pre><code>gu install -L -r component.jar
 gu install -r ruby
 </code></pre>
+
 <p>The process is the same as if <code>gu remove</code> is run first and <code>gu install</code> next.</p>
 
 <p>GraalVM Updater also refuses to overwrite existing files if the to-be-installed

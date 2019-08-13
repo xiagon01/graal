@@ -807,13 +807,14 @@ light in a rendered scene.</p>
             <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">plane</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">y</span><span class="o">++)</span> <span class="o">{</span>
                 <span class="n">Color</span><span class="o">[]</span> <span class="n">row</span> <span class="o">=</span> <span class="n">plane</span><span class="o">[</span><span class="n">y</span><span class="o">];</span>
                 <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="n">row</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">z</span><span class="o">++)</span> <span class="o">{</span>
-                    <span class="n">Color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="na">black</span><span class="o">();</span>
-                    <span class="n">color</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span> <span class="o">/</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">colors</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">y</span> <span class="o">/</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">row</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">z</span> <span class="o">/</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">row</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+                    <span class="n">Color</span> <span class="n">color</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Color</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">z</span><span class="o">);</span>
                     <span class="n">color</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-                    <span class="n">color</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="n">d</span><span class="o">);</span>
-                    <span class="c1">// PEA moves allocation of `color` to this point so above</span>
-                    <span class="c1">// computation avoids memory accesses for its fields.</span>
-                    <span class="n">row</span><span class="o">[</span><span class="n">z</span><span class="o">]</span> <span class="o">=</span> <span class="n">color</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">((</span><span class="n">color</span><span class="o">.</span><span class="na">r</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="na">g</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="na">b</span><span class="o">)</span> <span class="o">%</span> <span class="mi">42</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                         <span class="c1">// PEA only allocates a color object here.</span>
+                         <span class="n">row</span><span class="o">[</span><span class="n">z</span><span class="o">]</span> <span class="o">=</span> <span class="n">color</span><span class="o">;</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                         <span class="c1">// In this branch the color object is not allocated at all.</span>
+                    <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -864,37 +865,48 @@ light in a rendered scene.</p>
 <p>2. Compile it and run as follows:</p>
 <pre><code>$ javac Blender.java
 $ java Blender
-2676 ms
-706 ms
-612 ms
-520 ms
-537 ms
-531 ms
-579 ms
-547 ms
-557 ms
-554 ms
+2477 ms
+910 ms
+857 ms
+815 ms
+813 ms
+821 ms
+819 ms
+832 ms
+819 ms
+839 ms
 </code></pre>
 
-<p>3. Once again, use the <code>-XX:-UseJVMCICompiler</code> option to disable the GraalVM compiler:</p>
+<p>If you would like to check how it would behave when using the GraalVM CE, use the following configuration flag:</p>
+
+<pre><code>java -Dgraal.CompilerConfiguration=community Blender
+1127 ms
+902 ms
+888 ms
+858 ms
+820 ms
+860 ms
+855 ms
+864 ms
+899 ms
+899 ms
+</code></pre>
+
+<p>3.  again, use the <code>-XX:-UseJVMCICompiler</code> option to disable the GraalVM compiler and run with the normal HotSpot’s jit:</p>
 <pre><code>$ java -XX:-UseJVMCICompiler Blender
-1194 ms
-916 ms
-726 ms
-727 ms
-733 ms
-748 ms
-748 ms
-735 ms
-811 ms
-752 ms
+2214 ms
+1666 ms
+1667 ms
+1438 ms
+1436 ms
+1458 ms
+1452 ms
+1528 ms
+1557 ms
+1474 ms
 </code></pre>
 
-<p>For fun, modify <code>Blender.java</code> to replace <code>row[z] = color;</code> with
-<code>if (z == y &amp;&amp; y == x) row[z] = color;</code> and re-run to see what happens to
-the performance on Graal.</p>
-
-<p>The improvement in this example comes from PEA moving the allocation of <code>color</code>
+<p>The improvement compared to not using the GraalVM compiler  comes from the partial escape analysis moving the allocation of <code>color</code>
 in <code>initialize</code> down to the point where it is stored into <code>colors</code> (i.e., the
 point at which it escapes).</p>
 

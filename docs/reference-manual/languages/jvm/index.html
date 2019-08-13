@@ -697,9 +697,8 @@ itself needs to be compiled before it produces code quickly. This mode allows yo
 <p>These are general options for setting/getting configuration details.</p>
 
 <ul>
-  <li><code>-XX:+UseJVMCICompiler</code>: This disables use of the GraalVM compiler as the top tier JIT.
-This is useful when wanting to compare performance of the GraalVM compiler against the native
-JIT compilers.</li>
+  <li><code>-XX:-UseJVMCICompiler</code>: This disables use of the GraalVM compiler as the top tier JIT.
+This is useful when wanting to compare performance of the GraalVM compiler against the native JIT compilers.</li>
   <li>
     <p><code>-Dgraal.CompilerConfiguration=&lt;name&gt;</code>: Selects the GraalVM compiler configuration to use. If omitted, the compiler
 configuration with the highest auto-selection priority is used. To see the set

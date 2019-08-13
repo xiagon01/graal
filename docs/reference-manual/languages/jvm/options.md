@@ -6,9 +6,8 @@ The options for configuring the GraalVM compiler on the JVM are in 3 categories.
 
 These are general options for setting/getting configuration details.
 
-* `-XX:+UseJVMCICompiler`: This disables use of the GraalVM compiler as the top tier JIT.
-This is useful when wanting to compare performance of the GraalVM compiler against the native
-JIT compilers.
+* `-XX:-UseJVMCICompiler`: This disables use of the GraalVM compiler as the top tier JIT.
+This is useful when wanting to compare performance of the GraalVM compiler against the native JIT compilers. 
 * `-Dgraal.CompilerConfiguration=<name>`: Selects the GraalVM compiler configuration to use. If omitted, the compiler
 configuration with the highest auto-selection priority is used. To see the set
 of available configurations, supply the value help to this option.

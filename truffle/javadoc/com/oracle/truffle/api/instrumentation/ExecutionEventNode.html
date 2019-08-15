@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>7593ccb5eb6b411ae17efb3e3ecad43078ad69ea</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>30903d1c173a5c23ab1966666eda07c5321adb12</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -226,8 +226,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="c
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/instrumentation/ExecutionEventNode.html#onReturnExceptional-com.oracle.truffle.api.frame.VirtualFrame-java.lang.Throwable-">onReturnExceptional</a></span>(<a href="../../../../../com/oracle/truffle/api/frame/VirtualFrame.html" title="interface in com.oracle.truffle.api.frame">VirtualFrame</a>&nbsp;frame,
                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang">Throwable</a>&nbsp;exception)</code>
-<div class="block">Invoked immediately after an <a href="../../../../../com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> did
- not successfully execute.</div>
+<div class="block">Invoked immediately after the execution of an <a href="../../../../../com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> resulted in an exception.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -395,9 +394,10 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="c
 <h4>onReturnExceptional</h4>
 <pre>protected&nbsp;void&nbsp;onReturnExceptional(<a href="../../../../../com/oracle/truffle/api/frame/VirtualFrame.html" title="interface in com.oracle.truffle.api.frame">VirtualFrame</a>&nbsp;frame,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang">Throwable</a>&nbsp;exception)</pre>
-<div class="block">Invoked immediately after an <a href="../../../../../com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> did
- not successfully execute. The order in which multiple event listeners are notified matches
- the order they are
+<div class="block">Invoked immediately after the execution of an <a href="../../../../../com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> resulted in an exception. Note that this could be a
+ <a href="../../../../../com/oracle/truffle/api/nodes/ControlFlowException.html" title="class in com.oracle.truffle.api.nodes"><code>ControlFlowException</code></a>, which is expected and considered a
+ successful execution of the node. The order in which multiple event listeners are notified
+ matches the order they are
  <a href="../../../../../com/oracle/truffle/api/instrumentation/Instrumenter.html#attachExecutionEventListener-com.oracle.truffle.api.instrumentation.SourceSectionFilter-T-"><code>attached</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -575,7 +575,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="c
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0-dev</b><br>7593ccb5eb6b411ae17efb3e3ecad43078ad69ea</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>30903d1c173a5c23ab1966666eda07c5321adb12</div>
 </div>
 <div class="subNav">
 <ul class="navList">

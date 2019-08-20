@@ -9,7 +9,7 @@
 
   <title>
     
-      Generate Heap Dumps from Native Images
+      Version Roadmap
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/native_heapdump/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/release-notes/version-roadmap/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -310,6 +310,14 @@ $(document).ready(function(){
 <ul class="toc-bullets">
 
   
+
+  
+
+  
+
+  
+
+  
     
 
     
@@ -396,6 +404,89 @@ $(document).ready(function(){
 
 
         
+          
+          <li class="toc-bullets-sub toc-bullets-highlight">
+          
+            
+            <a href="/docs/release-notes/version-roadmap/">
+              Version Roadmap
+            </a>
+          </li>
+
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_2/">
+              GraalVM 19.2.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_1/">
+              GraalVM 19.1.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_0/">
+              GraalVM 19.0.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/release-candidates/">
+              Release Candidates
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/known-issues/">
+              Known Issues
+            </a>
+          </li>
+
+          
+        
       
     
       
@@ -476,14 +567,6 @@ $(document).ready(function(){
 
   
 
-  
-
-  
-
-  
-
-  
-
 </ul>
 
 </div>
@@ -498,243 +581,197 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="generating-native-heap-dumps">Generating Native Heap Dumps</h3>
-<p>As described in the <a href="/docs/reference-manual/aot-compilation/">Creating Native Images chapter</a> in the GraalVM section, it is possible to create highly performing applications. It is also possible to
-monitor the execution and generate Java heap dumps from within the native image
-application. The functionality is available only with <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">GraalVM Enterprise Edition</a>.</p>
+                <h3 id="version-roadmap">Version Roadmap</h3>
 
-<p>GraalVM Native Image does not implement JVMTI agent and it is not possible to
-trigger heap dump creation using tools like <em>GraalVM Visual VM</em> or <em>jmap</em>. But it
-is possible to build a native image for your application to handle signals and
-then get a heap dump when the application receives the SIGUSR1 signal. Another possibility
-is to add a special method to your application which will generate the heap dump
-at certain points in the lifetime of your application. E.g., when certain
-conditions are met while running a native image application, your application
-code can trigger heap dump creation. We will show both possibilities in this
-chapter.</p>
+<p>We release new major versions of GraalVM every 3 months on a predictable schedule, always to the closest Tuesday to the 17th of the month of February, May, August, and November. Major releases become inactive once a new release is published. Only the last major release of the year continues to be updated for the full next year.</p>
 
-<h2 id="handling-sigusr1-signal">Handling SIGUSR1 Signal</h2>
-<p>The following Java example is a simple multi-threaded application which runs for
-60 seconds. There is enough time to get its PID and send the SIGUSR1 signal
-which will generate a heap dump into the application’s working directory. Save
-the following code as SVMHeapDump.java file on your disk:</p>
-<pre><code class="language-java">import java.text.DateFormat;
-import java.util.Date;
+<p>Critical Patch Updates (CPU) for GraalVM follow the schedule for all CPU releases of Oracle as described <a href="https://www.oracle.com/technetwork/topics/security/alerts-086861.html">here</a>. The release happens quarterly always on the closest Tuesday to the 17th of the month of January, April, July, and October. All active releases receive patch updates.</p>
 
-public class SVMHeapDump extends Thread {
-    static int i = 0;
-    static int runs = 60;
-    static int sleepTime = 1000;
-    @Override
-    public void run() {
-        System.out.println(DateFormat.getDateTimeInstance().format(new Date()) + ": Thread started, it will run for " + runs + " seconds");
-        while (i &lt; runs){
-            System.out.println("Sleeping for " + (runs-i) + " seconds." );
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException ie){
-                System.out.println("Sleep interrupted.");
-            }
-            i++;
+<p>Find below a graphical visualizations of the release road map and the dates and version numbers of upcoming releases.</p>
+
+
+
+  <svg id="timeline" width="680" height="130">
+  </svg>
+
+  <div id="div_template"></div>
+  <p>
+    <b>Release Dates:</b>
+    <ul id="releaseDates" style="font-family: monospace">
+    </ul>
+  </p>
+
+  <script src="/resources/js/d3/d3.min.js"></script>
+  <script>
+    function makeTimeline() {
+      const closestTuesday = d => new Date(d.getTime() + 86400000 * (d.getDay() == 6 ? 3 : 2 - d.getDay()));
+
+      const majorReleases = year => [1, 4, 7, 10].map((x, index) => ({
+        version: (year % 100) + "." + index,
+        date: closestTuesday(new Date(year, x, 17)),
+        type: 'majorRelease'
+      }));
+
+      const activeCpuPatches = year => year == 2019 ? [] : [0, 3, 6, 9].map((x, index) => ({
+        version: (year - 1) % 100 + ".3." + (index + 1),
+        date: closestTuesday(new Date(year, x, 17)),
+        type: 'activeCPU'
+      }));
+
+      const maintainanceCpuPatches = year => [3, 6, 9].map((x, index) => ({
+        version: (year % 100) + "." + index + ".1",
+        date: closestTuesday(new Date(year, x, 17)),
+        type: 'maintainanceCPU'
+      }));
+
+      const getParent = function(version) {
+        var elements = version.split('.');
+        var first = elements[0] || 0;
+        var second = elements[1] || 0;
+        var third = elements[2] || 0;
+
+        if (third != 0) {
+          var result = first + '.' + second;
+          if (third - 1 != 0) {
+            result += '.' + (third - 1);
+          }
+          return result;
         }
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws InterruptedException {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer! \nGet PID of this process: ");
-        sb1.append("'ps -C svmheapdump -o pid= '\n");
-        sb1.append("then send it signal: ");
-        sb1.append("'kill -SIGUSR1 &lt;pid_printed_above&gt;' \n");
-        sb1.append("to get heap dump generated into working directory.\n");
-        sb1.append("Starting thread!");
-        System.out.println(sb1);
-        SVMHeapDump t = new SVMHeapDump();
-        t.start();
-        while (t.isAlive()) {
-            t.join(0);
+
+        if (second != 0) {
+          return first + '.' + (second - 1);
         }
-        sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Thread finished after: ");
-        sb1.append(i);
-        sb1.append(" iterations.");
-        System.out.println(sb1);
-    }
-}
-</code></pre>
-<h3 id="building-an-example">Building an Example</h3>
-<p>Compile SVMHeapDump.java as following</p>
-<pre><code class="language-bash">$ javac SVMHeapDump.java
-</code></pre>
-<p>If you run it on <code>java</code>, you will see it runs for 60 seconds then finishes. We will now look how to tell <code>native-image</code> to generate binary which will accept SIGUSR1 signal to produce a heap dump.</p>
-<h3 id="building-native-image">Building Native Image</h3>
-<p>When using GraalVM Enterprise Edition, downloaded from the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a>, you need to specify <code>-H:+AllowVMInspection</code> option for GraalVM <code>native-image</code> tool. See following example:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDump -H:+AllowVMInspection
-Build on Server(pid: 31386, port: 26682)
-   classlist:     172.62 ms
-       (cap):     865.71 ms
-       setup:   1,103.32 ms
-  (typeflow):   2,003.86 ms
-   (objects):     664.40 ms
-  (features):      26.82 ms
-    analysis:   2,779.99 ms
-    universe:     152.09 ms
-     (parse):     311.20 ms
-    (inline):     471.03 ms
-   (compile):   2,405.97 ms
-     compile:   3,458.48 ms
-       image:     540.78 ms
-       write:     464.04 ms
-     [total]:   8,714.06 ms
-</code></pre>
-<p>The <code>native-image</code> tool analyzes existing <code>SVMHeapDump.class</code> and creates from it an executable file. When the command completes, <code>svmheapdump</code> is created in the current directory.</p>
 
-<h3 id="run-the-application-and-get-heap-dump">Run the Application and Get Heap Dump</h3>
-<h4 id="1-run-the-app">1. Run the App</h4>
-<pre><code class="language-bash">$ ./svmheapdump
-Feb 22, 2018 2:56:30 PM: Hello GraalVM native image developer!
-Get PID of this process: 'ps -C svmheapdump -o pid= '
-then send it signal: 'kill -SIGUSR1 &lt;pid_printed_above&gt;'
-to get heap dump generated into working directory.
-Starting thread!
-Feb 22, 2018 2:56:30 PM: Thread started, it will run for 60 seconds
-Sleeping for 60 seconds.
+        return first - 1 + ".3";
+      }
 
-</code></pre>
-<h4 id="2-generate-heap-dump">2. Generate Heap Dump</h4>
-<p>Open the 2nd terminal to get PID of the running <code>svmheapdump</code> application using a command like <code>ps -C svmheapdump -o pid=</code> for Linux OS and <code>pgrep svmheapdump</code>
-for Mac OS.
-PID is printed, e.g. 100, which is then used in sending the signal to the running app:</p>
-<pre><code class="language-bash">kill -SIGUSR1 100
-</code></pre>
-<p>Heap dump is available at the working directory while application continues running.</p>
-
-<h2 id="java-api-example">Java API Example</h2>
-
-<p>The following Java example shows how Java heap dump can be generated from within
-a running application using <code>Compiler.command()</code> after some condition is met.
-The condition to generate a heap dump is provided as an option on the command line.
-Save following Java code as <em>SVMHeapDumpAPI.java</em>.</p>
-
-<p>The application creates some data to have something to dump, checks the command line
-to see if heap dump has to be created and then in method <code>createHeapDump()</code> creates
-the actual heap dump performing checks for file existence.</p>
-<pre><code class="language-java">import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
-
-public class SVMHeapDumpAPI {
-
-    private static final String HEAP_DUMP_COMMAND = "HeapDump.dumpHeap(FileOutputStream, Boolean)Boolean";
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer. \nYour command line options are: ");
-
-        if (args.length &gt; 0) {
-            sb1.append(args[0]);
-            System.out.println(sb1);
-            if (args[0].equalsIgnoreCase("--heapdump")){
-                createHeapDump();
-            }
-        } else {
-                sb1.append("None");
-                System.out.println(sb1);
+      const typeToString = function(type) {
+        switch(type) {
+          case 'majorRelease': return 'Major Release';
+          case 'activeCPU': return 'Critical Patch Update Release';
+          case 'maintainanceCPU': return 'Critical Patch Update LTS Release';
         }
-     }
+        return 'Unknown';
+      }
 
-    /**
-     * Generate heap dump and save it into temp file.
-     */
-    private static void createHeapDump() {
-        boolean heapDumpCreated = false;
-        try {
-            File file = File.createTempFile("SVMHeapDump-", ".hprof");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            // Create heap dump
-            final Object[] args = new Object[]{HEAP_DUMP_COMMAND, fileOutputStream, Boolean.TRUE};
-            final Object resultObject = Compiler.command(args);
-            // Following code checks if heap dump was created using return value
-            if (resultObject instanceof Boolean) {
-                heapDumpCreated = ((Boolean) resultObject).booleanValue();
-            }
-            fileOutputStream.close();
+      const reduceConcat = (a, b) => a.concat(b);
 
-            if (heapDumpCreated){
-                System.out.println("  Heap dump created " + file.getAbsolutePath() + ", size: " + file.length());
+
+      const years = [2019, 2020, 2021];
+      let allReleases = years.map(year => [majorReleases, activeCpuPatches, maintainanceCpuPatches].map(f => f(year)).reduce(reduceConcat)).reduce(reduceConcat);
+
+      allReleases = allReleases.filter(x => x.date.getTime() > new Date(2019, 7, 1).getTime());
+
+      var releasesMap = new Map();
+
+
+      allReleases.map(function(x) {
+        releasesMap.set(x.version, x);
+      });
+
+      var allLinks = new Array();
+
+      var nextLevel = 1;
+      allReleases.map(function(x) {
+        const parentVersion = getParent(x.version);
+        if (releasesMap.has(parentVersion)) {
+          const parent = releasesMap.get(parentVersion);
+          if (parent.firstChild) {
+            if (parent.version.split(".")[1] == '3') {
+              x.level = 2;
             } else {
-                // Delete the file to not pollute disk with empty files.
-                System.out.println("  Heap dump creation failed.");
-                file.delete();
+              x.level = 1;
             }
-        } catch (IOException ioe) {
-            System.out.println("  Caught IOException.");
+          } else {
+            parent.firstChild = x;
+            x.level = parent.level;
+          }
+          allLinks.push({from: parentVersion, to: x.version});
+        } else {
+          x.level = 0;
         }
-    }
-}
+      })
 
-</code></pre>
-<h2 id="building-an-example-1">Building an Example</h2>
-<p>In the next step, compile <em>SVMHeapDumpAPI.java</em>. It is good to define an environment variable pointing to your GraalVM installation, e.g. <code>export GRAALVM_HOME=/usr/graalvm</code>.
-Then compile using following command:</p>
-<pre><code class="language-bash">$ javac SVMHeapDumpAPI.java
-</code></pre>
-<h2 id="build-native-image">Build Native Image</h2>
-<p>Heap dump creation will work after the native image is built from a class file. Use the following command:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDumpAPI
-   Build on Server(pid: 31386, port: 26682)*
-   classlist:     804.50 ms
-       (cap):   1,645.69 ms
-       setup:   2,439.03 ms
-  (typeflow):   3,636.09 ms
-   (objects):   1,979.26 ms
-  (features):      57.29 ms
-    analysis:   5,775.18 ms
-    universe:     241.79 ms
-     (parse):     849.48 ms
-    (inline):   1,042.78 ms
-   (compile):   7,632.91 ms
-     compile:   9,971.89 ms
-       image:   1,441.42 ms
-       write:     637.83 ms
-     [total]:  21,388.04 ms
 
-</code></pre>
-<p>When the command completes, <code>svmheapdumpapi</code> executable is created in the current directory.</p>
+      allReleases.sort((a, b) => a.date.getTime() - b.date.getTime());
 
-<h3 id="run-the-application-and-check-heap-dump">Run the Application and Check Heap Dump</h3>
-<p>Now you can run your native image application and generate heap dump from it
-with the output similar to one below:</p>
-<pre><code class="language-bash">$ ./svmheapdumpapi --heapdump
-Oct 3, 2017 10:33:54 AM: Hello GraalVM native image developer.
-Your command line options are: --heapdump
-  Heap dump created /tmp/SVMHeapDump-7779460659275234903.hprof, size: 4436516
-</code></pre>
+      const dateFormat = d => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-<p>The resulting heap dump can be then opened with <a href="/docs/reference-manual/tools/#heap-viewer">Graal VisualVM</a> tool like any other Java heap dump.</p>
+      const releaseDateList = d3.select('#releaseDates');
+      for (var i = 0; i < allReleases.length; ++i) {
+        const curRelease = allReleases[i];
+        const nextRelease = allReleases[i + 1];
+        var additionalRelease = undefined;
+        if (nextRelease && nextRelease.date.getTime() == curRelease.date.getTime()) {
+          i++;
+          additionalRelease = nextRelease.version;
+        }
+        releaseDateList.insert('li').text(dateFormat(curRelease.date) + ": " + curRelease.version + (curRelease.type == 'majorRelease' ? "" : " (CPU)") + (additionalRelease ? ", " + additionalRelease + (additionalRelease == 'majorRelease' ? "" : " (CPU)") : ""));
+      }
 
-              </div>
+      const mydiv = d3.select("#div_template");
+      var tooltip = mydiv.append("div").style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+        .style("position", "relative");
 
-              <div role="button" class="menu-btn menu-btn--sidebar js-show-sidebar" title="sweet hamburger">
-                <div class="hamburger"><div class="inner"></div></div>
+      var showTooltip = function (d) {
+        tooltip.style("opacity", 1)
+          .html("Release date: " + dateFormat(d.date) + "</br>Release type: " + typeToString(d.type))
+      }
+
+      var hideTooltip = function (d) {
+        tooltip.transition().style("opacity", 0);
+      }
+
+      var svg = d3.select('#timeline');
+      var timeScaleRaw = d3.scaleTime().domain([new Date(2019, 7, 1), new Date(2022, 0, 11)]).range([0, svg.attr('width') - 100]);
+      var timeScale = d => timeScaleRaw(d) + 100;
+      const levelScale = x => 30 + x * 40;
+      const levels = [0, 1, 2];
+      const levelColor = ["#F29111", "#43AAC1", "#9CD5E1"];
+      const levelText = ["major", "patch", "LTS patch"];
+
+      var rectangle = svg.selectAll('rect').data(levels).enter().append("rect")
+                             .attr("x", 0)
+                             .attr("y", d => levelScale(d) - (levelScale(1) - levelScale(0)) / 2)
+                            .attr("width", svg.attr('width'))
+                            .attr("height", levelScale(1) - levelScale(0)).attr("fill", d => levelColor[d]);
+
+      svg.selectAll('text').data(levels).enter().append("text")
+                             .attr("x", 50)
+                             .attr("y", d => levelScale(d))
+                            .attr("width", 100)
+                            .attr("height", levelScale(1) - levelScale(0)).attr('text-anchor', 'middle').text(d => levelText[d]);
+      
+      d3.select('#timeline').selectAll('circle').data(allReleases).enter().append('circle').attr('r', 5).attr('cx', d => timeScale(d.date)).attr('cy', x => levelScale(x.level)).on('mouseover', showTooltip).on('mouseout', hideTooltip);
+      d3.select('#timeline').selectAll('text#versions').data(allReleases).enter().append('text').attr('class', 'version').attr('font-size', '13px').attr('cursor', 'default').attr('width', 20).attr('height', 20).attr('text-anchor', 'middle').attr('x', d => timeScale(d.date)).attr('y', x => levelScale(x.level) - 8).text(d => d.version);
+    
+      var lineFunction = d3.line()
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; });
+
+
+      d3.select('#timeline').selectAll('path').data(allLinks).enter().append('path').style("stroke", "black").style('fill', 'none').attr('d', d => lineFunction(
+        [{"x": timeScale(releasesMap.get(d.from).date)*1, "y": levelScale(releasesMap.get(d.from).level)},
+         {"x": timeScale(releasesMap.get(d.from).date)*1 + 10, "y": levelScale(releasesMap.get(d.from).level)},
+         {"x": timeScale(releasesMap.get(d.to).date)*1 - 20, "y": levelScale(releasesMap.get(d.to).level)},
+         {"x": timeScale(releasesMap.get(d.to).date)*1, "y": levelScale(releasesMap.get(d.to).level)}])).attr('stroke-width', 1);
+
+
+         
+    }    
+    makeTimeline();
+  </script>
               </div>
             </div>
           </div>
         </div>
     </div>
-  </div>
-</article>
 
 </div>
 

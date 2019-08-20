@@ -318,6 +318,8 @@ $(document).ready(function(){
   
 
   
+
+  
     
 
     
@@ -757,6 +759,104 @@ the required Rust libraries have to be specified manually.</p>
 <pre><code class="language-shell">$ rustc --emit=llvm-bc hello-rust.rs
 $ lli --lib $(rustc --print sysroot)/lib/libstd-* hello-rust.bc
 Hello Rust!
+</code></pre>
+
+<h2 id="llvm-toolchain">LLVM Toolchain</h2>
+
+<p>The toolchain is a set of tools and APIs for compiling native programs, such as
+C and C++, to bitcode that can be executed with the GraalVM LLVM runtime. To
+simplify compiling C/C++ to LLVM bitcode, we provide launchers that invoke the
+compiler with special flags to produce results that can be executed by the
+GraalVM LLVM runtime. Depending on the execution mode, the launchers location is
+<code>$GRAALVM/jre/languages/llvm/{native|managed}/bin/*</code> (in the native execution
+mode, the path is <code>$GRAALVM/jre/languages/llvm/native/bin/*</code>, in the managed
+mode – <code>$GRAALVM/jre/languages/llvm/managed/bin/*</code>). They are meant to be
+drop-in replacements for the C/C++ compiler when compiling a native program. The
+goal is to produce a GraalVM LLVM runtime executable by simply pointing the
+build system to those launchers, for example via <code>CC</code>/<code>CXX</code> environment
+variables or by setting <code>PATH</code>.</p>
+
+<p><strong>Warning:</strong> Toolchain support is <strong>experimental</strong>. Experimental features might never be
+included in a production version, or might change significantly before being
+considered production-ready.</p>
+
+<p>The LLVM toolchain is pre-packaged as a component and can be installed with <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a> tool:</p>
+<pre><code>gu install llvm-toolchain
+</code></pre>
+
+<p>The following example shows how the toolchain can be used to compile a <code>make</code>-based project.
+Let us assume that the <code>CC</code> variable is used in the <code>Makefile</code> to specify the C
+compiler that produces an executable named <code>myprogram</code>.
+We compile the project as follows:</p>
+<pre><code>$ make CC=${GRAALVM}/jre/languages/llvm/native/bin/clang myprogram
+</code></pre>
+<p>Afterwards, the resulting <code>myprogram</code> can be executed by the LLVM runtime:</p>
+<pre><code>$ ${GRAALVM}/bin/lli myprogram
+</code></pre>
+
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+  <li>
+    <p><strong>Simplify the compilation to bitcode:</strong> GraalVM users who want to run native projects via the GraalVM LLVM runtime must
+first compile these projects to LLVM bitcode. Although it is possible to do this
+with the standard LLVM tools (<code>clang</code>, <code>llvm-link</code>, etc.), there are several
+additional considerations, such as optimizations and manual linking. The
+toolchain aims to simplify this process, by providing an out-of-the-box drop-in
+replacement for the compiler when building native projects targeting the GraalVM
+LLVM runtime.</p>
+  </li>
+  <li>
+    <p><strong>Compile native extensions:</strong> GraalVM language implementers often use the GraalVM LLVM runtime to execute
+ native extensions, and these extensions are commonly installed by a package
+ manager. For example, packages in Python are usually added via <code>pip install</code>,
+ which means that the Python implementation is required to be able to compile
+ these native extensions on demand. The toolchain provides a Java API for
+ languages to access the tools bundled with GraalVM.</p>
+  </li>
+  <li>
+    <p><strong>Compile to bitcode at build time:</strong> GraalVM supported languages that integrate with the GraalVM LLVM runtime usually need to build bitcode libraries to integrate with the native pieces of their
+implementation. The toolchain can be used as a build-time dependency to achieve
+this in a standardized and compatible way.</p>
+  </li>
+</ul>
+
+<h3 id="file-format">File Format</h3>
+<p>To be compatible with existing build systems, by default, the toolchain will
+produce native executables with embedded bitcode (ELF files on Linux, Mach-O
+files on macOS).</p>
+
+<h3 id="toolchain-identifier">Toolchain Identifier</h3>
+<p>The GraalVM LLVM runtime can be ran in different configurations, which can
+differ in how the bitcode is being compiled. Generally, toolchain users do not
+need to be concerned, as the GraalVM LLVM runtime knows the mode it is running
+and will always provide the right toolchain. However, if a language
+implementation wants to store the bitcode compilation for later use, it will
+need to be able to identify the toolchain and its configurations used to compile
+the bitcode. To do so, each toolchain has an <em>identifier</em>. Conventionally, the
+identifier denotes the compilation output directory. The internal GraalVM LLVM
+runtime library layout follows the same approach.</p>
+
+<h3 id="java-api-toolchain-service">Java API Toolchain Service</h3>
+<p>Language implementations can access the toolchain via the <code>Toolchain</code> service. The service provides two methods:</p>
+
+<ul>
+  <li><code>TruffleFile getToolPath(String tool)</code> returns the path to the executable for a
+given tool. Every implementation is free to choose its own set of supported
+tools. The command line interface of the executable is specific to the tool. If
+a tool is not supported or not known, <code>null</code> is returned.</li>
+  <li><code>String getIdentifier()</code> returns the identifier for the toolchain. It can be
+used to distinguish results produced by different toolchains. The identifier can
+be used as a path suffix to place results in distinct locations, therefore it
+does not contain special characters like slashes or spaces.</li>
+</ul>
+
+<p>The <code>Toolchain</code> lives in the <code>SULONG_API</code> distribution. The LLVM runtime will
+always provide a toolchain that matches its current mode. The service can be
+looked-up via the <code>Env</code>:</p>
+<pre><code>LanguageInfo llvmInfo = env.getInternalLanguages().get("llvm");
+Toolchain toolchain = env.lookup(llvmInfo, Toolchain.class);
+TruffleFile toolPath = toolchain.getToolPath("CC");
+String toolchainId = toolchain.getIdentifier();
 </code></pre>
 
 <h2 id="interoperability">Interoperability</h2>

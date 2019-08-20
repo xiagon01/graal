@@ -9,7 +9,7 @@
 
   <title>
     
-      Generate Heap Dumps from Native Images
+      GraalVM 19.0.x
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/native_heapdump/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/release-notes/19_0/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -310,6 +310,14 @@ $(document).ready(function(){
 <ul class="toc-bullets">
 
   
+
+  
+
+  
+
+  
+
+  
     
 
     
@@ -396,6 +404,89 @@ $(document).ready(function(){
 
 
         
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/version-roadmap/">
+              Version Roadmap
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_2/">
+              GraalVM 19.2.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_1/">
+              GraalVM 19.1.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub toc-bullets-highlight">
+          
+            
+            <a href="/docs/release-notes/19_0/">
+              GraalVM 19.0.x
+            </a>
+          </li>
+
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/release-candidates/">
+              Release Candidates
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/known-issues/">
+              Known Issues
+            </a>
+          </li>
+
+          
+        
       
     
       
@@ -476,14 +567,6 @@ $(document).ready(function(){
 
   
 
-  
-
-  
-
-  
-
-  
-
 </ul>
 
 </div>
@@ -498,231 +581,114 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="generating-native-heap-dumps">Generating Native Heap Dumps</h3>
-<p>As described in the <a href="/docs/reference-manual/aot-compilation/">Creating Native Images chapter</a> in the GraalVM section, it is possible to create highly performing applications. It is also possible to
-monitor the execution and generate Java heap dumps from within the native image
-application. The functionality is available only with <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">GraalVM Enterprise Edition</a>.</p>
+                <h2 id="1900">19.0.0</h2>
+<p>(2019-05-09)</p>
 
-<p>GraalVM Native Image does not implement JVMTI agent and it is not possible to
-trigger heap dump creation using tools like <em>GraalVM Visual VM</em> or <em>jmap</em>. But it
-is possible to build a native image for your application to handle signals and
-then get a heap dump when the application receives the SIGUSR1 signal. Another possibility
-is to add a special method to your application which will generate the heap dump
-at certain points in the lifetime of your application. E.g., when certain
-conditions are met while running a native image application, your application
-code can trigger heap dump creation. We will show both possibilities in this
-chapter.</p>
+<h3 id="early-adopter-windows-support">Early Adopter Windows Support</h3>
+<p>The early adopter builds for Windows are available for GraalVM. These include
+the JDK with the GraalVM compiler enabled, the Native Image capabilities,
+GraalVM’s JavaScript engine and the developer tools: Chrome inspector based
+debugger, Profiler etc.. Currently there is no <code>gu</code> utility or the ability to
+add support for the other GraalVM languages.</p>
 
-<h2 id="handling-sigusr1-signal">Handling SIGUSR1 Signal</h2>
-<p>The following Java example is a simple multi-threaded application which runs for
-60 seconds. There is enough time to get its PID and send the SIGUSR1 signal
-which will generate a heap dump into the application’s working directory. Save
-the following code as SVMHeapDump.java file on your disk:</p>
-<pre><code class="language-java">import java.text.DateFormat;
-import java.util.Date;
+<h3 id="java">Java</h3>
 
-public class SVMHeapDump extends Thread {
-    static int i = 0;
-    static int runs = 60;
-    static int sleepTime = 1000;
-    @Override
-    public void run() {
-        System.out.println(DateFormat.getDateTimeInstance().format(new Date()) + ": Thread started, it will run for " + runs + " seconds");
-        while (i &lt; runs){
-            System.out.println("Sleeping for " + (runs-i) + " seconds." );
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException ie){
-                System.out.println("Sleep interrupted.");
-            }
-            i++;
-        }
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws InterruptedException {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer! \nGet PID of this process: ");
-        sb1.append("'ps -C svmheapdump -o pid= '\n");
-        sb1.append("then send it signal: ");
-        sb1.append("'kill -SIGUSR1 &lt;pid_printed_above&gt;' \n");
-        sb1.append("to get heap dump generated into working directory.\n");
-        sb1.append("Starting thread!");
-        System.out.println(sb1);
-        SVMHeapDump t = new SVMHeapDump();
-        t.start();
-        while (t.isAlive()) {
-            t.join(0);
-        }
-        sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Thread finished after: ");
-        sb1.append(i);
-        sb1.append(" iterations.");
-        System.out.println(sb1);
-    }
-}
-</code></pre>
-<h3 id="building-an-example">Building an Example</h3>
-<p>Compile SVMHeapDump.java as following</p>
-<pre><code class="language-bash">$ javac SVMHeapDump.java
-</code></pre>
-<p>If you run it on <code>java</code>, you will see it runs for 60 seconds then finishes. We will now look how to tell <code>native-image</code> to generate binary which will accept SIGUSR1 signal to produce a heap dump.</p>
-<h3 id="building-native-image">Building Native Image</h3>
-<p>When using GraalVM Enterprise Edition, downloaded from the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a>, you need to specify <code>-H:+AllowVMInspection</code> option for GraalVM <code>native-image</code> tool. See following example:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDump -H:+AllowVMInspection
-Build on Server(pid: 31386, port: 26682)
-   classlist:     172.62 ms
-       (cap):     865.71 ms
-       setup:   1,103.32 ms
-  (typeflow):   2,003.86 ms
-   (objects):     664.40 ms
-  (features):      26.82 ms
-    analysis:   2,779.99 ms
-    universe:     152.09 ms
-     (parse):     311.20 ms
-    (inline):     471.03 ms
-   (compile):   2,405.97 ms
-     compile:   3,458.48 ms
-       image:     540.78 ms
-       write:     464.04 ms
-     [total]:   8,714.06 ms
-</code></pre>
-<p>The <code>native-image</code> tool analyzes existing <code>SVMHeapDump.class</code> and creates from it an executable file. When the command completes, <code>svmheapdump</code> is created in the current directory.</p>
+<ul>
+  <li>We updated the base JDK to 8u212. You can find the JDK release notes at the <a href="https://www.oracle.com/technetwork/java/javase/8u212-relnotes-5292913.html">Oracle Technology Network website</a>.</li>
+</ul>
 
-<h3 id="run-the-application-and-get-heap-dump">Run the Application and Get Heap Dump</h3>
-<h4 id="1-run-the-app">1. Run the App</h4>
-<pre><code class="language-bash">$ ./svmheapdump
-Feb 22, 2018 2:56:30 PM: Hello GraalVM native image developer!
-Get PID of this process: 'ps -C svmheapdump -o pid= '
-then send it signal: 'kill -SIGUSR1 &lt;pid_printed_above&gt;'
-to get heap dump generated into working directory.
-Starting thread!
-Feb 22, 2018 2:56:30 PM: Thread started, it will run for 60 seconds
-Sleeping for 60 seconds.
+<h3 id="native-image">Native Image</h3>
 
-</code></pre>
-<h4 id="2-generate-heap-dump">2. Generate Heap Dump</h4>
-<p>Open the 2nd terminal to get PID of the running <code>svmheapdump</code> application using a command like <code>ps -C svmheapdump -o pid=</code> for Linux OS and <code>pgrep svmheapdump</code>
-for Mac OS.
-PID is printed, e.g. 100, which is then used in sending the signal to the running app:</p>
-<pre><code class="language-bash">kill -SIGUSR1 100
-</code></pre>
-<p>Heap dump is available at the working directory while application continues running.</p>
+<p>Native Image was extracted from the base GraalVM distribution. Currently it is
+available as an early adopter plugin. To install it, run: <code>gu install
+native-image</code>. After this additional step, the <code>native-image</code> executable will be
+in the <code>bin</code> directory, as for the previous releases.</p>
 
-<h2 id="java-api-example">Java API Example</h2>
+<p>There was a change in how classes are initialized in a <code>native-image</code>. Now, we initialize application classes at run time by default. The policy for initialization is as follows:</p>
+<ul>
+  <li>All JDK classes are initialized at build time.</li>
+  <li>We prove the safety of application static initializers after the analysis and initialize the safe classes.</li>
+  <li>We provide the following flags to control class initialization in a fine-grained way: <code>--initialize-at-build-time</code> and <code>--initialize-at-run-time</code>.</li>
+</ul>
 
-<p>The following Java example shows how Java heap dump can be generated from within
-a running application using <code>Compiler.command()</code> after some condition is met.
-The condition to generate a heap dump is provided as an option on the command line.
-Save following Java code as <em>SVMHeapDumpAPI.java</em>.</p>
+<p>The performance and startup impact of this change is negligible on all benchmarks that we have.</p>
 
-<p>The application creates some data to have something to dump, checks the command line
-to see if heap dump has to be created and then in method <code>createHeapDump()</code> creates
-the actual heap dump performing checks for file existence.</p>
-<pre><code class="language-java">import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
+<p>This change was made to improve user experience: there is no need to write
+substitutions and to deal with instances of unsupported classes ending up in the
+image heap. Their applications, given the right configuration for reflection,
+proxies, etc., should work without performance degradation.</p>
 
-public class SVMHeapDumpAPI {
+<p>To allow framework authors and end users to keep the startup time at minimum we
+improved functionality of <code>--initialize-at-build-time</code> and
+<code>--initialize-at-run-time</code>. These flags allow to specify a policy for whole
+packages or individual classes. For example, if we have classes <code>p.C1</code>, <code>p.C2</code>,
+… , <code>p.Cn</code>, we can eagerly initialize this package with
+<code>--initalize-at-build-time=p</code>. If we want to delay one of the classes in package
+<code>p</code> we can simply add <code>--initialize-at-run-time=p.C1</code>.</p>
 
-    private static final String HEAP_DUMP_COMMAND = "HeapDump.dumpHeap(FileOutputStream, Boolean)Boolean";
+<p>The whole class hierarchy can be initialized at build time by simply passing <code>--initalize-at-build-time</code> on the command line.</p>
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer. \nYour command line options are: ");
+<p>We also introduced the flag <code>-H:+PrintClassInitialization</code> which allows you to track what class initialization does during the image build. This flag will help you configure the build to work as intended.</p>
 
-        if (args.length &gt; 0) {
-            sb1.append(args[0]);
-            System.out.println(sb1);
-            if (args[0].equalsIgnoreCase("--heapdump")){
-                createHeapDump();
-            }
-        } else {
-                sb1.append("None");
-                System.out.println(sb1);
-        }
-     }
+<p><em>What should I do if I am a library author?</em></p>
+<ol>
+  <li>To get your tests back in check you can use <code>--intialize-at-build-time</code> which will revert to the previous behaviour.</li>
+  <li>Then use the flag <code>-H:+PrintClassInitialization</code> to see when classes get initialized. Based on this output you can make the proper configuration.</li>
+  <li>Configure your <code>native-image.properties</code> by passing <code>--intialize-at-build-time=&lt;csv-of-classes-or-packages&gt;</code> to it.</li>
+  <li>Submit a pull request to the downstream libraries with the configuration you believe works well. That way your <code>native-image.properties</code> will be concerned only with the classes from your framework.</li>
+  <li>There is a known issue with lambdas being initialized at build time. If your lambda inherits an interface with a default method and static fields, those fields will get pulled into the image. We will provide a fix to this bug in the next two weeks.</li>
+</ol>
 
-    /**
-     * Generate heap dump and save it into temp file.
-     */
-    private static void createHeapDump() {
-        boolean heapDumpCreated = false;
-        try {
-            File file = File.createTempFile("SVMHeapDump-", ".hprof");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            // Create heap dump
-            final Object[] args = new Object[]{HEAP_DUMP_COMMAND, fileOutputStream, Boolean.TRUE};
-            final Object resultObject = Compiler.command(args);
-            // Following code checks if heap dump was created using return value
-            if (resultObject instanceof Boolean) {
-                heapDumpCreated = ((Boolean) resultObject).booleanValue();
-            }
-            fileOutputStream.close();
+<h3 id="javascript">JavaScript</h3>
 
-            if (heapDumpCreated){
-                System.out.println("  Heap dump created " + file.getAbsolutePath() + ", size: " + file.length());
-            } else {
-                // Delete the file to not pollute disk with empty files.
-                System.out.println("  Heap dump creation failed.");
-                file.delete();
-            }
-        } catch (IOException ioe) {
-            System.out.println("  Caught IOException.");
-        }
-    }
-}
+<ul>
+  <li>Fixed various bugs that address compilation problems.</li>
+</ul>
 
-</code></pre>
-<h2 id="building-an-example-1">Building an Example</h2>
-<p>In the next step, compile <em>SVMHeapDumpAPI.java</em>. It is good to define an environment variable pointing to your GraalVM installation, e.g. <code>export GRAALVM_HOME=/usr/graalvm</code>.
-Then compile using following command:</p>
-<pre><code class="language-bash">$ javac SVMHeapDumpAPI.java
-</code></pre>
-<h2 id="build-native-image">Build Native Image</h2>
-<p>Heap dump creation will work after the native image is built from a class file. Use the following command:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDumpAPI
-   Build on Server(pid: 31386, port: 26682)*
-   classlist:     804.50 ms
-       (cap):   1,645.69 ms
-       setup:   2,439.03 ms
-  (typeflow):   3,636.09 ms
-   (objects):   1,979.26 ms
-  (features):      57.29 ms
-    analysis:   5,775.18 ms
-    universe:     241.79 ms
-     (parse):     849.48 ms
-    (inline):   1,042.78 ms
-   (compile):   7,632.91 ms
-     compile:   9,971.89 ms
-       image:   1,441.42 ms
-       write:     637.83 ms
-     [total]:  21,388.04 ms
+<h3 id="r">R</h3>
 
-</code></pre>
-<p>When the command completes, <code>svmheapdumpapi</code> executable is created in the current directory.</p>
+<ul>
+  <li>Fixed a fatal error on Linux platforms when sending <code>SIGINT</code> during long computations.</li>
+  <li>Fixed issues with the installation to protected locations: the default Renviron file sets the <code>R_LIBS_USER</code> to a directory inside the current user’s home. Users still have to create this directory manually. Alternatively, the <code>configure_fastr</code> script creates the directory, but for the current user only.</li>
+  <li>Implemented missing C API: <code>S_realloc</code>.</li>
+</ul>
 
-<h3 id="run-the-application-and-check-heap-dump">Run the Application and Check Heap Dump</h3>
-<p>Now you can run your native image application and generate heap dump from it
-with the output similar to one below:</p>
-<pre><code class="language-bash">$ ./svmheapdumpapi --heapdump
-Oct 3, 2017 10:33:54 AM: Hello GraalVM native image developer.
-Your command line options are: --heapdump
-  Heap dump created /tmp/SVMHeapDump-7779460659275234903.hprof, size: 4436516
-</code></pre>
+<h3 id="ruby">Ruby</h3>
 
-<p>The resulting heap dump can be then opened with <a href="/docs/reference-manual/tools/#heap-viewer">Graal VisualVM</a> tool like any other Java heap dump.</p>
+<ul>
+  <li>Various bug fixes. Most notably fixes around OpenSSL C extension compilation.</li>
+  <li>Renamed methods in the <code>TruffleRuby</code> object.</li>
+</ul>
+
+<h3 id="ideal-graph-visualizer-igv">Ideal Graph Visualizer (IGV)</h3>
+<ul>
+  <li>Fixed the <a href="https://github.com/oracle/graal/issues/1248">issue</a> with the ASTs and call trees not showing up.</li>
+</ul>
+
+<h2 id="1902">19.0.2</h2>
+<p>(2019-06-13)</p>
+
+<p>This is a bug fix release for 19.0 and we recommend upgrading for all 19.0.x users.</p>
+
+<h3 id="java-1">Java</h3>
+<ul>
+  <li>Improved compilation performance of scheduler phase.</li>
+  <li>Support retrieving annotations from class initializers (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
+  <li>Fixed problems related to the freetype library: <a href="https://github.com/oracle/graal/issues/1269">1269</a>, <a href="https://github.com/oracle/graal/issues/1270">1270</a>, <a href="https://github.com/oracle/graal/issues/1305">1305</a>.</li>
+  <li>Fixed Version string reporting (it was missing <code>64-Bit</code> in the string).</li>
+</ul>
+
+<h3 id="native-image-1">Native image</h3>
+<ul>
+  <li>Fixed <code>IllegalArgumentException: Cannot create Method for class initializer</code> (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
+  <li>Fixed an issue when the build would loop forever if <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code>.</li>
+  <li>Fixed the issue where fallback image generation would not respect the <code>--no-server</code> argument.</li>
+  <li>Fix <code>native-image-agent=restrict</code> configuration detection.</li>
+  <li>Added <code>-agentlib:native-image-agent=build</code> configuration option.</li>
+</ul>
+
+<h3 id="llvm-interpreter">LLVM interpreter</h3>
+<p>Allow LLVM interpreter Context to run without <code>allowIO(true)</code>.</p>
 
               </div>
 

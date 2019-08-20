@@ -9,7 +9,7 @@
 
   <title>
     
-      Generate Heap Dumps from Native Images
+      GraalVM 19.2.x
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/native_heapdump/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/release-notes/19_2/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -310,6 +310,14 @@ $(document).ready(function(){
 <ul class="toc-bullets">
 
   
+
+  
+
+  
+
+  
+
+  
     
 
     
@@ -396,6 +404,89 @@ $(document).ready(function(){
 
 
         
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/version-roadmap/">
+              Version Roadmap
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub toc-bullets-highlight">
+          
+            
+            <a href="/docs/release-notes/19_2/">
+              GraalVM 19.2.x
+            </a>
+          </li>
+
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_1/">
+              GraalVM 19.1.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_0/">
+              GraalVM 19.0.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/release-candidates/">
+              Release Candidates
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/known-issues/">
+              Known Issues
+            </a>
+          </li>
+
+          
+        
       
     
       
@@ -476,14 +567,6 @@ $(document).ready(function(){
 
   
 
-  
-
-  
-
-  
-
-  
-
 </ul>
 
 </div>
@@ -498,231 +581,147 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="generating-native-heap-dumps">Generating Native Heap Dumps</h3>
-<p>As described in the <a href="/docs/reference-manual/aot-compilation/">Creating Native Images chapter</a> in the GraalVM section, it is possible to create highly performing applications. It is also possible to
-monitor the execution and generate Java heap dumps from within the native image
-application. The functionality is available only with <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">GraalVM Enterprise Edition</a>.</p>
+                <h2 id="1920">19.2.0</h2>
+<p>(2019-08-20)</p>
 
-<p>GraalVM Native Image does not implement JVMTI agent and it is not possible to
-trigger heap dump creation using tools like <em>GraalVM Visual VM</em> or <em>jmap</em>. But it
-is possible to build a native image for your application to handle signals and
-then get a heap dump when the application receives the SIGUSR1 signal. Another possibility
-is to add a special method to your application which will generate the heap dump
-at certain points in the lifetime of your application. E.g., when certain
-conditions are met while running a native image application, your application
-code can trigger heap dump creation. We will show both possibilities in this
-chapter.</p>
+<p>This is a GraalVM feature release, we recommend upgrading to it from the 19.1.x or older releases.</p>
 
-<h2 id="handling-sigusr1-signal">Handling SIGUSR1 Signal</h2>
-<p>The following Java example is a simple multi-threaded application which runs for
-60 seconds. There is enough time to get its PID and send the SIGUSR1 signal
-which will generate a heap dump into the application’s working directory. Save
-the following code as SVMHeapDump.java file on your disk:</p>
-<pre><code class="language-java">import java.text.DateFormat;
-import java.util.Date;
+<h3 id="native-image">Native Image</h3>
 
-public class SVMHeapDump extends Thread {
-    static int i = 0;
-    static int runs = 60;
-    static int sleepTime = 1000;
-    @Override
-    public void run() {
-        System.out.println(DateFormat.getDateTimeInstance().format(new Date()) + ": Thread started, it will run for " + runs + " seconds");
-        while (i &lt; runs){
-            System.out.println("Sleeping for " + (runs-i) + " seconds." );
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException ie){
-                System.out.println("Sleep interrupted.");
-            }
-            i++;
-        }
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws InterruptedException {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer! \nGet PID of this process: ");
-        sb1.append("'ps -C svmheapdump -o pid= '\n");
-        sb1.append("then send it signal: ");
-        sb1.append("'kill -SIGUSR1 &lt;pid_printed_above&gt;' \n");
-        sb1.append("to get heap dump generated into working directory.\n");
-        sb1.append("Starting thread!");
-        System.out.println(sb1);
-        SVMHeapDump t = new SVMHeapDump();
-        t.start();
-        while (t.isAlive()) {
-            t.join(0);
-        }
-        sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Thread finished after: ");
-        sb1.append(i);
-        sb1.append(" iterations.");
-        System.out.println(sb1);
-    }
-}
-</code></pre>
-<h3 id="building-an-example">Building an Example</h3>
-<p>Compile SVMHeapDump.java as following</p>
-<pre><code class="language-bash">$ javac SVMHeapDump.java
-</code></pre>
-<p>If you run it on <code>java</code>, you will see it runs for 60 seconds then finishes. We will now look how to tell <code>native-image</code> to generate binary which will accept SIGUSR1 signal to produce a heap dump.</p>
-<h3 id="building-native-image">Building Native Image</h3>
-<p>When using GraalVM Enterprise Edition, downloaded from the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a>, you need to specify <code>-H:+AllowVMInspection</code> option for GraalVM <code>native-image</code> tool. See following example:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDump -H:+AllowVMInspection
-Build on Server(pid: 31386, port: 26682)
-   classlist:     172.62 ms
-       (cap):     865.71 ms
-       setup:   1,103.32 ms
-  (typeflow):   2,003.86 ms
-   (objects):     664.40 ms
-  (features):      26.82 ms
-    analysis:   2,779.99 ms
-    universe:     152.09 ms
-     (parse):     311.20 ms
-    (inline):     471.03 ms
-   (compile):   2,405.97 ms
-     compile:   3,458.48 ms
-       image:     540.78 ms
-       write:     464.04 ms
-     [total]:   8,714.06 ms
-</code></pre>
-<p>The <code>native-image</code> tool analyzes existing <code>SVMHeapDump.class</code> and creates from it an executable file. When the command completes, <code>svmheapdump</code> is created in the current directory.</p>
-
-<h3 id="run-the-application-and-get-heap-dump">Run the Application and Get Heap Dump</h3>
-<h4 id="1-run-the-app">1. Run the App</h4>
-<pre><code class="language-bash">$ ./svmheapdump
-Feb 22, 2018 2:56:30 PM: Hello GraalVM native image developer!
-Get PID of this process: 'ps -C svmheapdump -o pid= '
-then send it signal: 'kill -SIGUSR1 &lt;pid_printed_above&gt;'
-to get heap dump generated into working directory.
-Starting thread!
-Feb 22, 2018 2:56:30 PM: Thread started, it will run for 60 seconds
-Sleeping for 60 seconds.
-
-</code></pre>
-<h4 id="2-generate-heap-dump">2. Generate Heap Dump</h4>
-<p>Open the 2nd terminal to get PID of the running <code>svmheapdump</code> application using a command like <code>ps -C svmheapdump -o pid=</code> for Linux OS and <code>pgrep svmheapdump</code>
-for Mac OS.
-PID is printed, e.g. 100, which is then used in sending the signal to the running app:</p>
-<pre><code class="language-bash">kill -SIGUSR1 100
-</code></pre>
-<p>Heap dump is available at the working directory while application continues running.</p>
-
-<h2 id="java-api-example">Java API Example</h2>
-
-<p>The following Java example shows how Java heap dump can be generated from within
-a running application using <code>Compiler.command()</code> after some condition is met.
-The condition to generate a heap dump is provided as an option on the command line.
-Save following Java code as <em>SVMHeapDumpAPI.java</em>.</p>
-
-<p>The application creates some data to have something to dump, checks the command line
-to see if heap dump has to be created and then in method <code>createHeapDump()</code> creates
-the actual heap dump performing checks for file existence.</p>
-<pre><code class="language-java">import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
-
-public class SVMHeapDumpAPI {
-
-    private static final String HEAP_DUMP_COMMAND = "HeapDump.dumpHeap(FileOutputStream, Boolean)Boolean";
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // Do some manipulations so we have something to dump
-        StringBuffer sb1 = new StringBuffer(100);
-        sb1.append(DateFormat.getDateTimeInstance().format(new Date()));
-        sb1.append(": Hello GraalVM native image developer. \nYour command line options are: ");
-
-        if (args.length &gt; 0) {
-            sb1.append(args[0]);
-            System.out.println(sb1);
-            if (args[0].equalsIgnoreCase("--heapdump")){
-                createHeapDump();
-            }
-        } else {
-                sb1.append("None");
-                System.out.println(sb1);
-        }
-     }
-
-    /**
-     * Generate heap dump and save it into temp file.
-     */
-    private static void createHeapDump() {
-        boolean heapDumpCreated = false;
-        try {
-            File file = File.createTempFile("SVMHeapDump-", ".hprof");
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            // Create heap dump
-            final Object[] args = new Object[]{HEAP_DUMP_COMMAND, fileOutputStream, Boolean.TRUE};
-            final Object resultObject = Compiler.command(args);
-            // Following code checks if heap dump was created using return value
-            if (resultObject instanceof Boolean) {
-                heapDumpCreated = ((Boolean) resultObject).booleanValue();
-            }
-            fileOutputStream.close();
-
-            if (heapDumpCreated){
-                System.out.println("  Heap dump created " + file.getAbsolutePath() + ", size: " + file.length());
-            } else {
-                // Delete the file to not pollute disk with empty files.
-                System.out.println("  Heap dump creation failed.");
-                file.delete();
-            }
-        } catch (IOException ioe) {
-            System.out.println("  Caught IOException.");
-        }
-    }
-}
-
-</code></pre>
-<h2 id="building-an-example-1">Building an Example</h2>
-<p>In the next step, compile <em>SVMHeapDumpAPI.java</em>. It is good to define an environment variable pointing to your GraalVM installation, e.g. <code>export GRAALVM_HOME=/usr/graalvm</code>.
-Then compile using following command:</p>
-<pre><code class="language-bash">$ javac SVMHeapDumpAPI.java
-</code></pre>
-<h2 id="build-native-image">Build Native Image</h2>
-<p>Heap dump creation will work after the native image is built from a class file. Use the following command:</p>
-<pre><code class="language-bash">$ $GRAALVM_HOME/bin/native-image SVMHeapDumpAPI
-   Build on Server(pid: 31386, port: 26682)*
-   classlist:     804.50 ms
-       (cap):   1,645.69 ms
-       setup:   2,439.03 ms
-  (typeflow):   3,636.09 ms
-   (objects):   1,979.26 ms
-  (features):      57.29 ms
-    analysis:   5,775.18 ms
-    universe:     241.79 ms
-     (parse):     849.48 ms
-    (inline):   1,042.78 ms
-   (compile):   7,632.91 ms
-     compile:   9,971.89 ms
-       image:   1,441.42 ms
-       write:     637.83 ms
-     [total]:  21,388.04 ms
-
-</code></pre>
-<p>When the command completes, <code>svmheapdumpapi</code> executable is created in the current directory.</p>
-
-<h3 id="run-the-application-and-check-heap-dump">Run the Application and Check Heap Dump</h3>
-<p>Now you can run your native image application and generate heap dump from it
-with the output similar to one below:</p>
-<pre><code class="language-bash">$ ./svmheapdumpapi --heapdump
-Oct 3, 2017 10:33:54 AM: Hello GraalVM native image developer.
-Your command line options are: --heapdump
-  Heap dump created /tmp/SVMHeapDump-7779460659275234903.hprof, size: 4436516
+<p>We simplified the process of collecting data for profile-guided optimizations (PGO) for GraalVM Enterprise native images. PGO allows to optimize performance of native images by analyzing collected profiles during the image generation process. Since 19.2.0 you can collect data for PGO while running your application in a just-in-time (JIT) compiled mode:</p>
+<pre><code>$ /graal-ee-19.2.0/bin/java -Dgraal.PGOInstrument=myclass.iprof MyClass
+$ /graal-ee-19.2.0/bin/native-image --pgo=myclass.iprof MyClass
+$ ./myclass
 </code></pre>
 
-<p>The resulting heap dump can be then opened with <a href="/docs/reference-manual/tools/#heap-viewer">Graal VisualVM</a> tool like any other Java heap dump.</p>
+<h3 id="performance">Performance</h3>
+<p>We improved throughput for native image in GraalVM Enterprise when no profiles are available. Running the <a href="https://guides.micronaut.io/micronaut-creating-first-graal-app/guide/index.html">Micronaut GraalVM example</a> shows spending ~10% less CPU time and achieving a ~10% higher throughput of requests per CPU second in 19.2.</p>
+
+<p>We also solved a common usability problem when a class marked for
+initialization at runtime gets inadvertently initialized at build time. The flag <code>-H:+TraceClassInitialization</code> was introduced to help tracing what classes got initialized at runtime.</p>
+
+<h3 id="javascript">JavaScript</h3>
+<ul>
+  <li>We added support for date, time, timezone, instant and duration interoperability
+types to distinguish date-like objects from multiple
+languages in polyglot contexts (see changes to GraalVM SDK and Truffle APIs).</li>
+  <li>Added <code>Context.Builder.timeZone</code> to set the time zone.</li>
+  <li>We implemented the <a href="https://github.com/tc39/proposal-numeric-separator">Numeric separators</a> TC39 proposal. It is
+available in ECMAScript 2020 mode (<code>--js.ecmascript-version=2020</code>).</li>
+  <li>We moved ICU data for internationalization APIs, e.g. date and time formatting, number formatting, collation for each individual supported language, previously distributed as separate files in <code>&lt;GRAALVM_HOME&gt;/jre/languages/js/icu4j/icudt</code> to the executable of JavaScript (<code>js</code>).</li>
+</ul>
+
+<p>More changes are listed in the JavaScript component <a href="https://github.com/graalvm/graaljs/blob/master/CHANGELOG.md#version-1920">changelog</a>.</p>
+
+<h3 id="llvm-interpreter">LLVM Interpreter</h3>
+<p>We added preliminary support for compiling native programs to bitcode using
+the LLVM toolchain. The LLVM toolchain is a set of tools and APIs for compiling
+native projects, such as C and C++, to bitcode that can be executed with the
+GraalVM LLVM runtime. It is aimed to simplify ahead-of-time compilation for
+users and language implementers who want to use the GraalVM LLVM runtime. To do
+so, we provide launchers that invoke the C/C++ compiler with special flags to
+produce results that can be executed by the GraalVM LLVM runtime. For more
+details, please consult the <a href="/docs/reference-manual/languages/llvm/#llvm-toolchain/">LLVM reference documentation</a>.</p>
+
+<p>The toolchain is an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a> feature in this release.
+A complete list of changes to GraalVM LLVM runtime can be found in the
+<a href="https://github.com/oracle/graal/blob/master/sulong/CHANGELOG.md#version-1920">changelog</a>.</p>
+
+<h3 id="ruby">Ruby</h3>
+<p>A comprehensive list of changes to Ruby language component is available on <a href="https://github.com/oracle/truffleruby/blob/master/CHANGELOG.md#1920">GitHub</a>. Major changes include:</p>
+
+<ul>
+  <li>Implemented support for Fiddle – an extension to translate a foreign function interface (FFI) and <a href="http://sourceware.org/libffi/">libffi</a> wrapper for Ruby.</li>
+  <li>In terms of compatibility, <code>Thread.report_on_exception</code> is now <code>true</code> by default
+like MRI 2.5+; <code>BigDecimal</code> compatibility has been generally improved in several
+ways.</li>
+  <li>Improved the performance by optimizing <code>String</code> methods to use the vector
+instructions when searching for a single-byte character in a <code>String</code>.</li>
+  <li>Fixed several bugs reported by community:
+    <ul>
+      <li>Set <code>RbConfig::CONFIG['ruby_version']</code> to the same value as the TruffleRuby version. This fixes reusing C extensions between different versions of TruffleRuby with Bundler (<a href="https://github.com/oracle/truffleruby/issues/1715">#1715</a>).</li>
+      <li>Improved errors when interacting with single-threaded languages (<a href="https://github.com/oracle/truffleruby/issues/1709">#1709</a>).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="r">R</h3>
+<ul>
+  <li>Added a new <code>fastRCluster</code> package that allows to run FastR inside GNU-R:
+    <ol>
+      <li>install in GNU-R or RStudio with: <code>devtools::install_github('oracle/fastr/com.oracle.truffle.r.pkgs/fastRCluster')</code>;</li>
+      <li>use <code>?fastRCluster</code> to learn more.</li>
+    </ol>
+  </li>
+  <li>The problem that <code>SET_ATTRIB</code> does not validate the attributes as expected was resolved.</li>
+</ul>
+
+<p>The <a href="https://github.com/oracle/fastr/blob/master/CHANGELOG.md">changelog</a> is available on GitHub.</p>
+
+<h3 id="python">Python</h3>
+<p>The GraalVM Python implementation is still experimental and we are working towards improving completeness.</p>
+<ul>
+  <li>Implemented <code>PyStructSequence_*</code> C API – standard structured prediction functions.</li>
+  <li>Added support for more C API functions as <code>PyEval_InitThreads</code> and <code>PyEval_ThreadsInitialized</code>, type attributes i.e. <code>nb_remainder</code>, <code>nb_subtract</code>, <code>overflowed</code> and <code>recursion_depth</code> thread state fields.</li>
+  <li>Fixed printing of errors in the REPL and full paths in tracebacks.</li>
+</ul>
+
+<p>More details are available in the project <a href="https://github.com/graalvm/graalpython/blob/master/CHANGELOG.md#version-1920">changelog</a> on GitHub.</p>
+
+<h3 id="api-changes-for-graalvm-integrators-sdk--truffle">API Changes for GraalVM Integrators (SDK + Truffle)</h3>
+<p>We implemented the ability to configure custom polyglot access configuration with
+<code>PolyglotAccess.newBuilder()</code>. It allows to configure fine-grained access
+control for polyglot bindings and between polyglot languages. For example, given
+a <code>TruffleObject</code> as a value, there is a need to determine language and type of
+that object. This feature is significant for GraalVM execution inside <a href="https://oracle.github.io/oracle-db-mle/">Oracle
+RDBMS</a>.</p>
+
+<p>GraalVM 19.2.0 release also added support for date, time, timezone, duration
+values in polyglot APIs, and introduced the <code>Context.Builder.timeZone(ZoneId)</code>
+class to configure the default timezone of polyglot contexts.</p>
+
+<p>The major GraalVM SDK and Truffle APIs changes between the versions are summarized in:</p>
+<ul>
+  <li><a href="https://github.com/oracle/graal/blob/master/sdk/CHANGELOG.md#version-1920">GraalVM SDK changelog</a></li>
+  <li><a href="https://github.com/oracle/graal/blob/master/truffle/CHANGELOG.md#version-1920">GraalVM Truffle changelog</a></li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+<p>A preview version of Java Flight Recorder (JFR) support has been released as a plugin for the VisualVM tool bundled with GraalVM 19.2.0. The plugin reads all JFR snapshots created from Java 7 and newer and presents the data in typical VisualVM views familiar for its users.</p>
+
+<p><img src="/docs/img/visualvm_jfr.png" alt="" /></p>
+
+<p>To install the JFR support, download GraalVM 19.2.0 from <a href="/downloads">graalvm.org/downloads</a>, unzip it and run <GRAALVM_HOME>/bin/jvisualvm to start VisualVM.
+Use `Tools | Plugins | Available Plugins` to list all available plugins and install the VisualVM-JFR and VisualVM-JFR-Generic modules.
+The JFR snapshots can be opened using either the File | Load… action or by double-clicking the JFR Snapshots node and adding the snapshot into the JFR repository permanently.
+Please follow the documentation of your Java installation how to create JFR snapshots.</GRAALVM_HOME></p>
+
+<p>JFR support is currently an
+<a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>
+feature. Some advanced features like analyzing JVM internals, showing event
+stack traces or support for creating JFR snapshots from live processes are not
+available in the preview version and will be addressed incrementally in the
+following releases.</p>
+
+<h3 id="graalvm-updater-utility">GraalVM Updater Utility</h3>
+
+<p>We fixed an issue where GraalVM Enterprise would by default download the GraalVM Community components from GitHub. If you are using GraalVM Community – nothing changes, you can still install the components as before, and the <code>gu</code> will locate the necessary jar files on GitHub and correctly install them:</p>
+<pre><code>gu install native-image ruby R python
+</code></pre>
+
+<p>If you are using GraalVM Enterprise, you can install <code>R</code> and <code>llvm-toolchain</code> components from GitHub, for example:</p>
+<pre><code>gu install R
+</code></pre>
+
+<p>The other components are available from <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">the OTN page</a>, and can be installed from a manually downloaded file, for example to install <code>native-image</code> support run:</p>
+<pre><code>gu -L install native-image-installable-svm-svmee-darwin-amd64-19.2.0.jar
+</code></pre>
+
+<h3 id="version-calendar">Version Calendar</h3>
+
+<p>You can now refer to <a href="/docs/release-notes/version-roadmap/">GraalVM version calendar</a> to learn more about the GraalVM release model and prepare for upcoming releases.</p>
+
+<p><img src="/docs/img/graalvm_version_calendar.png" alt="" /></p>
 
               </div>
 

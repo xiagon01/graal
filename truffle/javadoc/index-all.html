@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>8b89dda1862c96eeaf99ad932ae0cf9e8d875cac</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>bcca361f7b2c5a7ab77bcfaf480351b3760aa47c</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -948,6 +948,18 @@
 <div class="block">Constructs a new index range between one a first index inclusive and a second index
  exclusive.</div>
 </dd>
+<dt><a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">BlockNode</span></a>&lt;<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="type parameter in BlockNode">T</a> extends <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a>&gt; - Class in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
+<dd>
+<div class="block">Represents a standard node for guest language blocks.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#BlockNode-T:A-">BlockNode(T[])</a></span> - Constructor for class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Internal constructor for implementations.</div>
+</dd>
+<dt><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes"><span class="typeNameLink">BlockNode.ElementExecutor</span></a>&lt;<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="type parameter in BlockNode.ElementExecutor">T</a> extends <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a>&gt; - Interface in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
+<dd>
+<div class="block">Represents a contract how block element nodes can be executed.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#BOOLEAN">BOOLEAN</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
 <dd>
 <div class="block">Represents a boolean type.</div>
@@ -1830,6 +1842,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/LibraryFactory.html#create-java.lang.Object-">create(Object)</a></span> - Method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/LibraryFactory.html" title="class in com.oracle.truffle.api.library">LibraryFactory</a></dt>
 <dd>
 <div class="block">Creates a new manually dispatched cached library for a given receiver.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#create-T:A-com.oracle.truffle.api.nodes.BlockNode.ElementExecutor-">create(T[], BlockNode.ElementExecutor&lt;T&gt;)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Creates a new block node.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/DirectCallNode.html#create-com.oracle.truffle.api.CallTarget-">create(CallTarget)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/DirectCallNode.html" title="class in com.oracle.truffle.api.nodes">DirectCallNode</a></dt>
 <dd>&nbsp;</dd>
@@ -2858,10 +2874,74 @@
 <dd>
 <div class="block">Executes this value if it <a href="org/graalvm/polyglot/Value.html#canExecute--"><code>can</code></a> be executed and returns its result.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeBoolean-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeBoolean(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a boolean value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeBoolean-com.oracle.truffle.api.frame.VirtualFrame-int-">executeBoolean(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a boolean value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeByte-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeByte(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a byte value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeByte-com.oracle.truffle.api.frame.VirtualFrame-int-">executeByte(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a byte value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeChar-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeChar(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a char value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeChar-com.oracle.truffle.api.frame.VirtualFrame-int-">executeChar(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a char value.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/dsl/Executed.html" title="annotation in com.oracle.truffle.api.dsl"><span class="typeNameLink">Executed</span></a> - Annotation Type in <a href="com/oracle/truffle/api/dsl/package-summary.html">com.oracle.truffle.api.dsl</a></dt>
 <dd>
 <div class="block">This annotation declares a <a href="com/oracle/truffle/api/nodes/Node.Child.html" title="annotation in com.oracle.truffle.api.nodes"><code>child</code></a> field to be executed and used as dynamic input
  values for <a href="com/oracle/truffle/api/dsl/Specialization.html" title="annotation in com.oracle.truffle.api.dsl"><code>specializations</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeDouble-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeDouble(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a double value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeDouble-com.oracle.truffle.api.frame.VirtualFrame-int-">executeDouble(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a double value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeFloat-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeFloat(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a float value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeFloat-com.oracle.truffle.api.frame.VirtualFrame-int-">executeFloat(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a float value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeGeneric-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeGeneric(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a generic value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeGeneric-com.oracle.truffle.api.frame.VirtualFrame-int-">executeGeneric(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a generic value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeInt-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeInt(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects an int value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeInt-com.oracle.truffle.api.frame.VirtualFrame-int-">executeInt(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns an int value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeLong-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeLong(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a long value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeLong-com.oracle.truffle.api.frame.VirtualFrame-int-">executeLong(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a long value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/LoopNode.html#executeLoop-com.oracle.truffle.api.frame.VirtualFrame-">executeLoop(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes">LoopNode</a></dt>
 <dd>
@@ -2874,6 +2954,14 @@
 <div class="block">Repeatedly invoked by a <a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes"><code>loop node</code></a> implementation until the method returns
  <code>false</code> or throws an exception.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeShort-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeShort(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a short value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeShort-com.oracle.truffle.api.frame.VirtualFrame-int-">executeShort(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a short value.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/instrumentation/ExecuteSourceEvent.html" title="class in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">ExecuteSourceEvent</span></a> - Class in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
 <div class="block">Represents a source execute event from a <a href="com/oracle/truffle/api/instrumentation/ExecuteSourceListener.html" title="interface in com.oracle.truffle.api.instrumentation"><code>ExecuteSourceListener</code></a>.</div>
@@ -2882,6 +2970,14 @@
 <dd>
 <div class="block">A listener attached by an <a href="com/oracle/truffle/api/instrumentation/Instrumenter.html" title="class in com.oracle.truffle.api.instrumentation"><code>Instrumenter</code></a> to specific sources of a guest language program to
  listen to execute source events.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeVoid-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeVoid(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element without expecting any return value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeVoid-com.oracle.truffle.api.frame.VirtualFrame-int-">executeVoid(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns no value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#executeVoid-java.lang.Object...-">executeVoid(Object...)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
@@ -3865,6 +3961,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ProbeNode.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ProbeNode.html" title="class in com.oracle.truffle.api.instrumentation">ProbeNode</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Block nodes always have <a href="com/oracle/truffle/api/nodes/NodeCost.html#NONE"><code>NodeCost.NONE</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/Node.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a></dt>
 <dd>
 <div class="block">Returns a rough estimate for the cost of this <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a>.</div>
@@ -3998,6 +4098,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/EventBinding.html#getElement--">getElement()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/EventBinding.html" title="class in com.oracle.truffle.api.instrumentation">EventBinding</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#getElements--">getElements()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Returns the elements of the block node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/Node.html#getEncapsulatingSourceSection--">getEncapsulatingSourceSection()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a></dt>
 <dd>
 <div class="block">Retrieves the segment of guest language source code that is represented by this Node, if
@@ -7818,6 +7922,10 @@
 <dd>
 <div class="block">Creates a new process builder with the specified operating program and arguments.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#NO_ARGUMENT">NO_ARGUMENT</a></span> - Static variable in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Use when no argument is needed for the block node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html#NO_FILTER">NO_FILTER</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html" title="interface in com.oracle.truffle.api.nodes">NodeUtil.NodeCountFilter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">Node</span></a> - Class in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
@@ -11519,7 +11627,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>8b89dda1862c96eeaf99ad932ae0cf9e8d875cac</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>bcca361f7b2c5a7ab77bcfaf480351b3760aa47c</div>
 </div>
 <div class="subNav">
 <ul class="navList">

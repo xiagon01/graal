@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>ab95d8490be57f58cc714bf07f86f14f03c81803</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>d329f88b8129fa6f862c16c1b4e79ca1fbb9065c</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -971,6 +971,10 @@
 <div class="block">
  BranchProfiles are profiles to speculate on branches that are unlikely to be visited.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#BREAK_LOOP_STATUS">BREAK_LOOP_STATUS</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">A value indicating that the loop should not be repeated.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug"><span class="typeNameLink">Breakpoint</span></a> - Class in <a href="com/oracle/truffle/api/debug/package-summary.html">com.oracle.truffle.api.debug</a></dt>
 <dd>
 <div class="block">A request that guest language program execution be suspended at specified locations on behalf of
@@ -1739,6 +1743,10 @@
 <dt><a href="com/oracle/truffle/api/instrumentation/ContextsListener.html" title="interface in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">ContextsListener</span></a> - Interface in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
 <div class="block">Listener to be notified about changes of contexts in guest language application.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#CONTINUE_LOOP_STATUS">CONTINUE_LOOP_STATUS</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">A value indicating that the loop should be repeated.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/nodes/ControlFlowException.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">ControlFlowException</span></a> - Exception in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
 <dd>
@@ -2862,6 +2870,12 @@
 <dd>
 <div class="block">Execute this fragment at the place where it was parsed.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/LoopNode.html#execute-com.oracle.truffle.api.frame.VirtualFrame-">execute(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes">LoopNode</a></dt>
+<dd>
+<div class="block">Invokes one loop invocation by repeatedly calling
+ <a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-"><code>execute)</code></a> on the repeating node the loop
+ was initialized with.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RootNode.html#execute-com.oracle.truffle.api.frame.VirtualFrame-">execute(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes">RootNode</a></dt>
 <dd>
 <div class="block">Executes this function using the specified frame and returns the result value.</div>
@@ -2943,16 +2957,15 @@
 <dd>
 <div class="block">Executes the block and returns a long value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/LoopNode.html#executeLoop-com.oracle.truffle.api.frame.VirtualFrame-">executeLoop(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes">LoopNode</a></dt>
-<dd>
-<div class="block">Invokes one loop invocation by repeatedly call
- <a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-"><code>execute)</code></a> on the repeating node the loop
- was initialized with.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-">executeRepeating(VirtualFrame)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
 <dd>
 <div class="block">Repeatedly invoked by a <a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes"><code>loop node</code></a> implementation until the method returns
  <code>false</code> or throws an exception.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeatingWithValue-com.oracle.truffle.api.frame.VirtualFrame-">executeRepeatingWithValue(VirtualFrame)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">Repeatedly invoked by a <a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes"><code>loop node</code></a> implementation, but allows returning a
+ language-specific loop exit status.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeShort-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeShort(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
 <dd>
@@ -11627,7 +11640,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>ab95d8490be57f58cc714bf07f86f14f03c81803</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>d329f88b8129fa6f862c16c1b4e79ca1fbb9065c</div>
 </div>
 <div class="subNav">
 <ul class="navList">

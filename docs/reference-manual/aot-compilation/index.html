@@ -669,7 +669,8 @@ $(document).ready(function(){
  etc.). The resulting program has faster startup time and lower runtime memory
  overhead compared to a Java VM.</p>
 
-<p><strong>Native Image Generator</strong> or <code>native-image</code> is a utility that processes all the classes of your application and their dependencies, including those from the JDK. It statically analyses these classes
+<p><strong>Native Image Generator</strong> or <code>native-image</code> is a utility that processes all the classes of your application and their
+dependencies, including those from the JDK. It statically analyses these classes
 to determine which classes and methods are reachable and used during application
 execution. Then it passes all this reachable code as the input to the GraalVM
 compiler which ahead-of-time compiles it to the native binary.</p>
@@ -681,7 +682,7 @@ itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
 <code>native-image</code> of guest languages used by an application, specify
 <code>--language:&lt;languageId&gt;</code> for each guest language used (e.g., <code>--language:js</code>).</p>
 
-<p><strong>Warning:</strong> GraalVM Native Image is
+<p><strong>Important:</strong> GraalVM Native Image is
 available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
 and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
 subscription, but is not covered by Oracle’s standard
@@ -789,10 +790,20 @@ and fields at run time when they are accessed the first time, instead of as an e
     <p><code>--static</code>  builds statically linked executable (requires static libc and zlib) (since 1.0-rc2);</p>
   </li>
   <li>
-    <p><code>--verbose</code> enables verbose output;</p>
+    <p><code>--verbose</code> enables verbose output.</p>
+  </li>
+</ul>
+
+<p><strong>Important:</strong> The following native image options are available only with GraalVM Enterprise Edition:</p>
+<ul>
+  <li>
+    <p><code>-g</code> enables the debugging info generation;</p>
   </li>
   <li>
-    <p><code>-g</code> enables the debugging info generation. <strong>Warning:</strong> The option is available only with GraalVM Enterprise Edition.</p>
+    <p><code>--pgo-instrument</code> builds an instrumented native image with profile-guided optimization data collected in the  <code>default.iprof</code> file, if nothing else is specified;</p>
+  </li>
+  <li>
+    <p><code>--pgo</code> provides a comma-separated list of files from which to read the data collected for profile-guided optimization of ahead-of-time compiled code.</p>
   </li>
 </ul>
 
@@ -906,7 +917,7 @@ specified as <code>NativeImageArgs</code>, plus the arguments specified on comma
 
 <p>For a more comprehensive list of options please check the <a href="https://github.com/oracle/graal/blob/master/substratevm/OPTIONS.md">documentation on Github</a>.</p>
 
-<p><strong>Warning:</strong>
+<p><strong>Disclaimer:</strong>
 Python source code or LLVM bitcode interpreted or compiled with GraalVM
 Community Edition will not have the same security characteristics as the same
 code interpreted or compiled using GraalVM Enterprise Edition. There is a
@@ -935,51 +946,10 @@ Enterprise Edition? Run this command:</p>
 <pre><code>com.oracle.svm.core.VM GraalVM 19.2.0 CE
 </code></pre>
 
-<h2 id="profile-guided-optimizations">Profile-guided Optimizations</h2>
-
-<p>For additional performance gain and higher throughput in GraalVM
-ahead-of-time (AOT) mode, make use of profile-guided optimizations (PGO). With
-PGO, you can collect the profiling data in advance and then feed it to the
-GraalVM <code>native-image</code> utility, which will use this information to optimize the
-performance of the resulting binary.</p>
-
-<p><strong>Warning:</strong> Profile-guided optimizations (PGO) is a GraalVM Enterprise feature.</p>
-
-<p>In GraalVM versions prior to 19.2.0, a commonly used technique to mitigate the
-missing just-in-time (JIT) optimization is to gather the execution profiles at one run
-and then use them to optimize subsequent compilation(s). In other words, one
-needs to create a native image with the <code>--pgo-instrument</code> option to collect the
-profile information. The <code>--pgo-instrument</code> builds an instrumented native image
-with profile-guided optimization data collected of AOT compiled code
-in the <em>default.iprof</em> file, if nothing else is specified. Then you run an
-example program, saving the result in <em>default.iprof</em>. Finally, you create a
-second native image with <code>--pgo profile.iprof</code> flag that should be significantly
-faster.</p>
-
-<p>Starting from 19.2.0, you can collect profiles while running your
-application in JIT mode and then use this information to generate
-a highly-optimized native binary. This maximizes the performance even more.</p>
-
-<ol>
-  <li>Run a java program in JIT mode with a <code>-Dgraal.PGOInstrument</code> flag to gather the profiling information:
-    <pre><code>$ java -Dgraal.PGOInstrument=myclass.iprof MyClass
-</code></pre>
-  </li>
-  <li>Use the collected data to generate a native image:
-    <pre><code>$ native-image --pgo=myclass.iprof MyClass
-</code></pre>
-  </li>
-  <li>Run the resulting binary:
-    <pre><code>$ ./myclass
-</code></pre>
-  </li>
-</ol>
-
 <h2 id="generating-heap-dumps">Generating Heap Dumps</h2>
 
-<p>GraalVM also supports monitoring and generating heap dumps of the Native Image processes.</p>
-
-<p><strong>Warning:</strong> This functionality is available in the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Enterprise Edition of GraalVM</a>.</p>
+<p>GraalVM also supports monitoring and generating heap dumps of the Native Image processes. This functionality is available in the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Enterprise Edition of GraalVM</a>.
+It is <strong>not</strong> available in the Community Edition of GraalVM.</p>
 
 <p>To find out more about generating heap dumps of the native image processes,
 refer to the <a href="/docs/reference-manual/native_heapdump/">step-by-step documentation</a>.</p>

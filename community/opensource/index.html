@@ -9,7 +9,7 @@
 
   <title>
     
-      GraalVM Contributors
+      GraalVM Open Source
     
   </title>
   <meta
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
 
-  <link rel="canonical" href="https://www.graalvm.org/community/contributors/">
+  <link rel="canonical" href="https://www.graalvm.org/community/opensource/">
   <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
@@ -335,7 +335,7 @@
                     </li>
                     
                     
-                    <li>
+                    <li class="toc-bullets-highlight">
                       
 
                       
@@ -375,7 +375,7 @@
                     </li>
                     
                     
-                    <li class="toc-bullets-highlight">
+                    <li>
                       
 
                       
@@ -409,21 +409,57 @@
 
           <div class="col-sm-9">
             <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-              <h1 id="graalvm-contributors">GraalVM Contributors</h1>
+              <h3 id="graalvm-open-source">GraalVM Open Source</h3>
 
-<p>We welcome contributions to the GraalVM project from the community and are thankful for past contributions both big and small. There have already been significant contributions to the GraalVM project from both industry and academia. Among the key academic collaborators are Johannes Kepler University Linz, TU Berlin, University of Edinburgh, LaBRI, University of California (Irvine), Purdue University, TU Dortmund, University of California (Davis), and the University of Lugano. Notable industrial contributors have been Intel, AMD, and RedHat.</p>
+<p>GraalVM Community Edition is built from the sources of  3.6 million lines of
+code originated by the GraalVM team and collaborators.</p>
 
-<p>We want to grow the GraalVM community both in terms of language-agnostic tooling as well as new supported languages. Only a large community can make this project into a strong language virtualization technology.</p>
+<p>We invite you to explore the current state of the project, contribute, or get in
+touch in case you have questions or suggestions.</p>
 
-<p>We offer summer internships for master or PhD students who want to join us in the mission to build a universal polyglot virtual machine. Please send your CV and preferred location (Zurich, Linz, Prague, or California) to
-<a href="mailto:graalvm-internships_ww_grp@oracle.com">graalvm-internships_ww_grp@oracle.com</a> if you are interested in such an opportunity.</p>
+<h3 id="contributors">Contributors</h3>
 
-<h1 id="want-to-become-a-graalvm-contributor">Want to Become a GraalVM Contributor?</h1>
-<p>GraalVM is an open source Oracle project community where people from all over the world contribute their work, help each other, and make GraalVM innovative. We welcome you and look forward to your contributions!</p>
+<p>We are grateful for contributions to the project, coming from our academic, industrial and individual collaborators.</p>
 
-<p>Open issues or contribute your code on <a href="https://github.com/oracle/graal" target="_blank">GitHub</a>. Note that to submit pull requests to the GraalVM, you need to sign the <a href="https://www.oracle.com/technetwork/community/oca-486395.html" target="_blank">Oracle Contributor Agreement</a>.</p>
+<p>You can contribute to further project development by <a href="https://github.com/oracle/graal/pulls">submitting a PR</a>, <a href="https://github.com/oracle/graal/issues">reporting an issue</a>, or <a href="https://www.graalvm.org/community/">providing feedback</a> for using GraalVM in your deployment.</p>
 
-<p>Abide by our <a href="/community/conduct" target="_blank">Contributor Covenant Code of Conduct</a>.</p>
+<h3 id="graalvm-open-source-repositories">GraalVM Open Source Repositories</h3>
+
+<p><img src="/docs/img/GraalVM-open-source.png" alt="" /></p>
+
+<p>GraalVM Core Repository includes:</p>
+<ul>
+  <li><a href="https://github.com/oracle/graal/tree/master/compiler">GraalVM compiler</a> is written in Java and supports both dynamic and static compilation;</li>
+  <li><a href="https://github.com/oracle/graal/tree/master/truffle">Truffle</a> is a language implementation framework for creating languages and instrumentations for GraalVM;</li>
+  <li><a href="https://github.com/oracle/graal/tree/master/substratevm">Substrate VM</a> is a framework that allows ahead-of-time (AOT) compilation of Java applications under closed-world assumption into executable images or shared objects;</li>
+  <li><a href="https://github.com/oracle/graal/tree/master/sulong">Sulong</a> is an engine for running LLVM bitcode on GraalVM;</li>
+  <li>other.</li>
+</ul>
+
+<p>Related repositories are:</p>
+<ul>
+  <li><a href="https://github.com/graalvm/graaljs">GraalJS</a> — GraalVM implementation of JavaScript (ECMAScript 2019 compatible) and Node.js 10.15.2;</li>
+  <li><a href="https://github.com/oracle/fastr">FastR</a> — GraalVM implementation of the 3.5.1 programming language;</li>
+  <li><a href="https://github.com/graalvm/graalpython">GraalPython</a> — GraalVM implementation of the Python 3.7 programming language;</li>
+  <li><a href="https://github.com/oracle/truffleruby/">TruffleRuby</a> — GraalVM implementation of the Ruby 2.6.2 programming language;</li>
+  <li><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a> — A simple demonstration language for the GraalVM;</li>
+  <li><a href="https://github.com/oracle/visualvm">VisualVM</a> — a visual tool integrating command line JDK tools and lightweight profiling capabilities.</li>
+</ul>
+
+<h3 id="ecosystem-contribution">Ecosystem Contribution</h3>
+
+<p>We also contribute to the ecosystem by joining efforts with other open-source projects. If you see how your project can benefit from using GraalVM, feel free to reach us.</p>
+
+<ul>
+  <li><strong>Quarkus</strong> is a Cloud Native, (Linux) Container First framework for writing Java applications. Quarkus tailors your application for GraalVM to offer instant startup and reduce memory consumption. Get started: <a href="https://quarkus.io/get-started/">quarkus.io/get-started/</a>.</li>
+  <li><strong>Helidon</strong> is a collection of Java libraries for writing microservices that run on a fast web core powered by Netty. It supports MicroProfile and provides familiar APIs like JAX-RS, CDI and JSON-P/B.  Starting with version 1.0.3, Helidon supports the GraalVM native-image capability. now you can easily compile your Helidon application into a native executable. Learn more about GraalVM support in Helidon: <a href="https://medium.com/oracledevs/helidon-flies-faster-with-graalvm-eea85287d2dc">medium.com/oracledevs/helidon-flies-faster-with-graalvm-eea85287d2dc</a>.</li>
+  <li><strong>Micronaut</strong> is a modern, JVM-based, full-stack framework for building modular, easily testable microservice and serverless applications. It offers extensive GraalVM support out of the box. Create your first Micronaut application: <a href="https://guides.micronaut.io/micronaut-creating-first-graal-app/guide/index.html">guides.micronaut.io/micronaut-creating-first-graal-app/guide/index.html</a>.</li>
+  <li><strong>Fn Project</strong> is an open-source, container-native, polyglot FaaS (Function as a Service) platform. Fn users can employ GraalVM AOT compilation capabilities for serverless Java functions. Learn more: <a href="https://medium.com/fnproject/serverless-functions-some-like-it-aot-ea8b46951335">medium.com/fnproject/serverless-functions-some-like-it-aot-ea8b46951335</a>.</li>
+  <li><strong>Eclipse Vert.x</strong> is a tool-kit for building reactive applications on the JVM. It’s even-driven, non-blocking, and supports languages like Java, JavaScript, Groovy, Ruby, Ceylon, Scala and Kotlin. Use this guide for building a Vert.x native image with GraalVM: <a href="http://how-to.vertx.io/graal-native-image-howto/">how-to.vertx.io/graal-native-image-howto</a></li>
+  <li><strong>Gluon Client Plugin</strong> leverages GraalVM, OpenJDK and JavaFX 11+, by compiling into native code the Java Client application and all its required dependencies, so it can directly be executed as a native application on the target platform. Learn more: <a href="https://docs.gluonhq.com/client/">docs.gluonhq.com/client/</a>.</li>
+  <li><strong>Picocli</strong> is a Java command line parser with both an annotations API and a programmatic API, featuring usage help with ANSI colors, autocomplete and nested subcommands. Picocli-based applications can be ahead-of-time compiled to GraalVM native images. Learn more: <a href="https://picocli.info/picocli-on-graalvm.html">https://picocli.info/picocli-on-graalvm.html</a>.</li>
+</ul>
+
 
             </div>
 

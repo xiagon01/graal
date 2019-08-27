@@ -515,58 +515,160 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="can-i-run-my-existing-application-with-graalvm">Can I run my existing application with GraalVM?</h3>
-<p>We aim for compatibility with existing language implementations. Java and JavaScript programs are expected to run fully compatible out-of-the-box. This includes code written in other JVM languages, such as Scala, Clojure or Kotlin, and node.js applications. For Ruby and R, we are still working on improved completeness, but specific applications may run. We do support LLVM-based languages via an LLVM bitcode execution environment. Python support is currently just beginning. Several third parties started their own development of GraalVM-based language implementations. We aim to grow the ecosystem of GraalVM languages such that GraalVM can truly run ‘any language’.</p>
+                <h3 id="how-is-graalvm-licensed">How is GraalVM licensed?</h3>
+<p>GraalVM is distributed as Community and Enterprise editions.</p>
 
-<h3 id="what-makes-graalvm-a-true-polyglot-vm">What makes GraalVM a true ‘polyglot’ VM?</h3>
-<p>GraalVM can not only run each of those individual languages with competitive performance, it also enables high-performance language interoperability. Languages can access each other’s data structures and call each other’s methods. We avoid costly conversions of data structures and instead allow data structures to be shared between languages. Our tooling is built in language-agnostic ways to unify tasks like debugging or profiling. Also, this simplifies deployment and configuration of the runtime environment. Important VM components like the just-in-time-compiler and the garbage collector are all fully shared across all languages and all embeddings of GraalVM.</p>
+<p>GraalVM Community Edition is open source software built from the sources
+available on <a href="https://github.com/oracle/graal">GitHub</a> and distributed under
+<a href="https://github.com/oracle/graal/blob/master/LICENSE">version 2 of the GNU General Public  License with the “Classpath” Exception</a>, which are the same terms as for Java. We also
+recommend checking the <a href="https://github.com/oracle/graal#license">licenses</a> of
+the individual GraalVM components (which are generally derivative of the license of a particular language). GraalVM Community is free to use for any purpose and comes with no strings attached, but also no guarantees or
+support.</p>
 
-<!--
-### How do you deploy the source code of dynamic languages in such multilingual environment? Can you deploy some precompiled bitcode?
-For Java or similar JVM-based languages we support running the bytecode. The dynamic languages GraalVM is currently supporting are JavaScript, Ruby, and R. These language runtimes interpret source code at runtime and utimately translate it to machine code. For static languages, like C or C++, the platform-independent LLVM bitcode can be executed by GraalVM's LLVM interpreter.
--->
+<p>Oracle GraalVM Enterprise Edition is licensed under either the <a href="https://www.oracle.com/technetwork/licenses/graalvm-otn-license-5486575.html">GraalVM OTN License Agreement</a>, 
+which is free for testing, evaluation, or for developing non-production applications, or under the terms of the Oracle Master License Agreement for customers.</p>
 
-<h3 id="what-does-it-mean-to-run-any-language-anywhere">What does it mean to run any language ‘anywhere’?</h3>
-<p>GraalVM can run embedded in a Java VM, stand-alone, or embedded in data stores like the Oracle RDBMS and MySQL. In all scenarios, the same underlying compilation and language execution technology runs in-process and with direct access to the data structure of the surrounding system. Separation of logical and physical data layout is a first class principle for GraalVM and enables flexible use of data structures without marshalling costs. We encourage embeddings of GraalVM in other projects and publish APIs for that purpose. The embeddings can work both in a managed JVM-based environment or a native environment. We envision a future where high-performance and standardized language execution technology is available without the need for provisioning separate VM deployments.</p>
+<p>The Native Image plugin is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>. 
+It can be used in production and is supported by Oracle as part of your GraalVM Enterprise subscription. However, it is not covered by Oracle’s standard warranty as Oracle
+reserves the right to force you to migrate to newer versions in order to get support.</p>
 
-<!--
-### What is the status of polyglot IDEs integration?
-We do support major IDEs, as well as major debugging protocols.  Eclipse, NetBeans, IntelliJ IDEA, Visual Studio Code are possible IDEs since they support all languages within one environment. IntelliJ Enterprise edition has a strong support for all languages even within one file. GraalVM provides a built-in implementation of Chrome DevTools Protocol that, in addition to debugging JavaScript, even enables debugging of R and Ruby applications, separately or across languages. You can even get a multilingual stacktrace that way.
--->
-<!--
-### What is Graal’s ‘native mode’?
-GraalVM provides the capability to fully compile JVM-based applications to native code ahead of time. The resulting binary can run stand-alone or can be linked with other native applications. It has order of magnitude better startup and significant footprint advantages compared to running the application in managed mode on a JVM. In order for the application to be eligible for this ‘native mode’, all executed code of the application needs to be available at native image generation time. Also, complex uses of reflection can prohibit this functionality.
--->
+<p>If you have a question about your license rights and obligations, please consult the <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Licensing Information User Manual</a>, contact your sales representative or send an email to <a href="mailto:graalvm-enterprise_ww_grp@oracle.com">graalvm_enterprise_ww_grp@oracle.com</a>.</p>
 
-<h3 id="what-are-existing-real-world-production-deployments-of-graal">What are existing real-world production deployments of Graal?</h3>
-<p>GraalVM is a project with new innovative technology in its early stages. Nevertheless, there already exist production deployments of GraalVM today. For example, Christian Thalinger from Twitter describes the production deployment of GraalVM at Twitter and how it can help save money via improved performance in his talk <a href="https://www.youtube.com/watch?v=pR5NDkIZBOA">Twitter’s Quest for a Wholly Graal Runtime</a> and how they save money using GraalVM. We thank early adopters of our technology who give us feedback on the project and help us develop new features.</p>
+<h3 id="how-much-does-a-graalvm-enterprise-subscription-cost">How much does a GraalVM Enterprise subscription cost?</h3>
+<p>Please consult the <a href="https://www.oracle.com/uk/corporate/pricing/#graalvm">Oracle global price list</a> for more information on GraalVM Enterprise offerings and pricing. Alternatively, contact your sales
+representative to discuss subscription licensing and support terms.</p>
 
-<h3 id="what-is-the-license-of-graalvm">What is the license of GraalVM?</h3>
-<p>There is a community edition (CE) and an enterprise edition (EE) of GraalVM. The community edition is distributed under an open source license. It is free to use in production and comes with no strings attached, but also no guarantees or support. The enterprise edition is available from the Oracle Technology Network under an evaluation license. It provides improved performance and security for production deployments. If you are interested in using the enterprise edition in production, please contact <a href="mailto:graalvm-enterprise_ww_grp@oracle.com">graalvm-enterprise_ww_grp@oracle.com</a>.</p>
+<h3 id="what-does-graalvm-enterprise-subscription-include">What does GraalVM Enterprise subscription include?</h3>
+<p>GraalVM Enterprise subscription provides licensing and support for on-premises environments and includes:</p>
 
-<!--
-### How can I receive updates or ask questions about GraalVM?
-We maintain three mailing lists:
+<ul>
+  <li><a href="https://www.oracle.com/support/premier/">Oracle premier support</a> (24x7x365) by the Oracle GraalVM team</li>
+  <li>Access to <a href="https://www.oracle.com/support/">My Oracle Support (MOS)</a></li>
+  <li>Improved performance and security over GraalVM Community (see <a href="https://blogs.oracle.com/graalvm/announcement">GraalVM Enterprise Announcement</a>)</li>
+</ul>
 
-    graalvm-announce@oss.oracle.com - low traffic announcement list used by the project maintainers
-    graalvm-users@oss.oracle.com - open source user mailing list for general questions and discussions
-    graalvm-dev@oss.oracle.com - list for contributors and language implementors
+<p>For <a href="https://cloud.oracle.com/home">Oracle Cloud</a> customers, GraalVM Enterprise
+support is included in the Oracle Cloud subscription.</p>
 
-Additional ways to stay up-to-date with GraalVM developments is to follow the @graalvm Twitter handle or watch the [github.com/oracle/graal](https://github.com/oracle/graal) repository.
--->
+<h3 id="where-should-bugs-security-issues-or-enhancement-requests-be-reported">Where should bugs, security issues, or enhancement requests be reported?</h3>
+<p>Any security vulnerabilities in either GraalVM Community or GraalVM Enterprise
+should <em>only</em> be reported via email to
+<a href="mailto:secalert_us@oracle.com">secalert_us@oracle.com</a>. Please consult our
+<a href="https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html">Reporting Vulnerabilities guide</a>
+for more information on reporting security vulnerabilities. Do <strong>not</strong> report
+security issues on GitHub Issues.</p>
 
-<h3 id="where-should-bugs-or-enhancement-requests-be-reported">Where should bugs or enhancement requests be reported?</h3>
-<p>Please report bugs or enhancement requests at <a href="https://github.com/oracle/graal/issues">GitHub Issues</a>. We listen to input and feedback from the community. We cannot give guarantees for issues to be addressed and will make decisions whether to address an issue based on the overall project priorities and direction.</p>
+<p>Please report any bugs or enhancement requests for GraalVM Community using
+<a href="https://github.com/oracle/graal/issues">GitHub Issues</a>. GraalVM Enterprise bugs
+or enhancement requests should be reported using <a href="https://support.oracle.com">My Oracle Support</a>.</p>
 
-<h3 id="how-should-a-security-vulnerability-be-reported">How should a security vulnerability be reported?</h3>
-<p>Please report security vulnerabilities not via GitHub issues or the public mailing lists, but via the process outlined
-at <a href="https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html">Reporting Vulnerabilities guide</a>.</p>
-
-<h3 id="what-license-can-my-graalvm-based-tools-have">What license can my GraalVM-based tools have?</h3>
-<p>The API for implementing languages or instrumentations that can run in GraalVM is licensed as GPLv2 with a classpath exception. Languages using this API are therefore not restricted to a specific open source license and can also use proprietary licenses.</p>
+<p>We always listen to input and feedback from the community and will address issues there time permitting.</p>
 
 <h3 id="how-do-i-contribute-to-graalvm">How do I contribute to GraalVM?</h3>
-<p>We welcome contributions to the GraalVM project from the community and are thankful for past contributions both big and small. We are happy to accept pull requests at <a href="https://github.com/oracle/graal/pulls">GitHub Pulls</a>. We require contributors to sign the <a href="http://www.oracle.com/technetwork/community/oca-486395.html" target="_blank">Oracle Contributor Agreement</a>.</p>
+<p>We welcome contributions to GraalVM from the community and are thankful for past contributions both big and small. We are happy to accept pull requests at <a href="https://github.com/oracle/graal/pulls">GitHub Pulls</a>. 
+We require contributors to sign the <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Oracle Contributor Agreement</a>.</p>
+
+<h3 id="how-can-i-receive-updates-about-graalvm">How can I receive updates about GraalVM?</h3>
+<p>We maintain three mailing lists:</p>
+
+<ul>
+  <li><em>graalvm-announce@oss.oracle.com</em> – a low traffic announcement list used by the project maintainers;</li>
+  <li><em>graalvm-users@oss.oracle.com</em> – an open source user mailing list for general questions and discussions;</li>
+  <li><em>graalvm-dev@oss.oracle.com</em> – a list for contributors and language implementors.</li>
+</ul>
+
+<p>Additional ways to stay up-to-date with GraalVM development is to track GraalVM
+at <a href="https://medium.com/graalvm">Medium blogging platform</a>, follow the <em>@graalvm</em>
+Twitter handle, watch the
+<a href="https://github.com/oracle/graal">github.com/oracle/graal</a> repository, or see posts on GraalVM at <a href="https://developer.oracle.com/">Oracle Developers Blog</a> and at the <a href="https://blogs.oracle.com/graalvm">Oracle GraalVM Enterprise Edition Blog</a>.</p>
+
+<h3 id="how-do-i-get-support-updates">How do I get support updates?</h3>
+<p>Comprehensive GraalVM Enterprise support is provided by the Oracle GraalVM team via <a href="https://www.oracle.com/support/">My Oracle Support</a>.
+Please verify if <a href="https://shop.oracle.com/apex/f?p=dstore:1002:0::::P1002_HELP_TOPIC_ID:114206114249751725703093">support services</a> are activated with your account.</p>
+
+<h3 id="what-is-the-readiness-level-of-graalvm-windows-support">What is the “readiness” level of GraalVM Windows support?</h3>
+<p>GraalVM Windows support is currently under development and released as
+“experimental” in GraalVM 19.x. The Windows preview package includes the JDK
+with the GraalVM compiler enabled, Native Image capabilities, GraalVM’s
+JavaScript engine and the developer tools (e.g. Chrome inspector based debugger,
+Profiler, etc.). Currently, there is no <a href="https://www.graalvm.org/docs/reference-manual/graal-updater/">GraalVM Updater</a> utility
+nor the ability to add support for other GraalVM languages. The GraalVM team is
+actively working on it, and you can follow our progress on
+<a href="https://github.com/oracle/graal">GitHub</a>.</p>
+
+<h3 id="can-i-run-my-existing-application-with-graalvm">Can I run my existing application with GraalVM?</h3>
+<p>The team behind GraalVM aims for compatibility with existing language
+implementations. Java and JavaScript programs are expected to run fully
+compatible out-of-the-box. This includes the code written in other JVM
+languages, such as Scala or Kotlin, and GraalVM treats Node.js as if it is a JVM
+language. LLVM-based languages are fully supported via the LLVM bitcode
+execution environment. For Ruby, R, and Python we are working on improved
+compatibility. Specific applications may run. Several third parties have started
+their own development of GraalVM-based language implementations. We continue to
+grow the ecosystem of GraalVM languages such that GraalVM can truly run ‘any
+language’.</p>
+
+<h3 id="what-makes-graalvm-a-true-polyglot-vm">What makes GraalVM a true ‘polyglot’ VM?</h3>
+<p>GraalVM can not only run individual languages with competitive performance, it
+also enables high-performance language interoperability. Languages can access
+each other’s data structures and call each other’s methods. We avoid costly
+conversions of data structures and instead allow data structures to be shared
+between languages. Our tooling is built in language-agnostic ways to unify tasks
+like debugging or profiling. This simplifies deployment and configuration
+of the runtime environment. Important VM components like the
+just-in-time-compiler and garbage collector are all fully shared across all
+languages.</p>
+
+<h3 id="what-does-it-mean-to-run-any-language-anywhere">What does it mean to run any language ‘anywhere’?</h3>
+<p>GraalVM can run embedded in OpenJDK, Oracle Java or Node.js platforms,
+standalone, or embedded in data stores like the <a href="https://oracle.github.io/oracle-db-mle/">Oracle Database</a>. In all scenarios, the same
+underlying compilation and language execution technology runs in-process and
+with direct access to data structures of the surrounding system. Separation of
+logical and physical data layout is a first class principle for GraalVM and
+enables flexible use of data structures without marshalling costs. We encourage
+the embedding of GraalVM in other projects and publish APIs for that purpose. We
+envision a future where high-performance and standardized language execution
+technology is available without the need for provisioning separate VM
+deployments.</p>
+
+<h3 id="can-i-use-graalvm-with-a-microservices-framework">Can I use GraalVM with a microservices framework?</h3>
+<p>Several Java microservices frameworks have already accepted the <a href="https://www.graalvm.org/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> technology as a platform. Examples include: <a href="https://helidon.io/">Helidon</a>, <a href="https://quarkus.io">Quarkus</a>, <a href="https://micronaut.io">Micronaut</a>.
+For these frameworks GraalVM Native Image significantly reduces the startup time
+and runtime memory requirements.</p>
+
+<h3 id="can-graalvm-run-spring-applications">Can GraalVM run Spring applications?</h3>
+<p>GraalVM can run Spring applications, compiled with OpenJDK, OracleJDK or other JVMs.
+Here is a <a href="https://github.com/graalvm/graalvm-demos/tree/master/spring-r">Spring application example</a> that
+not only runs on GraalVM, but also applies the R language to visualize a plot of the data, using
+GraalVM polyglot capabilities.</p>
+
+<p>Spring Framework support of <a href="https://www.graalvm.org/docs/reference-manual/aot-compilation/">GraalVM Native Image</a>
+technology is in its <a href="https://github.com/spring-projects/spring-framework/wiki/GraalVM-native-image-support">initial stages</a>. 
+The ability of GraalVM to create executable native images of Spring applications is not currently supported. 
+GraalVM Native Image has <a href="https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md">limitations</a> on what Java functionality it can compile ahead-of-time. 
+The GraalVM team is investigating what can be done to fully support compiling Spring applications to native images.</p>
+
+<h3 id="what-is-the-status-of-ide-integration">What is the status of IDE integration?</h3>
+<p>GraalVM supports major IDEs, as well as major debugging protocols. Eclipse,
+NetBeans, IntelliJ IDEA, Visual Studio Code are possible IDEs since they support
+all languages within one environment. IntelliJ Enterprise edition has strong
+support for all languages even within one file. GraalVM provides a built-in
+implementation of Chrome DevTools Protocol that, in addition to debugging
+JavaScript, even enables debugging of R and Ruby applications, separately or
+across languages. You can get a multilingual stacktrace that way.</p>
+
+<h3 id="what-are-existing-real-world-production-deployments-of-graalvm">What are existing real-world production deployments of GraalVM?</h3>
+<p>Several production deployments of GraalVM exist today. For example, Christian Thalinger from Twitter describes the production deployment of
+GraalVM at Twitter and how it can help save money via improved performance in
+his interview <a href="https://www.oracle.com/tools/graalvm-enterprise-edition.html?bcid=5772128098001">Accelerating Processing at Twitter </a> and how they save money using GraalVM. 
+We thank early adopters of our technology who give us feedback on the project and help us develop new features.</p>
+
+<h3 id="does-graalvm-support-java-11">Does GraalVM support Java 11?</h3>
+<p>Currently, GraalVM does not support Java 11. We are actively working on getting
+Java 11 support completed. This is being performed in parallel with continued
+development on Java 8. Here is a sample Maven project that shows how to run the
+<a href="https://github.com/graalvm/graal-js-jdk11-maven-demo">GraalVM JavaScript engine</a> on JDK11 both
+through the scripting API and the polyglot API.</p>
 
               </div>
 
@@ -609,10 +711,10 @@ at <a href="https://www.oracle.com/corporate/security-practices/assurance/vulner
           <div class="col-md-2 col-sm-6 col-6">
             <h6 class="title-footer">Community</h6>
             <ul class="footer-list">
-              <li class="footer-list__item"><a href="/community">Get support</a></li>
-              <li class="footer-list__item"><a href="https://github.com/oracle/graal/issues">Report a Bug</a></li>
               <li class="footer-list__item"><a href="/blog/">Team Blog</a></li>
               <li class="footer-list__item"><a href="/community/press/">In the Press</a></li>
+              <li class="footer-list__item"><a href="/community/">Get Support</a></li>
+              <li class="footer-list__item"><a href="/docs/faq/">FAQ</a></li>
             </ul>
           </div>
 

@@ -498,7 +498,27 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="native-image-of-scala-compiler">Native Image of Scala Compiler</h3>
+                <h3 id="running-scala-on-graalvm">Running Scala on GraalVM</h3>
+
+<p>GraalVM is a JVM, so you can run Java and Scala programs normally using the <code>java</code> command:</p>
+
+<pre><code>export GRAALVM_HOME=&lt;path to GraalVM&gt;/Content/Home
+export PATH=$GRAALVM_HOME/bin:$PATH
+
+$GRAALVM_HOME/bin/java -version
+java version "1.8.0_221"
+Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
+Java HotSpot(TM) 64-Bit GraalVM EE 19.2.0 (build 25.221-b11-jvmci-19.2-b02, mixed mode)
+</code></pre>
+
+<p>If you’re using sbt as the build tool, you can specify <code>JAVA_HOME</code> it will use from the command line:</p>
+
+<pre><code>sbt -java-home $GRAALVM_HOME
+</code></pre>
+
+<p>GraalVM performs really well on the Scala benchmarks, for example you can look at <a href="https://renaissance.dev/">Renaissance benchmarks suite</a>. Note that Scala compiler is a Scala application as well, and it benefits from GraalVM runtime and runs faster too.</p>
+
+<h3 id="native-image-of-scala-compiler">Native Image of Scala Compiler</h3>
 
 <p>In this guide, you will learn how to get started with running Scala programs on
 top of GraalVM and build a native image of <code>scalac</code> – the Scala compiler.</p>

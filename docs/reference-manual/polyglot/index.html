@@ -3048,6 +3048,24 @@ significantly before being considered production-ready.</p>
 
 <h2 id="polyglot-options">Polyglot Options</h2>
 
+<p>You can configure language engine for better throughput or startup.</p>
+
+<ul>
+  <li><code>--engine.Mode=default</code>: Configures the execution mode of the engine. The execution mode automatically tunes the polyglot engine towards latency or throughput.
+    <ul>
+      <li><code>throughput</code>: To collect the maximum amount of profiling information and compile using the
+  maximum number of optimizations. This mode results in slower application startup
+  but better throughput. This mode uses the compiler configuration <code>community</code> or 
+  <code>enterprise</code> if not specified otherwise.</li>
+      <li><code>default</code>: To use a balanced engine configuration. This mode uses the compiler configuration <code>community</code> or <code>enterprise</code> if not specified otherwise.</li>
+      <li><code>latency</code>: To collect only minimal profiling information and compile as fast as possible
+  with less optimal generated code. This mode results in faster application
+  startup but less optimal throughput. This mode uses the compiler configuration
+  <code>economy</code> if not specified otherwise.</li>
+    </ul>
+  </li>
+</ul>
+
 <h4 id="polyglot-options-for-language-launchers">Polyglot Options for Language Launchers</h4>
 
 <p>We have extended every language launcher with a set of so called <em>polyglot

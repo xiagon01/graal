@@ -41,19 +41,6 @@ of available configurations, supply the value help to this option.
     * `NonDeoptGuardTargets`: Same as GuardTargets except that branches which deoptimize are
       not protected since they can not be executed repeatedly.
 
-* `--engine.Mode=default`: Configures the execution mode of the engine. The execution mode automatically
-tunes the polyglot engine towards latency or throughput.
-    * `throughput`: To collect the maximum amount of profiling information and compile using the
-    maximum number of optimizations. This mode results in slower application startup
-    but better throughput. This mode uses the compiler configuration `community` or
-    `enterprise` if not specified otherwise.
-    * `default`: To use a balanced engine configuration. This mode uses the compiler configuration `community` or
-    `enterprise` if not specified otherwise.
-    * `latency`: To collect only minimal profiling information and compile as fast as possible
-    with less optimal generated code. This mode results in faster application
-    startup but less optimal throughput. This mode uses the compiler configuration
-    `economy` if not specified otherwise.
-
 ### Performance tuning options
 
 * `-Dgraal.UsePriorityInlining=true`: This can be used to disable use of the advanced inlining

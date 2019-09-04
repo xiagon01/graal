@@ -25,14 +25,16 @@
 
   <link rel="stylesheet" href="/assets/main.css">
   <link rel="stylesheet" href="/resources/styles/extra.css">
+  <link rel="stylesheet" href="http://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css>
 
   <link rel="canonical" href="https://www.graalvm.org/community/events/">
-  <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script>
+  <!-- <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script> -->
+  <script src="http://maps.oracle.com/mapviewer/jslib/v2.3/oraclemapsv2.js"></script>
+  <link rel="stylesheet" href="http://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css">
   <script src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="/resources/lib/sticky-sidebar/resizeSensor.js"></script>
   <script src="/resources/lib/sticky-sidebar/sticky-sidebar.min.js"></script>
   <script src="/resources/lib/highlight/highlight.pack.js"></script>
-  <script src="/resources/lib/jquery-terminal/jquery.terminal.min.js"></script>
   <script src="/resources/lib/purl/purl.js"></script>
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
@@ -259,44 +261,217 @@
       <a href="/community" class="link-back"><i>←</i>Back</a>
     </div>
   </div>
-<!--
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-      <h1 class="mt-2">Events map</h1>
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+        <h1 class="mt-2">Events map</h1>
+      </div>
     </div>
-  </div>
+  <div id="events-map" style="width: 920px; height: 400px"></div>
+  <script>
+(function () {
 
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-      <div id="map" class="events-map"></div>
+    var mapCenterLat = 49.832327;
+    var mapCenterLon = 23.996371;
+    var zoomLevel = 1;
+
+    var markers = [
+        {
+            id: 'event-one',
+            lat: 37.784400,
+            lon: -122.400400,
+            label: 'Oracle Code One'
+        },
+        {
+            id: 'event-two',
+            lat: 58.971459,
+            lon: 5.731973,
+            label: 'javaBin meetup'
+        },
+        {
+            id: 'event-three',
+            lat: 25.040949,
+            lon: 121.520856,
+            label: 'JCConf'
+        },
+        {
+            id: 'event-four',
+            lat: 51.535721,
+            lon: -0.104792,
+            label: 'JAX London'
+        },
+        {
+            id: 'event-five',
+            lat: 50.477010,
+            lon: 30.500544,
+            label: 'Devoxx Ukraine'
+        },
+        {
+            id: 'event-six',
+            lat: 51.245955,
+            lon: 4.416209,
+            label: 'Devoxx Belgium'
+        },
+        {
+            id: 'event-seven',
+            lat: 55.567072,
+            lon: 12.977411,
+            label: 'Oredev'
+        },
+        {
+            id: 'event-eight',
+            lat: 30.416528,
+            lon: -9.586806,
+            label: 'Devoxx Morocco'
+        },
+        {
+            id: 'event-nine',
+            lat: 55.637559,
+            lon: 12.578604,
+            label: 'KotlinConf'
+        },
+    ];
+    var baseURL = "https://elocation.oracle.com/mapviewer";
+    var mapview = new OM.Map(document.getElementById("events-map"), {mapviewerURL: baseURL});
+    var vectorlayer = new OM.layer.VectorLayer("vectorlayer", {def: {type: OM.layer.VectorLayer.TYPE_LOCAL}});
+
+    mapview.addLayer(vectorlayer);
+
+    OM.gv.setResourcePath("https://elocation.oracle.com/mapviewer/jslib/v2.3/");
+
+    var mpointCenter = new OM.geometry.Point(mapCenterLon, mapCenterLat, 8307);
+    mapview.setMapCenter(mpointCenter);
+    mapview.setMapZoomLevel(zoomLevel);
+
+    var tileLayer = new OM.layer.TileLayer("baseMap", {
+        dataSource: 'elocation_mercator',
+        tileLayer: 'BI_WORLD_MAP_LIGHT',
+        tileServerURL: baseURL + "/mcserver"
+    });
+    mapview.addLayer(tileLayer);
+
+    var layerOptions = {def: {type: OM.layer.VectorLayer.TYPE_LOCAL}};
+    var layer = new OM.layer.VectorLayer('Layer 1', layerOptions);
+
+    markers.forEach(function (marker) {
+        var mpoint = new OM.geometry.Point(marker.lon, marker.lat, 8307);
+        var feature = new OM.Feature(marker.id, mpoint, {
+          label: marker.label
+        });
+        layer.addFeature(feature);
+    });
+
+    layer.setLabelsVisible(false);
+    mapview.addLayer(layer);
+
+    var navPanel = new OM.control.NavigationPanelBar({
+        style: OM.control.NavigationPanelBar.STYLE_ZOOM_BUTTONS_ONLY,
+        anchorPosition: 3
+    });
+
+    mapview.addMapDecoration(navPanel);
+    mapview.init();
+})();
+  </script>
+
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+        <div class="events-table">
+
+      <div class="events-table__row" id="event-one">
+        <div class="events-table__count">
+        <span>
+          1
+        </span>
+        </div>
+        <ul class="events-table__details">
+          <li class="events-table__detail">
+            <h4 class="events-table__detail__title">Date</h4>
+            <p>September 16-19, 2019</p>
+          </li>
+
+          <li class="events-table__detail">
+            <h4 class="events-table__detail__title">Conference</h4>
+              <p>Oracle Code One</p>
+          </li>
+
+          <li class="events-table__detail">
+            <h4 class="events-table__detail__title">Location</h4>
+            <p>San Francisco, CA</p>
+          </li>
+
+          <li class="events-table__detail">
+            <h4 class="events-table__detail__title">Speakers</h4>
+              <p>Eric Sedlar</p>
+              <p>Christian Wimmer</p>
+              <p>Matthias Brantner</p>
+              <p>Harshad Kasture</p>
+          </li>
+
+          <li class="events-table__detail">
+            <h4 class="events-table__detail__title">Session Name</h4>
+            <p class=“session-name”>Save Money, Improve Reliability with Oracle GraalVM Enterprise Edition
+            <p>
+            <p class=“session-name”>JavaScript and Python Code in the Database with GraalVM and Multilingual Engine
+            <p>
+          </li>
+        </ul>
     </div>
-  </div> -->
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-      <div class="events-table">
-        
-    <div class="events-table__row" id="event-one">
+
+    <div class="events-table__row" id="event-two">
       <div class="events-table__count">
       <span>
-        1
+        2
       </span>
       </div>
       <ul class="events-table__details">
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Date</h4>
-          <p>July 11, 2019</p>
+          <p>October 2, 2019</p>
         </li>
 
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Meetup</h4>
-            <p>Oracle APAC User Group</p>
+            <p>JavaBin</p>
         </li>
 
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Location</h4>
-          <p>Singapore, Singapore</p>
+          <p>Oslo, Norway</p>
         </li>
 
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Alina Yurenko</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”>New Opportunities for Developers with GraalVM
+            <p>
+        </li>
+      </ul>
+    </div>
+    <div class="events-table__row" id="event-three">
+      <div class="events-table__count">
+      <span>
+        3
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>October 4, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>JCConf</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Taiwan, Republic of China</p>
+        </li>
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Speaker</h4>
             <p>Amitpal Singh</p>
@@ -304,132 +479,239 @@
 
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Session Name</h4>
-          <p class=“session-name”>
-            <a href="https://www.meetup.com/Oracle-User-APAC/events/262308728/" target="_blank" class=“session-name”>All About GraalVM! The Workshop Edition</a>
+          <p class=“session-name”>Run Programs Faster Everywhere Using GraalVM
           <p>
         </li>
       </ul>
-  </div>
-
-  <div class="events-table__row" id="event-two">
-    <div class="events-table__count">
-    <span>
-      2
-    </span>
     </div>
-    <ul class="events-table__details">
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Date</h4>
-        <p>July 17, 2019</p>
-      </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Meetup</h4>
-          <p> Silicon Valley Java User Group</p>
-      </li>
+    <div class="events-table__row" id="event-four">
+      <div class="events-table__count">
+      <span>
+        4
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>October 7-10, 2019</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Location</h4>
-        <p>Mountain View, CA</p>
-      </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>JAX London</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Speaker</h4>
-          <p>Eric Sedlar</p>
-      </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>London, UK</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Session Name</h4>
-        <p class=“session-name”>
-          <a href="https://www.meetup.com/sv-jug/events/262764927/" target="_blank" class=“session-name”>The GraalVM Universal Runtime</a>
-        <p>
-      </li>
-    </ul>
-  </div>
-  <div class="events-table__row" id="event-three">
-    <div class="events-table__count">
-    <span>
-      3
-    </span>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Alina Yurenko</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”><a href="https://jaxlondon.com/java-core-jvm-languages/new-opportunities-for-developers-with-graalvm/" target="_blank">New Opportunities for Developers with GraalVM</a>
+          </p>
+        </li>
+      </ul>
     </div>
-    <ul class="events-table__details">
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Date</h4>
-        <p> August 19, 2019</p>
-      </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Meetup</h4>
-          <p>The San Francisco Java User Group</p>
-      </li>
+    <div class="events-table__row" id="event-five">
+      <div class="events-table__count">
+      <span>
+        5
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>November 1-2, 2019</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Location</h4>
-        <p>San Francisco, CA</p>
-      </li>
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Speaker</h4>
-          <p>Eric Sedlar</p>
-      </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Devoxx Ukraine</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Session Name</h4>
-        <p class=“session-name”>
-          <a href="https://www.meetup.com/sfjava/events/262405317/" target="_blank" class=“event-name”>The GraalVM Universal Runtime</a>
-        <p>
-      </li>
-    </ul>
-  </div>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Kyiv, Ukraine</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Alina Yurenko</p>
+        </li>
 
-  <div class="events-table__row" id="event-four">
-    <div class="events-table__count">
-    <span>
-      4
-    </span>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”>Optimizing Performance of Java Applications with GraalVM
+          </p>
+          <p>
+        </li>
+      </ul>
     </div>
-    <ul class="events-table__details">
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Date</h4>
-        <p>September 16-19, 2019</p>
-      </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Conference</h4>
-          <p><a href="https://www.oracle.com/code-one/" target="_blank">Oracle Code One</a></p>
-      </li>
+    <div class="events-table__row" id="event-six">
+      <div class="events-table__count">
+      <span>
+        6
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>November 4-8, 2019</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Location</h4>
-        <p>San Francisco, USA</p>
-      </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Devoxx Belgium</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Speaker</h4>
-          <p>Oleg Šelajev</p>
-      </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Antwerp, Belgium</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speakers</h4>
+            <p>Vojin Jovanovic</p>
+            <p>Oleg Selajev</p>
+        </li>
 
-      <li class="events-table__detail">
-        <h4 class="events-table__detail__title">Session Name</h4>
-        <p class="“session-name”">GraalVM: Running Code Faster Anywhere, Two Years Later
-        </p><p>
-      </p></li>
-    </ul>
-  </div>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Sessions Name</h4>
+          <p class=“session-name”>Abstractions without Regret with GraalVM
+          <p>
+          <p class=“session-name”>GraalVM Native Images Explained
+          <p>
+          <p class=“session-name”>Deep Dive Intro to GraalVM
+          <p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="events-table__row" id="event-seven">
+      <div class="events-table__count">
+      <span>
+        7
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>November 6-8, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Oredev</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Malmö, Sweden</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Oleg Selajev</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”>Maximizing Performance with GraalVM
+          <p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="events-table__row" id="event-eight">
+      <div class="events-table__count">
+      <span>
+        8
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>November 12-14, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Devoxx Morocco</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Agadir, Morocco</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Mohamed Ez Zarghili</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”>Optimal Docker Containers with GraalVM
+          <p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="events-table__row" id="event-nine">
+      <div class="events-table__count">
+      <span>
+        9
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>December 4-6, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>KotlinConf</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Copenhagen, Denmark</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Oleg Selajev</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”>The best runtime for Kotlin is obviously GraalVM, isn't it?
+          <p>
+        </li>
+      </ul>
+    </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-<div class="container-fluid container-fluid--custom-sm">
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="docs-content">
-            <div class="row">
-              <div class="col-md-10">
-                
+  <div class="container-fluid container-fluid--custom-sm">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="docs-content">
+              <div class="row">
+                <div class="col-md-10">
+                  
 
 
+                </div>
               </div>
             </div>
           </div>
@@ -437,7 +719,6 @@
       </div>
     </div>
   </div>
-</div>
 
 </div>
 

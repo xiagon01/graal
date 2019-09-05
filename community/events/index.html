@@ -268,109 +268,111 @@
     </div>
   <div id="events-map" style="width: 920px; height: 400px"></div>
   <script>
-(function () {
+    window.addEventListener('load', function () {
+        var mapCenterLat = 49.832327;
+        var mapCenterLon = 23.996371;
+        var zoomLevel = 1;
+        var markers = [
+            {
+                id: 'event-one',
+                lat: 37.784400,
+                lon: -122.400400,
+                label: 'Oracle Code One'
+            },
+            {
+                id: 'event-two',
+                lat: 58.971459,
+                lon: 5.731973,
+                label: 'javaBin meetup'
+            },
+            {
+                id: 'event-three',
+                lat: 25.040949,
+                lon: 121.520856,
+                label: 'JCConf'
+            },
+            {
+                id: 'event-four',
+                lat: 51.535721,
+                lon: -0.104792,
+                label: 'JAX London'
+            },
+            {
+                id: 'event-five',
+                lat: 50.477010,
+                lon: 30.500544,
+                label: 'Devoxx Ukraine'
+            },
+            {
+                id: 'event-six',
+                lat: 51.245955,
+                lon: 4.416209,
+                label: 'Devoxx Belgium'
+            },
+            {
+                id: 'event-seven',
+                lat: 55.567072,
+                lon: 12.977411,
+                label: 'Oredev'
+            },
+            {
+                id: 'event-eight',
+                lat: 30.416528,
+                lon: -9.586806,
+                label: 'Devoxx Morocco'
+            },
+            {
+                id: 'event-nine',
+                lat: 55.637559,
+                lon: 12.578604,
+                label: 'KotlinConf'
+            },
+        ];
+        var baseURL = "https://elocation.oracle.com/mapviewer";
 
-    var mapCenterLat = 49.832327;
-    var mapCenterLon = 23.996371;
-    var zoomLevel = 1;
+        OM.gv.setResourcePath(baseURL + "/jslib/v2.3/");
 
-    var markers = [
-        {
-            id: 'event-one',
-            lat: 37.784400,
-            lon: -122.400400,
-            label: 'Oracle Code One'
-        },
-        {
-            id: 'event-two',
-            lat: 58.971459,
-            lon: 5.731973,
-            label: 'javaBin meetup'
-        },
-        {
-            id: 'event-three',
-            lat: 25.040949,
-            lon: 121.520856,
-            label: 'JCConf'
-        },
-        {
-            id: 'event-four',
-            lat: 51.535721,
-            lon: -0.104792,
-            label: 'JAX London'
-        },
-        {
-            id: 'event-five',
-            lat: 50.477010,
-            lon: 30.500544,
-            label: 'Devoxx Ukraine'
-        },
-        {
-            id: 'event-six',
-            lat: 51.245955,
-            lon: 4.416209,
-            label: 'Devoxx Belgium'
-        },
-        {
-            id: 'event-seven',
-            lat: 55.567072,
-            lon: 12.977411,
-            label: 'Oredev'
-        },
-        {
-            id: 'event-eight',
-            lat: 30.416528,
-            lon: -9.586806,
-            label: 'Devoxx Morocco'
-        },
-        {
-            id: 'event-nine',
-            lat: 55.637559,
-            lon: 12.578604,
-            label: 'KotlinConf'
-        },
-    ];
-    var baseURL = "https://elocation.oracle.com/mapviewer";
-    var mapview = new OM.Map(document.getElementById("events-map"), {mapviewerURL: baseURL});
-    var vectorlayer = new OM.layer.VectorLayer("vectorlayer", {def: {type: OM.layer.VectorLayer.TYPE_LOCAL}});
+        var mapview = new OM.Map(document.getElementById("events-map"), {mapviewerURL: baseURL});
 
-    mapview.addLayer(vectorlayer);
+        var mpointCenter = new OM.geometry.Point(mapCenterLon, mapCenterLat, 8307);
+        mapview.setMapCenter(mpointCenter);
+        mapview.setMapZoomLevel(zoomLevel);
+        mapview.enableMouseWheelZooming(false);
 
-    OM.gv.setResourcePath("https://elocation.oracle.com/mapviewer/jslib/v2.3/");
-
-    var mpointCenter = new OM.geometry.Point(mapCenterLon, mapCenterLat, 8307);
-    mapview.setMapCenter(mpointCenter);
-    mapview.setMapZoomLevel(zoomLevel);
-
-    var tileLayer = new OM.layer.TileLayer("baseMap", {
-        dataSource: 'elocation_mercator',
-        tileLayer: 'BI_WORLD_MAP_LIGHT',
-        tileServerURL: baseURL + "/mcserver"
-    });
-    mapview.addLayer(tileLayer);
-
-    var layerOptions = {def: {type: OM.layer.VectorLayer.TYPE_LOCAL}};
-    var layer = new OM.layer.VectorLayer('Layer 1', layerOptions);
-
-    markers.forEach(function (marker) {
-        var mpoint = new OM.geometry.Point(marker.lon, marker.lat, 8307);
-        var feature = new OM.Feature(marker.id, mpoint, {
-          label: marker.label
+        var tileLayer = new OM.layer.TileLayer("baseMap", {
+            dataSource: 'elocation_mercator',
+            tileLayer: 'BI_WORLD_MAP_LIGHT',
+            tileServerURL: baseURL + "/mcserver"
         });
-        layer.addFeature(feature);
+
+        mapview.addLayer(tileLayer);
+
+        var layerOptions = {def: {type: OM.layer.VectorLayer.TYPE_LOCAL}};
+        var layer = new OM.layer.VectorLayer('Events', layerOptions);
+
+        markers.forEach(function (marker) {
+            var mpoint = new OM.geometry.Point(marker.lon, marker.lat, 8307);
+            var feature = new OM.Feature(marker.id, mpoint, {
+                label: marker.label
+            });
+            feature.on(OM.event.MouseEvent.MOUSE_CLICK, function () {
+                var top = document.getElementById(marker.id).offsetTop;
+                window.scrollTo(0, top);
+            });
+            layer.addFeature(feature);
+        });
+
+        mapview.addLayer(layer);
+
+        var navPanel = new OM.control.NavigationPanelBar({
+            style: OM.control.NavigationPanelBar.STYLE_ZOOM_BUTTONS_ONLY,
+            anchorPosition: 3
+        });
+
+        mapview.addMapDecoration(navPanel);
+        mapview.init();
     });
 
-    layer.setLabelsVisible(false);
-    mapview.addLayer(layer);
-
-    var navPanel = new OM.control.NavigationPanelBar({
-        style: OM.control.NavigationPanelBar.STYLE_ZOOM_BUTTONS_ONLY,
-        anchorPosition: 3
-    });
-
-    mapview.addMapDecoration(navPanel);
-    mapview.init();
-})();
   </script>
 
     <div class="row">

@@ -596,10 +596,6 @@ $(document).ready(function(){
 </div>
 
                 </div>
-                  <form class="search-container" action="/docs/search" autocomplete="on" method="get">
-                    <input type="text" id="search-box" name="query" placeholder="Search">
-                    <button type="submit" class="searchbttn"></button>
-                  </form>
               </div>
             </div>
 
@@ -771,10 +767,10 @@ $(document).ready(function(){
                              .attr("y", d => levelScale(d))
                             .attr("width", 100)
                             .attr("height", levelScale(1) - levelScale(0)).attr('text-anchor', 'middle').text(d => levelText[d]);
-      
+
       d3.select('#timeline').selectAll('circle').data(allReleases).enter().append('circle').attr('r', 5).attr('cx', d => timeScale(d.date)).attr('cy', x => levelScale(x.level)).on('mouseover', showTooltip).on('mouseout', hideTooltip);
       d3.select('#timeline').selectAll('text#versions').data(allReleases).enter().append('text').attr('class', 'version').attr('font-size', '13px').attr('cursor', 'default').attr('width', 20).attr('height', 20).attr('text-anchor', 'middle').attr('x', d => timeScale(d.date)).attr('y', x => levelScale(x.level) - 8).text(d => d.version);
-    
+
       var lineFunction = d3.line()
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; });
@@ -787,8 +783,8 @@ $(document).ready(function(){
          {"x": timeScale(releasesMap.get(d.to).date)*1, "y": levelScale(releasesMap.get(d.to).level)}])).attr('stroke-width', 1);
 
 
-         
-    }    
+
+    }
     makeTimeline();
   </script>
               </div>

@@ -9,7 +9,7 @@
 
   <title>
     
-      Events
+      Events Map
     
   </title>
   <meta
@@ -266,7 +266,9 @@
         <h1 class="mt-2">Events map</h1>
       </div>
     </div>
-  <div id="events-map" style="width: 920px; height: 400px"></div>
+  <div class="row">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
+  <div id="events-map" style="width: 100%; height: 400px">
   <script>
     window.addEventListener('load', function () {
         var mapCenterLat = 49.832327;
@@ -293,36 +295,48 @@
             },
             {
                 id: 'event-four',
+                lat: 50.065889,
+                lon: 19.956454,
+                label: 'Sphere.it'
+            },
+            {
+                id: 'event-five',
                 lat: 51.535721,
                 lon: -0.104792,
                 label: 'JAX London'
             },
             {
-                id: 'event-five',
+                id: 'event-six',
                 lat: 50.477010,
                 lon: 30.500544,
                 label: 'Devoxx Ukraine'
             },
             {
-                id: 'event-six',
+                id: 'event-seven',
                 lat: 51.245955,
                 lon: 4.416209,
                 label: 'Devoxx Belgium'
             },
             {
-                id: 'event-seven',
+                id: 'event-eight',
                 lat: 55.567072,
                 lon: 12.977411,
                 label: 'Oredev'
             },
             {
-                id: 'event-eight',
+                id: 'event-nine',
                 lat: 30.416528,
                 lon: -9.586806,
                 label: 'Devoxx Morocco'
             },
             {
-                id: 'event-nine',
+                id: 'event-ten',
+                lat: 37.808105,
+                lon: -122.261131,
+                label: 'Scale By The Bay'
+            },
+            {
+                id: 'event-eleven',
                 lat: 55.637559,
                 lon: 12.578604,
                 label: 'KotlinConf'
@@ -374,6 +388,9 @@
     });
 
   </script>
+</div>
+</div>
+</div>
 
     <div class="row">
       <div class="col-12 col-sm-12 col-md-12 col-lg-10 offset-lg-1">
@@ -398,7 +415,7 @@
 
           <li class="events-table__detail">
             <h4 class="events-table__detail__title">Location</h4>
-            <p>San Francisco, CA</p>
+            <p>San Francisco, USA</p>
           </li>
 
           <li class="events-table__detail">
@@ -496,6 +513,41 @@
       <ul class="events-table__details">
         <li class="events-table__detail">
           <h4 class="events-table__detail__title">Date</h4>
+          <p>October 7-9, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Sphere.it</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>Krakow, Poland</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speaker</h4>
+            <p>Francois Farquet</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”><a href="https://sphere.it/talk/run-programs-faster-with-graalvm" target="_blank">Run Programs Faster with GraalVM</a>
+          </p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="events-table__row" id="event-five">
+      <div class="events-table__count">
+      <span>
+        5
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
           <p>October 7-10, 2019</p>
         </li>
 
@@ -522,10 +574,10 @@
       </ul>
     </div>
 
-    <div class="events-table__row" id="event-five">
+    <div class="events-table__row" id="event-six">
       <div class="events-table__count">
       <span>
-        5
+        6
       </span>
       </div>
       <ul class="events-table__details">
@@ -557,10 +609,10 @@
       </ul>
     </div>
 
-    <div class="events-table__row" id="event-six">
+    <div class="events-table__row" id="event-seven">
       <div class="events-table__count">
       <span>
-        6
+        7
       </span>
       </div>
       <ul class="events-table__details">
@@ -596,10 +648,10 @@
       </ul>
     </div>
 
-    <div class="events-table__row" id="event-seven">
+    <div class="events-table__row" id="event-eight">
       <div class="events-table__count">
       <span>
-        7
+        8
       </span>
       </div>
       <ul class="events-table__details">
@@ -630,10 +682,10 @@
       </ul>
     </div>
 
-    <div class="events-table__row" id="event-eight">
+    <div class="events-table__row" id="event-nine">
       <div class="events-table__count">
       <span>
-        8
+        9
       </span>
       </div>
       <ul class="events-table__details">
@@ -664,10 +716,45 @@
       </ul>
     </div>
 
-    <div class="events-table__row" id="event-nine">
+    <div class="events-table__row" id="event-ten">
       <div class="events-table__count">
       <span>
-        9
+        10
+      </span>
+      </div>
+      <ul class="events-table__details">
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Date</h4>
+          <p>November 13-15, 2019</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Conference</h4>
+            <p>Scale By The Bay</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Location</h4>
+          <p>San Francisco, USA</p>
+        </li>
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Speakers</h4>
+            <p>Francois Farquet</p>
+            <p>Christian Wimmer</p>
+        </li>
+
+        <li class="events-table__detail">
+          <h4 class="events-table__detail__title">Session Name</h4>
+          <p class=“session-name”><a href="https://www.scale.bythebay.io/speakers" target="_blank">The Renaissance for Big Data and Parallelism with GraalVM</a>
+          <p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="events-table__row" id="event-eleven">
+      <div class="events-table__count">
+      <span>
+        11
       </span>
       </div>
       <ul class="events-table__details">

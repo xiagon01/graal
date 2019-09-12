@@ -38,7 +38,7 @@
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0.1-dev</b><br>70f5e3cd61aeca395fc671c7a5de22f5215db6ac</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>22d145690ef7ce1ab3a528369eeebbd1ff3c017d</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -114,11 +114,12 @@ public @interface <span class="memberNameLabel">Cached</span></pre>
  </p>
  <p>
  The initializer expression of a cached parameter is defined using a subset of Java. This subset
- includes field/parameter accesses, function calls, type exact infix comparisons (==, !=,
- <, <=, >, >=) and integer literals. The return type of the initializer expression must be
- assignable to the parameter type. If the annotated parameter type is derived from <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a>
- then the <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a> instance is allowed to use the <a href="../../../../../com/oracle/truffle/api/nodes/Node.html#replace-T-"><code>Node.replace(Node)</code></a> method to replace
- itself. Bound elements without receivers are resolved using the following order:
+ includes field/parameter accesses, function calls, type exact infix comparisons (==, !=, <, <=,
+ >, >=), logical negation (!), logical disjunction (||), null, true, false, and integer literals.
+ The return type of the initializer expression must be assignable to the parameter type. If the
+ annotated parameter type is derived from <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a> then the <a href="../../../../../com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a> instance is allowed
+ to use the <a href="../../../../../com/oracle/truffle/api/nodes/Node.html#replace-T-"><code>Node.replace(Node)</code></a> method to replace itself. Bound elements without receivers
+ are resolved using the following order:
  <ol>
  <li>Dynamic and cached parameters of the enclosing specialization.</li>
  <li>Fields defined using <a href="../../../../../com/oracle/truffle/api/dsl/NodeField.html" title="annotation in com.oracle.truffle.api.dsl"><code>NodeField</code></a> for the enclosing node.</li>
@@ -497,7 +498,7 @@ public @interface <span class="memberNameLabel">Cached</span></pre>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0.1-dev</b><br>70f5e3cd61aeca395fc671c7a5de22f5215db6ac</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>22d145690ef7ce1ab3a528369eeebbd1ff3c017d</div>
 </div>
 <div class="subNav">
 <ul class="navList">

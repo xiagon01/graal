@@ -601,7 +601,19 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h2 id="1920">19.2.0</h2>
+                <h2 id="19201">19.2.0.1</h2>
+<p>(2019-09-13)</p>
+
+<p>We prepared an unscheduled critical patch update for GraalVM to address the following issues:</p>
+
+<ul>
+  <li>Fixed a critical compiler bug that caused <code>String.indexOf</code> to be executed incorrectly on older machines that <a href="https://stackoverflow.com/questions/43880227/why-does-tzcnt-work-for-my-sandy-bridge-processor">do not support the <code>TZCNT</code></a> instruction. The problem causes incorrect string operations and typically shows up as truncated string values.</li>
+  <li>Fixed a bug causing the bounds check in Native Image’s implementation of <code>System.arraycopy</code> to overflow with large indices which typically causes process termination.</li>
+  <li>Fixed a bounds check for <code>System.arraycopy</code> in cases where the array is “virtualized” (i.e., can be in registers and stack slots instead of on the heap).</li>
+  <li>Removed declaration of otherwise unused SIOCGSTAMP symbol in Native Image. This allows use of Native Image on any Linux distro using a 5.2.x kernel such as the latest versions of Fedora, Ubuntu (except LTS release users), Arch, openSUSE (tumbleweed).</li>
+</ul>
+
+<h2 id="1920">19.2.0</h2>
 <p>(2019-08-20)</p>
 
 <p>This is a GraalVM feature release, we recommend upgrading to it from the 19.1.x or older releases.</p>

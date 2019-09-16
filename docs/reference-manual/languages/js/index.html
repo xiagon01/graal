@@ -805,10 +805,10 @@ for more information about interoperability with other programming languages.</p
 
 <h2 id="graalvm-javascript-compatibility">GraalVM JavaScript Compatibility</h2>
 
-<p>GraalVM is <a href="http://www.ecma-international.org/ecma-262/9.0/index.html">ECMAScript 2018</a> compliant and fully compatible with a diverse range of active Node.js (npm) modules.
-It will also be compliant to ECMAScript 2019 once this updated specification is published (<a href="https://tc39.github.io/ecma262/">draft spec</a>).
-More than 95,000 npm packages are regularly tested and are compatible with GraalVM, including modules like express, react, async, request, browserify, grunt, mocha, and underscore.
-The latest release of GraalVM is based on Node.js version 10.15.2.</p>
+<p>GraalVM is <a href="http://www.ecma-international.org/ecma-262/10.0/index.html">ECMAScript 2019</a> compliant and fully compatible with a diverse range of active Node.js (npm) modules.
+It will also be compliant to ECMAScript 2020 once this updated specification is published (<a href="https://tc39.github.io/ecma262/">draft spec</a>).
+More than 100,000 npm packages are regularly tested and are compatible with GraalVM, including modules like express, react, async, request, browserify, grunt, mocha, and underscore.
+The latest release of GraalVM is based on Node.js version 10.16.3.</p>
 
 <h3 id="is-graalvm-compatible-with-the-javascript-language">Is GraalVM compatible with the JavaScript language?</h3>
 
@@ -819,19 +819,9 @@ Some features of ECMAScript 2020 including some proposed features and extensions
 
 <p><em>How do we know it?</em></p>
 
-<p>GraalVM is tested against the official test suite of ECMAScript, <a href="https://github.com/tc39/test262">test262</a>.
-On the current stable feature set of ECMAScript 2019, GraalVM compliance is above 99%.</p>
+<p>The compatibility of GraalVM JavaScript is verified by external sources, like the <a href="https://kangax.github.io/compat-table/es6/">Kangax ECMAScript compatibility table</a>.</p>
 
-<p>In our internal CI system, we test against test262, tests published by Nashorn and V8, Node unit tests, as well as GraalVM’s own unit tests.</p>
-
-<p>From the <a href="https://github.com/graalvm/graaljs">graaljs</a> code repository, you can execute the whole test262 test suite:</p>
-<pre><code>mx test262 gate
-</code></pre>
-
-<p>This will execute test262 in a mode to guarantee that local changes do not regress compatibility, i.e., results in an error if any tests expected to pass actually fail.
-Individual tests can be executed with</p>
-<pre><code>mx test262 single=built-ins/Array/length.js
-</code></pre>
+<p>On our CI system, we test GraalVM JavaScript against a set of test engines, like the official test suite of ECMAScript, <a href="https://github.com/tc39/test262">test262</a>, as well as tests published by V8 and Nashorn, Node.js unit tests, and GraalVM’s own unit tests.</p>
 
 <p>For a reference of the JavaScript APIs that GraalVM supports, see <a href="https://github.com/graalvm/graaljs/blob/master/docs/user/JavaScriptCompatibility.md">GRAAL.JS-API</a>.</p>
 

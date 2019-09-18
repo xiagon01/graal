@@ -7,7 +7,7 @@ The options for configuring the GraalVM compiler on the JVM are in 3 categories.
 These are general options for setting/getting configuration details.
 
 * `-XX:-UseJVMCICompiler`: This disables use of the GraalVM compiler as the top tier JIT.
-This is useful when wanting to compare performance of the GraalVM compiler against the native JIT compilers. 
+This is useful when wanting to compare performance of the GraalVM compiler against the native JIT compilers.
 * `-Dgraal.CompilerConfiguration=<name>`: Selects the GraalVM compiler configuration to use. If omitted, the compiler
 configuration with the highest auto-selection priority is used. To see the set
 of available configurations, supply the value help to this option.
@@ -48,6 +48,8 @@ algorithm that favors throughput over compilation speed. **This option is only a
 GraalVM EE**.
 * `-Dgraal.Vectorization=true`: This can be used to disable the auto vectorization optimization.
 **This option is only available in GraalVM EE**.
+* `-Dgraal.OptDuplication=true`: This can be used to disable the [path duplication optimization](http://ssw.jku.at/General/Staff/Leopoldseder/DBDS_CGO18_Preprint.pdf). **This option is only available in
+GraalVM EE**.
 * `-Dgraal.TraceInlining=false`: Enables tracing of inlining decisions. This can be used
     for advanced tuning where it may be possible to change the source code of the program.
     The output format is shown below:

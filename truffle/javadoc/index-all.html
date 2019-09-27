@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>3975b5ebda5dbe867e32c09b5776b32a4281d39e</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>43d66d91747e0eff68ac9c43167ec8a1ff33ceed</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -1345,7 +1345,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#check-com.oracle.truffle.api.object.DynamicObject-">check(DynamicObject)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
-<div class="block">Check whether this shape is identical to the given shape.</div>
+<div class="block">Checks whether the given object's shape is identical to this shape.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/utilities/AlwaysValidAssumption.html#check--">check()</a></span> - Method in class com.oracle.truffle.api.utilities.<a href="com/oracle/truffle/api/utilities/AlwaysValidAssumption.html" title="class in com.oracle.truffle.api.utilities">AlwaysValidAssumption</a></dt>
 <dd>&nbsp;</dd>
@@ -4482,10 +4482,6 @@
 <dd>
 <div class="block">Returns the key for this option.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getKeyList-com.oracle.truffle.api.object.Shape.Pred-">getKeyList(Shape.Pred&lt;Property&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Get a filtered list of property keys in insertion order.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getKeyList--">getKeyList()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
 <div class="block">Get a list of all property keys in insertion order.</div>
@@ -4925,7 +4921,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getObjectType--">getObjectType()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
-<div class="block">Get the shape's operations.</div>
+<div class="block">Get the shape's object type info.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/AllocationEvent.html#getOldSize--">getOldSize()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/AllocationEvent.html" title="class in com.oracle.truffle.api.instrumentation">AllocationEvent</a></dt>
 <dd>
@@ -5105,10 +5101,6 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getPropertyCount--">getPropertyCount()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
 <div class="block">Get number of properties in this shape.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getPropertyList-com.oracle.truffle.api.object.Shape.Pred-">getPropertyList(Shape.Pred&lt;Property&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Get a list of properties that this Shape stores.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getPropertyList--">getPropertyList()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
@@ -5837,10 +5829,6 @@
 <div class="block">Returns <code>true</code> if this node should be considered tagged by a given tag else
  <code>false</code>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#hasTransitionWithKey-java.lang.Object-">hasTransitionWithKey(Object)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Query whether the shape has a transition with the given key.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#hasWriteSideEffects--">hasWriteSideEffects()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if setting a new value can have side-effects, else
@@ -6542,10 +6530,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isDuration--">isDuration()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/DynamicObject.html#isEmpty--">isEmpty()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/DynamicObject.html" title="class in com.oracle.truffle.api.object">DynamicObject</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object contains no properties.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/UnmodifiableEconomicMap.html#isEmpty--">isEmpty()</a></span> - Method in interface org.graalvm.collections.<a href="org/graalvm/collections/UnmodifiableEconomicMap.html" title="interface in org.graalvm.collections">UnmodifiableEconomicMap</a></dt>
 <dd>
@@ -7377,13 +7361,7 @@
 <dd>
 <div class="block">Create a new location for a fixed type.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-boolean-boolean-">locationForValue(Object, boolean, boolean)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-">locationForValue(Object)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
-<dd>
-<div class="block">Create a new location compatible with the given initial value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-java.util.EnumSet-">locationForValue(Object, EnumSet&lt;LocationModifier&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
 <dd>
 <div class="block">Create a new location compatible with the given initial value.</div>
 </dd>
@@ -10028,10 +10006,6 @@
 <dd>
 <div class="block">Utility class to allocate locations in an object layout.</div>
 </dd>
-<dt><a href="com/oracle/truffle/api/object/Shape.Pred.html" title="interface in com.oracle.truffle.api.object"><span class="typeNameLink">Shape.Pred</span></a>&lt;<a href="com/oracle/truffle/api/object/Shape.Pred.html" title="type parameter in Shape.Pred">T</a>&gt; - Interface in <a href="com/oracle/truffle/api/object/package-summary.html">com.oracle.truffle.api.object</a></dt>
-<dd>
-<div class="block">Represents a predicate (boolean-valued function) of one argument.</div>
-</dd>
 <dt><a href="com/oracle/truffle/api/object/ShapeListener.html" title="interface in com.oracle.truffle.api.object"><span class="typeNameLink">ShapeListener</span></a> - Interface in <a href="com/oracle/truffle/api/object/package-summary.html">com.oracle.truffle.api.object</a></dt>
 <dd>
 <div class="block">A listener to be notified of property transitions.</div>
@@ -10091,10 +10065,6 @@
 <dt><a href="org/graalvm/word/SignedWord.html" title="interface in org.graalvm.word"><span class="typeNameLink">SignedWord</span></a> - Interface in <a href="org/graalvm/word/package-summary.html">org.graalvm.word</a></dt>
 <dd>
 <div class="block">Represents a signed word-sized value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/DynamicObject.html#size--">size()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/DynamicObject.html" title="class in com.oracle.truffle.api.object">DynamicObject</a></dt>
-<dd>
-<div class="block">Returns the number of properties in this object.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#SIZE">SIZE</a></span> - Static variable in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
@@ -10462,10 +10432,6 @@
 <dd>
 <div class="block">Returns <code>true</code> if the given source should be tested positive and
  <code>false</code> if the sources should be filtered.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Pred.html#test-T-">test(T)</a></span> - Method in interface com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Pred.html" title="interface in com.oracle.truffle.api.object">Shape.Pred</a></dt>
-<dd>
-<div class="block">Evaluates this predicate on the given argument.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugThreadsListener.html#threadDisposed-com.oracle.truffle.api.debug.DebugContext-java.lang.Thread-">threadDisposed(DebugContext, Thread)</a></span> - Method in interface com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugThreadsListener.html" title="interface in com.oracle.truffle.api.debug">DebugThreadsListener</a></dt>
 <dd>
@@ -11641,7 +11607,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>3975b5ebda5dbe867e32c09b5776b32a4281d39e</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>43d66d91747e0eff68ac9c43167ec8a1ff33ceed</div>
 </div>
 <div class="subNav">
 <ul class="navList">

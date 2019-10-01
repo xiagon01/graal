@@ -1134,116 +1134,6 @@ Make sure to prepend <code>--experimental-options</code> flag to enable <code>--
   <li><code>--memtracer.TraceStatements</code>: captures statements when tracing. The default is false.</li>
 </ul>
 
-<h2 id="ideal-graph-visualizer">Ideal Graph Visualizer</h2>
-<p>Ideal Graph Visualizer or IGV is a developer tool, currently maintained as part of the GraalVM compiler, recommended for performance issues investigation.</p>
-
-<p>The tool is essential for any language implementers building on top of <strong>GraalVM Enterprise Edition</strong>.
-It is available as a separate download on <a href="https://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a> and requires accepting the Oracle Technology Network Developer License.</p>
-
-<p>Ideal Graph Visualizer is developed to view and inspect interim graph representations from GraalVM and Truffle compilations.</p>
-
-<p>1.Unzip the downloaded package and enter <code>bin</code> directory:</p>
-
-<pre><code>$ cd idealgraphvisualizer/bin
-</code></pre>
-
-<p>2.Launch the tool:</p>
-
-<pre><code>$ idealgraphvisualizer
-</code></pre>
-
-<p>3.Save the following code snippet as  <code>Test.rb</code>:</p>
-
-<pre><code>require 'json'
-
-obj = {
-  time: Time.now,
-  msg: 'Hello World',
-  payload: (1..10).to_a
-}
-
-encoded = JSON.dump(obj)
-
-js_obj = Polyglot.eval('js', 'JSON.parse').call(encoded)
-
-puts js_obj[:time]
-puts js_obj[:msg]
-puts js_obj[:payload].join(' ')
-</code></pre>
-
-<p>4.From another console window, make sure <code>ruby</code> component is installed in GraalVM,
-and connect <code>Test.rb</code> script to the running IGV:</p>
-
-<pre><code class="language-shell">$ gu list
-$ ruby --jvm --vm.Dgraal.Dump=:1 --vm.Dgraal.PrintGraph=Network Test.rb
-</code></pre>
-<p>This causes GraalVM to dump compiler graphs in IGV format over the network to an IGV process listening
-on <code>127.0.0.1:4445</code>. Once the connection is made, you are able to see the graphs in the Outline window.
-Find e.g. <code>java.lang.String.char(int)</code> folder and open its <em>After parsing</em> graph by double-clicking.
-If the node has <code>sourceNodePosition</code> property, then the Processing Window will attempt to display its location and the entire stacktrace.</p>
-
-<h3 id="browsing-graphs">Browsing Graphs</h3>
-<p>Once a specific graph is opened, you can search for nodes by name, ID, or by <code>property=value</code> data, and all matching results will be shown.
-Another cool feature of this tool is the ability to navigate to the original guest language source code!
-Select a node in graph and press ‘go to source’ button in the Stack View window.</p>
-
-<p><img src="/docs/img/IGV_navigate_to_source.png" alt="" /></p>
-
-<p>Graphs navigation is available also from the context menu, enabled by focusing
-and right-clicking a specific graph node. Extract nodes option will re-render
-a graph and display just selected nodes and their neighbours.</p>
-
-<p><img src="/docs/img/IGV_context_menu.png" alt="" /></p>
-
-<p>If the graph is larger than the screen, manipulate with the ‘satellite’ view button
-in the main toolbar to move the viewport rectangle.</p>
-
-<p><img src="/docs/img/IGV_satellite_view.png" alt="" /></p>
-
-<p>For user preference, the graph color scheme is adjustable by editing
-the Coloring filter, enabled by default in the left sidebar.</p>
-
-<h3 id="viewing-source-code">Viewing Source Code</h3>
-
-<p>Source code views can be opened in manual and assisted modes. Once you select a node
-in the graph view, the Processing View will open. If IGV knows where the source code
-for the current frame is, the green ‘go to source’ arrow is enabled. If IGV does not
-know where the source is, the line is grayed out and a ‘looking glass’ button appears.</p>
-
-<p><img src="/docs/img/IGV_add_source.png" alt="" /></p>
-
-<p>Press it and select “Locate in Java project” to locate the correct project in the dialog.
-IGV hides projects which do not contain the required source file.
-The “Source Collections” serves to display the stand alone roots added by “Add root of sources” general action.
-If the source is located using the preferred method (i.e., from a Java project),
-its project can be later managed on the Project tab. That one is initially hidden,
-but you can display the list of opened projects using Window - Projects.</p>
-
-<h3 id="dumping-graphs">Dumping Graphs</h3>
-
-<p>The IGV tool is developed to allow GraalVM language implementers
-to optimize their languages assembled with the Truffle framework. As a development
-tool it should not be installed to production environments.</p>
-
-<p>To dump the GraalVM compiler graphs from an embedded Java application to IGV,
-you need to add options to GraalVM based processes. Depending on the language/VM
-used, you may need to prefix the options by <code>--vm</code>. See the particular
-language’s documentation for the details. The main option to add is
-<code>-Dgraal.Dump=:1</code>. This will dump graphs in an IGV readable format to the local
-file system. To send the dumps directly to IGV over the network, add
-<code>-Dgraal.PrintGraph=Network</code> when starting a GraalVM instance. Optionally a
-port can be specified. Then dumps are sent to IGV from the running GraalVM on
-localhost. If IGV does not listen on localhost, options “Ideal Graph Settings|
-Accept Data from network” can be checked. If there is not an IGV instance
-listening on <code>127.0.0.1</code> or it cannot be connected to, the dumps will be
-redirected to the local file system. The file system location is <code>graal_dumps/</code>
-under the current working directory of the process and can be changed with the
-<code>-Dgraal.DumpPath</code> option.</p>
-
-<p>In case an older GraalVM is used, you may need to explicitly request that dumps
-include the <code>nodeSourcePosition</code> property. This is done by adding the
-<code>-XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints</code> options.</p>
-
 <h2 id="graalvm-visualvm">GraalVM VisualVM</h2>
 <p>GraalVM comes with <strong>GraalVM VisualVM</strong>, an enhanced version of the popular
 <a href="https://visualvm.github.io">VisualVM</a> tool which includes special heap analysis
@@ -1364,6 +1254,286 @@ being considered production-ready. Some advanced features like
 analyzing JVM internals, showing event stack traces or support for creating JFR
 snapshots from live processes are not available in this preview version and will
 be addressed incrementally in the following releases.</p>
+
+<h2 id="ideal-graph-visualizer">Ideal Graph Visualizer</h2>
+<p>Ideal Graph Visualizer or IGV is a developer tool, currently maintained as part of the GraalVM compiler, recommended for performance issues investigation.</p>
+
+<p>The tool is essential for any language implementers building on top of <strong>GraalVM Enterprise Edition</strong>.
+It is available as a separate download on <a href="https://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a> and requires accepting the Oracle Technology Network Developer License.</p>
+
+<p>Ideal Graph Visualizer is developed to view and inspect interim graph representations from GraalVM and Truffle compilations.</p>
+
+<p>1.Unzip the downloaded package and enter <code>bin</code> directory:</p>
+
+<pre><code>$ cd idealgraphvisualizer/bin
+</code></pre>
+
+<p>2.Launch the tool:</p>
+
+<pre><code>$ idealgraphvisualizer
+</code></pre>
+
+<p>3.Save the following code snippet as  <code>Test.rb</code>:</p>
+
+<pre><code>require 'json'
+
+obj = {
+  time: Time.now,
+  msg: 'Hello World',
+  payload: (1..10).to_a
+}
+
+encoded = JSON.dump(obj)
+
+js_obj = Polyglot.eval('js', 'JSON.parse').call(encoded)
+
+puts js_obj[:time]
+puts js_obj[:msg]
+puts js_obj[:payload].join(' ')
+</code></pre>
+
+<p>4.From another console window, make sure <code>ruby</code> component is installed in GraalVM,
+and connect <code>Test.rb</code> script to the running IGV:</p>
+
+<pre><code class="language-shell">$ gu list
+$ ruby --jvm --vm.Dgraal.Dump=:1 --vm.Dgraal.PrintGraph=Network Test.rb
+</code></pre>
+<p>This causes GraalVM to dump compiler graphs in IGV format over the network to an IGV process listening
+on <code>127.0.0.1:4445</code>. Once the connection is made, you are able to see the graphs in the Outline window.
+Find e.g. <code>java.lang.String.char(int)</code> folder and open its <em>After parsing</em> graph by double-clicking.
+If the node has <code>sourceNodePosition</code> property, then the Processing Window will attempt to display its location and the entire stacktrace.</p>
+
+<h3 id="browsing-graphs">Browsing Graphs</h3>
+<p>Once a specific graph is opened, you can search for nodes by name, ID, or by <code>property=value</code> data, and all matching results will be shown.
+Another cool feature of this tool is the ability to navigate to the original guest language source code!
+Select a node in graph and press ‘go to source’ button in the Stack View window.</p>
+
+<p><img src="/docs/img/IGV_navigate_to_source.png" alt="" /></p>
+
+<p>Graphs navigation is available also from the context menu, enabled by focusing
+and right-clicking a specific graph node. Extract nodes option will re-render
+a graph and display just selected nodes and their neighbours.</p>
+
+<p><img src="/docs/img/IGV_context_menu.png" alt="" /></p>
+
+<p>If the graph is larger than the screen, manipulate with the ‘satellite’ view button
+in the main toolbar to move the viewport rectangle.</p>
+
+<p><img src="/docs/img/IGV_satellite_view.png" alt="" /></p>
+
+<p>For user preference, the graph color scheme is adjustable by editing
+the Coloring filter, enabled by default in the left sidebar.</p>
+
+<h3 id="viewing-source-code">Viewing Source Code</h3>
+
+<p>Source code views can be opened in manual and assisted modes. Once you select a node
+in the graph view, the Processing View will open. If IGV knows where the source code
+for the current frame is, the green ‘go to source’ arrow is enabled. If IGV does not
+know where the source is, the line is grayed out and a ‘looking glass’ button appears.</p>
+
+<p><img src="/docs/img/IGV_add_source.png" alt="" /></p>
+
+<p>Press it and select “Locate in Java project” to locate the correct project in the dialog.
+IGV hides projects which do not contain the required source file.
+The “Source Collections” serves to display the stand alone roots added by “Add root of sources” general action.
+If the source is located using the preferred method (i.e., from a Java project),
+its project can be later managed on the Project tab. That one is initially hidden,
+but you can display the list of opened projects using Window - Projects.</p>
+
+<h3 id="dumping-graphs">Dumping Graphs</h3>
+
+<p>The IGV tool is developed to allow GraalVM language implementers
+to optimize their languages assembled with the Truffle framework. As a development
+tool it should not be installed to production environments.</p>
+
+<p>To dump the GraalVM compiler graphs from an embedded Java application to IGV,
+you need to add options to GraalVM based processes. Depending on the language/VM
+used, you may need to prefix the options by <code>--vm</code>. See the particular
+language’s documentation for the details. The main option to add is
+<code>-Dgraal.Dump=:1</code>. This will dump graphs in an IGV readable format to the local
+file system. To send the dumps directly to IGV over the network, add
+<code>-Dgraal.PrintGraph=Network</code> when starting a GraalVM instance. Optionally a
+port can be specified. Then dumps are sent to IGV from the running GraalVM on
+localhost. If IGV does not listen on localhost, options “Ideal Graph Settings|
+Accept Data from network” can be checked. If there is not an IGV instance
+listening on <code>127.0.0.1</code> or it cannot be connected to, the dumps will be
+redirected to the local file system. The file system location is <code>graal_dumps/</code>
+under the current working directory of the process and can be changed with the
+<code>-Dgraal.DumpPath</code> option.</p>
+
+<p>In case an older GraalVM is used, you may need to explicitly request that dumps
+include the <code>nodeSourcePosition</code> property. This is done by adding the
+<code>-XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints</code> options.</p>
+
+<h2 id="visual-studio-code-extensions-for-graalvm">Visual Studio Code Extensions for GraalVM</h2>
+<p>This page explains how to start using <strong>Visual Studio Code support for
+GraalVM</strong>, introduced in the 19.2 version. Visual Studio Code (from now on
+VS Code) is a source-code editor  that provides embedded Git and GitHub control,
+syntax highlighting, code refactoring etc.. To enable a polyglot environment in
+VS Code, we created extensions for GraalVM supported languages:  JS, Ruby, R,
+Python. This allows a simple registration of GraalVM as a runtime, code editing
+and debugging of polyglot applications.</p>
+
+<p>The following extensions are available:</p>
+<ul>
+  <li><em>graalvm</em> – a VS Code extension providing the basic environment for editing and debugging programs running on GraalVM and includes JavaScript and Node.js support by default.</li>
+  <li><em>graalvm-r</em> – a VS Code extension providing the basic support for editing and debugging R programs running on GraalVM.</li>
+  <li><em>graalvm-ruby</em> – a VS Code extension providing the basic support for editing and debugging Ruby programs on GraalVM.</li>
+  <li><em>graalvm-python</em> – a VS Code extension providing the basic support for editing and debugging Python programs running on GraalVM.</li>
+</ul>
+
+<h3 id="install-extensions">Install Extensions</h3>
+
+<p>To start using the extensions in VS Code, take the following steps.</p>
+<ol>
+  <li>Download the <strong>vs-code-extensions-tech-preview.zip</strong>
+from <a href="https://github.com/oracle/graal/releases">Github</a>, extract an archive and enter it. Inside the folder you see VSIX packages built for you:
+    <pre><code>graalvm-&lt;version&gt;.vsix
+graalvm-r-&lt;version&gt;.vsix
+graalvm-ruby-&lt;version&gt;.vsix
+graalvm-python-&lt;version&gt;.vsix
+</code></pre>
+    <p>1.1. As an alternative, you can build VSIX packages yourself.
+Clone the extensions source and enter it:</p>
+    <pre><code>git clone https://github.com/oracle/graal.git
+cd graal/vs-code
+</code></pre>
+    <p>1.2. Install <code>vsce</code> (short for “Visual Studio Code Extension Manager”), a command-line tool
+for packaging, publishing and managing VS Code extensions:</p>
+    <pre><code>npm install -g vsce
+</code></pre>
+    <p>1.3. Build VSIX packages that could be manually installed later:</p>
+    <pre><code>cd graalvm; npm install; vsce package
+cd graalvm-r; npm install; vsce package
+cd graalvm-ruby; npm install; vsce package
+cd graalvm-python; npm install; vsce package
+</code></pre>
+  </li>
+  <li>Install each package into VS Code with <code>code --install-extension &lt;extension.vsix&gt;</code> syntax:
+    <pre><code>code --install-extension graalvm-&lt;version&gt;.vsix
+code --install-extension graalvm-r-&lt;version&gt;.vsix
+code --install-extension graalvm-ruby-&lt;version&gt;.vsix
+code --install-extension graalvm-python-&lt;version&gt;.vsix
+</code></pre>
+    <p>Alternatively to the manual installation, use the <em>Install from VSIX…</em> action: open Extensions (<code>Ctrl+Shift+X</code>) -&gt; More Actions (three dots in the upper right corner) -&gt; Install from VSIX.</p>
+  </li>
+</ol>
+
+<p><img src="/docs/img/manual_install.png" alt="" /></p>
+
+<h3 id="graalvm-extension">GraalVM Extension</h3>
+<p>Upon the <em>graalvm</em> extension installation, launch VS Code by
+double-clicking on the icon in the launchpad or by typing <code>code .</code> from the CLI.
+The user is then requested to provide a path to the GraalVM home directory.</p>
+
+<p><img src="/docs/img/no-path-to-graalvm.png" alt="" /></p>
+
+<p>For that purpose, next options can be used (invoke by <em>Ctrl+Shift+P</em> hot keys combination):</p>
+
+<ul>
+  <li><strong>Select GraalVM Installation</strong> - Provides the UI to select an already installed GraalVM. By default, the following locations are searched for the already installed GraalVM:
+    <ul>
+      <li>the extension’s global storage</li>
+      <li><code>/opt</code> folder as the default RPM install location</li>
+      <li><code>PATH</code> environment variable content</li>
+      <li><code>GRAALVM_HOME</code> environment variable content</li>
+      <li><code>JAVA_HOME</code> environment variable content</li>
+    </ul>
+  </li>
+  <li><strong>Install GraalVM</strong> - Downloads the latest GraalVM release from Github and installs it within the extension’s global storage.</li>
+  <li><strong>Install GraalVM Component</strong> - Downloads and installs one of the GraalVM’s optional components.</li>
+</ul>
+
+<p><img src="/docs/img/component-install.png" alt="" /></p>
+
+<p>To verify whether the <code>PATH</code> environment variable is valid, navigate to Code -&gt; Preferences -&gt; Settings -&gt; Extensions -&gt; GraalVM -&gt; Home:</p>
+
+<p><img src="/docs/img/graalvm_path.png" alt="" /></p>
+
+<p>If the path to GraalVM home directory is provided properly, the following debug
+configurations can be used:</p>
+
+<ul>
+  <li><em>Attach</em> - Attaches debugger to a locally running GraalVM.</li>
+  <li><em>Attach to Remote</em> - Attaches debugger to the debug port of a remote GraalVM.</li>
+  <li><em>Launch JavaScript</em> - Launches  JavaScript using GraalVM in a debug mode.</li>
+  <li><em>Launch Node.js Application</em> - Launches a Node.js network application using GraalVM in a debug mode.</li>
+</ul>
+
+<p><img src="/docs/img/debug-config.png" alt="" /></p>
+
+<p>Languages interoperability is one of the defining features of GraalVM, enabled
+with <a href="https://www.graalvm.org/sdk/javadoc/">Polyglot APIs</a>. The code completion
+invoked inside JavaScript sources provides items for <code>Polyglot.eval(...)</code>,
+<code>Polyglot.evalFile(...)</code> and <code>Java.type(...)</code> calls.</p>
+
+<p><img src="/docs/img/code-completion-js.png" alt="" /></p>
+
+<p>For JavaScript sources opened in the editor, all the <code>Polyglot.eval(...)</code> calls
+are detected and the respective embedded languages are injected to their
+locations. For example, having an R code snippet called via the Polyglot API
+from inside the JavaScript source, the R language code is embedded inside the
+corresponding JavaScript string and all VS Code’s editing features (syntax
+highlighting, bracket matching, auto closing pairs, code completion, etc.) treat
+the content of the string as the R source code.</p>
+
+<p><img src="/docs/img/language-embedding-js.png" alt="" /></p>
+
+<h3 id="r-extension">R Extension</h3>
+
+<p>Upon the extension installation in VS Code, GraalVM is checked for
+presence of the R component and a user is provided with an option of an automatic
+installation of the missing component. The <em>Ctrl+Shift+P</em> command from the
+Command Palette can be also used to invoke <strong>Install GraalVM
+Component</strong> option to install the R component manually.</p>
+
+<p>Once GraalVM contains the R component, the following debug configurations
+can be used to debug your R scripts running on GraalVM:</p>
+
+<ul>
+  <li><strong>Launch R Script</strong> - Launches an R script using GraalVM in a debug mode.</li>
+  <li><strong>Launch R Terminal</strong> - Launches an integrated R terminal running on GraalVM in a debug mode.</li>
+</ul>
+
+<p><img src="/docs/img/debug-config-r.png" alt="" /></p>
+
+<p>Thanks to languages interoperability within GraalVM, the code completion invoked
+inside R sources provides items for <code>eval.polyglot(...)</code> and <code>new("&lt;Java type&gt;",
+...)</code> calls. For R sources opened in editor, all the <code>eval.polyglot(...)</code> calls are detected and the respective embedded languages are injected to their locations.</p>
+
+<p><img src="/docs/img/code-completion-r.png" alt="" /></p>
+
+<p>Please note, this R extension depends on the basic support for <a href="https://marketplace.visualstudio.com/items?itemName=Ikuyadeu.r">R language</a> and GraalVM extension in VS Code.</p>
+
+<h3 id="ruby-extension">Ruby Extension</h3>
+
+<p>Similar to the above R extension installation, GraalVM is checked for
+presence of the Ruby component and a user is provided with an option of an automatic
+installation of the missing component. The <em>Ctrl+Shift+P</em> command from the
+Command Palette can be also used to invoke <strong>Install GraalVM
+Component</strong> option to install the Ruby component manually.</p>
+
+<p>Once GraalVM contains the Ruby component, <strong>Launch Ruby Script</strong> debug
+configuration can be used to run your Ruby script in a debug mode.</p>
+
+<p>The code completion invoked inside Ruby sources provides items for <code>Polyglot.eval(...)</code>, <code>Polyglot.eval_file(...)</code> and <code>Java.type(...)</code> calls. As with other languages, all the <code>Polyglot.eval(...)</code> calls are detected and the respective embedded languages are injected to their locations. For example, the JavaScript language code is embedded inside the corresponding Ruby string and all VS Code’s editing features (syntax highlighting, bracket matching, auto closing pairs, code completion, etc.) treat the content of the string as the JavaScript source code.</p>
+
+<p><img src="/docs/img/language-embedding-ruby.png" alt="" /></p>
+
+<p>This Ruby extension requires a default <a href="https://marketplace.visualstudio.com/items?itemName=rebornix.Ruby">Ruby language support</a> and GraalVM extension in VS Code.</p>
+
+<h3 id="python-extension">Python Extension</h3>
+
+<p>GraalVM is checked for presence of the Python component and a user is provided
+with an option of an automatic installation of the missing component, similar to
+the previous R and Ruby extensions. The <em>Ctrl+Shift+P</em> command from the Command
+Palette can be also used to invoke <strong>Install GraalVM Component</strong> option to
+install the Ruby component manually.</p>
+
+<p>Once GraalVM contains the Ruby component, <strong>Launch Python Script</strong> debug
+configuration can be used to run the Python script in a debug mode.</p>
+
+<p>Python VS Code extension requires a default <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python">Python language support</a> and GraalVM extension in VS Code.</p>
 
 
               </div>

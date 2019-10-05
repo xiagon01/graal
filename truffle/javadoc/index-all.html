@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>7c30f07e6b9fa36f387c4922d1c7049e15319ee8</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>b42ce815319316cf2a1323c9e8809b24902131c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -5210,6 +5210,19 @@
 <dd>
 <div class="block">Get the root shape.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugScope.html#getRootInstance--">getRootInstance()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugScope.html" title="class in com.oracle.truffle.api.debug">DebugScope</a></dt>
+<dd>
+<div class="block">Get value that represents root instance of this scope.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/Scope.html#getRootInstance--">getRootInstance()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/Scope.html" title="class in com.oracle.truffle.api">Scope</a></dt>
+<dd>
+<div class="block">Get the root instance object of this scope.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#getRootInstanceBreakpoints--">getRootInstanceBreakpoints()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
+<dd>
+<div class="block">Get a list of breakpoints installed to the value's session and whose
+ <a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html#rootInstance-com.oracle.truffle.api.debug.DebugValue-"><code>root instance</code></a> is this value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionEvent.html#getRootName--">getRootName()</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionEvent.html" title="class in org.graalvm.polyglot.management">ExecutionEvent</a></dt>
 <dd>
 <div class="block">Returns the root name or <code>null</code> if no name is available.</div>
@@ -9631,6 +9644,14 @@
 <dd>
 <div class="block">Represents the target of a call to a <a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes"><code>RootNode</code></a>, i.e., to another tree of nodes.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html#rootInstance-com.oracle.truffle.api.debug.DebugValue-">rootInstance(DebugValue)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html" title="class in com.oracle.truffle.api.debug">Breakpoint.Builder</a></dt>
+<dd>
+<div class="block">Specifies the breakpoint's root instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/Scope.Builder.html#rootInstance-java.lang.Object-">rootInstance(Object)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/Scope.Builder.html" title="class in com.oracle.truffle.api">Scope.Builder</a></dt>
+<dd>
+<div class="block">Set the root instance object of this scope.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html#rootNameFilter-java.util.function.Predicate-">rootNameFilter(Predicate&lt;String&gt;)</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html" title="class in org.graalvm.polyglot.management">ExecutionListener.Builder</a></dt>
 <dd>
 <div class="block">Set an addition filter execution events by root name.</div>
@@ -11607,7 +11628,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>7c30f07e6b9fa36f387c4922d1c7049e15319ee8</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>b42ce815319316cf2a1323c9e8809b24902131c6</div>
 </div>
 <div class="subNav">
 <ul class="navList">

@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>66d988946a5b4f550bfb6b75f1572ef7bad32f6e</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>924a9de8fb92c1f263b35f4ab6ff9e97ab7baa3d</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -1071,6 +1071,10 @@
 <dd>
 <div class="block">Creates an instance of the custom polyglot access configuration.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Builds the limit configuration object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.Builder.html" title="class in org.graalvm.polyglot">Source.Builder</a></dt>
 <dd>
 <div class="block">Uses configuration of this builder to create new <a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot"><code>Source</code></a> object.</div>
@@ -1812,6 +1816,12 @@
 <dt><a href="org/graalvm/nativeimage/c/struct/CPointerTo.html" title="annotation in org.graalvm.nativeimage.c.struct"><span class="typeNameLink">CPointerTo</span></a> - Annotation Type in <a href="org/graalvm/nativeimage/c/struct/package-summary.html">org.graalvm.nativeimage.c.struct</a></dt>
 <dd>
 <div class="block">Denotes Java interface that imports a C pointer type.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#cpuTimeLimit-java.time.Duration-java.time.Duration-">cpuTimeLimit(Duration, Duration)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCpuTime-long-" title="class or interface in java.lang.management"><code>CPU time</code></a> a context may
+ be active until the onLimit event is notified and the context will be
+ <a href="org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.Provider.html#create-java.lang.Object...-">create(Object...)</a></span> - Static method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.Provider.html" title="interface in com.oracle.truffle.api.dsl">Introspection.Provider</a></dt>
 <dd>
@@ -3968,6 +3978,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getContext--">getContext()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Returns the polyglot context associated with this environment.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimitEvent.html#getContext--">getContext()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a></dt>
+<dd>
+<div class="block">The context for which the limit was exceeded.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#getContextReference--">getContextReference()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
 <dd>
@@ -7839,6 +7853,10 @@
 <dd>
 <div class="block">Creates a new custom polyglot access configuration builder.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.html#newBuilder--">newBuilder()</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot">ResourceLimits</a></dt>
+<dd>
+<div class="block">Creates a new builder to construct <a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><code>ResourceLimits</code></a> instances.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#newBuilder-java.lang.String-java.lang.CharSequence-java.lang.String-">newBuilder(String, CharSequence, String)</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dd>
 <div class="block">Creates a new character based literal source from a character sequence.</div>
@@ -8213,6 +8231,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ContextsListener.html#onLanguageContextInitialized-com.oracle.truffle.api.TruffleContext-com.oracle.truffle.api.nodes.LanguageInfo-">onLanguageContextInitialized(TruffleContext, LanguageInfo)</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ContextsListener.html" title="interface in com.oracle.truffle.api.instrumentation">ContextsListener</a></dt>
 <dd>
 <div class="block">Notifies about initialization of a language-specific context in an existing polyglot context.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#onLimit-java.util.function.Consumer-">onLimit(Consumer&lt;ResourceLimitEvent&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Notified when a resource limit is reached.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/LoadSourceListener.html#onLoad-com.oracle.truffle.api.instrumentation.LoadSourceEvent-">onLoad(LoadSourceEvent)</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/LoadSourceListener.html" title="interface in com.oracle.truffle.api.instrumentation">LoadSourceListener</a></dt>
 <dd>
@@ -9587,6 +9609,10 @@
 <dd>
 <div class="block">Reserve the primitive extension array field.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#resetLimits--">resetLimits()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
+<dd>
+<div class="block">Resets all accumulators of resource limits for the associated context to zero.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/LibraryFactory.html#resolve-java.lang.Class-">resolve(Class&lt;T&gt;)</a></span> - Static method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/LibraryFactory.html" title="class in com.oracle.truffle.api.library">LibraryFactory</a></dt>
 <dd>
 <div class="block">Looks up the resolved library instance for a library class.</div>
@@ -9614,6 +9640,22 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebuggerSession.html#resolveSource-com.oracle.truffle.api.source.Source-">resolveSource(Source)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebuggerSession.html" title="class in com.oracle.truffle.api.debug">DebuggerSession</a></dt>
 <dd>
 <div class="block">Resolve the source with respect to the actual <a href="com/oracle/truffle/api/debug/DebuggerSession.html#setSourcePath-java.lang.Iterable-"><code>source path</code></a>.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimitEvent</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">Event triggered by a resource limit for a context.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#resourceLimits-org.graalvm.polyglot.ResourceLimits-">resourceLimits(ResourceLimits)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Assigns resource limit configuration to a context.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimits</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">Represents resource limits configuration that is used to configure contexts.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimits.Builder</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">A builder used to construct resource limits.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/InlineSnippet.Builder.html#resultVerifier-org.graalvm.polyglot.tck.ResultVerifier-">resultVerifier(ResultVerifier)</a></span> - Method in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/InlineSnippet.Builder.html" title="class in org.graalvm.polyglot.tck">InlineSnippet.Builder</a></dt>
 <dd>
@@ -10323,6 +10365,11 @@
 <dd>
 <div class="block">Tests if this <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> path starts with the given <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> path.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#statementLimit-long-java.util.function.Predicate-">statementLimit(long, Predicate&lt;Source&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum number of statements a context may execute until the onLimit event
+ is notified and the context will be <a href="org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html#statements-boolean-">statements(boolean)</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html" title="class in org.graalvm.polyglot.management">ExecutionListener.Builder</a></dt>
 <dd>
 <div class="block">Include program locations that are marked as statements.</div>
@@ -10648,6 +10695,7 @@
 <dd>
 <div class="block">Returns a string representation of this stack frame.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimitEvent.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/SourceSection.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/SourceSection.html" title="class in org.graalvm.polyglot">SourceSection</a></dt>
 <dd>
@@ -11628,7 +11676,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>66d988946a5b4f550bfb6b75f1572ef7bad32f6e</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>924a9de8fb92c1f263b35f4ab6ff9e97ab7baa3d</div>
 </div>
 <div class="subNav">
 <ul class="navList">

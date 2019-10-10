@@ -9,7 +9,7 @@
 
   <title>
     
-      JVM Languages Reference
+      Native Image
     
   </title>
   <meta
@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="/resources/styles/extra.css">
   <link rel="stylesheet" href="https://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css>
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/languages/jvm/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/native-image/">
   <!-- <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script> -->
   <script src="https://maps.oracle.com/mapviewer/jslib/v2.3/oraclemapsv2.js"></script>
   <link rel="stylesheet" href="https://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css">
@@ -448,7 +448,7 @@ $(document).ready(function(){
           
         
           
-          <li class="toc-bullets-sub toc-bullets-highlight">
+          <li class="toc-bullets-sub dsdsd">
           
             
             <a href="/docs/reference-manual/languages/jvm/">
@@ -456,23 +456,6 @@ $(document).ready(function(){
             </a>
           </li>
 
-          
-            <div>
-    <script>
-      var scriptElement = document.currentScript;
-      var div = $(scriptElement.parentElement);
-      $(window).on("load", function() {
-        $("#content-wrapper h1, #content-wrapper h2").each(function() {
-          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
-          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
-          a.text($(this).text());
-          li.append(a);
-          div.append(li);
-        });
-      });
-    </script>
-  </div>
-  
           
         
           
@@ -531,7 +514,7 @@ $(document).ready(function(){
           
         
           
-          <li class="toc-bullets-sub dsdsd">
+          <li class="toc-bullets-sub toc-bullets-highlight">
           
             
             <a href="/docs/reference-manual/native-image/">
@@ -539,6 +522,23 @@ $(document).ready(function(){
             </a>
           </li>
 
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
           
         
           
@@ -678,363 +678,532 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h2 id="running-jvm-based-apps">Running JVM-based Apps</h2>
-<p>GraalVM gives you an enhanced performance for JVM-based applications written
-in languages such as Java, Scala, Groovy, Clojure or Kotlin. It uses a dynamic
-compiler that dramatically improves the efficiency and the speed of applications
-through unique approaches to code analysis and optimization.</p>
+                <h2 id="graalvm-native-image">GraalVM Native Image</h2>
 
-<h3 id="interoperability">Interoperability</h3>
-<p>In addition to running JVM-based languages, you can also call any other language
-implemented with GraalVM <a href="https://github.com/oracle/graal/blob/master/truffle/README.md">Language Implementation Framework</a> directly from Java.
-See the <a href="/docs/reference-manual/polyglot/">Polyglot Reference</a> and the
-<a href="/docs/graalvm-as-a-platform/embed/">Embedding documentation</a>
-for more information about interoperability with other programming languages.</p>
+<p><strong>GraalVM Native Image</strong> allows you to ahead-of-time compile Java code to a standalone executable,
+ called a <strong>native image</strong>. This executable includes the application, the
+ libraries, the JDK and does not run on the Java VM, but includes necessary
+ components like memory management and thread scheduling from a different
+ virtual machine, called “Substrate VM”. Substrate VM is the name for the
+ runtime components (like the deoptimizer, garbage collector, thread scheduling
+ etc.). The resulting program has faster startup time and lower runtime memory
+ overhead compared to a Java VM.</p>
 
-<h3 id="compiler-performance">Compiler Performance</h3>
-<p>The GraalVM compiler achieves excellent performance for modern workloads
-such as Scala or usage of the Java Streams API. For examples, see the
-<a href="/docs/examples/java-performance-examples">Java performance examples</a>.</p>
+<p><strong>Native Image Generator</strong> or <code>native-image</code> is a utility that processes all the classes of your application and their dependencies, including those from the JDK. It statically analyses these classes
+to determine which classes and methods are reachable and used during application
+execution. Then it passes all this reachable code as the input to the GraalVM
+compiler which ahead-of-time compiles it to the native binary.</p>
 
-<h3 id="compiler-operating-modes">Compiler Operating Modes</h3>
-<p>There are two operating modes of the GraalVM compiler when used as a HotSpot JIT compiler:</p>
+<p>GraalVM <code>native-image</code> supports JVM-based languages, e.g., Java, Scala,
+Clojure, Kotlin. The resulting native image can, optionally, execute dynamic
+languages like Ruby, R, or Python, but it does not pre-compile their code
+itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
+<code>native-image</code> of guest languages used by an application, specify
+<code>--language:&lt;languageId&gt;</code> for each guest language used (e.g., <code>--language:js</code>).</p>
+
+<p><strong>Warning:</strong> GraalVM Native Image is
+available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
+and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
+subscription, but is not covered by Oracle’s standard
+warranty.</p>
+
+<h2 id="install-native-image">Install Native Image</h2>
+
+<p>Starting from GraalVM 19.0, Native Image was extracted from the base distribution.
+This functionality can be added to the core installation with <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a> tool in a similar way as other additional components by running:</p>
+<pre><code>gu install native-image
+</code></pre>
+<p>After this additional step, the <code>native-image</code> executable will be in the <code>bin</code>
+directory, as for the previous releases.</p>
+
+<p>Take a look at the <a href="/docs/examples/native-list-dir/">native image generation</a> or <a href="/docs/examples/java-kotlin-aot/">compiling a Java and Kotlin app ahead-of-time</a> samples.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>For compilation <code>native-image</code> depends on the local toolchain, so please make
+sure: <code>glibc-devel</code>, <code>zlib-devel</code> (header files for the C library and <code>zlib</code>)
+and <code>gcc</code> are available on your system.</p>
+
+<p>Another prerequisite to consider is the maximum heap size. Physical memory for
+running a JVM-based application may be insufficient to build a native image. For
+server-based image building we allow to use 80% of the reported physical RAM for
+all servers together, but never more than 14GB per server (for exact details
+please consult the native-image source code). If you run with <code>--no-server</code>
+option, you will get the whole 80% of what is reported as physical RAM as the
+baseline. This mode respects <code>-Xmx</code> arguments additionally.</p>
+
+<h2 id="image-generation-options">Image Generation Options</h2>
+
+<p>The <code>native-image</code> command line needs to provide the class path for all classes
+using the familiar option from the <code>java</code> launcher: <code>-cp</code> is followed by a list
+of directories or .jar files, separated by <code>:</code>. The name of the class containing
+the <code>main</code> method is the last argument; or you can use <code>-jar</code> and provide a .jar
+file that specifies the main method in its manifest. The syntax of the <code>native-image</code> command is:</p>
 
 <ul>
   <li>
-    <p><strong>libgraal</strong>: the GraalVM compiler is compiled ahead of time into a native shared library. In this operating mode, the shared library is loaded by the HotSpot VM. The compiler uses memory separate from the HotSpot heap and it runs fast from the start since it does not need to warm-up. This is the default and recommended mode of operation.</p>
+    <p><code>native-image [options] class</code> to build an executable file for a class in the
+current working directory. Invoking it executes the native-compiled code of that
+class.</p>
   </li>
   <li>
-    <p><strong>jargraal</strong>: the GraalVM compiler goes through the same warm-up phase that the rest of Java application does. That is, it is first interpreted before its hot methods are compiled. This mode is selected with the <code>-XX:-UseJVMCINativeLibrary</code> command line option. This will delay the time to reach peak performance as the compiler
-itself needs to be compiled before it produces code quickly. This mode allows you to
-<a href="/docs/reference-manual/languages/jvm/#troubleshooting-graal">debug the GraalVM compiler with a Java debugger</a>.</p>
+    <p><code>native-image [options] -jar jarfile</code> to build an image for a jar file.</p>
   </li>
 </ul>
 
-<h2 id="compiler-configuration-on-jvm">Compiler Configuration on JVM</h2>
+<p>There is a command-line help available. Run <code>native-image --help</code> to get
+commands overview and <code>native-image --help-extra</code> to print help on non-standard
+options.</p>
 
-<p>The options for configuring the GraalVM compiler on the JVM are in 3 categories.</p>
-
-<h3 id="general-options">General options</h3>
-
-<p>These are general options for setting/getting configuration details.</p>
-
-<ul>
-  <li><code>-XX:-UseJVMCICompiler</code>: This disables use of the GraalVM compiler as the top tier JIT.
-This is useful when wanting to compare performance of the GraalVM compiler against the native JIT compilers.</li>
-  <li>
-    <p><code>-Dgraal.CompilerConfiguration=&lt;name&gt;</code>: Selects the GraalVM compiler configuration to use. If omitted, the compiler
-configuration with the highest auto-selection priority is used. To see the set
-of available configurations, supply the value help to this option.</p>
-
-    <p>The current configurations and their semantics are:</p>
-    <ul>
-      <li><code>enterprise</code>: To produce highly optimized code with a possible trade-off to compilation time.
-<strong>This value is only available in GraalVM EE.</strong></li>
-      <li><code>community</code>: To produce reasonably optimized code with a faster compilation time.</li>
-      <li><code>economy</code>: To compile as fast as possible with less optimal throughput of the generated code.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code>-Dgraal.ShowConfiguration=none</code>: Prints information about the GraalVM compiler configuration selected.
-  This option only produces output when the compiler is initialized. By default, the GraalVM compiler is
-  initialized on the first top-tier compilation. For this reason, the way to use this option
-  is as follows: <code>java -XX:+EagerJVMCI -Dgraal.ShowConfiguration=info -version</code>.</p>
-
-    <p>The accepted values for this option are:</p>
-    <ul>
-      <li><code>none</code>: To show no information.</li>
-      <li><code>info</code>: To print one line of output showing the name of the compiler configuration in use
- and the location it is loaded from.</li>
-      <li><code>verbose</code>: To print detailed compiler configuration information.</li>
-    </ul>
-  </li>
-  <li>
-    <p><code>-Dgraal.MitigateSpeculativeExecutionAttacks=None</code>: Selects a strategy to mitigate speculative
-  execution attacks (e.g., SPECTRE).</p>
-
-    <p>Accepted values are:</p>
-    <ul>
-      <li><code>None</code>: No mitigations are used in JIT compiled code.</li>
-      <li><code>AllTargets</code>: All branches are protected against speculative attacks. This has a large
-performance impact.</li>
-      <li><code>GuardTargets</code>: Only branches that preserve Java memory safety are protected. This has
-reduced performance impact.</li>
-      <li><code>NonDeoptGuardTargets</code>: Same as GuardTargets except that branches which deoptimize are
-not protected since they can not be executed repeatedly.</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="performance-tuning-options">Performance tuning options</h3>
-
-<ul>
-  <li><code>-Dgraal.UsePriorityInlining=true</code>: This can be used to disable use of the advanced inlining
-algorithm that favors throughput over compilation speed. <strong>This option is only available in
-GraalVM EE</strong>.</li>
-  <li><code>-Dgraal.Vectorization=true</code>: This can be used to disable the auto vectorization optimization.
-<strong>This option is only available in GraalVM EE</strong>.</li>
-  <li><code>-Dgraal.OptDuplication=true</code>: This can be used to disable the <a href="http://ssw.jku.at/General/Staff/Leopoldseder/DBDS_CGO18_Preprint.pdf">path duplication optimization</a>. <strong>This option is only available in
-GraalVM EE</strong>.</li>
-  <li>
-    <p><code>-Dgraal.TraceInlining=false</code>: Enables tracing of inlining decisions. This can be used
-  for advanced tuning where it may be possible to change the source code of the program.
-  The output format is shown below:</p>
-
-    <pre><code>compilation of 'Signature of the compilation root method':
-at 'Sig of the root method' ['Bytecode index']: &lt;'Phase'&gt; 'Child method signature': 'Decision made about this callsite'
-  at 'Signature of the child method' ['Bytecode index']:
-     |--&lt;'Phase 1'&gt; 'Grandchild method signature': 'First decision made about this callsite'
-     \--&lt;'Phase 2'&gt; 'Grandchild method signature': 'Second decision made about this callsite'
-  at 'Signature of the child method' ['Bytecode index']: &lt;'Phase'&gt; 'Another grandchild method signature': 'The only decision made about this callsite.'
-</code></pre>
-
-    <p>For example:</p>
-    <pre><code>compilation of java.lang.Character.toUpperCaseEx(int):
-at java.lang.Character.toUpperCaseEx(Character.java:7138) [bci: 22]:
-   ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterData.of(int): no, bytecode parser did not replace invoke
-   └──&lt;PriorityInliningPhase&gt; java.lang.CharacterData.of(int): yes, worth inlining according to the cost-benefit analysis.
-at java.lang.Character.toUpperCaseEx(Character.java:7138) [bci: 26]:
-   ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterDataLatin1.toUpperCaseEx(int): no, bytecode parser did not replace invoke
-   └──&lt;PriorityInliningPhase&gt; java.lang.CharacterDataLatin1.toUpperCaseEx(int): yes, worth inlining according to the cost-benefit analysis.
-  at java.lang.CharacterDataLatin1.toUpperCaseEx(CharacterDataLatin1.java:223) [bci: 4]:
-     ├──&lt;GraphBuilderPhase&gt; java.lang.CharacterDataLatin1.getProperties(int): no, bytecode parser did not replace invoke
-     └──&lt;PriorityInliningPhase&gt; java.lang.CharacterDataLatin1.getProperties(int): yes, worth inlining according to the cost-benefit analysis.
-</code></pre>
-  </li>
-</ul>
-
-<h3 id="diagnostic-options">Diagnostic options</h3>
+<p>You may provide additional options to the native image building:</p>
 
 <ul>
   <li>
-    <p><code>-Dgraal.CompilationFailureAction=Silent</code>: Specifies the action to take when compilation fails by
-  throwing an exception.</p>
-
-    <p>The accepted values are:</p>
-    <ul>
-      <li><code>Silent</code>: Print nothing to the console.</li>
-      <li><code>Print</code>: Print a stack trace to the console.</li>
-      <li><code>Diagnose</code>: Retry the compilation with extra diagnostics enabled. On VM exit, the collected
- diagnostics are saved to a zip file that can be submitted along with a bug report. A message
- is printed to the console describing where the diagnostics file is saved:
-        <pre><code>Graal diagnostic output saved in /Users/graal/graal_dumps/1549459528316/graal_diagnostics_22774.zip
-</code></pre>
-      </li>
-      <li><code>ExitVM</code>: Same as <code>Diagnose</code> except that the VM process exits after retrying.</li>
-    </ul>
-
-    <p>For all values except for <code>ExitVM</code>, the VM continues executing.</p>
+    <p><code>-cp</code> and <code>--class-path &lt;class search path of directories and zip/jar files&gt;</code>
+help to search for class files through separated list of directories, JAR archives, and ZIP archives;</p>
   </li>
-  <li><code>-Dgraal.CompilationBailoutAsFailure=false</code>: The compiler may not complete compilation of a method due
- to some property or code shape in the method (e.g. exotic uses of the jsr and ret bytecodes). In this
- case the compilation <em>bails out</em>. If you want to be informed of such bailouts, this option makes GraalVM
- treat bailouts as failures and thus be subject to the action specified by the
- <code>-Dgraal.CompilationFailureAction</code> option.</li>
-  <li><code>-Dgraal.PrintCompilation=false</code>: Prints an informational line to the console for each completed compilation.
-For example:
-    <pre><code>HotSpotCompilation-11  Ljava/lang/Object;                            wait          ()V       |  591ms    12B    92B  4371kB
-HotSpotCompilation-175 Ljava/lang/String;                            lastIndexOf   (II)I     |  590ms   126B   309B  4076kB
-HotSpotCompilation-184 Ljava/util/concurrent/ConcurrentHashMap;      setTabAt      ([Ljava/util/concurrent/ConcurrentHashMap$Node;ILjava/util/concurrent/ConcurrentHashMap$Node;)V  |  591ms    38B    67B  3411kB
-HotSpotCompilation-136 Lsun/nio/cs/UTF_8$Encoder;                    encode        ([CII[B)I |  591ms   740B   418B  4921
-</code></pre>
+  <li>
+    <p><code>-D&lt;name&gt;=&lt;value&gt;</code> sets a system property for the JVM running the image generator;</p>
+  </li>
+  <li>
+    <p><code>-J&lt;flag&gt;</code> passes <code>&lt;flag&gt;</code> directly to the JVM running the image generator;</p>
+  </li>
+  <li>
+    <p><code>-O&lt;level&gt;</code> 0 – no optimizations, 1 – basic optimizations (default);</p>
+  </li>
+  <li>
+    <p><code>-ea</code> and <code>-da</code> enables or disables assertions in the generated image;</p>
+  </li>
+  <li>
+    <p><code>--allow-incomplete-classpath</code> allows image building with an incomplete class path and reports type resolution errors at run time when they are accessed the first time, instead of during image building;</p>
+  </li>
+  <li>
+    <p><code>--auto-fallback</code> builds a stand-alone image if possible, which is a default setting, <code>--no-fallback</code> builds a stand-alone image or reports a failure, and <code>--force-fallback</code> forces building of a fallback image;</p>
+  </li>
+  <li>
+    <p><code>--enable-all-security-services</code> adds all security service classes to the generated image;</p>
+  </li>
+  <li>
+    <p><code>--enable-http</code> or <code>--enable-https</code> enables http or https support in the generated image;</p>
+  </li>
+  <li>
+    <p><code>--enable-url-protocols</code> provides  a list of comma separated URL protocols to enable;</p>
+  </li>
+  <li>
+    <p><code>--features=&lt;fqcn&gt;</code> provides a comma-separated list of fully qualified feature implementation classes;</p>
+  </li>
+  <li>
+    <p><code>--initialize-at-build-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses during image building;</p>
+  </li>
+  <li>
+    <p><code>--initialize-at-run-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses at run time and not during image building;</p>
+  </li>
+  <li>
+    <p><code>--report-unsupported-elements-at-runtime</code> reports usage of unsupported methods
+and fields at run time when they are accessed the first time, instead of as an error during image building;</p>
+  </li>
+  <li>
+    <p><code>--shared</code>  builds shared library;</p>
+  </li>
+  <li>
+    <p><code>--static</code>  builds statically linked executable (requires static libc and zlib) (since 1.0-rc2);</p>
+  </li>
+  <li>
+    <p><code>--verbose</code> enables verbose output;</p>
+  </li>
+  <li>
+    <p><code>-g</code> enables the debugging info generation. <strong>Warning:</strong> The option is available only with GraalVM Enterprise Edition.</p>
   </li>
 </ul>
 
-<h2 id="setting-compiler-options-with-language-launchers">Setting Compiler Options with Language Launchers</h2>
+<h3 id="macro-options">Macro Options</h3>
 
-<p>The GraalVM compiler properties above are usable with some other GraalVM launchers such as
-<code>node</code>, <code>js</code> and <code>lli</code>. The prefix for specifying the properties is slightly different.
-For example:</p>
+<p>Macro-options are mainly helpful for polyglot capabilities of native images:</p>
 
-<pre><code>$ java -XX:+EagerJVMCI -Dgraal.ShowConfiguration=info -version
-</code></pre>
-
-<p>Becomes:</p>
-
-<pre><code>$ js --jvm --vm.Dgraal.ShowConfiguration=info -version
-</code></pre>
-
-<p>Note the <code>-D</code> prefix is replaced by <code>--vm.D</code>.</p>
-
-<h2 id="jvm-operations-manual">JVM Operations Manual</h2>
-
-<h3 id="difference-between-running-the-graalvm-compiler-in-a-native-image-vs-on-the-jvm">Difference between running the GraalVM compiler in a Native Image vs on the JVM</h3>
-
-<p>When running the GraalVM compiler on the JVM, it goes through the same warmup phase that the
-rest of Java application does. That is, it is first interpreted before
-its hot methods are compiled. This can translate into slightly longer times
-until the application reaches peak performance when compared to the native compilers
-in the JVM such as C1 and C2.</p>
-
-<p>To address the issue of taking longer to reach to peak performance, <strong>libgraal</strong>
-was introduced – a shared library, produced using <a href="https://github.com/oracle/graal/blob/master/substratevm/README.md">Native Image</a>
-framework to ahead-of-time compile the compiler itself. That means the GraalVM
-compiler is deployed as a native shared library. In this mode, the
-compiler uses memory separate from the HotSpot heap and it runs compiled from
-the start. That is, it has execution properties similar to other native HotSpot
-compilers such as C1 and C2. Currently, this is the <strong>default mode</strong> of
-operation in both GraalVM Community and Enterprise images. It can be disabled
-with <code>-XX:-UseJVMCINativeLibrary</code>.</p>
-
-<h2 id="measuring-performance">Measuring Performance</h2>
-
-<p>The first thing to be sure of when measuring the performance is to ensure the JVM is using the GraalVM compiler.
-In the GraalVM binary, the JVM is configured to use the GraalVM compiler
-as the top tier compiler by default. You can confirm this by adding <code>-Dgraal.ShowConfiguration=info</code>
-to the command line. It will produce a line of output similar to the one below
-when the compiler is initialized:</p>
-<pre><code>Using Graal compiler configuration 'community' provided by org.graalvm.compiler.hotspot.CommunityCompilerConfigurationFactory loaded from jar:file:/Users/dsimon/graal/graal/compiler/mxbuild/dists/graal.jar!/org/graalvm/compiler/hotspot/CommunityCompilerConfigurationFactory.class
-</code></pre>
-<p>Note that the GraalVM compiler is only initialized on the first top tier JIT compilation request
-so if your application is short lived, you may not see this output.</p>
-
-<p>Optimizing JVM-based applications is a science in itself. The compilation may not
-even be a factor in the case of poor performance as the problem may
-lie in any other part of the VM (I/O, garbage collection, threading etc) or in
-poorly written application or 3rd party library code. For this reason, it’s
-worth using profilers such as <a href="http://www.oracle.com/technetwork/java/javaseproducts/mission-control/java-mission-control-1998576.html">Java Mission Control</a> to
-diagnose application behavior.</p>
-
-<p>You can also compare performance against the native top tier compiler in the JVM by
-adding <code>-XX:-UseJVMCICompiler</code> to the command line.</p>
-
-<p>If you observe a significant performance regression when using the GraalVM compiler, please
-open an issue on GitHub. Attaching a Java Flight Recorder log and instructions
-to reproduce the issue makes investigation easier and thus
-chances of a fix higher. Even better is if you can submit a <a href="http://openjdk.java.net/projects/code-tools/jmh/">JMH</a>
-benchmark that represents the hottest parts of your application (as identified
-by a profiler). This allows us to very quickly pinpoint missing optimization
-opportunities or to offer suggestions on how to restructure the code to
-avoid or reduce performance bottlenecks.</p>
-
-<h2 id="troubleshooting-the-graalvm-compiler">Troubleshooting the GraalVM Compiler</h2>
-
-<p>Like all software, the GraalVM compiler is not guaranteed to be bug free so it is useful to
-know how to diagnose and submit useful bug reports if you encounter issues.</p>
-
-<p>If you spot a security vulnerability, please do <strong>not</strong> report it via GitHub Issues or the public mailing lists,
-but via the process outlined at <a href="https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html">Reporting Vulnerabilities guide</a>.</p>
-
-<h3 id="compilation-exceptions">Compilation Exceptions</h3>
-
-<p>One advantage of the compiler being written in Java is that runtime exceptions during
-compilation are not fatal VM errors. Instead, each compilation has an exception
-handler that takes an action based on the <code>graal.CompilationFailureAction</code>
-property.</p>
-
-<p>The default value is <code>Silent</code>. Specifying <code>Diagnose</code> causes failing compilations to be retried
-with extra diagnostics enabled. Just before the VM exits, all diagnostic output
-captured during retried compilations is written to a <code>.zip</code> file and its location
-is printed on the console:</p>
-<pre><code>Graal diagnostic output saved in /Users/demo/graal-dumps/1499768882600/graal_diagnostics_64565.zip
-</code></pre>
-
-<p>You can then attach the .zip file to an issue on <a href="https://github.com/oracle/graal">GitHub</a>.</p>
-
-<p>Apart from <code>Silent</code> and <code>Diagnose</code> the following values for <code>graal.CompilationFailureAction</code>
-are supported:</p>
 <ul>
-  <li><code>Print</code>: Prints a message and stack trace to the console but does not do the re-compilation.</li>
-  <li><code>ExitVM</code>: Same as <code>Diagnose</code> but the VM process exits after the re-compilation.</li>
+  <li>
+    <p><code>--language:nfi</code> to make Truffle Native Function Interface language available;</p>
+  </li>
+  <li>
+    <p><code>--language:regex</code> to make Truffle Regular Expression engine available that
+  exposes regular expression functionality in GraalVM supported languages;</p>
+  </li>
+  <li>
+    <p><code>--language:python</code> to make sure Python is available as a language for the image;</p>
+  </li>
+  <li>
+    <p><code>--language:llvm</code> to make sure LLVM bitcode is available for the image;</p>
+  </li>
+  <li>
+    <p><code>--language:js</code> to make sure JavaScript is available as a language for the image;</p>
+  </li>
+  <li>
+    <p><code>--language:ruby</code> to make sure Ruby is available as a language for the image;</p>
+  </li>
+  <li>
+    <p><code>--language:R</code>  to make sure R is available as a language for the image;</p>
+  </li>
+  <li>
+    <p><code>--tool:chromeinspector</code>  adds debugging support to a Truffle framework based language image;</p>
+  </li>
+  <li>
+    <p><code>--tool:profiler</code> adds profiling support to a Truffle framework based language image.</p>
+  </li>
 </ul>
 
-<h3 id="code-generation-errors">Code Generation Errors</h3>
+<p>Please note, the <code>--language:python</code>, <code>--language:ruby</code> and <code>--language:R</code> polyglot macro options become available once the corresponding languages engines are added to the base GraalVM installation with GraalVM Updater tool:</p>
+<pre><code>gu install python
+gu install ruby
+gu install R
+</code></pre>
+<h3 id="non-standard-options">Non-standard Options</h3>
 
-<p>The other type of error compilers can have is producing incorrect machine code.
-This error can cause a VM crash, which should produce a file that starts with
-<code>hs_err_pid</code> in the current working directory of the VM process. In most cases,
-there is a section in the file that shows the stack at the time of the crash,
-including the type of code for each frame in the stack, as in the following
-example:</p>
+<p>Get acquainted with the non-standard native image building options, that are subject to change through a deprecation cycle:</p>
 
-<pre><code>Stack: [0x00007000020b1000,0x00007000021b1000],  sp=0x00007000021af7a0,  free space=1017k
-Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
-J 761 JVMCI org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V (299 bytes) @ 0x0000000108a2fc01 [0x0000000108a2fac0+0x141] (null)
-j  org.graalvm.compiler.core.gen.NodeLIRBuilder.doBlock(Lorg/graalvm/compiler/nodes/cfg/Block;Lorg/graalvm/compiler/nodes/StructuredGraph;Lorg/graalvm/compiler/core/common/cfg/BlockMap;)V+211
-j  org.graalvm.compiler.core.LIRGenerationPhase.emitBlock(Lorg/graalvm/compiler/nodes/spi/NodeLIRBuilderTool;Lorg/graalvm/compiler/lir/gen/LIRGenerationResult;Lorg/graalvm/compiler/nodes/cfg/Block;Lorg/graalvm/compiler/nodes/StructuredGraph;Lorg/graalvm/compiler/core/common/cfg/BlockMap;)V+65
+<ul>
+  <li>
+    <p><code>--no-server</code> tells to not use server-based image building;</p>
+  </li>
+  <li>
+    <p><code>--server-list</code> lists current image-build servers;</p>
+  </li>
+  <li>
+    <p><code>--server-list-details</code> lists current image-build servers with more details;</p>
+  </li>
+  <li>
+    <p><code>--server-cleanup</code> removes stale image-build servers entries;</p>
+  </li>
+  <li>
+    <p><code>--server-shutdown</code> shuts down image-build servers under current session ID;</p>
+  </li>
+  <li>
+    <p><code>--server-shutdown-all</code> shuts down all image-build servers;</p>
+  </li>
+  <li>
+    <p><code>--server-session=&lt;custom-session-name&gt;</code> uses custom session name instead
+   of system provided session ID of the calling process;</p>
+  </li>
+  <li>
+    <p><code>--verbose-server</code> enables verbose output for image-build server handling.</p>
+  </li>
+</ul>
+
+<h3 id="server-side-options">Server-side Options</h3>
+
+<ul>
+  <li>
+    <p><code>--debug-attach[=&lt;port&gt;]</code> attaches to debugger during image building (default  port is 8000);</p>
+  </li>
+  <li>
+    <p><code>--dry-run</code> outputs the command line that would be used for image building;</p>
+  </li>
+  <li>
+    <p><code>--expert-options</code> lists image build options for experts;</p>
+  </li>
+  <li>
+    <p><code>--expert-options-all</code>  lists all image build options for experts (to be used at your own risk);</p>
+  </li>
+  <li>
+    <p><code>--configurations-path &lt;search path of option-configuration directories&gt;</code> a separated list of directories to be treated as option-configuration directories;</p>
+  </li>
+  <li>
+    <p><code>-V&lt;key&gt;=&lt;value&gt;</code> provides values for placeholders in native-image.properties files.</p>
+  </li>
+</ul>
+
+<p>If the environment variable <code>NATIVE_IMAGE_CONFIG_FILE</code> is set to a Java
+properties file, a native image will use the defaults defined in there on each
+invocation.</p>
+
+<p>Here is an example of configuration file (saved as <code>~/.native-image/default.properties</code>) :</p>
+
+<pre><code>NativeImageArgs = --configurations-path /home/user/custom-image-configs \
+                  -O1
 </code></pre>
 
-<p>This example shows that the top frame was compiled (J) by the JVMCI compiler,
-which is the GraalVM compiler. The crash occurred at offset 0x141 in the machine
-code produced for:</p>
-<pre><code>org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V
+<p>If the user has a configuration file and export <code>NATIVE_IMAGE_CONFIG_FILE=$HOME/.native-image/default.properties</code> in <code>~/.bash_profile</code>, every time the native image gets used, it will implicitly use the arguments
+specified as <code>NativeImageArgs</code>, plus the arguments specified on command line.</p>
+
+<p>For a more comprehensive list of options please check the <a href="https://github.com/oracle/graal/blob/master/substratevm/OPTIONS.md">documentation on Github</a>.</p>
+
+<p><strong>Warning:</strong>
+Python source code or LLVM bitcode interpreted or compiled with GraalVM
+Community Edition will not have the same security characteristics as the same
+code interpreted or compiled using GraalVM Enterprise Edition. There is a
+GraalVM string embedded in each image that allows to figure out the version and
+variant of the base (Community or Enterprise) used to build an image.
+The following command will query that information from an image:</p>
+<pre><code>strings &lt;path to native-image exe or shared object&gt; | grep com.oracle.svm.core.VM
 </code></pre>
 
-<p>The next two frames in the stack were executing in the interpreter (j). The
-location of the crash is also often indicated near the top of the file with
-something like this:</p>
-<pre><code># Problematic frame:
-# J 761 JVMCI org.graalvm.compiler.core.gen.NodeLIRBuilder.matchComplexExpressions(Ljava/util/List;)V (299 bytes) @ 0x0000000108a2fc01 [0x0000000108a2fac0+0x141] (null)
+<p>Assuming you have a Java class file <em>EmptyHello.class</em> containing an empty main method
+and have generated an empty shared object <code>emptyhello</code> with GraalVM Native Image Generator utility of it:</p>
+<pre><code>$ native-image -cp hello EmptyHello
+Build on Server(pid: 11228, port: 41223)
+[emptyhello:11228]    classlist:     149.59 ms
+...
 </code></pre>
 
-<p>In this example, there is likely an error in the code produced by the GraalVM compiler for <code>NodeLIRBuilder.matchComplexExpressions</code>.</p>
+<p>If you do not know what GraalVM distribution is set to the <code>PATH</code> environment
+variable, how to determine if a native image was compiled with Community or
+Enterprise Edition? Run this command:</p>
 
-<p>When filing an issue on <a href="https://github.com/oracle/graal">GitHub</a>
-for such a crash, you should first attempt to reproduce the crash with extra
-diagnostics enabled for the compilation of the problematic method.
-In this example, you would add the following to your command line:</p>
-<pre><code>-Dgraal.MethodFilter=NodeLIRBuilder.matchComplexExpressions, -Dgraal.Dump=:2
+<pre><code>$ strings emptyhello | grep com.oracle.svm.core.VM
 </code></pre>
 
-<p>These options are described in more detail <a href="https://github.com/oracle/graal/blob/master/compiler/docs/Debugging.md">here</a>.
-In brief, these options tell the compiler to capture snapshots of the compiler state at
-verbosity level 2 while compiling any method named <code>matchComplexExpressions</code> in
-a class with a simple name of <code>NodeLIRBuilder</code>. The complete format of the
-<code>MethodFilter</code> option is described in the output of <code>java -XX:+JVMCIPrintProperties</code>.</p>
-
-<p>Quite often, the crash location does not exist directly in the problematic method
-mentioned in the crash log but comes from an inlined method.</p>
-
-<p>In such a case, simply filtering for the problematic method might not capture an
-erroneous compilation causing a crash.</p>
-
-<p>To improve the likelihood of capturing an erroneous compilation, you need to
-broaden the <code>MethodFilter</code> value. To guide this, add <code>-Dgraal.PrintCompilation=true</code>
-when trying to reproduce the crash so you can see what was compiled just before
-the crash.</p>
-
-<p>The following shows sample output from the console:</p>
-<pre><code>HotSpotCompilation-1218        Lorg/graalvm/compiler/core/amd64/AMD64NodeLIRBuilder;                  peephole                                      (Lorg/graalvm/compiler/nodes/ValueNode;)Z           |   87ms   428B   447B  1834kB
-HotSpotCompilation-1212        Lorg/graalvm/compiler/lir/LIRInstructionClass;                         forEachState                                  (Lorg/graalvm/compiler/lir/LIRInstruction;Lorg/graalvm/compiler/lir/InstructionValueProcedure;)V  |  359ms    92B   309B  6609kB
-HotSpotCompilation-1221        Lorg/graalvm/compiler/hotspot/amd64/AMD64HotSpotLIRGenerator;          getResult                                     ()Lorg/graalvm/compiler/hotspot/HotSpotLIRGenerationResult;  |   54ms    18B   142B  1025kB
-#
-# A fatal error has been detected by the Java Runtime Environment:
-#
-#  SIGSEGV (0xb) at pc=0x000000010a6cafb1, pid=89745, tid=0x0000000000004b03
-#
-# JRE version: OpenJDK Runtime Environment (8.0_121-b13) (build 1.8.0_121-graalvm-olabs-b13)
-# Java VM: OpenJDK 64-Bit GraalVM (25.71-b01-internal-jvmci-0.30 mixed mode bsd-amd64 compressed oops)
-# Problematic frame:
-# J 1221 JVMCI org.graalvm.compiler.hotspot.amd64.AMD64HotSpotLIRGenerator.getResult()Lorg/graalvm/compiler/hotspot/HotSpotLIRGenerationResult; (18 bytes) @ 0x000000010a6cafb1 [0x000000010a6caf60+0x51] (null)
-#
-# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
-</code></pre>
-<p>Here we see that the crash happened in a different method than the first crash.
-As such, we expand the filter argument to be <code>-Dgraal.MethodFilter=
-NodeLIRBuilder.matchComplexExpressions,AMD64HotSpotLIRGenerator.getResult</code>
-and run again.</p>
-
-<p>When the VM crashes in this way, it does not execute the shutdown code that
-archives the GraalVM compiler diagnostic output or delete the directory it was written to.
-This must be done manually after the crash.</p>
-
-<p>By default, the directory is <code>$PWD/graal-dumps/&lt;timestamp&gt;</code>; for example, <code>./graal-dumps/1499938817387</code>.
-However, you can set the directory with <code>-Dgraal.DumpPath=&lt;path&gt;</code>.</p>
-
-<p>A message, such as the following, is printed to the console when this
-directory is first used by the compiler:</p>
-<pre><code>Dumping debug output in /Users/demo/graal-dumps/1499768882600
+<p>The expected output should match the following:</p>
+<pre><code>com.oracle.svm.core.VM GraalVM 19.2.0.1 CE
 </code></pre>
 
-<p>This directory should contain content related to the crashing method, such as:</p>
-<pre><code>$ ls -l /Users/demo/graal-dumps/1499768882600
--rw-r--r--  1 demo  staff    144384 Jul 13 11:46 HotSpotCompilation-1162[AMD64HotSpotLIRGenerator.getResult()].bgv
--rw-r--r--  1 demo  staff     96925 Jul 13 11:46 HotSpotCompilation-1162[AMD64HotSpotLIRGenerator.getResult()].cfg
--rw-r--r--  1 demo  staff  12600725 Jul 13 11:46 HotSpotCompilation-791[NodeLIRBuilder.matchComplexExpressions(List)].bgv
--rw-r--r--  1 demo  staff   1727409 Jul 13 11:46 HotSpotCompilation-791[NodeLIRBuilder.matchComplexExpressions(List)].cfg
-</code></pre>
-<p>You should attach a zip of this directory to an issue on <a href="https://github.com/oracle/graal">GitHub</a>.</p>
+<h2 id="profile-guided-optimizations">Profile-guided Optimizations</h2>
 
+<p>For additional performance gain and higher throughput in GraalVM
+ahead-of-time (AOT) mode, make use of profile-guided optimizations (PGO). With
+PGO, you can collect the profiling data in advance and then feed it to the
+GraalVM <code>native-image</code> utility, which will use this information to optimize the
+performance of the resulting binary.</p>
+
+<p><strong>Warning:</strong> Profile-guided optimizations (PGO) is a GraalVM Enterprise feature.</p>
+
+<p>In GraalVM versions prior to 19.2.0, a commonly used technique to mitigate the
+missing just-in-time (JIT) optimization is to gather the execution profiles at one run
+and then use them to optimize subsequent compilation(s). In other words, one
+needs to create a native image with the <code>--pgo-instrument</code> option to collect the
+profile information. The <code>--pgo-instrument</code> builds an instrumented native image
+with profile-guided optimization data collected of AOT compiled code
+in the <em>default.iprof</em> file, if nothing else is specified. Then you run an
+example program, saving the result in <em>default.iprof</em>. Finally, you create a
+second native image with <code>--pgo profile.iprof</code> flag that should be significantly
+faster.</p>
+
+<p>Starting from 19.2.0, you can collect profiles while running your
+application in JIT mode and then use this information to generate
+a highly-optimized native binary. This maximizes the performance even more.</p>
+
+<ol>
+  <li>Run a java program in JIT mode with a <code>-Dgraal.PGOInstrument</code> flag to gather the profiling information:
+    <pre><code>$ java -Dgraal.PGOInstrument=myclass.iprof MyClass
+</code></pre>
+  </li>
+  <li>Use the collected data to generate a native image:
+    <pre><code>$ native-image --pgo=myclass.iprof MyClass
+</code></pre>
+  </li>
+  <li>Run the resulting binary:
+    <pre><code>$ ./myclass
+</code></pre>
+  </li>
+</ol>
+
+<h3 id="limitations-of-aot-compilation">Limitations of AOT Compilation</h3>
+
+<p>GraalVM Native Image does not support all Java features or supports some of them
+only partially to allow effective ahead-of-time optimizations. To be able to
+build a highly optimized native executable, we run an aggressive static analysis
+that requires a closed-world assumption, which means that all classes and all
+bytecodes that are reachable at runtime must be known at build time. Therefore,
+it is not possible to load new classes that have not been available during
+ahead-of-time compilation. In other terms, GraalVM Native Image does not support
+dynamic class loading.</p>
+
+<p>A more comprehensive list of restrictions can be found in the <a href="https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md">Native Image Java Limitations</a> document.</p>
+
+<!-- Tracing Agent -->
+<h2 id="tracing-agent">Tracing Agent</h2>
+
+<p>To overcome some restrictions of GraalVM Native Image and to simplify the
+configuration process, we implemented a tracing agent which records the behavior
+of a Java application running on GraalVM or any other compatible JVM that
+supports Java VM Tool Interface (JVMTI). The tracing agent is supported in both
+GraalVM Enterprise and Community Editions.</p>
+
+<p><strong>Warning:</strong> The tracing agent is part of the GraalVM Native Image component, which must be <a href="/docs/reference-manual/aot-compilation/">installed</a> first.</p>
+
+<p>The tracing agent helps to deal with such features as <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">Reflection</a>, <a href="https://github.com/oracle/graal/blob/master/substratevm/JNI.md">Java Native Interface</a>, <a href="https://github.com/oracle/graal/blob/master/substratevm/RESOURCES.md">Class Path Resources</a>, and <a href="https://github.com/oracle/graal/blob/master/substratevm/DYNAMIC_PROXY.md">Dynamic Proxy</a> in the GraalVM environment. It is applicable when the static analysis cannot automatically determine what to put into a native image and undetected usages of these dynamic features need to be provided to the generation process in the form of configuration files. The tracing agent observes the application behavior and builds configuration files when running on the Java HotSpot VM, thus it can be enabled on the command line with the <code>java</code> command:</p>
+<pre><code>$JAVA_HOME/bin/java -agentlib:native-image-agent=config-output-dir=/path/to/config-dir/ ...
+</code></pre>
+<p>Please note that <code>-agentlib</code> must be specified before a <code>-jar</code> option or a class
+name or any application parameters in the <code>java</code> command line.</p>
+
+<p>During execution, the agent interfaces with the JVM to intercept all calls
+that look up classes, methods, fields, resources or request proxy accesses. The
+agent then generates the <em>jni-config.json</em>, <em>reflect-config.json</em>,
+<em>proxy-config.json</em> and <em>resource-config.json</em> in the specified output
+directory. The generated files are stand-alone configuration files in JSON
+format which contain all intercepted dynamic accesses.</p>
+
+<p>The generated configuration files can later be supplied to the native-image tool
+by placing them in a <code>META-INF/native-image/</code> directory on the class path, for
+example, in a JAR file. Not all of those files must be present. When multiple
+files with the same name are found, all of them are included.</p>
+
+<p>Read more about advanced usage of the tracing agent in <a href="https://github.com/oracle/graal/blob/master/substratevm/CONFIGURE.md">Assisted Configuration of Native Image Builds</a> document.</p>
+
+<h3 id="java-reflection-support">Java Reflection Support</h3>
+
+<p>Further below we will focus on GraalVM Native Image support of Java Reflection API.</p>
+
+<p>Java Reflection provides the ability to inspect and modify applications runtime
+behavior. It allows to inspect a class or an interface, get its methods and
+fields information, invoke a method, and even create an object of a class at
+runtime. The Reflection API classes are part of the <code>java.lang.reflect</code> package.</p>
+
+<p>For GraalVM Native Image to handle the Reflection API, in some cases, a reflection
+configuration has to be provided at image build time. Within a
+closed-world assumption approach, an aggressive static analysis can see most
+classes, methods and fields with certainty because they are used directly.
+However, when the code accesses program elements by name via reflection, the
+analysis cannot always determine ahead-of-time what program elements it refers
+to, and the user’s assistance is then needed to make these elements accessible
+at runtime. For example, the analysis can discover all dynamic usages of the
+<code>Class.forName("java.lang.String").getMethod("hashCode").invoke("Hello!");</code>
+sequence because only constants are used, but in
+<code>String.class.getMethod("hashCode".replace('K', 'C')).invoke("Hello!");</code> it
+cannot. Where the static analysis fails to access the program elements
+reflectively, they must be specified in a configuration file via the option
+<code>-H:ReflectionConfigurationFiles=</code>. For more details, read our <a href="https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md">documentation on reflection support</a>.</p>
+
+<p>In the given case, the tracing agent can simplify the configuration process and
+write a reflection configuration file by tracing all reflective lookup
+operations on the Java HotSpot VM. The traced operations are <code>Class.forName</code>, <code>Class.getMethod</code>, and <code>Class.getField</code>.</p>
+
+<p>For demonstration purposes, save the following code as <em>ReflectionExample.java</em> file:</p>
+
+<pre><code>import java.lang.reflect.Method;
+
+class StringReverser {
+    static String reverse(String input) {
+        return new StringBuilder(input).reverse().toString();
+    }
+}
+
+class StringCapitalizer {
+    static String capitalize(String input) {
+        return input.toUpperCase();
+    }
+}
+
+public class ReflectionExample {
+    public static void main(String[] args) throws ReflectiveOperationException {
+        String className = args[0];
+        String methodName = args[1];
+        String input = args[2];
+
+        Class&lt;?&gt; clazz = Class.forName(className);
+        Method method = clazz.getDeclaredMethod(methodName, String.class);
+        Object result = method.invoke(null, input);
+        System.out.println(result);
+    }
+}
+</code></pre>
+
+<p>This is a simple Java program where non-constant strings for accessing program
+elements by name must come as external inputs. The main method invokes a method
+of a particular class (<code>Class.forName</code>) whose names are passed as command line
+arguments. Providing any other class or method name on the command line leads to
+an exception.</p>
+
+<p>Having compiled the example, invoke each method:</p>
+<pre><code>$JAVA_HOME/bin/javac ReflectionExample.java
+$JAVA_HOME/bin/java ReflectionExample StringReverser reverse "hello"
+olleh
+$JAVA_HOME/bin/java ReflectionExample StringCapitalizer capitalize "hello"
+HELLO
+</code></pre>
+
+<!-- If we create an object of a class and directly instantiate it, like
+```
+StringReverser stringReverser = new StringReverser();
+Class<? extends StringReverser>  clazz = stringReverser.getClass();
+```
+this access will not be problematic for the GraalVM Compiler because `getClass()`
+is always supported. To evidence a problematic usage of the Reflection API, we access the
+class whose property is to be checked with `Class.forName()` method. -->
+
+<p>Now we are going to build a native image as regularly, without a reflection configuration file and run a resulting image:</p>
+<pre><code>$JAVA_HOME/bin/native-image ReflectionExample
+Build on Server(pid: 59625, port: 58819)
+[reflectionexample:59625]    classlist:     467.66 ms
+...
+Warning: Image 'reflectionexample' is a fallback image that requires a JDK for execution (use --no-fallback to suppress fallback image generation).
+$ ./reflectionexample
+</code></pre>
+<p>The <code>reflectionexample</code> binary is just a launcher for the Java HotSpot VM, a “fallback
+image” as stated in the warning message. To generate a native image with
+reflective lookup operations, we will apply the tracing agent to write a
+configuration file to be later feed into the native image generation together
+with a <code>--no-fallback</code> option.</p>
+
+<ol>
+  <li>Create a directory <code>META-INF/native-image</code> in the working directory:
+    <pre><code>mkdir -p META-INF/native-image
+</code></pre>
+  </li>
+  <li>Enable the agent and pass necessary command line arguments:
+    <pre><code>$JAVA_HOME/bin/java -agentlib:native-image-agent=config-output-dir=META-INF/native-image ReflectionExample StringReverser reverse "hello"
+</code></pre>
+    <p>This command creates a <em>reflection-config.json</em> file which makes the <code>StringReverser</code> class and the <code>reverse()</code> method accessible via reflection. The <em>jni-config.json</em>, <em>proxy-config.json</em> ,and <em>resource-config.json</em> configuration files are written in that directory too.
+<img src="/docs/img/reflect_config_file_example.png" alt="" /></p>
+  </li>
+  <li>Build a native image:
+    <pre><code>$JAVA_HOME/bin/native-image --no-fallback ReflectionExample
+</code></pre>
+    <p>The native image generator automatically picks up configuration files in
+<em>META-INF/native-image</em> directory or subdirectories. However, it is recommended
+to have <em>META-INF/native-image</em> location on the class path, either via a JAR
+file or via the <code>-cp</code> flag. It will help to avoid confusion for IDE users where a
+directory structure is defined by the tool.</p>
+  </li>
+  <li>Test the methods, but remember that we have not run the tracing agent twice to create a configuration
+that supports both:
+    <pre><code>$ ./reflectionexample StringReverser reverse "hello"
+olleh
+$ ./reflectionexample  StringCapitalizer capitalize "hello"
+Exception in thread "main" java.lang.ClassNotFoundException: StringCapitalizer
+ at com.oracle.svm.core.hub.ClassForNameSupport.forName(ClassForNameSupport.java:60)
+ at java.lang.Class.forName(DynamicHub.java:1161)
+ at ReflectionExample.main(ReflectionExample.java:21)
+</code></pre>
+  </li>
+</ol>
+
+<p>Neither the tracing agent nor native images generator cannot automatically check
+if the provided configuration files are complete. The agent only observes and
+records which values are accessed through reflection so that the same accesses
+are possible in a native image. You can either manually edit the
+<em>reflection-config.json</em> file, or re-run the tracing agent to transform the
+existing configuration file, or extend it by using <code>config-merge-dir</code> option:</p>
+
+<pre><code>$JAVA_HOME/bin/java -agentlib:native-image-agent=config-merge-dir=META-INF/native-image ReflectionExample StringCapitalizer capitalize "hello"
+</code></pre>
+<p>Note, the different option <code>config-merge-dir</code> instructs the agent to extend the
+existing configuration files instead of overwriting them. After re-building the
+native image, the <code>StringCapitalizer</code> class and the <code>capitalize</code> method will be
+accessible too.</p>
+
+<p><img src="/docs/img/reflect_config_file_merged.png" alt="" /></p>
+
+<h2 id="generating-heap-dumps">Generating Heap Dumps</h2>
+
+<p>GraalVM also supports monitoring and generating heap dumps of the Native Image processes.</p>
+
+<p><strong>Warning:</strong> This functionality is available in the <a href="http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Enterprise Edition of GraalVM</a>.</p>
+
+<p>To find out more about generating heap dumps of the native image processes,
+refer to the <a href="/docs/reference-manual/native_heapdump/">step-by-step documentation</a>.</p>
+
+<h3 id="operational-information-for-native-images">Operational Information for Native Images</h3>
+
+<p><em>When does it make sense to run in a Native Image instead of the JVM?</em></p>
+<ul>
+  <li>When startup time and memory footprint is important.</li>
+  <li>When you want to embed Java code with existing C/C++ applications</li>
+</ul>
+
+<p><em>What tools work with Native Image: debugger, profilers? How to use them?</em></p>
+<ul>
+  <li>The community version does not support DWARF information. The enterprise version supports all native tools that rely on DWARF information, like debuggers (gdb) and profilers (VTune).</li>
+</ul>
 
               </div>
 

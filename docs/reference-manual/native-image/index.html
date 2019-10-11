@@ -1194,15 +1194,25 @@ refer to the <a href="/docs/reference-manual/native_heapdump/">step-by-step docu
 
 <h3 id="operational-information-for-native-images">Operational Information for Native Images</h3>
 
+<p><em>How can I specify the default amount of memory a native image can use when it gets executed?</em></p>
+<ul>
+  <li>To fine-tune maximum memory to be used by an image, set the percent value of physical
+memory using the <code>-R:MaximumHeapSizePercent=&lt;value&gt;</code> option. For more
+information, unfold the <code>native-image --expert-options-all</code> list and search for
+<code>-R:MaximumHeapSizePercent=&lt;value&gt;</code>,
+<code>-R:MaximumYoungGenerationSizePercent=&lt;value&gt;</code>,
+<code>-H:AllocationBeforePhysicalMemorySize=&lt;value&gt;</code> and other related options.</li>
+</ul>
+
 <p><em>When does it make sense to run in a Native Image instead of the JVM?</em></p>
 <ul>
-  <li>When startup time and memory footprint is important.</li>
-  <li>When you want to embed Java code with existing C/C++ applications</li>
+  <li>When startup time, memory footprint and packaging size are important.</li>
+  <li>When you want to embed Java code with existing C/C++ applications.</li>
 </ul>
 
 <p><em>What tools work with Native Image: debugger, profilers? How to use them?</em></p>
 <ul>
-  <li>The community version does not support DWARF information. The enterprise version supports all native tools that rely on DWARF information, like debuggers (gdb) and profilers (VTune).</li>
+  <li>The community version does not support DWARF information. The enterprise version supports all native tools that rely on DWARF information, like debuggers (GNU Project Debugger) and profilers (VTune).</li>
 </ul>
 
               </div>

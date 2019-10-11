@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>70de30a4aa25a202af8ad2e4530aa8eb05ce7712</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0.1</b><br>65e0378255ed44e067c0f20398f94539da38d1c9</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -321,7 +321,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
  calling this method remains always the same.
  <p>
  This method might be called in parallel from multiple threads even if the language is single
- threaded. The method may be invoked without a language context currently being active.</div>
+ threaded. The method may be invoked without a <a href="../../../../../com/oracle/truffle/api/TruffleLanguage.html#getContextReference--"><code>language context</code></a> currently being active.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>0.33</dd>
@@ -360,8 +360,8 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
  delegate has just thrown an exception.</li>
  </ul>
  <p>
- This method is always invoked on an interpreter thread. The method may be invoked without a
- language context currently being active.</div>
+ This method is always invoked on an interpreter thread. The method is always invoked with a
+ <a href="../../../../../com/oracle/truffle/api/TruffleLanguage.html#getContextReference--"><code>language context</code></a> currently being active.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>probe</code> - the <a href="../../../../../com/oracle/truffle/api/instrumentation/ProbeNode.html" title="class in com.oracle.truffle.api.instrumentation"><code>probe node</code></a> to be adopted and sent execution events by the
@@ -454,7 +454,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
  calling this method for a particular tag remains always the same.
  <p>
  This method might be called in parallel from multiple threads even if the language is single
- threaded. The method may be invoked without a language context currently being active.</div>
+ threaded. The method may be invoked without a <a href="../../../../../com/oracle/truffle/api/TruffleLanguage.html#getContextReference--"><code>language context</code></a> currently being active.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>tag</code> - the class <a href="../../../../../com/oracle/truffle/api/instrumentation/ProvidedTags.html" title="annotation in com.oracle.truffle.api.instrumentation"><code>provided</code></a> by
@@ -499,9 +499,8 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
  a TruffleObject and return this instance.
  <p>
  This method might be called in parallel from multiple threads even if the language is single
- threaded. The method may be invoked without a language context currently being active. The
- <a href="../../../../../com/oracle/truffle/api/nodes/Node.html#getLock--"><code>AST lock</code></a> is held while <a href="../../../../../com/oracle/truffle/api/instrumentation/InstrumentableNode.html#getNodeObject--"><code>InstrumentableNode.getNodeObject()</code></a> object is invoked.
- There is no lock held when the object is read.</div>
+ threaded. The method may be invoked without a <a href="../../../../../com/oracle/truffle/api/TruffleLanguage.html#getContextReference--"><code>language context</code></a> currently being active. The <a href="../../../../../com/oracle/truffle/api/nodes/Node.html#getLock--"><code>AST lock</code></a> is held while
+ <a href="../../../../../com/oracle/truffle/api/instrumentation/InstrumentableNode.html#getNodeObject--"><code>InstrumentableNode.getNodeObject()</code></a> object is invoked. There is no lock held when the object is read.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the node object as TruffleObject or <code>null</code> if no node object properties
@@ -536,7 +535,8 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
  The AST lock is acquired while this method is invoked. Therefore it is not allowed to run
  guest language code while this method is invoked. This method might be called in parallel
  from multiple threads even if the language is single threaded. The method may be invoked
- without a language context currently being active.
+ without a <a href="../../../../../com/oracle/truffle/api/TruffleLanguage.html#getContextReference--"><code>language context</code></a> currently being
+ active.
  <p>
  In the example below, we show how the <code>IncrementNode</code> with a
  <code>ConstantNode</code> child is optimized into a <code>ConstantIncrementNode</code> and
@@ -750,7 +750,7 @@ extends <a href="../../../../../com/oracle/truffle/api/nodes/NodeInterface.html"
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>70de30a4aa25a202af8ad2e4530aa8eb05ce7712</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.0.1</b><br>65e0378255ed44e067c0f20398f94539da38d1c9</div>
 </div>
 <div class="subNav">
 <ul class="navList">

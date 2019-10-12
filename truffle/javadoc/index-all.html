@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.1-dev</b><br>06cc5091757e2ade13a696d810373ab0ca9219ea</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>08ec97f754b8c2e5ce7c129aa7214e8eecc43c86</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -772,7 +772,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#asString-java.lang.Object-">asString(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
 <dd>
-<div class="block">Returns the Java boolean value if the receiver represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isBoolean-java.lang.Object-"><code>boolean</code></a> like value.</div>
+<div class="block">Returns the Java string value if the receiver represents a <a href="com/oracle/truffle/api/interop/InteropLibrary.html#isString-java.lang.Object-"><code>string</code></a>
+ like value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#asString--">asString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
@@ -948,6 +949,18 @@
 <div class="block">Constructs a new index range between one a first index inclusive and a second index
  exclusive.</div>
 </dd>
+<dt><a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">BlockNode</span></a>&lt;<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="type parameter in BlockNode">T</a> extends <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a>&gt; - Class in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
+<dd>
+<div class="block">Represents a standard node for guest language blocks.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#BlockNode-T:A-">BlockNode(T[])</a></span> - Constructor for class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Internal constructor for implementations.</div>
+</dd>
+<dt><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes"><span class="typeNameLink">BlockNode.ElementExecutor</span></a>&lt;<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="type parameter in BlockNode.ElementExecutor">T</a> extends <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a>&gt; - Interface in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
+<dd>
+<div class="block">Represents a contract how block element nodes can be executed.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#BOOLEAN">BOOLEAN</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
 <dd>
 <div class="block">Represents a boolean type.</div>
@@ -958,6 +971,10 @@
 <dd>
 <div class="block">
  BranchProfiles are profiles to speculate on branches that are unlikely to be visited.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#BREAK_LOOP_STATUS">BREAK_LOOP_STATUS</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">A value indicating that the loop should not be repeated.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug"><span class="typeNameLink">Breakpoint</span></a> - Class in <a href="com/oracle/truffle/api/debug/package-summary.html">com.oracle.truffle.api.debug</a></dt>
 <dd>
@@ -1053,6 +1070,10 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/PolyglotAccess.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/PolyglotAccess.Builder.html" title="class in org.graalvm.polyglot">PolyglotAccess.Builder</a></dt>
 <dd>
 <div class="block">Creates an instance of the custom polyglot access configuration.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Builds the limit configuration object.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.Builder.html#build--">build()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.Builder.html" title="class in org.graalvm.polyglot">Source.Builder</a></dt>
 <dd>
@@ -1328,7 +1349,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#check-com.oracle.truffle.api.object.DynamicObject-">check(DynamicObject)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
-<div class="block">Check whether this shape is identical to the given shape.</div>
+<div class="block">Checks whether the given object's shape is identical to this shape.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/utilities/AlwaysValidAssumption.html#check--">check()</a></span> - Method in class com.oracle.truffle.api.utilities.<a href="com/oracle/truffle/api/utilities/AlwaysValidAssumption.html" title="class in com.oracle.truffle.api.utilities">AlwaysValidAssumption</a></dt>
 <dd>&nbsp;</dd>
@@ -1728,6 +1749,10 @@
 <dd>
 <div class="block">Listener to be notified about changes of contexts in guest language application.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#CONTINUE_LOOP_STATUS">CONTINUE_LOOP_STATUS</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">A value indicating that the loop should be repeated.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/nodes/ControlFlowException.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">ControlFlowException</span></a> - Exception in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
 <dd>
 <div class="block">An exception thrown to model control flow in a Truffle interpreter.</div>
@@ -1792,6 +1817,12 @@
 <dd>
 <div class="block">Denotes Java interface that imports a C pointer type.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#cpuTimeLimit-java.time.Duration-java.time.Duration-">cpuTimeLimit(Duration, Duration)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCpuTime-long-" title="class or interface in java.lang.management"><code>CPU time</code></a> a context may
+ be active until the onLimit event is notified and the context will be
+ <a href="org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.Provider.html#create-java.lang.Object...-">create(Object...)</a></span> - Static method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.Provider.html" title="interface in com.oracle.truffle.api.dsl">Introspection.Provider</a></dt>
 <dd>
 <div class="block">Factory method to create <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a> introspection data.</div>
@@ -1799,6 +1830,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ExecutionEventNodeFactory.html#create-com.oracle.truffle.api.instrumentation.EventContext-">create(EventContext)</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ExecutionEventNodeFactory.html" title="interface in com.oracle.truffle.api.instrumentation">ExecutionEventNodeFactory</a></dt>
 <dd>
 <div class="block">Returns a new instance of <a href="com/oracle/truffle/api/instrumentation/ExecutionEventNode.html" title="class in com.oracle.truffle.api.instrumentation"><code>ExecutionEventNode</code></a> for this particular source location.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html#create--">create()</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html" title="interface in com.oracle.truffle.api.instrumentation">TruffleInstrument.Provider</a></dt>
+<dd>
+<div class="block">Creates a new instance of a <a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.html" title="class in com.oracle.truffle.api.instrumentation"><code>TruffleInstrument</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/ArityException.html#create-int-int-">create(int, int)</a></span> - Static method in exception com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/ArityException.html" title="class in com.oracle.truffle.api.interop">ArityException</a></dt>
 <dd>
@@ -1831,6 +1866,10 @@
 <dd>
 <div class="block">Creates a new manually dispatched cached library for a given receiver.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#create-T:A-com.oracle.truffle.api.nodes.BlockNode.ElementExecutor-">create(T[], BlockNode.ElementExecutor&lt;T&gt;)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Creates a new block node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/DirectCallNode.html#create-com.oracle.truffle.api.CallTarget-">create(CallTarget)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/DirectCallNode.html" title="class in com.oracle.truffle.api.nodes">DirectCallNode</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/IndirectCallNode.html#create--">create()</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/IndirectCallNode.html" title="class in com.oracle.truffle.api.nodes">IndirectCallNode</a></dt>
@@ -1842,6 +1881,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/profiles/BranchProfile.html#create--">create()</a></span> - Static method in class com.oracle.truffle.api.profiles.<a href="com/oracle/truffle/api/profiles/BranchProfile.html" title="class in com.oracle.truffle.api.profiles">BranchProfile</a></dt>
 <dd>
 <div class="block">Call to create a new instance of a branch profile.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html#create--">create()</a></span> - Method in interface com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api">TruffleLanguage.Provider</a></dt>
+<dd>
+<div class="block">Creates a new instance of a <a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/EconomicMap.html#create--">create()</a></span> - Static method in interface org.graalvm.collections.<a href="org/graalvm/collections/EconomicMap.html" title="interface in org.graalvm.collections">EconomicMap</a></dt>
 <dd>
@@ -2066,6 +2109,10 @@
 <dd>
 <div class="block">Creates a new empty file.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html#createFileTypeDetectors--">createFileTypeDetectors()</a></span> - Method in interface com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api">TruffleLanguage.Provider</a></dt>
+<dd>
+<div class="block">Creates file type detectors used by the <a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/LanguageProvider.html#createIdentityFunction-org.graalvm.polyglot.Context-">createIdentityFunction(Context)</a></span> - Method in interface org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/LanguageProvider.html" title="interface in org.graalvm.polyglot.tck">LanguageProvider</a></dt>
 <dd>
 <div class="block">Creates an identity function.</div>
@@ -2222,6 +2269,16 @@
 <dd>
 <div class="block">Creates a new symbolic link.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#createTempDirectory-com.oracle.truffle.api.TruffleFile-java.lang.String-java.nio.file.attribute.FileAttribute...-">createTempDirectory(TruffleFile, String, FileAttribute&lt;?&gt;...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Creates a new directory in the specified or default temporary directory, using the given
+ prefix to generate its name.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#createTempFile-com.oracle.truffle.api.TruffleFile-java.lang.String-java.lang.String-java.nio.file.attribute.FileAttribute...-">createTempFile(TruffleFile, String, String, FileAttribute&lt;?&gt;...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Creates a new empty file in the specified or default temporary directory, using the given
+ prefix and suffix to generate its name.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#createThread-java.lang.Runnable-">createThread(Runnable)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Creates a new thread that has access to the current language context.</div>
@@ -2324,7 +2381,7 @@
 </a>
 <h2 class="title">D</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html#DARWIN_AArch64--">DARWIN_AArch64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AArch64</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.DARWIN_AARCH64.html#DARWIN_AARCH64--">DARWIN_AARCH64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.DARWIN_AARCH64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AARCH64</a></dt>
 <dd>
 <div class="block">Instantiates a marker instance of this platform.</div>
 </dd>
@@ -2836,6 +2893,12 @@
 <dd>
 <div class="block">Execute this fragment at the place where it was parsed.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/LoopNode.html#execute-com.oracle.truffle.api.frame.VirtualFrame-">execute(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes">LoopNode</a></dt>
+<dd>
+<div class="block">Invokes one loop invocation by repeatedly calling
+ <a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-"><code>execute)</code></a> on the repeating node the loop
+ was initialized with.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RootNode.html#execute-com.oracle.truffle.api.frame.VirtualFrame-">execute(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes">RootNode</a></dt>
 <dd>
 <div class="block">Executes this function using the specified frame and returns the result value.</div>
@@ -2848,21 +2911,92 @@
 <dd>
 <div class="block">Executes this value if it <a href="org/graalvm/polyglot/Value.html#canExecute--"><code>can</code></a> be executed and returns its result.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeBoolean-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeBoolean(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a boolean value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeBoolean-com.oracle.truffle.api.frame.VirtualFrame-int-">executeBoolean(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a boolean value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeByte-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeByte(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a byte value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeByte-com.oracle.truffle.api.frame.VirtualFrame-int-">executeByte(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a byte value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeChar-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeChar(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a char value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeChar-com.oracle.truffle.api.frame.VirtualFrame-int-">executeChar(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a char value.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/dsl/Executed.html" title="annotation in com.oracle.truffle.api.dsl"><span class="typeNameLink">Executed</span></a> - Annotation Type in <a href="com/oracle/truffle/api/dsl/package-summary.html">com.oracle.truffle.api.dsl</a></dt>
 <dd>
 <div class="block">This annotation declares a <a href="com/oracle/truffle/api/nodes/Node.Child.html" title="annotation in com.oracle.truffle.api.nodes"><code>child</code></a> field to be executed and used as dynamic input
  values for <a href="com/oracle/truffle/api/dsl/Specialization.html" title="annotation in com.oracle.truffle.api.dsl"><code>specializations</code></a>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/LoopNode.html#executeLoop-com.oracle.truffle.api.frame.VirtualFrame-">executeLoop(VirtualFrame)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes">LoopNode</a></dt>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeDouble-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeDouble(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
 <dd>
-<div class="block">Invokes one loop invocation by repeatedly call
- <a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-"><code>execute)</code></a> on the repeating node the loop
- was initialized with.</div>
+<div class="block">Executes the block node element and expects a double value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeDouble-com.oracle.truffle.api.frame.VirtualFrame-int-">executeDouble(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a double value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeFloat-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeFloat(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a float value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeFloat-com.oracle.truffle.api.frame.VirtualFrame-int-">executeFloat(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a float value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeGeneric-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeGeneric(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a generic value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeGeneric-com.oracle.truffle.api.frame.VirtualFrame-int-">executeGeneric(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a generic value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeInt-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeInt(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects an int value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeInt-com.oracle.truffle.api.frame.VirtualFrame-int-">executeInt(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns an int value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeLong-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeLong(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a long value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeLong-com.oracle.truffle.api.frame.VirtualFrame-int-">executeLong(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a long value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeating-com.oracle.truffle.api.frame.VirtualFrame-">executeRepeating(VirtualFrame)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
 <dd>
 <div class="block">Repeatedly invoked by a <a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes"><code>loop node</code></a> implementation until the method returns
  <code>false</code> or throws an exception.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/RepeatingNode.html#executeRepeatingWithValue-com.oracle.truffle.api.frame.VirtualFrame-">executeRepeatingWithValue(VirtualFrame)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/RepeatingNode.html" title="interface in com.oracle.truffle.api.nodes">RepeatingNode</a></dt>
+<dd>
+<div class="block">Repeatedly invoked by a <a href="com/oracle/truffle/api/nodes/LoopNode.html" title="class in com.oracle.truffle.api.nodes"><code>loop node</code></a> implementation, but allows returning a
+ language-specific loop exit status.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeShort-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeShort(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element and expects a short value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeShort-com.oracle.truffle.api.frame.VirtualFrame-int-">executeShort(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns a short value.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/instrumentation/ExecuteSourceEvent.html" title="class in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">ExecuteSourceEvent</span></a> - Class in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
@@ -2872,6 +3006,14 @@
 <dd>
 <div class="block">A listener attached by an <a href="com/oracle/truffle/api/instrumentation/Instrumenter.html" title="class in com.oracle.truffle.api.instrumentation"><code>Instrumenter</code></a> to specific sources of a guest language program to
  listen to execute source events.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html#executeVoid-com.oracle.truffle.api.frame.VirtualFrame-T-int-int-">executeVoid(VirtualFrame, T, int, int)</a></span> - Method in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes">BlockNode.ElementExecutor</a></dt>
+<dd>
+<div class="block">Executes the block node element without expecting any return value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#executeVoid-com.oracle.truffle.api.frame.VirtualFrame-int-">executeVoid(VirtualFrame, int)</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Executes the block and returns no value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#executeVoid-java.lang.Object...-">executeVoid(Object...)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
@@ -3849,12 +3991,16 @@
 <dd>
 <div class="block">Returns the polyglot context associated with this environment.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#getContextReference--">getContextReference()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimitEvent.html#getContext--">getContext()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a></dt>
 <dd>
-<div class="block">Creates a reference to the current context to be stored in an AST.</div>
+<div class="block">The context for which the limit was exceeded.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ProbeNode.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ProbeNode.html" title="class in com.oracle.truffle.api.instrumentation">ProbeNode</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Block nodes always have <a href="com/oracle/truffle/api/nodes/NodeCost.html#NONE"><code>NodeCost.NONE</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/Node.html#getCost--">getCost()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a></dt>
 <dd>
 <div class="block">Returns a rough estimate for the cost of this <a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes"><code>Node</code></a>.</div>
@@ -3988,6 +4134,10 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/EventBinding.html#getElement--">getElement()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/EventBinding.html" title="class in com.oracle.truffle.api.instrumentation">EventBinding</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#getElements--">getElements()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Returns the elements of the block node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/Node.html#getEncapsulatingSourceSection--">getEncapsulatingSourceSection()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/Node.html" title="class in com.oracle.truffle.api.nodes">Node</a></dt>
 <dd>
 <div class="block">Retrieves the segment of guest language source code that is represented by this Node, if
@@ -4184,6 +4334,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.html#getHitCount--">getHitCount()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug">Breakpoint</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#getHomeFolder--">getHomeFolder()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/InstrumentInfo.html#getId--">getId()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/InstrumentInfo.html" title="class in com.oracle.truffle.api">InstrumentInfo</a></dt>
 <dd>
 <div class="block">Gets the id clients can use to acquire this instrument.</div>
@@ -4268,10 +4420,16 @@
 <dd>
 <div class="block">Returns the input values provided to execute this source location.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#getInstance--">getInstance()</a></span> - Static method in class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.SpecializationInfo.html#getInstances--">getInstances()</a></span> - Method in class com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.SpecializationInfo.html" title="class in com.oracle.truffle.api.dsl">Introspection.SpecializationInfo</a></dt>
 <dd>
 <div class="block">Returns the number of dynamic specialization instances that are active for this
  specialization.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html#getInstrumentClassName--">getInstrumentClassName()</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html" title="interface in com.oracle.truffle.api.instrumentation">TruffleInstrument.Provider</a></dt>
+<dd>
+<div class="block">Returns the name of a class implementing the <a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.html" title="class in com.oracle.truffle.api.instrumentation"><code>TruffleInstrument</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--">getInstrumentedNode()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/EventContext.html" title="class in com.oracle.truffle.api.instrumentation">EventContext</a></dt>
 <dd>
@@ -4312,6 +4470,14 @@
 <dd>
 <div class="block">Returns all languages that are installed and internally accessible in the environment.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getInternalTruffleFile-java.lang.String-">getInternalTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public or internal <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getInternalTruffleFile-java.net.URI-">getInternalTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public or internal <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.Provider.html#getIntrospectionData--">getIntrospectionData()</a></span> - Method in interface com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.Provider.html" title="interface in com.oracle.truffle.api.dsl">Introspection.Provider</a></dt>
 <dd>
 <div class="block">Returns internal reflection data in undefined format.</div>
@@ -4345,10 +4511,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#getKey--">getKey()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dd>
 <div class="block">Returns the key for this option.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getKeyList-com.oracle.truffle.api.object.Shape.Pred-">getKeyList(Shape.Pred&lt;Property&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Get a filtered list of property keys in insertion order.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getKeyList--">getKeyList()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
@@ -4386,10 +4548,16 @@
 <dd>
 <div class="block">Returns the language this source created with.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html#getLanguageClassName--">getLanguageClassName()</a></span> - Method in interface com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api">TruffleLanguage.Provider</a></dt>
+<dd>
+<div class="block">Returns the name of a class implementing the <a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#getLanguageHome--">getLanguageHome()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
 <dd>
 <div class="block">Returns the home location for this language.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#getLanguageHomes--">getLanguageHomes()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/ExecutableNode.html#getLanguageInfo--">getLanguageInfo()</a></span> - Method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/ExecutableNode.html" title="class in com.oracle.truffle.api.nodes">ExecutableNode</a></dt>
 <dd>
 <div class="block">Returns public information about the language.</div>
@@ -4789,7 +4957,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getObjectType--">getObjectType()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
-<div class="block">Get the shape's operations.</div>
+<div class="block">Get the shape's object type info.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/AllocationEvent.html#getOldSize--">getOldSize()</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/AllocationEvent.html" title="class in com.oracle.truffle.api.instrumentation">AllocationEvent</a></dt>
 <dd>
@@ -4970,10 +5138,6 @@
 <dd>
 <div class="block">Get number of properties in this shape.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getPropertyList-com.oracle.truffle.api.object.Shape.Pred-">getPropertyList(Shape.Pred&lt;Property&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Get a list of properties that this Shape stores.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#getPropertyList--">getPropertyList()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
 <dd>
 <div class="block">Get a list of all properties that this Shape stores.</div>
@@ -4985,6 +5149,14 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicLanguages--">getPublicLanguages()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Returns all languages that are installed and publicly accessible in the environment.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicTruffleFile-java.lang.String-">getPublicTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getPublicTruffleFile-java.net.URI-">getPublicTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
+<dd>
+<div class="block">Returns a public <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/Message.html#getQualifiedName--">getQualifiedName()</a></span> - Method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/Message.html" title="class in com.oracle.truffle.api.library">Message</a></dt>
 <dd>
@@ -5074,6 +5246,19 @@
 <dd>
 <div class="block">Get the root shape.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugScope.html#getRootInstance--">getRootInstance()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugScope.html" title="class in com.oracle.truffle.api.debug">DebugScope</a></dt>
+<dd>
+<div class="block">Get value that represents root instance of this scope.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/Scope.html#getRootInstance--">getRootInstance()</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/Scope.html" title="class in com.oracle.truffle.api">Scope</a></dt>
+<dd>
+<div class="block">Get the root instance object of this scope.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#getRootInstanceBreakpoints--">getRootInstanceBreakpoints()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
+<dd>
+<div class="block">Get a list of breakpoints installed to the value's session and whose
+ <a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html#rootInstance-com.oracle.truffle.api.debug.DebugValue-"><code>root instance</code></a> is this value.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionEvent.html#getRootName--">getRootName()</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionEvent.html" title="class in org.graalvm.polyglot.management">ExecutionEvent</a></dt>
 <dd>
 <div class="block">Returns the root name or <code>null</code> if no name is available.</div>
@@ -5119,6 +5304,14 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#getSeparator--">getSeparator()</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
 <dd>
 <div class="block">Returns the name separator used to separate names in a path string.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html#getServicesClassNames--">getServicesClassNames()</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html" title="interface in com.oracle.truffle.api.instrumentation">TruffleInstrument.Provider</a></dt>
+<dd>
+<div class="block">Returns the class names of provided services.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html#getServicesClassNames--">getServicesClassNames()</a></span> - Method in interface com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api">TruffleLanguage.Provider</a></dt>
+<dd>
+<div class="block">Returns the class names of provided services.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/SuspendedEvent.html#getSession--">getSession()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/SuspendedEvent.html" title="class in com.oracle.truffle.api.debug">SuspendedEvent</a></dt>
 <dd>
@@ -5307,6 +5500,10 @@
 <dd>
 <div class="block">Returns the call target on the stack.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/FileSystem.html#getTempDirectory--">getTempDirectory()</a></span> - Method in interface org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/FileSystem.html" title="interface in org.graalvm.polyglot.io">FileSystem</a></dt>
+<dd>
+<div class="block">Returns the default temporary directory.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugException.html#getThrowLocation--">getThrowLocation()</a></span> - Method in exception com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugException.html" title="class in com.oracle.truffle.api.debug">DebugException</a></dt>
 <dd>
 <div class="block">Get source code location where this exception was thrown from.</div>
@@ -5315,6 +5512,8 @@
 <dd>
 <div class="block">Returns the default time zone of this environment.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#getToolHomes--">getToolHomes()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebuggerSession.html#getTopScope-java.lang.String-">getTopScope(String)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebuggerSession.html" title="class in com.oracle.truffle.api.debug">DebuggerSession</a></dt>
 <dd>
 <div class="block">Returns a language top scope.</div>
@@ -5328,14 +5527,6 @@
 <div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html#getTruffleFile-java.net.URI-">getTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument.Env</a></dt>
-<dd>
-<div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getTruffleFile-java.lang.String-">getTruffleFile(String)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
-<dd>
-<div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given path.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#getTruffleFile-java.net.URI-">getTruffleFile(URI)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Returns a <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> for given <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a>.</div>
 </dd>
@@ -5485,6 +5676,8 @@
 <dd>
 <div class="block">Returns the version of the language.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#getVersion--">getVersion()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Engine.html#getVersion--">getVersion()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Engine.html" title="class in org.graalvm.polyglot">Engine</a></dt>
 <dd>
 <div class="block">Gets the version string of the engine in an unspecified format.</div>
@@ -5697,10 +5890,6 @@
 <div class="block">Returns <code>true</code> if this node should be considered tagged by a given tag else
  <code>false</code>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.html#hasTransitionWithKey-java.lang.Object-">hasTransitionWithKey(Object)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></dt>
-<dd>
-<div class="block">Query whether the shape has a transition with the given key.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugValue.html#hasWriteSideEffects--">hasWriteSideEffects()</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugValue.html" title="class in com.oracle.truffle.api.debug">DebugValue</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if setting a new value can have side-effects, else
@@ -5716,6 +5905,12 @@
  object identity.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/HiddenKey.html#HiddenKey-java.lang.String-">HiddenKey(String)</a></span> - Constructor for class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/HiddenKey.html" title="class in com.oracle.truffle.api.object">HiddenKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home"><span class="typeNameLink">HomeFinder</span></a> - Class in <a href="org/graalvm/home/package-summary.html">org.graalvm.home</a></dt>
+<dd>
+<div class="block">A utility class to find various paths of the running GraalVM, as well as the version.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/HomeFinder.html#HomeFinder--">HomeFinder()</a></span> - Constructor for class org.graalvm.home.<a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#HOST_OBJECT">HOST_OBJECT</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
 <dd>
@@ -5868,6 +6063,21 @@
 <dd>
 <div class="block">Returns the index of the first occurrence of any byte contained in <code>needle</code> in
  <code>haystack</code>, bounded by <code>fromIndex</code> (inclusive) and <code>maxIndex</code> (exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#indexOfWithOrMask-byte:A-int-int-byte:A-byte:A-">indexOfWithOrMask(byte[], int, int, byte[], byte[])</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns the index of the first region of <code>haystack</code> that equals <code>needle</code> after
+ being OR'ed with <code>mask</code>, bounded by <code>fromIndex</code> (inclusive) and <code>length</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#indexOfWithOrMask-char:A-int-int-char:A-char:A-">indexOfWithOrMask(char[], int, int, char[], char[])</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns the index of the first region of <code>haystack</code> that equals <code>needle</code> after
+ being OR'ed with <code>mask</code>, bounded by <code>fromIndex</code> (inclusive) and <code>length</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#indexOfWithOrMask-java.lang.String-int-int-java.lang.String-java.lang.String-">indexOfWithOrMask(String, int, int, String, String)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns the index of the first region of <code>haystack</code> that equals <code>needle</code> after
+ being OR'ed with <code>mask</code>, bounded by <code>fromIndex</code> (inclusive) and <code>length</code>.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/nodes/IndirectCallNode.html" title="class in com.oracle.truffle.api.nodes"><span class="typeNameLink">IndirectCallNode</span></a> - Class in <a href="com/oracle/truffle/api/nodes/package-summary.html">com.oracle.truffle.api.nodes</a></dt>
 <dd>
@@ -6387,10 +6597,6 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isDuration--">isDuration()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if this object represents a duration, else <code>false</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/DynamicObject.html#isEmpty--">isEmpty()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/DynamicObject.html" title="class in com.oracle.truffle.api.object">DynamicObject</a></dt>
-<dd>
-<div class="block">Returns <code>true</code> if this object contains no properties.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/UnmodifiableEconomicMap.html#isEmpty--">isEmpty()</a></span> - Method in interface org.graalvm.collections.<a href="org/graalvm/collections/UnmodifiableEconomicMap.html" title="interface in org.graalvm.collections">UnmodifiableEconomicMap</a></dt>
 <dd>
@@ -7169,7 +7375,7 @@
 <div class="block">Add a filter for all source sections where the line starts in one of the given index
  ranges.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.LINUX_AArch64.html#LINUX_AArch64--">LINUX_AArch64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.LINUX_AArch64.html" title="class in org.graalvm.nativeimage">Platform.LINUX_AArch64</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Platform.LINUX_AARCH64.html#LINUX_AARCH64--">LINUX_AARCH64()</a></span> - Constructor for class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Platform.LINUX_AARCH64.html" title="class in org.graalvm.nativeimage">Platform.LINUX_AARCH64</a></dt>
 <dd>
 <div class="block">Instantiates a marker instance of this platform.</div>
 </dd>
@@ -7222,13 +7428,7 @@
 <dd>
 <div class="block">Create a new location for a fixed type.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-boolean-boolean-">locationForValue(Object, boolean, boolean)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-">locationForValue(Object)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
-<dd>
-<div class="block">Create a new location compatible with the given initial value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Allocator.html#locationForValue-java.lang.Object-java.util.EnumSet-">locationForValue(Object, EnumSet&lt;LocationModifier&gt;)</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></dt>
 <dd>
 <div class="block">Create a new location compatible with the given initial value.</div>
 </dd>
@@ -7693,6 +7893,10 @@
 <dd>
 <div class="block">Creates a new custom polyglot access configuration builder.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.html#newBuilder--">newBuilder()</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot">ResourceLimits</a></dt>
+<dd>
+<div class="block">Creates a new builder to construct <a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><code>ResourceLimits</code></a> instances.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#newBuilder-java.lang.String-java.lang.CharSequence-java.lang.String-">newBuilder(String, CharSequence, String)</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dd>
 <div class="block">Creates a new character based literal source from a character sequence.</div>
@@ -7780,6 +7984,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#newProcessBuilder-java.lang.String...-">newProcessBuilder(String...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Creates a new process builder with the specified operating program and arguments.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/BlockNode.html#NO_ARGUMENT">NO_ARGUMENT</a></span> - Static variable in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></dt>
+<dd>
+<div class="block">Use when no argument is needed for the block node.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html#NO_FILTER">NO_FILTER</a></span> - Static variable in interface com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.NodeCountFilter.html" title="interface in com.oracle.truffle.api.nodes">NodeUtil.NodeCountFilter</a></dt>
 <dd>&nbsp;</dd>
@@ -8064,6 +8272,10 @@
 <dd>
 <div class="block">Notifies about initialization of a language-specific context in an existing polyglot context.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#onLimit-java.util.function.Consumer-">onLimit(Consumer&lt;ResourceLimitEvent&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Notified when a resource limit is reached.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/LoadSourceListener.html#onLoad-com.oracle.truffle.api.instrumentation.LoadSourceEvent-">onLoad(LoadSourceEvent)</a></span> - Method in interface com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/LoadSourceListener.html" title="interface in com.oracle.truffle.api.instrumentation">LoadSourceListener</a></dt>
 <dd>
 <div class="block">Invoked whenever a new <a href="com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>source</code></a> is loaded.</div>
@@ -8093,8 +8305,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ExecutionEventNode.html#onReturnExceptional-com.oracle.truffle.api.frame.VirtualFrame-java.lang.Throwable-">onReturnExceptional(VirtualFrame, Throwable)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ExecutionEventNode.html" title="class in com.oracle.truffle.api.instrumentation">ExecutionEventNode</a></dt>
 <dd>
-<div class="block">Invoked immediately after an <a href="com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> did
- not successfully execute.</div>
+<div class="block">Invoked immediately after the execution of an <a href="com/oracle/truffle/api/instrumentation/EventContext.html#getInstrumentedNode--"><code>instrumented node</code></a> resulted in an exception.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/ProbeNode.html#onReturnExceptionalOrUnwind-com.oracle.truffle.api.frame.VirtualFrame-java.lang.Throwable-boolean-">onReturnExceptionalOrUnwind(VirtualFrame, Throwable, boolean)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/ProbeNode.html" title="class in com.oracle.truffle.api.instrumentation">ProbeNode</a></dt>
 <dd>
@@ -8267,6 +8478,10 @@
 <dd>
 <div class="block">The GraalVM SDK collections package contains memory efficient data structures.</div>
 </dd>
+<dt><a href="org/graalvm/home/package-summary.html">org.graalvm.home</a> - package org.graalvm.home</dt>
+<dd>
+<div class="block">The GraalVM SDK home API allows query home paths for the GraalVM, its languages and its tools.</div>
+</dd>
 <dt><a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a> - package org.graalvm.nativeimage</dt>
 <dd>
 <div class="block">The GraalVM SDK native-image API allows to customize the native image generation, i.e., the
@@ -8421,6 +8636,31 @@
 <div class="block">Assertion that the corresponding value is reduced to a constant during the initial partial
  evaluation phase.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-boolean-">partialEvaluationConstant(boolean)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
+<dd>
+<div class="block">Specialized version of <a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-"><code>CompilerAsserts.compilationConstant(Object)</code></a> for
+ <code>boolean</code> values.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-int-">partialEvaluationConstant(int)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
+<dd>
+<div class="block">Specialized version of <a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-"><code>CompilerAsserts.compilationConstant(Object)</code></a> for
+ <code>int</code> values.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-float-">partialEvaluationConstant(float)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
+<dd>
+<div class="block">Specialized version of <a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-"><code>CompilerAsserts.compilationConstant(Object)</code></a> for
+ <code>float</code> values.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-long-">partialEvaluationConstant(long)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
+<dd>
+<div class="block">Specialized version of <a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-"><code>CompilerAsserts.compilationConstant(Object)</code></a> for
+ <code>long</code> values.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#partialEvaluationConstant-double-">partialEvaluationConstant(double)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
+<dd>
+<div class="block">Specialized version of <a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-"><code>CompilerAsserts.compilationConstant(Object)</code></a> for
+ <code>double</code> values.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.html#patchContext-C-com.oracle.truffle.api.TruffleLanguage.Env-">patchContext(C, TruffleLanguage.Env)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></dt>
 <dd>
 <div class="block">Notifies the language with pre-initialized context about <a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage.Env</code></a> change.</div>
@@ -8437,7 +8677,7 @@
 <dd>
 <div class="block">Root of the interface hierarchy for architectures, OS, and supported combinations of them.</div>
 </dd>
-<dt><a href="org/graalvm/nativeimage/Platform.AArch64.html" title="interface in org.graalvm.nativeimage"><span class="typeNameLink">Platform.AArch64</span></a> - Interface in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
+<dt><a href="org/graalvm/nativeimage/Platform.AARCH64.html" title="interface in org.graalvm.nativeimage"><span class="typeNameLink">Platform.AARCH64</span></a> - Interface in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
 <div class="block">Supported architecture: ARMv8 64-bit.</div>
 </dd>
@@ -8449,7 +8689,7 @@
 <dd>
 <div class="block">Supported operating system: Darwin (MacOS).</div>
 </dd>
-<dt><a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.DARWIN_AArch64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
+<dt><a href="org/graalvm/nativeimage/Platform.DARWIN_AARCH64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.DARWIN_AARCH64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
 <div class="block">Supported leaf platform: Darwin (MacOS) on AArch 64-bit.</div>
 </dd>
@@ -8466,7 +8706,7 @@
 <dd>
 <div class="block">Supported operating system: Linux.</div>
 </dd>
-<dt><a href="org/graalvm/nativeimage/Platform.LINUX_AArch64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.LINUX_AArch64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
+<dt><a href="org/graalvm/nativeimage/Platform.LINUX_AARCH64.html" title="class in org.graalvm.nativeimage"><span class="typeNameLink">Platform.LINUX_AARCH64</span></a> - Class in <a href="org/graalvm/nativeimage/package-summary.html">org.graalvm.nativeimage</a></dt>
 <dd>
 <div class="block">Supported leaf platform: Linux on AArch64 64-bit.</div>
 </dd>
@@ -8830,6 +9070,16 @@
 <dd>
 <div class="block">Conversion to a Java primitive value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.QueryReachabilityAccess.html#reachableMethodOverrides-java.lang.reflect.Executable-">reachableMethodOverrides(Executable)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.QueryReachabilityAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.QueryReachabilityAccess</a></dt>
+<dd>
+<div class="block">Returns all method overrides of the given {param baseMethod} that the static analysis
+ determined to be reachable at run time (including the {param baseMethod} itself).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.QueryReachabilityAccess.html#reachableSubtypes-java.lang.Class-">reachableSubtypes(Class&lt;?&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.QueryReachabilityAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.QueryReachabilityAccess</a></dt>
+<dd>
+<div class="block">Returns all subtypes of the given {param baseClass} that the static analysis determined
+ to be reachable at run time (including the {param baseClass} itself).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/c/type/CCharPointer.html#read--">read()</a></span> - Method in interface org.graalvm.nativeimage.c.type.<a href="org/graalvm/nativeimage/c/type/CCharPointer.html" title="interface in org.graalvm.nativeimage.c.type">CCharPointer</a></dt>
 <dd>
 <div class="block">Reads the value at the pointer address.</div>
@@ -9152,6 +9402,24 @@
 <dd>
 <div class="block">Constructor for generated subclasses.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#regionEqualsWithOrMask-byte:A-int-byte:A-int-int-byte:A-">regionEqualsWithOrMask(byte[], int, byte[], int, int, byte[])</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> iff for all indices <code>i</code> from <code>0</code> (inclusive) to
+ <code>length</code> (exclusive), <code>(a1[fromIndex1 + i] | mask[i]) == a2[fromIndex2 + i]</code>
+ holds.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#regionEqualsWithOrMask-char:A-int-char:A-int-int-char:A-">regionEqualsWithOrMask(char[], int, char[], int, int, char[])</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> iff for all indices <code>i</code> from <code>0</code> (inclusive) to
+ <code>length</code> (exclusive), <code>(a1[fromIndex1 + i] | mask[i]) == a2[fromIndex2 + i]</code>
+ holds.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/ArrayUtils.html#regionEqualsWithOrMask-java.lang.String-int-java.lang.String-int-int-java.lang.String-">regionEqualsWithOrMask(String, int, String, int, int, String)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> iff for all indices <code>i</code> from <code>0</code> (inclusive) to
+ <code>length</code> (exclusive),
+ <code>(a1.charAt(fromIndex1 + i) | mask.charAt(i)) == a2.charAt(fromIndex2 + i)</code> holds.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/LibraryExport.html#register-java.lang.Class-com.oracle.truffle.api.library.LibraryExport...-">register(Class&lt;?&gt;, LibraryExport&lt;?&gt;...)</a></span> - Static method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/LibraryExport.html" title="class in com.oracle.truffle.api.library">LibraryExport</a></dt>
 <dd>
 <div class="block">Called only by code generated by <a href="com/oracle/truffle/api/library/ExportLibrary.html" title="annotation in com.oracle.truffle.api.library"><code>ExportLibrary</code></a>.</div>
@@ -9209,6 +9477,12 @@
 <div class="block">Makes the provided classes available for reflective instantiation by
  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true#newInstance--" title="class or interface in java.lang"><code>Class.newInstance()</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerMethodOverrideReachabilityHandler-java.util.function.BiConsumer-java.lang.reflect.Executable-">registerMethodOverrideReachabilityHandler(BiConsumer&lt;Feature.DuringAnalysisAccess, Executable&gt;, Executable)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
+<dd>
+<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
+ for each time a method that overrides the specified {param baseMethod} is determined to
+ be reachable at run time.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.DuringSetupAccess.html#registerObjectReplacer-java.util.function.Function-">registerObjectReplacer(Function&lt;Object, Object&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.DuringSetupAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.DuringSetupAccess</a></dt>
 <dd>
 <div class="block">Registers the provided function to replace objects.</div>
@@ -9230,6 +9504,12 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLanguage.Env.html#registerService-java.lang.Object-">registerService(Object)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLanguage.Env.html" title="class in com.oracle.truffle.api">TruffleLanguage.Env</a></dt>
 <dd>
 <div class="block">Registers additional services provided by the language.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html#registerSubtypeReachabilityHandler-java.util.function.BiConsumer-java.lang.Class-">registerSubtypeReachabilityHandler(BiConsumer&lt;Feature.DuringAnalysisAccess, Class&lt;?&gt;&gt;, Class&lt;?&gt;)</a></span> - Method in interface org.graalvm.nativeimage.hosted.<a href="org/graalvm/nativeimage/hosted/Feature.BeforeAnalysisAccess.html" title="interface in org.graalvm.nativeimage.hosted">Feature.BeforeAnalysisAccess</a></dt>
+<dd>
+<div class="block">Registers a callback that is invoked once <a href="org/graalvm/nativeimage/hosted/Feature.html#duringAnalysis-org.graalvm.nativeimage.hosted.Feature.DuringAnalysisAccess-"><code>during analysis</code></a>
+ for each time a subtype of the class specified by {param baseClass} is determined to be
+ reachable at run time.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#relativize-com.oracle.truffle.api.TruffleFile-">relativize(TruffleFile)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
@@ -9373,6 +9653,10 @@
 <dd>
 <div class="block">Reserve the primitive extension array field.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#resetLimits--">resetLimits()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
+<dd>
+<div class="block">Resets all accumulators of resource limits for the associated context to zero.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/library/LibraryFactory.html#resolve-java.lang.Class-">resolve(Class&lt;T&gt;)</a></span> - Static method in class com.oracle.truffle.api.library.<a href="com/oracle/truffle/api/library/LibraryFactory.html" title="class in com.oracle.truffle.api.library">LibraryFactory</a></dt>
 <dd>
 <div class="block">Looks up the resolved library instance for a library class.</div>
@@ -9400,6 +9684,22 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebuggerSession.html#resolveSource-com.oracle.truffle.api.source.Source-">resolveSource(Source)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebuggerSession.html" title="class in com.oracle.truffle.api.debug">DebuggerSession</a></dt>
 <dd>
 <div class="block">Resolve the source with respect to the actual <a href="com/oracle/truffle/api/debug/DebuggerSession.html#setSourcePath-java.lang.Iterable-"><code>source path</code></a>.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimitEvent</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">Event triggered by a resource limit for a context.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.Builder.html#resourceLimits-org.graalvm.polyglot.ResourceLimits-">resourceLimits(ResourceLimits)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.Builder.html" title="class in org.graalvm.polyglot">Context.Builder</a></dt>
+<dd>
+<div class="block">Assigns resource limit configuration to a context.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimits</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">Represents resource limits configuration that is used to configure contexts.</div>
+</dd>
+<dt><a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot"><span class="typeNameLink">ResourceLimits.Builder</span></a> - Class in <a href="org/graalvm/polyglot/package-summary.html">org.graalvm.polyglot</a></dt>
+<dd>
+<div class="block">A builder used to construct resource limits.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/InlineSnippet.Builder.html#resultVerifier-org.graalvm.polyglot.tck.ResultVerifier-">resultVerifier(ResultVerifier)</a></span> - Method in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/InlineSnippet.Builder.html" title="class in org.graalvm.polyglot.tck">InlineSnippet.Builder</a></dt>
 <dd>
@@ -9429,6 +9729,14 @@
 <dt><a href="com/oracle/truffle/api/RootCallTarget.html" title="interface in com.oracle.truffle.api"><span class="typeNameLink">RootCallTarget</span></a> - Interface in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
 <div class="block">Represents the target of a call to a <a href="com/oracle/truffle/api/nodes/RootNode.html" title="class in com.oracle.truffle.api.nodes"><code>RootNode</code></a>, i.e., to another tree of nodes.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html#rootInstance-com.oracle.truffle.api.debug.DebugValue-">rootInstance(DebugValue)</a></span> - Method in class com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/Breakpoint.Builder.html" title="class in com.oracle.truffle.api.debug">Breakpoint.Builder</a></dt>
+<dd>
+<div class="block">Specifies the breakpoint's root instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/Scope.Builder.html#rootInstance-java.lang.Object-">rootInstance(Object)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/Scope.Builder.html" title="class in com.oracle.truffle.api">Scope.Builder</a></dt>
+<dd>
+<div class="block">Set the root instance object of this scope.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html#rootNameFilter-java.util.function.Predicate-">rootNameFilter(Predicate&lt;String&gt;)</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html" title="class in org.graalvm.polyglot.management">ExecutionListener.Builder</a></dt>
 <dd>
@@ -9805,10 +10113,6 @@
 <dd>
 <div class="block">Utility class to allocate locations in an object layout.</div>
 </dd>
-<dt><a href="com/oracle/truffle/api/object/Shape.Pred.html" title="interface in com.oracle.truffle.api.object"><span class="typeNameLink">Shape.Pred</span></a>&lt;<a href="com/oracle/truffle/api/object/Shape.Pred.html" title="type parameter in Shape.Pred">T</a>&gt; - Interface in <a href="com/oracle/truffle/api/object/package-summary.html">com.oracle.truffle.api.object</a></dt>
-<dd>
-<div class="block">Represents a predicate (boolean-valued function) of one argument.</div>
-</dd>
 <dt><a href="com/oracle/truffle/api/object/ShapeListener.html" title="interface in com.oracle.truffle.api.object"><span class="typeNameLink">ShapeListener</span></a> - Interface in <a href="com/oracle/truffle/api/object/package-summary.html">com.oracle.truffle.api.object</a></dt>
 <dd>
 <div class="block">A listener to be notified of property transitions.</div>
@@ -9868,10 +10172,6 @@
 <dt><a href="org/graalvm/word/SignedWord.html" title="interface in org.graalvm.word"><span class="typeNameLink">SignedWord</span></a> - Interface in <a href="org/graalvm/word/package-summary.html">org.graalvm.word</a></dt>
 <dd>
 <div class="block">Represents a signed word-sized value.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/DynamicObject.html#size--">size()</a></span> - Method in class com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/DynamicObject.html" title="class in com.oracle.truffle.api.object">DynamicObject</a></dt>
-<dd>
-<div class="block">Returns the number of properties in this object.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#SIZE">SIZE</a></span> - Static variable in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
@@ -10109,6 +10409,11 @@
 <dd>
 <div class="block">Tests if this <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> path starts with the given <a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api"><code>TruffleFile</code></a> path.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimits.Builder.html#statementLimit-long-java.util.function.Predicate-">statementLimit(long, Predicate&lt;Source&gt;)</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></dt>
+<dd>
+<div class="block">Specifies the maximum number of statements a context may execute until the onLimit event
+ is notified and the context will be <a href="org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html#statements-boolean-">statements(boolean)</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionListener.Builder.html" title="class in org.graalvm.polyglot.management">ExecutionListener.Builder</a></dt>
 <dd>
 <div class="block">Include program locations that are marked as statements.</div>
@@ -10239,10 +10544,6 @@
 <dd>
 <div class="block">Returns <code>true</code> if the given source should be tested positive and
  <code>false</code> if the sources should be filtered.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/object/Shape.Pred.html#test-T-">test(T)</a></span> - Method in interface com.oracle.truffle.api.object.<a href="com/oracle/truffle/api/object/Shape.Pred.html" title="interface in com.oracle.truffle.api.object">Shape.Pred</a></dt>
-<dd>
-<div class="block">Evaluates this predicate on the given argument.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/debug/DebugThreadsListener.html#threadDisposed-com.oracle.truffle.api.debug.DebugContext-java.lang.Thread-">threadDisposed(DebugContext, Thread)</a></span> - Method in interface com.oracle.truffle.api.debug.<a href="com/oracle/truffle/api/debug/DebugThreadsListener.html" title="interface in com.oracle.truffle.api.debug">DebugThreadsListener</a></dt>
 <dd>
@@ -10438,6 +10739,7 @@
 <dd>
 <div class="block">Returns a string representation of this stack frame.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/ResourceLimitEvent.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Source.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/SourceSection.html#toString--">toString()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/SourceSection.html" title="class in org.graalvm.polyglot">SourceSection</a></dt>
 <dd>
@@ -10530,6 +10832,10 @@
 <dd>
 <div class="block">Access to instrumentation services as well as input, output, and error streams.</div>
 </dd>
+<dt><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html" title="interface in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">TruffleInstrument.Provider</span></a> - Interface in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
+<dd>
+<div class="block">Used to register a <a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.html" title="class in com.oracle.truffle.api.instrumentation"><code>TruffleInstrument</code></a> using a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html?is-external=true" title="class or interface in java.util"><code>ServiceLoader</code></a>.</div>
+</dd>
 <dt><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Registration.html" title="annotation in com.oracle.truffle.api.instrumentation"><span class="typeNameLink">TruffleInstrument.Registration</span></a> - Annotation Type in <a href="com/oracle/truffle/api/instrumentation/package-summary.html">com.oracle.truffle.api.instrumentation</a></dt>
 <dd>
 <div class="block">Annotation that registers an <a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.html" title="class in com.oracle.truffle.api.instrumentation"><code>instrument</code></a> implementations for
@@ -10567,6 +10873,10 @@
 <dt><a href="com/oracle/truffle/api/TruffleLanguage.ParsingRequest.html" title="class in com.oracle.truffle.api"><span class="typeNameLink">TruffleLanguage.ParsingRequest</span></a> - Class in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
 <div class="block">Request for parsing.</div>
+</dd>
+<dt><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api"><span class="typeNameLink">TruffleLanguage.Provider</span></a> - Interface in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
+<dd>
+<div class="block">Used to register a <a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api"><code>TruffleLanguage</code></a> using a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html?is-external=true" title="class or interface in java.util"><code>ServiceLoader</code></a>.</div>
 </dd>
 <dt><a href="com/oracle/truffle/api/TruffleLanguage.Registration.html" title="annotation in com.oracle.truffle.api"><span class="typeNameLink">TruffleLanguage.Registration</span></a> - Annotation Type in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
@@ -11418,7 +11728,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.1-dev</b><br>06cc5091757e2ade13a696d810373ab0ca9219ea</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>08ec97f754b8c2e5ce7c129aa7214e8eecc43c86</div>
 </div>
 <div class="subNav">
 <ul class="navList">

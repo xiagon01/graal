@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>120959079ea63b3cec07149c1810a1dda1b76b4b</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>910d5ae6442ccb40d0acc8fe5dfab17bfa3541cb</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -1622,6 +1622,11 @@
 <div class="block">In a single atomic step, compares the memory at address <code>(this + offset)</code> to the
  expected value, and if equal, exchanges it for the new value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#compareTo-org.graalvm.home.Version-">compareTo(Version)</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#compareTo-int...-">compareTo(int...)</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Compares this version to another GraalVM version.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/CompilerAsserts.html#compilationConstant-java.lang.Object-">compilationConstant(Object)</a></span> - Static method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/CompilerAsserts.html" title="class in com.oracle.truffle.api">CompilerAsserts</a></dt>
 <dd>
 <div class="block">Assertion that the corresponding value is reduced to a constant during compilation.</div>
@@ -1953,6 +1958,10 @@
 <dd>
 <div class="block">Constructs a pair with its left value being <code>left</code>, and its right value being
  <code>right</code>, or returns an empty pair if both inputs are null.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#create-int...-">create(int...)</a></span> - Static method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Constructs a new GraalVM version from a list of version numbers.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/c/function/CEntryPointLiteral.html#create-java.lang.Class-java.lang.String-java.lang.Class...-">create(Class&lt;?&gt;, String, Class&lt;?&gt;...)</a></span> - Static method in class org.graalvm.nativeimage.c.function.<a href="org/graalvm/nativeimage/c/function/CEntryPointLiteral.html" title="class in org.graalvm.nativeimage.c.function">CEntryPointLiteral</a></dt>
 <dd>
@@ -2780,6 +2789,7 @@
  <code>false</code> otherwise.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#equals-java.lang.Object-">equals(Object)</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
 <dd>&nbsp;</dd>
@@ -4012,6 +4022,10 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleFile.html#getCreationTime-java.nio.file.LinkOption...-">getCreationTime(LinkOption...)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleFile.html" title="class in com.oracle.truffle.api">TruffleFile</a></dt>
 <dd>
 <div class="block">Returns the creation time.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#getCurrent--">getCurrent()</a></span> - Static method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Returns the current GraalVM version of the installed component.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Context.html#getCurrent--">getCurrent()</a></span> - Static method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Context.html" title="class in org.graalvm.polyglot">Context</a></dt>
 <dd>
@@ -5818,6 +5832,7 @@
 <div class="block">Returns the hash code of a non-<code>null</code> argument <code>o</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionMap.html#hashCode--">hashCode()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionMap.html" title="class in org.graalvm.options">OptionMap</a></dt>
 <dd>&nbsp;</dd>
@@ -7063,6 +7078,11 @@
 <dd>
 <div class="block">Are these two shapes related, i.e.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#isRelease--">isRelease()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if this is a supported release build of GraalVM else
+ <code>false</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.html#isReplacementSafe-com.oracle.truffle.api.nodes.Node-com.oracle.truffle.api.nodes.Node-com.oracle.truffle.api.nodes.Node-">isReplacementSafe(Node, Node, Node)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.html" title="class in com.oracle.truffle.api.nodes">NodeUtil</a></dt>
 <dd>
 <div class="block">Determines whether a proposed child replacement would be safe: structurally and type.</div>
@@ -7093,6 +7113,11 @@
 <dt><span class="memberNameLink"><a href="org/graalvm/word/LocationIdentity.html#isSingle--">isSingle()</a></span> - Method in class org.graalvm.word.<a href="org/graalvm/word/LocationIdentity.html" title="class in org.graalvm.word">LocationIdentity</a></dt>
 <dd>
 <div class="block">Returns true if this location identity is not <a href="org/graalvm/word/LocationIdentity.html#any--"><code>LocationIdentity.any()</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#isSnapshot--">isSnapshot()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if this is an unsupported snapshot build of GraalVM else
+ <code>false</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/management/ExecutionEvent.html#isStatement--">isStatement()</a></span> - Method in class org.graalvm.polyglot.management.<a href="org/graalvm/polyglot/management/ExecutionEvent.html" title="class in org.graalvm.polyglot.management">ExecutionEvent</a></dt>
 <dd>
@@ -8612,6 +8637,10 @@
 <div class="block">Parses the <a href="com/oracle/truffle/api/TruffleLanguage.InlineParsingRequest.html#getSource--"><code>provided source snippet</code></a> at the
  <a href="com/oracle/truffle/api/TruffleLanguage.InlineParsingRequest.html#getLocation--"><code>provided location</code></a> and generates its appropriate
  AST representation.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#parse-java.lang.String-">parse(String)</a></span> - Static method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
+<dd>
+<div class="block">Parses a GraalVM version from its String raw format.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html#parseInline-com.oracle.truffle.api.source.Source-com.oracle.truffle.api.nodes.Node-com.oracle.truffle.api.frame.MaterializedFrame-">parseInline(Source, Node, MaterializedFrame)</a></span> - Method in class com.oracle.truffle.api.instrumentation.<a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument.Env</a></dt>
 <dd>
@@ -10733,6 +10762,7 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/utilities/JSONHelper.JSONStringBuilder.html#toString--">toString()</a></span> - Method in class com.oracle.truffle.api.utilities.<a href="com/oracle/truffle/api/utilities/JSONHelper.JSONStringBuilder.html" title="class in com.oracle.truffle.api.utilities">JSONHelper.JSONStringBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/collections/Pair.html#toString--">toString()</a></span> - Method in class org.graalvm.collections.<a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></dt>
+<dt><span class="memberNameLink"><a href="org/graalvm/home/Version.html#toString--">toString()</a></span> - Method in class org.graalvm.home.<a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionDescriptor.html#toString--">toString()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionDescriptor.html" title="class in org.graalvm.options">OptionDescriptor</a></dt>
 <dt><span class="memberNameLink"><a href="org/graalvm/options/OptionType.html#toString--">toString()</a></span> - Method in class org.graalvm.options.<a href="org/graalvm/options/OptionType.html" title="class in org.graalvm.options">OptionType</a></dt>
 <dd>&nbsp;</dd>
@@ -11311,6 +11341,10 @@ the order they are declared.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/nodes/NodeUtil.html#verify-com.oracle.truffle.api.nodes.Node-">verify(Node)</a></span> - Static method in class com.oracle.truffle.api.nodes.<a href="com/oracle/truffle/api/nodes/NodeUtil.html" title="class in com.oracle.truffle.api.nodes">NodeUtil</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/graalvm/home/Version.html" title="class in org.graalvm.home"><span class="typeNameLink">Version</span></a> - Class in <a href="org/graalvm/home/package-summary.html">org.graalvm.home</a></dt>
+<dd>
+<div class="block">A version utility to canonicalize and compare GraalVM versions.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/polyglot/io/MessageTransport.VetoException.html#VetoException-java.lang.String-">VetoException(String)</a></span> - Constructor for exception org.graalvm.polyglot.io.<a href="org/graalvm/polyglot/io/MessageTransport.VetoException.html" title="class in org.graalvm.polyglot.io">MessageTransport.VetoException</a></dt>
 <dd>
 <div class="block">Create a new VetoException.</div>
@@ -11732,7 +11766,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>120959079ea63b3cec07149c1810a1dda1b76b4b</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>910d5ae6442ccb40d0acc8fe5dfab17bfa3541cb</div>
 </div>
 <div class="subNav">
 <ul class="navList">

@@ -608,39 +608,25 @@ $(document).ready(function(){
 Editions following a regular Oracle CPUs cycle. The update
 is to address security vulnerabilities announced in the <a href="https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html">October 2019 Oracle Critical Patch Update Advisory</a>. The 19.2.1 version is a full distribution and and it is recommended to upgrade to it from older GraalVM versions.</p>
 
-<p>Oracle GraalVM Enterprise Edition 19.2.1 includes all the Java security fixes released as part of that CPU and mentioned in the <a href="https://www.oracle.com/technetwork/java/javase/8u231-relnotes-5592812.html">Java SE 8 Release notes</a>. Critical fixes that also went into this version are:</p>
-<ul>
-  <li>Fixed a problem of not being able to create a native image of GraalVM JavaScript source when you use a custom <code>CharSequence</code> implementation that would require a <code>TruffleBoundary</code> implementation.</li>
-  <li>Fixed bytecode index to re-throw an exception in the interpreter.</li>
-</ul>
-
-<p>It also includes the following:</p>
+<p>Oracle GraalVM Enterprise Edition 19.2.1 includes all the Java security fixes released as part of that CPU and mentioned in the <a href="https://www.oracle.com/technetwork/java/javase/8u231-relnotes-5592812.html">Java SE 8 Release notes</a>.  It also includes the following:</p>
 <ul>
   <li>Update GraalVM Enterprise base Java to the 8u231 Oracle Java version</li>
   <li>Update GraalVM Community base Java to the 8u232 OpenJDK version</li>
   <li>Update Node.js to 10.16.3</li>
 </ul>
 
-<p>Listed below are the Common Vulnerabilities and Exposures (CVEs) that went to the GraalVM 19.2.1 release:</p>
+<p>Listed below are critical fixes that also went into this version:</p>
 <ul>
-  <li>CVE-2019-2986</li>
-  <li>CVE-2019-9511</li>
-  <li>CVE-2019-2989</li>
+  <li>Fixed a problem that prevented creating a native image including the GraalVM JavaScript engine combined with <code>java.lang.CharSequence</code> implementations that have non-trivial implementations of the <code>length</code> and <code>charAt</code> methods (see <a href="https://github.com/oracle/graal/issues/1625">#1625</a>).</li>
+  <li>Fixed a problem that could allow an exception to propagate past a <code>catch</code> clause that should handle it.</li>
 </ul>
 
-<p>This GraalVM Enterprise Edition Critical Patch Update coincided with the
-availability of Oracle GraalVM Enterprise Edition in the <a href="https://www.oracle.com/cloud/">Oracle Cloud Infrastructure</a>  YUM repository. That means
-that Oracle Cloud Infrastructure customers can use GraalVM Enterprise environment in their cloud
-instances by simply installing it with <code>yum</code> - a package-management utility for the Linux operating systems using the RPM Package Manager. For example, having logged into
-Oracle Linux virtual machine using SSH connection and the public IP address, a
-user can verify what GraalVM Enterprise RPMs are available: <code>$ sudo yum provides
-graalvm*</code>. To install GraalVM Enterprise with all its dependencies, it is enough
-to run <code>$ sudo yum install &lt;package_name&gt;</code>. For more details, please see
+<p>Oracle Cloud Infrastructure customers can use GraalVM Enterprise environment in their cloud instances by simply installing it with <code>yum</code>. For more details, please see
 <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/oci/create-instance.html">GraalVM on OCI</a>. </p>
 
 <p><strong>Warning:</strong> We currently do not recommend macOS users to upgrade to Catalina – a next major
 release of macOS desktop operating system. We can not guarantee complete
-compatibility with GraalVM 19.2.1 or older versions.</p>
+compatibility with GraalVM 19.2.1 or older versions yet.</p>
 
 <h2 id="19201">19.2.0.1</h2>
 <p>(2019-09-13)</p>

@@ -38,7 +38,7 @@
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>201bee93181b42f9bf04486d6aaa36e31c2a8a92</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>765bd75eb747145c43db22974e8c32f3bd9c7f0e</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -2860,6 +2860,10 @@
 <dt><a href="com/oracle/truffle/api/ExactMath.html" title="class in com.oracle.truffle.api"><span class="typeNameLink">ExactMath</span></a> - Class in <a href="com/oracle/truffle/api/package-summary.html">com.oracle.truffle.api</a></dt>
 <dd>
 <div class="block">This class contains methods that will be part of java.lang.Math starting with JDK 8.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/tck/TypeDescriptor.html#EXCEPTION">EXCEPTION</a></span> - Static variable in class org.graalvm.polyglot.tck.<a href="org/graalvm/polyglot/tck/TypeDescriptor.html" title="class in org.graalvm.polyglot.tck">TypeDescriptor</a></dt>
+<dd>
+<div class="block">Type descriptor for duration.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/ProcessProperties.html#exec-java.nio.file.Path-java.lang.String...-">exec(Path, String...)</a></span> - Static method in class org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/ProcessProperties.html" title="class in org.graalvm.nativeimage">ProcessProperties</a></dt>
 <dd>
@@ -6631,6 +6635,15 @@
 <dd>
 <div class="block">Returns <code>true</code> if the given root node is considered an engine evaluation root
  for the current execution context.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#isException-java.lang.Object-">isException(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if the receiver value represents a throwable
+ <a href="com/oracle/truffle/api/TruffleException.html#getExceptionObject--">exception/error object</a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#isException--">isException()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if this object represents an exception, else <code>false</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/dsl/Introspection.SpecializationInfo.html#isExcluded--">isExcluded()</a></span> - Method in class com.oracle.truffle.api.dsl.<a href="com/oracle/truffle/api/dsl/Introspection.SpecializationInfo.html" title="class in com.oracle.truffle.api.dsl">Introspection.SpecializationInfo</a></dt>
 <dd>
@@ -10604,10 +10617,19 @@
 <dd>
 <div class="block">Listener to be notified about changes of threads in guest language application.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/api/interop/InteropLibrary.html#throwException-java.lang.Object-">throwException(Object)</a></span> - Method in class com.oracle.truffle.api.interop.<a href="com/oracle/truffle/api/interop/InteropLibrary.html" title="class in com.oracle.truffle.api.interop">InteropLibrary</a></dt>
+<dd>
+<div class="block">Throws the receiver object as an exception of the source language, as if it was thrown by the
+ source language itself.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/graalvm/nativeimage/Threading.RecurringCallbackAccess.html#throwException-java.lang.Throwable-">throwException(Throwable)</a></span> - Method in interface org.graalvm.nativeimage.<a href="org/graalvm/nativeimage/Threading.RecurringCallbackAccess.html" title="interface in org.graalvm.nativeimage">Threading.RecurringCallbackAccess</a></dt>
 <dd>
 <div class="block">Throws an exception from the recurring callback to the code that is regularly executing
  in the thread.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/graalvm/polyglot/Value.html#throwException--">throwException()</a></span> - Method in class org.graalvm.polyglot.<a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></dt>
+<dd>
+<div class="block">Throws the receiver if this object represents an <a href="org/graalvm/polyglot/Value.html#isException--"><code>exception</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/api/TruffleLogger.html#throwing-java.lang.String-java.lang.String-T-">throwing(String, String, T)</a></span> - Method in class com.oracle.truffle.api.<a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></dt>
 <dd>
@@ -11766,7 +11788,7 @@ the order they are declared.</div>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>201bee93181b42f9bf04486d6aaa36e31c2a8a92</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>765bd75eb747145c43db22974e8c32f3bd9c7f0e</div>
 </div>
 <div class="subNav">
 <ul class="navList">

@@ -72,6 +72,7 @@
 <span class="packageHierarchyLabel">Package Hierarchies:</span>
 <ul class="horizontal">
 <li><a href="com/oracle/truffle/tools/agentscript/package-tree.html">com.oracle.truffle.tools.agentscript</a>, </li>
+<li><a href="com/oracle/truffle/tools/coverage/package-tree.html">com.oracle.truffle.tools.coverage</a>, </li>
 <li><a href="com/oracle/truffle/tools/profiler/package-tree.html">com.oracle.truffle.tools.profiler</a></li>
 </ul>
 </div>
@@ -80,6 +81,8 @@
 <ul>
 <li type="circle">java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang"><span class="typeNameLink">Object</span></a>
 <ul>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/CoverageTracker.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">CoverageTracker</span></a> (implements java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>)</li>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/CoverageTracker.Config.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">CoverageTracker.Config</span></a></li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/CPUSampler.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">CPUSampler</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)</li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/CPUSampler.Payload.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">CPUSampler.Payload</span></a></li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/CPUTracer.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">CPUTracer</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)</li>
@@ -89,7 +92,19 @@
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/MemoryTracer.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">MemoryTracer</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)</li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/MemoryTracer.AllocationEventInfo.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">MemoryTracer.AllocationEventInfo</span></a></li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/MemoryTracer.Payload.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">MemoryTracer.Payload</span></a></li>
+<li type="circle">com.oracle.truffle.api.nodes.Node (implements java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, com.oracle.truffle.api.nodes.NodeInterface)
+<ul>
+<li type="circle">com.oracle.truffle.api.instrumentation.ExecutionEventNode
+<ul>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/CountingCoverageNode.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">CountingCoverageNode</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/ProfilerNode.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">ProfilerNode</span></a>&lt;T&gt;</li>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/RootCoverage.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">RootCoverage</span></a></li>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/SectionCoverage.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">SectionCoverage</span></a></li>
+<li type="circle">com.oracle.truffle.tools.coverage.<a href="com/oracle/truffle/tools/coverage/SourceCoverage.html" title="class in com.oracle.truffle.tools.coverage"><span class="typeNameLink">SourceCoverage</span></a></li>
 <li type="circle">com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/StackTraceEntry.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">StackTraceEntry</span></a></li>
 </ul>
 </li>

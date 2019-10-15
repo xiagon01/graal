@@ -30,9 +30,10 @@
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="com/oracle/truffle/tools/profiler/package-summary.html">Package</a></li>
+<li><a href="overview-summary.html">Overview</a></li>
+<li>Package</li>
 <li>Class</li>
-<li><a href="com/oracle/truffle/tools/profiler/package-tree.html">Tree</a></li>
+<li><a href="overview-tree.html">Tree</a></li>
 <li><a href="deprecated-list.html">Deprecated</a></li>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>
@@ -66,7 +67,17 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a name="I:C">
+<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a name="I:A">
+<!--   -->
+</a>
+<h2 class="title">A</h2>
+<dl>
+<dt><a href="com/oracle/truffle/tools/agentscript/AgentScript.html" title="interface in com.oracle.truffle.tools.agentscript"><span class="typeNameLink">AgentScript</span></a> - Interface in <a href="com/oracle/truffle/tools/agentscript/package-summary.html">com.oracle.truffle.tools.agentscript</a></dt>
+<dd>
+<div class="block">Programatic access to the scripting agent.</div>
+</dd>
+</dl>
+<a name="I:C">
 <!--   -->
 </a>
 <h2 class="title">C</h2>
@@ -102,6 +113,11 @@
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/tools/profiler/MemoryTracer.html#close--">close()</a></span> - Method in class com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/MemoryTracer.html" title="class in com.oracle.truffle.tools.profiler">MemoryTracer</a></dt>
 <dd>
 <div class="block">Closes the tracer for fuhrer use, deleting all the gathered data.</div>
+</dd>
+<dt><a href="com/oracle/truffle/tools/agentscript/package-summary.html">com.oracle.truffle.tools.agentscript</a> - package com.oracle.truffle.tools.agentscript</dt>
+<dd>
+<div class="block">Write instruments in dynamic languages via
+ <a href="com/oracle/truffle/tools/agentscript/AgentScript.html" title="interface in com.oracle.truffle.tools.agentscript"><code>AgentScript</code></a>.</div>
 </dd>
 <dt><a href="com/oracle/truffle/tools/profiler/package-summary.html">com.oracle.truffle.tools.profiler</a> - package com.oracle.truffle.tools.profiler</dt>
 <dd>
@@ -305,6 +321,10 @@
 </a>
 <h2 class="title">I</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/tools/agentscript/AgentScript.html#ID">ID</a></span> - Static variable in interface com.oracle.truffle.tools.agentscript.<a href="com/oracle/truffle/tools/agentscript/AgentScript.html" title="interface in com.oracle.truffle.tools.agentscript">AgentScript</a></dt>
+<dd>
+<div class="block">The ID of the agent script instrument.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="com/oracle/truffle/tools/profiler/MemoryTracer.Payload.html#incrementTotalAllocations--">incrementTotalAllocations()</a></span> - Method in class com.oracle.truffle.tools.profiler.<a href="com/oracle/truffle/tools/profiler/MemoryTracer.Payload.html" title="class in com.oracle.truffle.tools.profiler">MemoryTracer.Payload</a></dt>
 <dd>
 <div class="block">Increases the number of total allocations recorded while the associated element was on
@@ -371,6 +391,16 @@
 <dt><a href="com/oracle/truffle/tools/profiler/ProfilerNode.html" title="class in com.oracle.truffle.tools.profiler"><span class="typeNameLink">ProfilerNode</span></a>&lt;<a href="com/oracle/truffle/tools/profiler/ProfilerNode.html" title="type parameter in ProfilerNode">T</a>&gt; - Class in <a href="com/oracle/truffle/tools/profiler/package-summary.html">com.oracle.truffle.tools.profiler</a></dt>
 <dd>
 <div class="block">Represents a node in the call tree built up by sampling the shadow stack.</div>
+</dd>
+</dl>
+<a name="I:R">
+<!--   -->
+</a>
+<h2 class="title">R</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/tools/agentscript/AgentScript.html#registerAgentScript-com.oracle.truffle.api.source.Source-">registerAgentScript(Source)</a></span> - Method in interface com.oracle.truffle.tools.agentscript.<a href="com/oracle/truffle/tools/agentscript/AgentScript.html" title="interface in com.oracle.truffle.tools.agentscript">AgentScript</a></dt>
+<dd>
+<div class="block">Loads an agent script file into the system.</div>
 </dd>
 </dl>
 <a name="I:S">
@@ -478,8 +508,12 @@
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="com/oracle/truffle/tools/agentscript/AgentScript.html#VERSION">VERSION</a></span> - Static variable in interface com.oracle.truffle.tools.agentscript.<a href="com/oracle/truffle/tools/agentscript/AgentScript.html" title="interface in com.oracle.truffle.tools.agentscript">AgentScript</a></dt>
+<dd>
+<div class="block">Version of the agent script instrument.</div>
+</dd>
 </dl>
-<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;</div>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->
@@ -489,9 +523,10 @@ the order they are declared.</div>
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="com/oracle/truffle/tools/profiler/package-summary.html">Package</a></li>
+<li><a href="overview-summary.html">Overview</a></li>
+<li>Package</li>
 <li>Class</li>
-<li><a href="com/oracle/truffle/tools/profiler/package-tree.html">Tree</a></li>
+<li><a href="overview-tree.html">Tree</a></li>
 <li><a href="deprecated-list.html">Deprecated</a></li>
 <li class="navBarCell1Rev">Index</li>
 <li><a href="help-doc.html">Help</a></li>

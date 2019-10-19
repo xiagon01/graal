@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../index-all.html">Index</a></li>
 <li><a href="../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>1b630f8d8656717e48d6f005fd44d6356be25adf</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>44f883ae7f6d92179cfa01a059966284ff4d5c3f</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -146,20 +146,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html#cpuTimeLimit-java.time.Duration-java.time.Duration-">cpuTimeLimit</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a>&nbsp;timeLimit,
-            <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a>&nbsp;accuracy)</code>
-<div class="block">Specifies the maximum <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCpuTime-long-" title="class or interface in java.lang.management"><code>CPU time</code></a> a context may
- be active until the onLimit event is notified and the context will be
- <a href="../../../org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html#onLimit-java.util.function.Consumer-">onLimit</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function">Consumer</a>&lt;<a href="../../../org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a>&gt;&nbsp;onLimit)</code>
 <div class="block">Notified when a resource limit is reached.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html#statementLimit-long-java.util.function.Predicate-">statementLimit</a></span>(long&nbsp;limit,
               <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html?is-external=true" title="class or interface in java.util.function">Predicate</a>&lt;<a href="../../../org/graalvm/polyglot/Source.html" title="class in org.graalvm.polyglot">Source</a>&gt;&nbsp;sourceFilter)</code>
@@ -206,13 +197,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  overwrites previous statement limit configurations. If the statement limit is exceeded
  then the <a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html#onLimit-java.util.function.Consumer-"><code>onLimit</code></a> listener is notified.
  <p>
- By default there is no statement limit applied. The limit may be set to 0 to disable the
- statement limit. In addition to the limit a source filter may be set to indicate for
- which sources the limit should be applied. If the source filter is <code>null</code> then
- it will be applied to all <a href="../../../org/graalvm/polyglot/Source.html#isInternal--"><code>internal</code></a> and public sources. The
- provided limit must not be negative otherwise an <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang"><code>IllegalArgumentException</code></a> is
- thrown. If a <a href="../../../org/graalvm/polyglot/Context.Builder.html#engine-org.graalvm.polyglot.Engine-"><code>shared engine</code></a> is used then the same
- source filter instance must be used for all contexts of an engine. Otherwise an
+ By default there is no statement limit applied. The limit may be set to 0 to disable it.
+ In addition to the limit a source filter may be set to indicate for which sources the
+ limit should be applied. If the source filter is <code>null</code> then it will be
+ applied to all <a href="../../../org/graalvm/polyglot/Source.html#isInternal--"><code>internal</code></a> and public sources. The provided
+ limit must not be negative otherwise an <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang"><code>IllegalArgumentException</code></a> is thrown. If a
+ <a href="../../../org/graalvm/polyglot/Context.Builder.html#engine-org.graalvm.polyglot.Engine-"><code>shared engine</code></a> is used then the same source filter
+ instance must be used for all contexts of an engine. Otherwise an
  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang"><code>IllegalArgumentException</code></a> is thrown when the context is
  <a href="../../../org/graalvm/polyglot/Context.Builder.html#build--"><code>built</code></a>. The limit itself may vary between contexts.
  <p>
@@ -220,55 +211,20 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  Therefore, new inner contexts cannot be used to exceed the statement limit.
  <p>
  Note that attaching a statement limit to a context reduces the throughput of all guest
- applications with that use the same engine. The statement counter needs to be updated
- with every statement that is executed. It is recommended to benchmark the use of the
- statement limit before it is used in production.</div>
+ applications with the same engine. The statement counter needs to be updated with every
+ statement that is executed. It is recommended to benchmark the use of the statement limit
+ before it is used in production.
+ <p>
+ Note that the complexity of a single statement may not be constant time depending on the
+ guest language. For example, statements that execute JavaScript builtins, like
+ <code>Array.sort</code>, may account for a single statement, but its execution time is
+ dependent on the size of the array. The statement count limit is therefore not suitable
+ to perform time boxing and must be combined with other more reliable measures.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>19.3</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><code>Example Usage</code></a></dd>
-</dl>
-</li>
-</ul>
-<a name="cpuTimeLimit-java.time.Duration-java.time.Duration-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>cpuTimeLimit</h4>
-<pre>public&nbsp;<a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html" title="class in org.graalvm.polyglot">ResourceLimits.Builder</a>&nbsp;cpuTimeLimit(<a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a>&nbsp;timeLimit,
-                                           <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time">Duration</a>&nbsp;accuracy)</pre>
-<div class="block">Specifies the maximum <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCpuTime-long-" title="class or interface in java.lang.management"><code>CPU time</code></a> a context may
- be active until the onLimit event is notified and the context will be
- <a href="../../../org/graalvm/polyglot/Context.html#close--"><code>closed</code></a>. The <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time"><code>time limit</code></a> may be specified
- alongside an <a href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html?is-external=true" title="class or interface in java.time"><code>accuracy</code></a> with which the time limit is enforced. Both time
- limit and accuracy must be positive. Both parameters may be set to <code>null</code> to
- disable the time limit for a builder. By default no time limit is configured. Invoking
- this method multiple times overwrites previous time limit configurations. If the time
- limit is exceeded then the <a href="../../../org/graalvm/polyglot/ResourceLimits.Builder.html#onLimit-java.util.function.Consumer-"><code>onLimit</code></a> listener is notified. The
- minimal accuracy is 10 milliseconds, values below that will be rounded up.
- <p>
- The used CPU time of a context typically does not include time spent waiting for
- synchronization or IO. The CPU time of all threads will be added and checked against the
- CPU time limit. This can mean that if two threads execute the same context then the time
- limit will be exceeded twice as fast.
- <p>
- The time limit is enforced by a separate high-priority thread that will be woken
- regularly. There is no guarantee that the context will be cancelled within the accuracy
- specified. The accuracy may be significantly missed, e.g. if the host VM causes a full
- garbage collection. If the time limit is never exceeded then the throughput of the guest
- context is not affected. If the time limit is exceeded for one context then it may slow
- down the throughput for other contexts of an engine temporarily.
- <p>
- The time limit is applied to the context and all inner contexts it spawns. Therefore, new
- inner contexts cannot be used to exceed the time limit.</div>
-<dl>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>19.3</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/management/ThreadMXBean.html?is-external=true#getThreadCpuTime-long-" title="class or interface in java.lang.management"><code>ThreadMXBean.getThreadCpuTime(long)</code></a>, 
-<a href="../../../org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot"><code>Example Usage</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -327,7 +283,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li><a href="../../../index-all.html">Index</a></li>
 <li><a href="../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>1b630f8d8656717e48d6f005fd44d6356be25adf</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>44f883ae7f6d92179cfa01a059966284ff4d5c3f</div>
 </div>
 <div class="subNav">
 <ul class="navList">

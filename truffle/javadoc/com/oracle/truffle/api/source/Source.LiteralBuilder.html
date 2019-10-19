@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>44f883ae7f6d92179cfa01a059966284ff4d5c3f</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>fe68c889b0f55f3cd15a7cf86b21a3e0b1a02fef</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -159,48 +159,53 @@ extends <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuild
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#content-org.graalvm.polyglot.io.ByteSequence-">content</a></span>(<a href="../../../../../org/graalvm/polyglot/io/ByteSequence.html" title="interface in org.graalvm.polyglot.io">ByteSequence</a>&nbsp;bytes)</code>
+<div class="block">Specifies byte based content of <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#content-java.lang.CharSequence-">content</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;characters)</code>
+<div class="block">Specifies character based content of <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#encoding-java.nio.charset.Charset-">encoding</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a>&nbsp;encoding)</code>
 <div class="block">Explicitly assigns an encoding used to read the file content.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#interactive-boolean-">interactive</a></span>(boolean&nbsp;enabled)</code>
 <div class="block">Marks the source as interactive.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#internal-boolean-">internal</a></span>(boolean&nbsp;enabled)</code>
 <div class="block">Marks the source as internal.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#mimeType-java.lang.String-">mimeType</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;newMimeType)</code>
 <div class="block">Explicitly assigns a <a href="../../../../../com/oracle/truffle/api/source/Source.html#getMimeType--"><code>MIME type</code></a> to the <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#name-java.lang.String-">name</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;newName)</code>
 <div class="block">Specifies a name to the <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html#uri-java.net.URI-">uri</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net">URI</a>&nbsp;ownUri)</code>
 <div class="block">Assigns new <a href="http://docs.oracle.com/javase/8/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net"><code>URI</code></a> to the <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-created</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.com.oracle.truffle.api.source.Source.SourceBuilder">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;com.oracle.truffle.api.source.<a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html" title="class in com.oracle.truffle.api.source">Source.SourceBuilder</a></h3>
-<code><a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#content-org.graalvm.polyglot.io.ByteSequence-">content</a>, <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#content-java.lang.CharSequence-">content</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -222,6 +227,76 @@ extends <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuild
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="content-java.lang.CharSequence-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>content</h4>
+<pre>public&nbsp;<a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a>&nbsp;content(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;characters)</pre>
+<div class="block">Specifies character based content of <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>. Using
+ this method one can ignore the real content of a file or URL and use already read one, or
+ completely different one. Use <a href="../../../../../com/oracle/truffle/api/source/Source.html#CONTENT_NONE"><code>Source.CONTENT_NONE</code></a> to set no content,
+ <a href="../../../../../com/oracle/truffle/api/source/Source.html#hasCharacters--"><code>Source.hasCharacters()</code></a> will be <code>false</code> then. The given characters must
+ not mutate after they were accessed for the first time. Example:
+
+ <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net"><code>URL</code></a> resource = relativeClass.getResource(<em>"sample.js"</em>);
+<a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a> source = <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.newBuilder(<em>"js"</em>, resource)
+    .content(<em>"{}"</em>)
+    .build();
+<b>assert</b> resource.toExternalForm().equals(source.getPath());
+<b>assert</b> <em>"sample.js"</em>.equals(source.getName());
+<b>assert</b> resource.toExternalForm().equals(source.getURI().toString());
+<b>assert</b> <em>"{}"</em>.equals(source.getCharacters());
+</pre></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#content-java.lang.CharSequence-">content</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html" title="class in com.oracle.truffle.api.source">Source.SourceBuilder</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>characters</code> - the code to be available via <a href="../../../../../com/oracle/truffle/api/source/Source.html#getCharacters--"><code>Source.getCharacters()</code></a>, or
+            <a href="../../../../../com/oracle/truffle/api/source/Source.html#CONTENT_NONE"><code>Source.CONTENT_NONE</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>instance of this builder - which's <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>Source.SourceBuilder.build()</code></a> method no longer throws an
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io"><code>IOException</code></a></dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>19.3</dd>
+</dl>
+</li>
+</ul>
+<a name="content-org.graalvm.polyglot.io.ByteSequence-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>content</h4>
+<pre>public&nbsp;<a href="../../../../../com/oracle/truffle/api/source/Source.LiteralBuilder.html" title="class in com.oracle.truffle.api.source">Source.LiteralBuilder</a>&nbsp;content(<a href="../../../../../org/graalvm/polyglot/io/ByteSequence.html" title="interface in org.graalvm.polyglot.io">ByteSequence</a>&nbsp;bytes)</pre>
+<div class="block">Specifies byte based content of <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>to-be-built</code></a> <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>. Using this
+ method one can ignore the real content of a file or URL and use already read one, or
+ completely different one. The given bytes must not mutate after they were accessed for
+ the first time. Example:
+
+ <pre><a href="http://docs.oracle.com/javase/8/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net"><code>URL</code></a> resource = relativeClass.getResource(<em>"sample.js"</em>);
+<a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a> source = <a href="../../../../../com/oracle/truffle/api/source/Source.html" title="class in com.oracle.truffle.api.source"><code>Source</code></a>.newBuilder(<em>"js"</em>, resource)
+    .content(<em>"{}"</em>)
+    .build();
+<b>assert</b> resource.toExternalForm().equals(source.getPath());
+<b>assert</b> <em>"sample.js"</em>.equals(source.getName());
+<b>assert</b> resource.toExternalForm().equals(source.getURI().toString());
+<b>assert</b> <em>"{}"</em>.equals(source.getCharacters());
+</pre></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#content-org.graalvm.polyglot.io.ByteSequence-">content</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html" title="class in com.oracle.truffle.api.source">Source.SourceBuilder</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bytes</code> - the code to be available via <a href="../../../../../com/oracle/truffle/api/source/Source.html#getBytes--"><code>Source.getBytes()</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>instance of this builder - which's <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuilder.html#build--"><code>Source.SourceBuilder.build()</code></a> method no longer throws an
+         <a href="http://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io"><code>IOException</code></a></dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>19.3</dd>
+</dl>
+</li>
+</ul>
 <a name="name-java.lang.String-">
 <!--   -->
 </a>
@@ -438,7 +513,7 @@ extends <a href="../../../../../com/oracle/truffle/api/source/Source.SourceBuild
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>44f883ae7f6d92179cfa01a059966284ff4d5c3f</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>fe68c889b0f55f3cd15a7cf86b21a3e0b1a02fef</div>
 </div>
 <div class="subNav">
 <ul class="navList">

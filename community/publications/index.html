@@ -427,15 +427,16 @@
 <h2 id="selected-papers">Selected Papers</h2>
 <p>We recommend the following papers as a starting point for learning about Graal:</p>
 
-<p>Language implementations on GraalVM are based on the Truffle framework.
-User applications are transformed to an abstract syntax tree, which is then <em>partially evaluated</em>. If you want to learn more about how to build Truffle languages, how partial evaluation works, and how the Truffle framework allows you to guide the GraalVM compiler, we recommend reading:</p>
-
+<p>GraalVM Native Image uses a novel iterative application of points-to analysis and heap snapshotting, followed by ahead-of-time compilation with an optimizing compiler. 
+Initialization code can run at build time, i.e., executables can be tailored to a particular application configuration. We recommend reading:</p>
 <blockquote>
   <p>Peter Hofer, Codrut Stancu, Vojin Jovanovic, Peter Kessler, Christian Wimmer, Thomas Wuerthinger, Oleg Pliss, Paul Woegerer
 <a href="https://dl.acm.org/citation.cfm?id=3360610"><strong>Initialize Once, Start Fast: Application Initialization at Build Time</strong></a>
 In <em>Proceedings of the ACM on Programming Languages</em></p>
 </blockquote>
 
+<p>Language implementations on GraalVM are based on the Truffle framework.
+User applications are transformed to an abstract syntax tree, which is then <em>partially evaluated</em>. If you want to learn more about how to build Truffle languages, how partial evaluation works, and how the Truffle framework allows you to guide the GraalVM compiler, we recommend reading:</p>
 <blockquote>
   <p>Thomas Würthinger, Christian Wimmer, Christian Humer, Andreas Wöß, Lukas Stadler, Chris Seaton, Gilles Duboscq, Doug Simon, Matthias Grimmer
 <a href="http://dl.acm.org/citation.cfm?id=3062381"><strong>Practical partial evaluation for high-performance dynamic language runtimes</strong></a>

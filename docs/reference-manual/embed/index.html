@@ -3142,20 +3142,18 @@ converted to 0-based indices for proxy arrays.</li>
 <p>For more information about the polyglot proxy interfaces, see the
 <a href="http://www.graalvm.org/truffle/javadoc/org/graalvm/polyglot/package-summary.html">Polyglot API JavaDoc</a>.</p>
 
-<h2 id="run-less-trusted-code">Run Less Trusted Code</h2>
+<h2 id="access-restrictions">Access Restrictions</h2>
 
-<p>The Polyglot API supports running less trusted code from a third-party source.
-By default a polyglot context evaluates code in a <em>less trusted</em> mode.
-If the code is fully trusted, then <code>allowAllAccess</code> can be set to <code>true</code> in order to avoid any further configuration.</p>
+<p>The Polyglot API by default restricts access to certain critical functionality, such as file I/O.
+These restrictions can be lifted entirely by setting <code>allowAllAccess</code> to <code>true</code>.</p>
 
-<p><strong>Important:</strong> Running less trusted code is currently only supported with JavaScript.</p>
+<p><strong>Important:</strong> Access restrictions are currently only supported with JavaScript.</p>
 
 <h4 id="configuring-host-access">Configuring Host Access</h4>
 
-<p>Running less trusted applications requires special attention to which host
-methods are exposed to the guest application. For example, if a Java method is
-exposed that calls <code>System.exit</code> then the guest application will be able to exit
-the host process.
+<p>It might be desirable to limit the access of guest applications to the host.
+For example, if a Java method is exposed that calls <code>System.exit</code> then the guest
+application will be able to exit the host process.
 In order to avoid accidentally exposed methods, no host access is allowed by
 default and every public method or field needs to be annotated with
 <code>@HostAccess.Export</code> explicitly.</p>
@@ -3298,7 +3296,7 @@ default and every public method or field needs to be annotated with
 <ul>
   <li>The class <code>Employee</code> is declared with a field <code>name</code> of type <code>String</code>. Access to the <code>getName</code> method is explicitly allowed by annotating the method with <code>@HostAccess.Export</code>.</li>
   <li>The <code>Services</code> class exposes two methods <code>createEmployee</code> and <code>exitVM</code>. The <code>createEmployee</code> method takes the name of the employee as an argument and creates a new <code>Employee</code> instance. The <code>createEmployee</code> method is annotated with <code>@HostAccess.Export</code> and therefore accessible to the guest application. The <code>exitVM</code> method is not explicitly exported and therefore not accessible.</li>
-  <li>The <code>main</code> method first creates new polyglot context in default configuration. It therefore evaluates code in less trusted mode.</li>
+  <li>The <code>main</code> method first creates new polyglot context in the default configuration, disallowing host access except for methods annotated with <code>@HostAccess.Export</code>.</li>
   <li>A new <code>Services</code> instance is created and put into the context as global variable <code>services</code>.</li>
   <li>The first evaluated script creates a new employee using the services object and returns its name.</li>
   <li>The returned name is asserted to equal the expected name <code>John Doe</code>.</li>
@@ -3323,146 +3321,7 @@ The following access parameters may be configured:</p>
   <li>Allow access to IO using <a href="https://www.graalvm.org/truffle/javadoc/org/graalvm/polyglot/Context.Builder.html#allowIO-boolean-"><code>allowIO</code></a> and proxy file accesses using <a href="https://www.graalvm.org/truffle/javadoc/org/graalvm/polyglot/Context.Builder.html#fileSystem-org.graalvm.polyglot.io.FileSystem-"><code>fileSystem</code></a>.</li>
 </ul>
 
-<p><strong>Important:</strong> Allowing access to class loading, native APIs or host IO must not be enabled for less trusted code as these privileges effectively allow all access.</p>
-
-<h4 id="reliable-timeouts">Reliable Timeouts</h4>
-
-<p>The Polyglot API lets you reliably cancel guest language execution after a
-timeout interval. Use the code example in this section with your polyglot
-application to see how less trusted code, e.g. an infinite while loop, can be reliably canceled.</p>
-
-<div class="tabs-below">
-
-<div class="tab-content">
-  
-  <div id="Timeout_JS" class="tab-pane fade in active">
-    
-<div class="snippet-container">
-  <div>
-    <span href="" class="copy-button" onclick="copySnippet(this);">
-      <img src="/resources/img/copy.svg" title="Copy" />
-    </span>
-  </div>
-
-  <!--
-  java
-  embed/timeout_js.java
-  -->
-
-  
-
-  
-<figure class="highlight"><pre><code class="language-java" data-lang="java">  <span class="c1">// COMPILE-CMD: javac {file}</span>
-<span class="c1">// RUN-CMD: java -ea {file}</span>
-<span class="kn">import</span> <span class="nn">java.util.Timer</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.TimerTask</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.Callable</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.graalvm.polyglot.*</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">timeout_js</span> <span class="o">{</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-<span class="c1">// BEGIN-SNIPPET</span>
-<span class="k">try</span> <span class="o">(</span><span class="n">Context</span> <span class="n">context</span> <span class="o">=</span> <span class="n">Context</span><span class="o">.</span><span class="na">create</span><span class="o">())</span> <span class="o">{</span>
-    <span class="n">context</span><span class="o">.</span><span class="na">initialize</span><span class="o">(</span><span class="s">"js"</span><span class="o">);</span>
-
-    <span class="n">Timer</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Timer</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-    <span class="n">timer</span><span class="o">.</span><span class="na">schedule</span><span class="o">(</span><span class="k">new</span> <span class="n">TimerTask</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">context</span><span class="o">.</span><span class="na">close</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">},</span> <span class="mi">1000</span><span class="o">);</span>
-
-    <span class="k">try</span> <span class="o">{</span>
-        <span class="n">String</span> <span class="n">lessTrustedCode</span> <span class="o">=</span> <span class="s">"while(true);"</span><span class="o">;</span>
-        <span class="n">context</span><span class="o">.</span><span class="na">eval</span><span class="o">(</span><span class="s">"js"</span><span class="o">,</span> <span class="n">lessTrustedCode</span><span class="o">);</span>
-        <span class="k">assert</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">PolyglotException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="na">isCancelled</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="c1">// END-SNIPPET</span>
-<span class="o">}</span>
-
-<span class="o">}</span>
-
-  </code></pre></figure>
-
-
-  
-
-  <script>
-  var beginPattern = "BEGIN-SNIPPET";
-  var endPattern = "END-SNIPPET";
-  var parent = document.currentScript.parentElement;
-  var dropMode = true;
-  function cleanWhitespace(element) {
-    textNodes = element.contents().filter(
-      function() { return (this.nodeType == 3 && /\s+\n\s+\n\s+/.test(this.nodeValue)); }
-    ).replaceWith("\n\n");
-    return element;
-  }
-  $(parent).find("figure > pre > code > span").each(function() {
-    var span = $(this);
-    if (dropMode) {
-      this.parentElement.removeChild(this);
-      if (span.text().includes(beginPattern)) {
-        dropMode = false;
-      }
-    } else {
-      if (span.text().includes(endPattern)) {
-        dropMode = true;
-      }
-      if (dropMode) {
-        this.parentElement.removeChild(this);
-      }
-    }
-  });
-  $(parent).find("figure > pre > code").each(function() {
-    $(this).html($(this).html().trim());
-    cleanWhitespace($(this));
-  });
-  </script>
-
-</div>
-
-  </div>
-  
-  
-  
-  
-  
-</div>
-
-<ul class="nav nav-tabs">
-  
-  <li class="active"><a data-toggle="tab" href="#Timeout_JS">JavaScript</a></li>
-  
-  
-  
-  
-  
-  
-</ul>
-
-</div>
-
-<p> In this code:</p>
-<ul>
-  <li>The first line of code creates a new context for any language.</li>
-  <li>The second line of code ensures the language is initialized. This prevents
-the execution from being canceled during context initialization.</li>
-  <li>A new <code>java.util.Timer</code> instance is created.</li>
-  <li>To close the context, a new <code>TimerTask</code> is scheduled to run after one
-second. The <code>true</code> parameter to <code>close</code> indicates that the execution should be
-canceled if it is currently running.</li>
-  <li>An infinite while loop is evaluated. This code will
-never complete. For this reason, the timer task closes and cancels the
-execution. This scenario causes a <code>PolyglotException</code> to be thrown.</li>
-  <li>Finally, in the exception catch block, the exception is verified as
-originating from a cancel event.</li>
-</ul>
+<p><strong>Important:</strong> Granting access to class loading, native APIs or host IO effectively grants all access, as these privileges can be used to bypass other access restrictions.</p>
 
 <h2 id="build-native-images-from-polyglot-applications">Build Native Images from Polyglot Applications</h2>
 
@@ -3621,7 +3480,7 @@ for (;;) {
 
 <h2 id="step-through-with-execution-listeners">Step through with Execution Listeners</h2>
 <p>GraalVM Polyglot API allows to instrument the execution of guest languages through <a href="http://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/management/ExecutionListener.html">ExecutionListener class</a>. For example, it lets you attach an execution listener that is invoked for every statement of the guest language program. Execution listeners
-are designed as simple API for polyglot embedders and may become handy in, e.g., single-stepping through the program to detect less trusted code by counting the number of statements executed.</p>
+are designed as simple API for polyglot embedders and may become handy in, e.g., single-stepping through the program.</p>
 
 <pre><code class="language-java">import org.graalvm.polyglot.*;
 import org.graalvm.polyglot.management.*;

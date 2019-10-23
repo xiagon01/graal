@@ -538,7 +538,7 @@ $(document).ready(function(){
                 <p>Get started with GraalVM and configure it to run programs written in Java (or
 other JVM-based languages), JavaScript and Node.js, Ruby, R, or Python. This
 page guides you through downloading and installing GraalVM and adding support
-for additional languages, and shows you how to run simple programs on GraalVM.</p>
+for additional languages and/or plugins, and shows you how to run simple programs on GraalVM.</p>
 
 <h2 id="install-graalvm">Install GraalVM</h2>
 
@@ -547,8 +547,8 @@ languages (e.g. Scala, Kotlin), dynamic languages (e.g. JavaScript, R, Ruby, R,
 Python), LLVM-based languages (e.g. C and C++) in one shared runtime, and
 supports Linux and macOS platforms on x86 64-bit systems. It is available as
 Community Edition (CE) and Enterprise Edition (EE). GraalVM Community Edition is
-based on the OpenJDK 8. GraalVM Enterprise Edition is developed on top of the
-Java SE 1.8.0_231. Proceed to the <a href="/downloads/">Downloads</a>
+based on the OpenJDK version 8u232. GraalVM Enterprise Edition is developed on top of the
+Java SE version 1.8.0_231. Proceed to the <a href="/downloads/">Downloads</a>
 page and make your choice depending on your operating system and use case.</p>
 
 <p>In this getting started guide we will focus on working with GraalVM
@@ -558,11 +558,11 @@ interpreter, and the JavaScript runtime with Node.js support – all in one
 package. GraalVM environment can be extended with:</p>
 <ul>
   <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> – a technology to compile an application ahead-of-time into a binary that runs natively on the system. <strong>Warning:</strong> GraalVM Native Image is
-available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
-and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
-subscription, but is not covered by Oracle’s standard
-warranty.</li>
-  <li>R, Ruby and Python languages interpreters. <strong>Warning:</strong> The support for Ruby, R and Python languages is  <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.</li>
+available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>.</li>
+  <li>R, Ruby and Python languages interpreters. <strong>Warning:</strong> The support for Ruby, R and Python languages is  <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</li>
+  <li><a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">The LLVM toolchain</a> –  a set of tools and APIs for compiling native programs to
+bitcode that can be executed with the GraalVM LLVM runtime.<br />
+ <strong>Warning:</strong> Toolchain support is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</li>
 </ul>
 
 <p>Getting GraalVM installed and ready-to-go should only take a few minutes. Please
@@ -612,13 +612,8 @@ should be enough to run an application with GraalVM.</p>
 </ul>
 
 <p>Notably, <strong>java</strong> runs the JVM with GraalVM’s default compiler.
-The Ruby, Python and R executables become available only if you install the corresponding language engines.
-For example, running the following command will install Ruby support:</p>
-
-<pre><code>gu install ruby
-</code></pre>
-
-<p>For more information on using GraalVM Updater please refer to <a href="/docs/reference-manual/graal-updater/">its documentation</a>.</p>
+The Ruby, Python, R, executables become available only if you install the corresponding language engines.
+For more information on using GraalVM Updater please refer to <a href="/docs/reference-manual/graal-updater/">its documentation</a>.</p>
 
 <p>Once the <code>PATH</code> environment variable is set properly, it is easy to check language versions with GraalVM launchers:</p>
 
@@ -634,11 +629,6 @@ $ lli --version
 LLVM (GraalVM EE Native 19.2.1)
 </code></pre>
 
-<p>If you have, e.g., the Ruby language component installed, you can check its version as well:</p>
-
-<pre><code class="language-shell">$ ruby -v
-truffleruby 19.2.1, like ruby 2.6.2, GraalVM CE Native [x86_64-darwin]
-</code></pre>
 <h2 id="docker-containers">Docker Containers</h2>
 
 <p>The official Docker images for GraalVM CE are available from the Docker Hub:
@@ -868,8 +858,8 @@ Hello from GraalVM!
 <p>The Ruby engine is not installed by default, but it can easily be added using <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a>:</p>
 <pre><code>gu install ruby
 </code></pre>
-
-<p>This makes Ruby commands like <code>ruby</code>, <code>gem</code>, <code>irb</code>, <code>rake</code>, <code>rdoc</code> and <code>ri</code> available:</p>
+<p>The above command will install a community version of a component from GitHub catalog. For GraalVM Enterprise Edition users, a <a href="/docs/reference-manual/install-components/#component-installation-modes">manual component installation</a> is required.
+Then the Ruby launchers like <code>ruby</code>, <code>gem</code>, <code>irb</code>, <code>rake</code>, <code>rdoc</code> and <code>ri</code> will become available:</p>
 <pre><code>$ ruby [options] program.rb
 </code></pre>
 
@@ -896,8 +886,8 @@ Therefore its installation, <code>gem install bundler</code>, is not needed.</p>
 <p>The R engine is not installed by default, but it can easily be added using <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a>:</p>
 <pre><code>gu install R
 </code></pre>
-
-<p>When the R engine is installed, you can execute R scripts and use the R REPL with GraalVM:</p>
+<p>Please note, the installation of the R language component is possible only <a href="/docs/reference-manual/install-components/#component-installation-modes">from catalog</a>.
+When the R engine is installed, you can execute R scripts and use the R REPL with GraalVM:</p>
 
 <pre><code>$ R
 R version 3.5.1 (FastR)
@@ -915,10 +905,10 @@ R version 3.5.1 (FastR)
 The Python engine is not installed by default, but it can easily be added using <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a>:</p>
 <pre><code>gu install python
 </code></pre>
+<p>The above command will install a community version of a component from GitHub catalog. For GraalVM Enterprise Edition users, a <a href="/docs/reference-manual/install-components/#component-installation-modes">manual component installation</a> is required.
+Once the Python engine is installed, GraalVM can execute Python programs:</p>
 
-<p>Once the Python engine is installed, GraalVM can execute Python programs:</p>
-
-<pre><code class="language-shell">$ graalpython
+<pre><code>$ graalpython
 ...
 &gt;&gt;&gt; 1 + 2
 3
@@ -938,7 +928,10 @@ the same runtime as the <code>example.js</code> application. For more informatio
 <h2 id="native-images">Native Images</h2>
 
 <p>GraalVM can compile Java bytecode into native images to achieve faster startup and smaller footprint for your applications.
-The <a href="/docs/reference-manual/aot-compilation/">Native Image</a> functionality is not available by default, but it can easily be added using <code>gu install native-image</code> command. Let’s use the <code>HelloWorld</code> example from above to demonstrate how to compile Java bytecode into a native image:</p>
+The <a href="/docs/reference-manual/aot-compilation/">Native Image</a> functionality is not available by default but <a href="/docs/reference-manual/native-image/#install-native-image">can be easily installed</a>.</p>
+
+<p>The <code>HelloWorld</code> example from above is used here to demonstrate how to compile
+Java bytecode into a native image:</p>
 
 <pre><code class="language-java">// HelloWorld.java
 public class HelloWorld {

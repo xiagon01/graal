@@ -696,7 +696,7 @@ compiler which ahead-of-time compiles it to the native binary.</p>
 
 <p>GraalVM <code>native-image</code> supports JVM-based languages, e.g., Java, Scala,
 Clojure, Kotlin. The resulting native image can, optionally, execute dynamic
-languages like Ruby, R, or Python, but it does not pre-compile their code
+languages like JavaScript, Ruby, R, or Python, but it does not pre-compile their code
 itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
 <code>native-image</code> of guest languages used by an application, specify
 <code>--language:&lt;languageId&gt;</code> for each guest language used (e.g., <code>--language:js</code>).</p>
@@ -704,17 +704,23 @@ itself. Polyglot embeddings can also be compiled ahead-of-time. To inform
 <p><strong>Warning:</strong> GraalVM Native Image is
 available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production
 and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition
-subscription, but is not covered by Oracle’s standard
-warranty.</p>
+subscription, but is not covered by Oracle’s standard warranty.</p>
 
 <h2 id="install-native-image">Install Native Image</h2>
 
 <p>Starting from GraalVM 19.0, Native Image was extracted from the base distribution.
-This functionality can be added to the core installation with <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a> tool in a similar way as other additional components by running:</p>
-<pre><code>gu install native-image
-</code></pre>
-<p>After this additional step, the <code>native-image</code> executable will be in the <code>bin</code>
-directory, as for the previous releases.</p>
+This functionality can be added to the core installation with <a href="/docs/reference-manual/graal-updater/">GraalVM Updater</a> utility in a similar way as other additional components.</p>
+
+<p>For GraalVM Enterprise Edition users, download the Native Image component JAR
+file from <a href="https://www.oracle.com/downloads/graalvm-downloads.html">Oracle Technology Network</a> and install it
+by running <code>gu -L install component.jar</code>, where <code>-L</code> option, equivalent to
+<code>--local-file</code>, tells to install a component from a downloaded archive.</p>
+
+<p>For GraalVM Community Edition users, install a component from the GitHub catalog by
+its name <code>gu install native-image</code>.</p>
+
+<p>After this additional step, the <code>native-image</code> executable will become available in
+the <code>bin</code> directory, as for the previous releases.</p>
 
 <p>Take a look at the <a href="/docs/examples/native-list-dir/">native image generation</a> or <a href="/docs/examples/java-kotlin-aot/">compiling a Java and Kotlin app ahead-of-time</a> samples.</p>
 
@@ -760,59 +766,59 @@ options.</p>
 <ul>
   <li>
     <p><code>-cp</code> and <code>--class-path &lt;class search path of directories and zip/jar files&gt;</code>
-help to search for class files through separated list of directories, JAR archives, and ZIP archives;</p>
+  help to search for class files through separated list of directories, JAR archives, and ZIP archives</p>
   </li>
   <li>
-    <p><code>-D&lt;name&gt;=&lt;value&gt;</code> sets a system property for the JVM running the image generator;</p>
+    <p><code>-D&lt;name&gt;=&lt;value&gt;</code> sets a system property for the JVM running the image generator</p>
   </li>
   <li>
-    <p><code>-J&lt;flag&gt;</code> passes <code>&lt;flag&gt;</code> directly to the JVM running the image generator;</p>
+    <p><code>-J&lt;flag&gt;</code> passes <code>&lt;flag&gt;</code> directly to the JVM running the image generator</p>
   </li>
   <li>
-    <p><code>-O&lt;level&gt;</code> 0 – no optimizations, 1 – basic optimizations (default);</p>
+    <p><code>-O&lt;level&gt;</code> 0 – no optimizations, 1 – basic optimizations (default)</p>
   </li>
   <li>
-    <p><code>-ea</code> and <code>-da</code> enables or disables assertions in the generated image;</p>
+    <p><code>-ea</code> and <code>-da</code> enables or disables assertions in the generated image</p>
   </li>
   <li>
-    <p><code>--allow-incomplete-classpath</code> allows image building with an incomplete class path and reports type resolution errors at run time when they are accessed the first time, instead of during image building;</p>
+    <p><code>--allow-incomplete-classpath</code> allows image building with an incomplete class path and reports type resolution errors at run time when they are accessed the first time, instead of during image building</p>
   </li>
   <li>
-    <p><code>--auto-fallback</code> builds a stand-alone image if possible, which is a default setting, <code>--no-fallback</code> builds a stand-alone image or reports a failure, and <code>--force-fallback</code> forces building of a fallback image;</p>
+    <p><code>--auto-fallback</code> builds a stand-alone image if possible, which is a default setting, <code>--no-fallback</code> builds a stand-alone image or reports a failure, and <code>--force-fallback</code> forces building of a fallback image</p>
   </li>
   <li>
-    <p><code>--enable-all-security-services</code> adds all security service classes to the generated image;</p>
+    <p><code>--enable-all-security-services</code> adds all security service classes to the generated image</p>
   </li>
   <li>
-    <p><code>--enable-http</code> or <code>--enable-https</code> enables http or https support in the generated image;</p>
+    <p><code>--enable-http</code> or <code>--enable-https</code> enables http or https support in the generated image</p>
   </li>
   <li>
-    <p><code>--enable-url-protocols</code> provides  a list of comma separated URL protocols to enable;</p>
+    <p><code>--enable-url-protocols</code> provides a list of comma separated URL protocols to enable</p>
   </li>
   <li>
-    <p><code>--features=&lt;fqcn&gt;</code> provides a comma-separated list of fully qualified feature implementation classes;</p>
+    <p><code>--features=&lt;fqcn&gt;</code> provides a comma-separated list of fully qualified feature implementation classes</p>
   </li>
   <li>
-    <p><code>--initialize-at-build-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses during image building;</p>
+    <p><code>--initialize-at-build-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses during image building</p>
   </li>
   <li>
-    <p><code>--initialize-at-run-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses at run time and not during image building;</p>
+    <p><code>--initialize-at-run-time=&lt;comma separated list of class/package names&gt;</code> initializes classes and implicitly all of their superclasses at run time and not during image building</p>
   </li>
   <li>
     <p><code>--report-unsupported-elements-at-runtime</code> reports usage of unsupported methods
-and fields at run time when they are accessed the first time, instead of as an error during image building;</p>
+  and fields at run time when they are accessed the first time, instead of as an error during image building;</p>
   </li>
   <li>
-    <p><code>--shared</code>  builds shared library;</p>
+    <p><code>--shared</code> builds a shared library</p>
   </li>
   <li>
-    <p><code>--static</code>  builds statically linked executable (requires static libc and zlib) (since 1.0-rc2);</p>
+    <p><code>--static</code> builds a statically linked executable. This option prevents linking against shared libraries. This requires the static <em>libc</em> library to be available on the host system. <strong>Warning:</strong>  On systems other than Linux, this option has no effect</p>
   </li>
   <li>
-    <p><code>--verbose</code> enables verbose output;</p>
+    <p><code>--verbose</code> makes image building output more verbose</p>
   </li>
   <li>
-    <p><code>-g</code> enables the debugging info generation. <strong>Warning:</strong> The option is available only with GraalVM Enterprise Edition.</p>
+    <p><code>-g</code> enables the debugging info generation. <strong>Warning:</strong> The option is available only with GraalVM Enterprise Edition</p>
   </li>
 </ul>
 
@@ -822,69 +828,66 @@ and fields at run time when they are accessed the first time, instead of as an e
 
 <ul>
   <li>
-    <p><code>--language:nfi</code> to make Truffle Native Function Interface language available;</p>
+    <p><code>--language:nfi</code> to make Truffle Native Function Interface language available</p>
   </li>
   <li>
     <p><code>--language:regex</code> to make Truffle Regular Expression engine available that
-  exposes regular expression functionality in GraalVM supported languages;</p>
+  exposes regular expression functionality in GraalVM supported languages</p>
   </li>
   <li>
-    <p><code>--language:python</code> to make sure Python is available as a language for the image;</p>
+    <p><code>--language:js</code> to make sure JavaScript is available as a language for the image</p>
   </li>
   <li>
-    <p><code>--language:llvm</code> to make sure LLVM bitcode is available for the image;</p>
+    <p><code>--language:llvm</code> to make sure LLVM bitcode is available for the image</p>
   </li>
   <li>
-    <p><code>--language:js</code> to make sure JavaScript is available as a language for the image;</p>
+    <p><code>--language:python</code> to make sure Python is available as a language for the image</p>
   </li>
   <li>
-    <p><code>--language:ruby</code> to make sure Ruby is available as a language for the image;</p>
+    <p><code>--language:ruby</code> to make sure Ruby is available as a language for the image</p>
   </li>
   <li>
-    <p><code>--language:R</code>  to make sure R is available as a language for the image;</p>
+    <p><code>--language:R</code>  to make sure R is available as a language for the image</p>
   </li>
   <li>
-    <p><code>--tool:chromeinspector</code>  adds debugging support to a Truffle framework based language image;</p>
+    <p><code>--tool:chromeinspector</code>  adds debugging support to a Truffle framework based language image</p>
   </li>
   <li>
-    <p><code>--tool:profiler</code> adds profiling support to a Truffle framework based language image.</p>
+    <p><code>--tool:profiler</code> adds profiling support to a Truffle framework based language image</p>
   </li>
 </ul>
 
-<p>Please note, the <code>--language:python</code>, <code>--language:ruby</code> and <code>--language:R</code> polyglot macro options become available once the corresponding languages engines are added to the base GraalVM installation with GraalVM Updater tool:</p>
-<pre><code>gu install python
-gu install ruby
-gu install R
-</code></pre>
+<p>Please note, the <code>--language:python</code>, <code>--language:ruby</code> and <code>--language:R</code> polyglot macro options become available once the corresponding languages engines <a href="/docs/reference-manual/graal-updater/">are installed</a> to the base GraalVM distribution.</p>
+
 <h3 id="non-standard-options">Non-standard Options</h3>
 
 <p>Get acquainted with the non-standard native image building options, that are subject to change through a deprecation cycle:</p>
 
 <ul>
   <li>
-    <p><code>--no-server</code> tells to not use server-based image building;</p>
+    <p><code>--no-server</code> tells to not use server-based image building</p>
   </li>
   <li>
-    <p><code>--server-list</code> lists current image-build servers;</p>
+    <p><code>--server-list</code> lists current image-build servers</p>
   </li>
   <li>
-    <p><code>--server-list-details</code> lists current image-build servers with more details;</p>
+    <p><code>--server-list-details</code> lists current image-build servers with more details</p>
   </li>
   <li>
-    <p><code>--server-cleanup</code> removes stale image-build servers entries;</p>
+    <p><code>--server-cleanup</code> removes stale image-build servers entries</p>
   </li>
   <li>
-    <p><code>--server-shutdown</code> shuts down image-build servers under current session ID;</p>
+    <p><code>--server-shutdown</code> shuts down image-build servers under current session ID</p>
   </li>
   <li>
-    <p><code>--server-shutdown-all</code> shuts down all image-build servers;</p>
+    <p><code>--server-shutdown-all</code> shuts down all image-build servers</p>
   </li>
   <li>
     <p><code>--server-session=&lt;custom-session-name&gt;</code> uses custom session name instead
-   of system provided session ID of the calling process;</p>
+   of system provided session ID of the calling process</p>
   </li>
   <li>
-    <p><code>--verbose-server</code> enables verbose output for image-build server handling.</p>
+    <p><code>--verbose-server</code> enables verbose output for image-build server handling</p>
   </li>
 </ul>
 
@@ -892,22 +895,22 @@ gu install R
 
 <ul>
   <li>
-    <p><code>--debug-attach[=&lt;port&gt;]</code> attaches to debugger during image building (default  port is 8000);</p>
+    <p><code>--debug-attach[=&lt;port&gt;]</code> attaches to debugger during image building (default  port is 8000)</p>
   </li>
   <li>
-    <p><code>--dry-run</code> outputs the command line that would be used for image building;</p>
+    <p><code>--dry-run</code> outputs the command line that would be used for image building</p>
   </li>
   <li>
-    <p><code>--expert-options</code> lists image build options for experts;</p>
+    <p><code>--expert-options</code> lists image build options for experts</p>
   </li>
   <li>
-    <p><code>--expert-options-all</code>  lists all image build options for experts (to be used at your own risk);</p>
+    <p><code>--expert-options-all</code>  lists all image build options for experts (to be used at your own risk)</p>
   </li>
   <li>
-    <p><code>--configurations-path &lt;search path of option-configuration directories&gt;</code> a separated list of directories to be treated as option-configuration directories;</p>
+    <p><code>--configurations-path &lt;search path of option-configuration directories&gt;</code> a separated list of directories to be treated as option-configuration directories</p>
   </li>
   <li>
-    <p><code>-V&lt;key&gt;=&lt;value&gt;</code> provides values for placeholders in native-image.properties files.</p>
+    <p><code>-V&lt;key&gt;=&lt;value&gt;</code> provides values for placeholders in native-image.properties files</p>
   </li>
 </ul>
 

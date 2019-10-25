@@ -1,4 +1,5 @@
 org.graalvm.collections
+org.graalvm.home
 org.graalvm.nativeimage
 org.graalvm.nativeimage.c
 org.graalvm.nativeimage.c.constant

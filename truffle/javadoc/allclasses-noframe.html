@@ -22,6 +22,8 @@
 <li><a href="com/oracle/truffle/api/ArrayUtils.html" title="class in com.oracle.truffle.api">ArrayUtils</a></li>
 <li><a href="com/oracle/truffle/api/utilities/AssumedValue.html" title="class in com.oracle.truffle.api.utilities">AssumedValue</a></li>
 <li><a href="com/oracle/truffle/api/Assumption.html" title="interface in com.oracle.truffle.api"><span class="interfaceName">Assumption</span></a></li>
+<li><a href="com/oracle/truffle/api/nodes/BlockNode.html" title="class in com.oracle.truffle.api.nodes">BlockNode</a></li>
+<li><a href="com/oracle/truffle/api/nodes/BlockNode.ElementExecutor.html" title="interface in com.oracle.truffle.api.nodes"><span class="interfaceName">BlockNode.ElementExecutor</span></a></li>
 <li><a href="com/oracle/truffle/api/object/BooleanLocation.html" title="interface in com.oracle.truffle.api.object"><span class="interfaceName">BooleanLocation</span></a></li>
 <li><a href="com/oracle/truffle/api/profiles/BranchProfile.html" title="class in com.oracle.truffle.api.profiles">BranchProfile</a></li>
 <li><a href="com/oracle/truffle/api/debug/Breakpoint.html" title="class in com.oracle.truffle.api.debug">Breakpoint</a></li>
@@ -173,6 +175,7 @@
 <li><a href="com/oracle/truffle/api/nodes/GraphPrintVisitor.GraphPrintHandler.html" title="interface in com.oracle.truffle.api.nodes"><span class="interfaceName">GraphPrintVisitor.GraphPrintHandler</span></a></li>
 <li><a href="com/oracle/truffle/api/nodes/GraphPrintVisitor.NullGraphPrintHandler.html" title="annotation in com.oracle.truffle.api.nodes">GraphPrintVisitor.NullGraphPrintHandler</a></li>
 <li><a href="com/oracle/truffle/api/object/HiddenKey.html" title="class in com.oracle.truffle.api.object">HiddenKey</a></li>
+<li><a href="org/graalvm/home/HomeFinder.html" title="class in org.graalvm.home">HomeFinder</a></li>
 <li><a href="org/graalvm/polyglot/HostAccess.html" title="class in org.graalvm.polyglot">HostAccess</a></li>
 <li><a href="org/graalvm/polyglot/HostAccess.Export.html" title="annotation in org.graalvm.polyglot">HostAccess.Export</a></li>
 <li><a href="org/graalvm/polyglot/HostAccess.Implementable.html" title="annotation in org.graalvm.polyglot">HostAccess.Implementable</a></li>
@@ -278,14 +281,14 @@
 <li><a href="org/graalvm/collections/Pair.html" title="class in org.graalvm.collections">Pair</a></li>
 <li><a href="org/graalvm/nativeimage/PinnedObject.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">PinnedObject</span></a></li>
 <li><a href="org/graalvm/nativeimage/Platform.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform</span></a></li>
-<li><a href="org/graalvm/nativeimage/Platform.AArch64.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.AArch64</span></a></li>
+<li><a href="org/graalvm/nativeimage/Platform.AARCH64.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.AARCH64</span></a></li>
 <li><a href="org/graalvm/nativeimage/Platform.AMD64.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.AMD64</span></a></li>
 <li><a href="org/graalvm/nativeimage/Platform.DARWIN.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.DARWIN</span></a></li>
-<li><a href="org/graalvm/nativeimage/Platform.DARWIN_AArch64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AArch64</a></li>
+<li><a href="org/graalvm/nativeimage/Platform.DARWIN_AARCH64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AARCH64</a></li>
 <li><a href="org/graalvm/nativeimage/Platform.DARWIN_AMD64.html" title="class in org.graalvm.nativeimage">Platform.DARWIN_AMD64</a></li>
 <li><a href="org/graalvm/nativeimage/Platform.HOSTED_ONLY.html" title="class in org.graalvm.nativeimage">Platform.HOSTED_ONLY</a></li>
 <li><a href="org/graalvm/nativeimage/Platform.LINUX.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.LINUX</span></a></li>
-<li><a href="org/graalvm/nativeimage/Platform.LINUX_AArch64.html" title="class in org.graalvm.nativeimage">Platform.LINUX_AArch64</a></li>
+<li><a href="org/graalvm/nativeimage/Platform.LINUX_AARCH64.html" title="class in org.graalvm.nativeimage">Platform.LINUX_AARCH64</a></li>
 <li><a href="org/graalvm/nativeimage/Platform.LINUX_AMD64.html" title="class in org.graalvm.nativeimage">Platform.LINUX_AMD64</a></li>
 <li><a href="org/graalvm/nativeimage/Platform.WINDOWS.html" title="interface in org.graalvm.nativeimage"><span class="interfaceName">Platform.WINDOWS</span></a></li>
 <li><a href="org/graalvm/nativeimage/Platform.WINDOWS_AMD64.html" title="class in org.graalvm.nativeimage">Platform.WINDOWS_AMD64</a></li>
@@ -315,6 +318,8 @@
 <li><a href="org/graalvm/polyglot/proxy/ProxyTime.html" title="interface in org.graalvm.polyglot.proxy"><span class="interfaceName">ProxyTime</span></a></li>
 <li><a href="org/graalvm/polyglot/proxy/ProxyTimeZone.html" title="interface in org.graalvm.polyglot.proxy"><span class="interfaceName">ProxyTimeZone</span></a></li>
 <li><a href="org/graalvm/nativeimage/c/struct/RawField.html" title="annotation in org.graalvm.nativeimage.c.struct">RawField</a></li>
+<li><a href="org/graalvm/nativeimage/c/struct/RawFieldAddress.html" title="annotation in org.graalvm.nativeimage.c.struct">RawFieldAddress</a></li>
+<li><a href="org/graalvm/nativeimage/c/struct/RawFieldOffset.html" title="annotation in org.graalvm.nativeimage.c.struct">RawFieldOffset</a></li>
 <li><a href="org/graalvm/nativeimage/c/struct/RawStructure.html" title="annotation in org.graalvm.nativeimage.c.struct">RawStructure</a></li>
 <li><a href="com/oracle/truffle/api/library/ReflectionLibrary.html" title="class in com.oracle.truffle.api.library">ReflectionLibrary</a></li>
 <li><a href="org/graalvm/nativeimage/c/function/RelocatedPointer.html" title="interface in org.graalvm.nativeimage.c.function"><span class="interfaceName">RelocatedPointer</span></a></li>
@@ -322,6 +327,8 @@
 <li><a href="com/oracle/truffle/api/ReplaceObserver.html" title="interface in com.oracle.truffle.api"><span class="interfaceName">ReplaceObserver</span></a></li>
 <li><a href="com/oracle/truffle/api/dsl/ReportPolymorphism.html" title="annotation in com.oracle.truffle.api.dsl">ReportPolymorphism</a></li>
 <li><a href="com/oracle/truffle/api/dsl/ReportPolymorphism.Exclude.html" title="annotation in com.oracle.truffle.api.dsl">ReportPolymorphism.Exclude</a></li>
+<li><a href="org/graalvm/polyglot/ResourceLimitEvent.html" title="class in org.graalvm.polyglot">ResourceLimitEvent</a></li>
+<li><a href="org/graalvm/polyglot/ResourceLimits.html" title="class in org.graalvm.polyglot">ResourceLimits</a></li>
 <li><a href="org/graalvm/polyglot/tck/ResultVerifier.html" title="interface in org.graalvm.polyglot.tck"><span class="interfaceName">ResultVerifier</span></a></li>
 <li><a href="org/graalvm/polyglot/tck/ResultVerifier.SnippetRun.html" title="class in org.graalvm.polyglot.tck">ResultVerifier.SnippetRun</a></li>
 <li><a href="com/oracle/truffle/api/RootCallTarget.html" title="interface in com.oracle.truffle.api"><span class="interfaceName">RootCallTarget</span></a></li>
@@ -333,7 +340,6 @@
 <li><a href="com/oracle/truffle/api/Scope.html" title="class in com.oracle.truffle.api">Scope</a></li>
 <li><a href="com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></li>
 <li><a href="com/oracle/truffle/api/object/Shape.Allocator.html" title="class in com.oracle.truffle.api.object">Shape.Allocator</a></li>
-<li><a href="com/oracle/truffle/api/object/Shape.Pred.html" title="interface in com.oracle.truffle.api.object"><span class="interfaceName">Shape.Pred</span></a></li>
 <li><a href="com/oracle/truffle/api/object/ShapeListener.html" title="interface in com.oracle.truffle.api.object"><span class="interfaceName">ShapeListener</span></a></li>
 <li><a href="org/graalvm/word/SignedWord.html" title="interface in org.graalvm.word"><span class="interfaceName">SignedWord</span></a></li>
 <li><a href="org/graalvm/nativeimage/c/struct/SizeOf.html" title="class in org.graalvm.nativeimage.c.struct">SizeOf</a></li>
@@ -378,6 +384,7 @@
 <li><a href="com/oracle/truffle/api/TruffleFile.FileTypeDetector.html" title="interface in com.oracle.truffle.api"><span class="interfaceName">TruffleFile.FileTypeDetector</span></a></li>
 <li><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument</a></li>
 <li><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Env.html" title="class in com.oracle.truffle.api.instrumentation">TruffleInstrument.Env</a></li>
+<li><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Provider.html" title="interface in com.oracle.truffle.api.instrumentation"><span class="interfaceName">TruffleInstrument.Provider</span></a></li>
 <li><a href="com/oracle/truffle/api/instrumentation/TruffleInstrument.Registration.html" title="annotation in com.oracle.truffle.api.instrumentation">TruffleInstrument.Registration</a></li>
 <li><a href="com/oracle/truffle/api/TruffleLanguage.html" title="class in com.oracle.truffle.api">TruffleLanguage</a></li>
 <li><a href="com/oracle/truffle/api/TruffleLanguage.ContextPolicy.html" title="enum in com.oracle.truffle.api">TruffleLanguage.ContextPolicy</a></li>
@@ -386,6 +393,7 @@
 <li><a href="com/oracle/truffle/api/TruffleLanguage.InlineParsingRequest.html" title="class in com.oracle.truffle.api">TruffleLanguage.InlineParsingRequest</a></li>
 <li><a href="com/oracle/truffle/api/TruffleLanguage.LanguageReference.html" title="class in com.oracle.truffle.api">TruffleLanguage.LanguageReference</a></li>
 <li><a href="com/oracle/truffle/api/TruffleLanguage.ParsingRequest.html" title="class in com.oracle.truffle.api">TruffleLanguage.ParsingRequest</a></li>
+<li><a href="com/oracle/truffle/api/TruffleLanguage.Provider.html" title="interface in com.oracle.truffle.api"><span class="interfaceName">TruffleLanguage.Provider</span></a></li>
 <li><a href="com/oracle/truffle/api/TruffleLanguage.Registration.html" title="annotation in com.oracle.truffle.api">TruffleLanguage.Registration</a></li>
 <li><a href="com/oracle/truffle/api/TruffleLogger.html" title="class in com.oracle.truffle.api">TruffleLogger</a></li>
 <li><a href="com/oracle/truffle/api/interop/TruffleObject.html" title="interface in com.oracle.truffle.api.interop"><span class="interfaceName">TruffleObject</span></a></li>
@@ -416,6 +424,7 @@
 <li><a href="com/oracle/truffle/api/interop/UnsupportedTypeException.html" title="class in com.oracle.truffle.api.interop">UnsupportedTypeException</a></li>
 <li><a href="org/graalvm/polyglot/Value.html" title="class in org.graalvm.polyglot">Value</a></li>
 <li><a href="com/oracle/truffle/api/profiles/ValueProfile.html" title="class in com.oracle.truffle.api.profiles">ValueProfile</a></li>
+<li><a href="org/graalvm/home/Version.html" title="class in org.graalvm.home">Version</a></li>
 <li><a href="com/oracle/truffle/api/frame/VirtualFrame.html" title="interface in com.oracle.truffle.api.frame"><span class="interfaceName">VirtualFrame</span></a></li>
 <li><a href="org/graalvm/nativeimage/VMRuntime.html" title="class in org.graalvm.nativeimage">VMRuntime</a></li>
 <li><a href="org/graalvm/nativeimage/c/type/VoidPointer.html" title="interface in org.graalvm.nativeimage.c.type"><span class="interfaceName">VoidPointer</span></a></li>

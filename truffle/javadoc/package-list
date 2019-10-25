@@ -13,6 +13,7 @@ com.oracle.truffle.api.profiles
 com.oracle.truffle.api.source
 com.oracle.truffle.api.utilities
 org.graalvm.collections
+org.graalvm.home
 org.graalvm.nativeimage
 org.graalvm.nativeimage.c
 org.graalvm.nativeimage.c.constant

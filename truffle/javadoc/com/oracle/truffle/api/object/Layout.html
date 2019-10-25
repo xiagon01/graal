@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>b3e035da38f813aab2a5c09f0aa6b9da8a25c69a</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.1</b><br>8041f00bd21bc6701a4ce8fa85843cad5e16efe7</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -237,7 +237,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>abstract <a href="../../../../../com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/object/Layout.html#createShape-com.oracle.truffle.api.object.ObjectType-java.lang.Object-int-">createShape</a></span>(<a href="../../../../../com/oracle/truffle/api/object/ObjectType.html" title="class in com.oracle.truffle.api.object">ObjectType</a>&nbsp;objectType,
            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;sharedData,
-           int&nbsp;flags)</code>
+           int&nbsp;id)</code>
 <div class="block">Create a root shape.</div>
 </td>
 </tr>
@@ -430,13 +430,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>createShape</h4>
 <pre>public abstract&nbsp;<a href="../../../../../com/oracle/truffle/api/object/Shape.html" title="class in com.oracle.truffle.api.object">Shape</a>&nbsp;createShape(<a href="../../../../../com/oracle/truffle/api/object/ObjectType.html" title="class in com.oracle.truffle.api.object">ObjectType</a>&nbsp;objectType,
                                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;sharedData,
-                                  int&nbsp;flags)</pre>
+                                  int&nbsp;id)</pre>
 <div class="block">Create a root shape.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>objectType</code> - that describes the object instance with this shape.</dd>
 <dd><code>sharedData</code> - for language-specific use</dd>
-<dd><code>flags</code> - for language-specific use, must be in the range 0-255.</dd>
+<dd><code>id</code> - for language-specific use</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>new instance of a shape</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
@@ -521,7 +521,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.3.0-dev</b><br>b3e035da38f813aab2a5c09f0aa6b9da8a25c69a</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>19.2.1</b><br>8041f00bd21bc6701a4ce8fa85843cad5e16efe7</div>
 </div>
 <div class="subNav">
 <ul class="navList">

@@ -1,4 +1,4 @@
-This page explains how to start using **Visual Studio Code support for
+This section explains how to start using **Visual Studio Code support for
 GraalVM**, introduced in the 19.2 version. Visual Studio Code (from now on
 VS Code) is a source-code editor  that provides embedded Git and GitHub control,
 syntax highlighting, code refactoring etc.. To enable a polyglot environment in
@@ -6,52 +6,16 @@ VS Code, we created extensions for GraalVM supported languages:  JS, Ruby, R,
 Python. This allows a simple registration of GraalVM as a runtime, code editing
 and debugging of polyglot applications.
 
-The following extensions are available:
-- *graalvm* -- a VS Code extension providing the basic environment for editing and debugging programs running on GraalVM and includes JavaScript and Node.js support by default.
-- *graalvm-r* -- a VS Code extension providing the basic support for editing and debugging R programs running on GraalVM.
-- *graalvm-ruby* -- a VS Code extension providing the basic support for editing and debugging Ruby programs on GraalVM.
-- *graalvm-python* -- a VS Code extension providing the basic support for editing and debugging Python programs running on GraalVM.
+The following extensions are available from [VSCode Marketplace](https://marketplace.visualstudio.com/):
+- *GraalVM* -- a VS Code extension providing the basic environment for editing and debugging programs running on GraalVM and includes JavaScript and Node.js support by default.
+- *GraalVM R* -- a VS Code extension providing the basic support for editing and debugging R programs running on GraalVM.
+- *Graalvm Ruby* -- a VS Code extension providing the basic support for editing and debugging Ruby programs on GraalVM.
+- *GraalVM Python* -- a VS Code extension providing the basic support for editing and debugging Python programs running on GraalVM.
+- *GraalVM Extensions Pack* -- pack of all above listed extensions for simpler installation.
 
 ### Install Extensions
+GraalVM VSCode extensions can be simply installed from VSCode IDE Extensions panel by searching for *GraalVM*
 
-To start using the extensions in VS Code, take the following steps.
-1. Download the **vs-code-extensions-tech-preview.zip**
-from [Github](https://github.com/oracle/graal/releases), extract an archive and enter it. Inside the folder you see VSIX packages built for you:
-```
-graalvm-<version>.vsix
-graalvm-r-<version>.vsix
-graalvm-ruby-<version>.vsix
-graalvm-python-<version>.vsix
-```
-1.1. As an alternative, you can build VSIX packages yourself.
-Clone the extensions source and enter it:
-```
-git clone https://github.com/oracle/graal.git
-cd graal/vs-code
-```
-1.2. Install `vsce` (short for "Visual Studio Code Extension Manager"), a command-line tool
-for packaging, publishing and managing VS Code extensions:
-```
-npm install -g vsce
-```
-1.3. Build VSIX packages that could be manually installed later:
-```
-cd graalvm; npm install; vsce package
-cd graalvm-r; npm install; vsce package
-cd graalvm-ruby; npm install; vsce package
-cd graalvm-python; npm install; vsce package
-```
-
-2. Install each package into VS Code with `code --install-extension <extension.vsix>` syntax:
-```
-code --install-extension graalvm-<version>.vsix
-code --install-extension graalvm-r-<version>.vsix
-code --install-extension graalvm-ruby-<version>.vsix
-code --install-extension graalvm-python-<version>.vsix
-```
-Alternatively to the manual installation, use the _Install from VSIX..._ action: open Extensions (`Ctrl+Shift+X`) -> More Actions (three dots in the upper right corner) -> Install from VSIX.
-
-![](/docs/img/manual_install.png)
 
 ### GraalVM Extension
 Upon the *graalvm* extension installation, launch VS Code by

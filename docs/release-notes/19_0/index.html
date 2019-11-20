@@ -421,6 +421,17 @@ $(document).ready(function(){
           <li class="toc-bullets-sub dsdsd">
           
             
+            <a href="/docs/release-notes/19_3/">
+              GraalVM 19.3.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
             <a href="/docs/release-notes/19_2/">
               GraalVM 19.2.x
             </a>
@@ -601,7 +612,32 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h2 id="1900">19.0.0</h2>
+                <h2 id="1902">19.0.2</h2>
+<p>(2019-06-13)</p>
+
+<p>This is a bug fix release for 19.0 and we recommend upgrading for all 19.0.x users.</p>
+
+<h3 id="java">Java</h3>
+<ul>
+  <li>Improved compilation performance of scheduler phase.</li>
+  <li>Support retrieving annotations from class initializers (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
+  <li>Fixed problems related to the freetype library: <a href="https://github.com/oracle/graal/issues/1269">1269</a>, <a href="https://github.com/oracle/graal/issues/1270">1270</a>, <a href="https://github.com/oracle/graal/issues/1305">1305</a>.</li>
+  <li>Fixed Version string reporting (it was missing <code>64-Bit</code> in the string).</li>
+</ul>
+
+<h3 id="native-image">Native image</h3>
+<ul>
+  <li>Fixed <code>IllegalArgumentException: Cannot create Method for class initializer</code> (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
+  <li>Fixed an issue when the build would loop forever if <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code>.</li>
+  <li>Fixed the issue where fallback image generation would not respect the <code>--no-server</code> argument.</li>
+  <li>Fix <code>native-image-agent=restrict</code> configuration detection.</li>
+  <li>Added <code>-agentlib:native-image-agent=build</code> configuration option.</li>
+</ul>
+
+<h3 id="llvm-interpreter">LLVM interpreter</h3>
+<p>Allow LLVM interpreter Context to run without <code>allowIO(true)</code>.</p>
+
+<h2 id="1900">19.0.0</h2>
 <p>(2019-05-09)</p>
 
 <h3 id="early-adopter-windows-support">Early Adopter Windows Support</h3>
@@ -611,14 +647,12 @@ GraalVM’s JavaScript engine and the developer tools: Chrome inspector based
 debugger, Profiler etc.. Currently there is no <code>gu</code> utility or the ability to
 add support for the other GraalVM languages.</p>
 
-<h3 id="java">Java</h3>
-
+<h3 id="java-1">Java</h3>
 <ul>
   <li>We updated the base JDK to 8u212. You can find the JDK release notes at the <a href="https://www.oracle.com/technetwork/java/javase/8u212-relnotes-5292913.html">Oracle Technology Network website</a>.</li>
 </ul>
 
-<h3 id="native-image">Native Image</h3>
-
+<h3 id="native-image-1">Native Image</h3>
 <p>Native Image was extracted from the base GraalVM distribution. Currently it is
 available as an early adopter plugin. To install it, run: <code>gu install
 native-image</code>. After this additional step, the <code>native-image</code> executable will be
@@ -660,13 +694,11 @@ packages or individual classes. For example, if we have classes <code>p.C1</code
 </ol>
 
 <h3 id="javascript">JavaScript</h3>
-
 <ul>
   <li>Fixed various bugs that address compilation problems.</li>
 </ul>
 
 <h3 id="r">R</h3>
-
 <ul>
   <li>Fixed a fatal error on Linux platforms when sending <code>SIGINT</code> during long computations.</li>
   <li>Fixed issues with the installation to protected locations: the default Renviron file sets the <code>R_LIBS_USER</code> to a directory inside the current user’s home. Users still have to create this directory manually. Alternatively, the <code>configure_fastr</code> script creates the directory, but for the current user only.</li>
@@ -674,7 +706,6 @@ packages or individual classes. For example, if we have classes <code>p.C1</code
 </ul>
 
 <h3 id="ruby">Ruby</h3>
-
 <ul>
   <li>Various bug fixes. Most notably fixes around OpenSSL C extension compilation.</li>
   <li>Renamed methods in the <code>TruffleRuby</code> object.</li>
@@ -684,31 +715,6 @@ packages or individual classes. For example, if we have classes <code>p.C1</code
 <ul>
   <li>Fixed the <a href="https://github.com/oracle/graal/issues/1248">issue</a> with the ASTs and call trees not showing up.</li>
 </ul>
-
-<h2 id="1902">19.0.2</h2>
-<p>(2019-06-13)</p>
-
-<p>This is a bug fix release for 19.0 and we recommend upgrading for all 19.0.x users.</p>
-
-<h3 id="java-1">Java</h3>
-<ul>
-  <li>Improved compilation performance of scheduler phase.</li>
-  <li>Support retrieving annotations from class initializers (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
-  <li>Fixed problems related to the freetype library: <a href="https://github.com/oracle/graal/issues/1269">1269</a>, <a href="https://github.com/oracle/graal/issues/1270">1270</a>, <a href="https://github.com/oracle/graal/issues/1305">1305</a>.</li>
-  <li>Fixed Version string reporting (it was missing <code>64-Bit</code> in the string).</li>
-</ul>
-
-<h3 id="native-image-1">Native image</h3>
-<ul>
-  <li>Fixed <code>IllegalArgumentException: Cannot create Method for class initializer</code> (see <a href="https://github.com/oracle/graal/issues/1320">1320</a>).</li>
-  <li>Fixed an issue when the build would loop forever if <code>META-INF/native-image/native-image.properties</code> contains <code>--force-fallback</code>.</li>
-  <li>Fixed the issue where fallback image generation would not respect the <code>--no-server</code> argument.</li>
-  <li>Fix <code>native-image-agent=restrict</code> configuration detection.</li>
-  <li>Added <code>-agentlib:native-image-agent=build</code> configuration option.</li>
-</ul>
-
-<h3 id="llvm-interpreter">LLVM interpreter</h3>
-<p>Allow LLVM interpreter Context to run without <code>allowIO(true)</code>.</p>
 
               </div>
 

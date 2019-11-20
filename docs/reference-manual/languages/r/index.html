@@ -683,9 +683,7 @@ can run R code at <a href="#high-performance">unparalleled performance</a>,
 <a href="#graalvm-integration">integrates with the GraalVM</a>
 ecosystem and provides <a href="#graalvm-r-engine-additional-features">additional R level features</a>.</p>
 
-<p><strong>Warning:</strong> The support for R is experimental.
-Experimental features might never be included in a production version, or might
-change significantly before being considered production-ready.</p>
+<p><strong>Warning:</strong> The support for R is currently <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</p>
 
 <h2 id="installing-r">Installing R</h2>
 
@@ -693,26 +691,45 @@ change significantly before being considered production-ready.</p>
 See <code>graalvm/bin/gu --help</code> for more information.</p>
 
 <h3 id="requirements">Requirements</h3>
-<p>GraalVM R engine requires the OpenMP runtime library be installed on the target system.
-Moreover, to install R packages that contain C/C++ or Fortran code, compilers
-for those languages must be present on the target system. Note that all these
-requirements can be satisfied by, e.g., installing the GNU Compiler Collection (GCC).</p>
+<p>GraalVM R engine requires the <a href="https://www.openmprtl.org/">OpenMP runtime library</a> and <a href="https://gcc.gnu.org/wiki/GFortranBinaries">GFortran 3</a> runtime libraries to be installed
+on the target system. Following commands should install those dependencies.</p>
 
-<p>The installation of R packages uses the configuration from <code>jre/languages/R/etc/Makeconf</code>.
-This includes, for example, the configuration of C compiler options.
-If you intend to install R packages, it is recommended to update this configuration
-to match your target system by running the <code>jre/languages/R/bin/configure_fastr</code> script.
-Experienced users can also edit the <code>Makeconf</code> file manually.</p>
+<ul>
+  <li>Ubuntu 18.04 and 19.04: <code>apt-get install libgfortran3 libgomp1</code></li>
+  <li>Oracle Linux 7: <code>yum install libgfortran libgomp</code></li>
+  <li>Oracle Linux 8: <code>yum install compat-libgfortran-48</code></li>
+  <li>MacOS: <code>brew install gcc@4.9</code></li>
+</ul>
+
+<p>On macOS it is necessary to run <code>$R_HOME/bin/configure_fastr</code>.
+This script will attempt to locate the necessary runtime libraries on your computer
+and will fine-tune the the GraalVM R installation according to your system.
+On Linux systems, this script will check that the necessary libraries are installed, and if not,
+it will suggest how to install them.</p>
+
+<p>Moreover, to install R packages that contain C/C++ or Fortran code, compilers
+for those languages must be present on the target system. Following packages
+satisfy the dependencies of the most common R packages:</p>
+
+<ul>
+  <li>Ubuntu 18.04 and 19.04:
+    <pre><code>apt-get install libgfortran3 build-essential gfortran libxml2-dev libc++-dev
+</code></pre>
+  </li>
+  <li>Oracle Linux 7 and 8:
+    <pre><code>yum groupinstall 'Development Tools' &amp;&amp; yum install gcc-gfortran bzip2 libxml2-devel
+</code></pre>
+  </li>
+</ul>
+
+<p>Note that you still need to install the GFortran 3 runtime libraries unless this is
+the default version on your system.</p>
 
 <h3 id="search-paths-for-packages">Search Paths for Packages</h3>
 <p>The default R library location is within the GraalVM installation directory.
 In order to allow installation of additional packages for users that
 do not have write access to the GraalVM installation directory,
-edit the <code>R_LIBS_USER</code> variable in the <code>jre/languages/R/etc/Renviron</code> file.</p>
-
-<p>Alternatively, the configuration script <code>jre/languages/R/bin/configure_fastr</code>
-automatically creates a local R library directory in the current user’s home and changes
-the <code>R_LIBS_USER</code> variable to point to that directory.</p>
+edit the <code>R_LIBS_USER</code> variable in the <code>$R_HOME/etc/Renviron</code> file.</p>
 
 <h2 id="running-r-code">Running R Code</h2>
 
@@ -739,19 +756,76 @@ but for the sake of future compatibility the Java interoperability will not be a
 <pre><code class="language-shell">jre/languages/R/bin/install_r_native_image
 </code></pre>
 
+<h2 id="running-r-extensions">Running R Extensions</h2>
+
+<p>The GraalVM R engine can run <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">R extensions</a> in two modes:</p>
+
+<ul>
+  <li><strong>native</strong>: the native machine code is run directly on your CPU, this is the same as how GNU-R runs R extensions.</li>
+  <li><strong>llvm</strong>: if the LLVM bitcode is available, it can be interpreted by <a href="/docs/reference-manual/languages/llvm">GraalVM LLVM</a>.</li>
+</ul>
+
+<p>The <em>native</em> mode is better suited for code that does not extensively interact with the R API, for example,
+plain C or Fortran numerical computations working on primitive arrays. The <em>llvm</em> mode provides significantly
+better performance for extensions that frequently call between R and the C/C++ code, because GraalVM LLVM
+interpreter is also partially evaluated by the <a href="https://github.com/oracle/graal/tree/master/truffle">Truffle library</a> like the R code, both can be inlined and optimized
+as one compilation unit. Moreover, GraalVM LLVM is supported by
+<a href="/docs/reference-manual/tools/">GraalVM tools</a> which allows to, for instance,
+debug R and C code together.</p>
+
+<p>In one GraalVM R process, any R package can be loaded in either mode. That is, GraalVM R supports
+mixing packages loaded in the <em>native</em> mode with packages loaded in the <em>llvm</em> mode in one process.</p>
+
+<h3 id="generating-llvm-bitcode">Generating LLVM Bitcode</h3>
+
+<p>As of version 19.3.0, the GraalVM R engine is configured to use the
+<a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">LLVM toolchain</a>
+to compile R packages native code. This toolchain produces standard executable binaries for
+a given system, but it also embeds the corresponding LLVM bitcode into them.
+The binaries produced by the LLVM Toolchain can be loaded in both modes: <em>native</em> or <em>llvm</em>.</p>
+
+<p>The GraalVM R engine can be reconfigured to use your system default compilers
+when installing R packages by running</p>
+
+<pre><code class="language-shell"># use local installation of GGC:
+$ R -e 'fastr.setToolchain("native")'
+# to revert back to using the GraalVM's LLVM toolchain:
+$ R -e 'fastr.setToolchain("llvm")'
+</code></pre>
+
+<p>Using the system default compilers may be more reliable, but you loose the
+ability to load the R packages built with the LLVM toolchain in the <em>llvm</em> mode,
+because they will not contain the embedded bitcode. Moreover, mixing packages
+built by the local system default compilers and packages built by the LLVM
+toolchain in one GraalVM R process may cause linking issues.</p>
+
+<h3 id="choosing-the-running-mode">Choosing the Running Mode</h3>
+
+<p>Starting from the version 19.3.0, the GraalVM R engine uses the following defaults:</p>
+<ul>
+  <li><strong>native</strong> mode to load the packages</li>
+  <li><strong>llvm</strong> toolchain to build their sources</li>
+</ul>
+
+<p>To enable the <em>llvm</em> mode for loading the packages, use <code>--R.BackEnd=llvm</code>.
+You can also enable each mode selectively for given R packages by using:</p>
+<ul>
+  <li><code>--R.BackEndLLVM=package1,package2</code></li>
+  <li><code>--R.BackEndNative=package1,package2</code></li>
+</ul>
+
 <h2 id="graalvm-r-engine-compatibility">GraalVM R Engine Compatibility</h2>
 
 <p>GraalVM implementation of R, known as <strong>FastR</strong>, is based on GNU R and reuses
-the base packages. It is currently based on R 3.5.1, and moves to new major
-versions of R as they become available and stable. The <a href="https://github.com/oracle/fastr">FastR
-project</a>, maintains an extensive set of unit
+the base packages. It is currently based on GNU-R 3.6.1, and moves to new major
+versions of R as they become available and stable. The <a href="https://github.com/oracle/fastr">FastR project</a>, maintains an extensive set of unit
 tests for all aspects of the R language and the builtin functionality, and these
 tests are available as part of the R source code. GraalVM R engine aims to be
-fully compatible with GNU R, including its native interface as used by R
-packages. It can install and run unmodified complex R packages like <code>ggplot2</code>,
-<code>Shiny</code>, or <code>Rcpp</code>. As some packages rely on unspecified behavior or
-implementation details of GNU R, support for packages is work in progress, and
-some packages might not install successfully or work as expected.</p>
+fully compatible with GNU R, including its native interface as used by <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">R extensions</a>. It
+can install and run unmodified complex R packages like <code>ggplot2</code>, <code>Shiny</code>, or
+<code>Rcpp</code>. As some packages rely on unspecified behavior or implementation details
+of GNU-R, support for packages is work in progress, and some packages might not
+install successfully or work as expected.</p>
 
 <p>Packages can be installed using the <code>install.packages</code> function or the <code>R CMD INSTALL</code> shell command.
 By default, R uses fixed snapshot of the CRAN repository<a href="#note-1"><sup>1</sup></a>.

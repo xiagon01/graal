@@ -58,7 +58,7 @@ textually by clicking the HTML toolbar button.
 ![](/docs/img/HeapViewer_thread.png "GraalVM VisualVM Heap Viewer - analyzing thread")
 
 ### Reading JFR Snapshots
-VisualVM tool bundled with GraalVM 19.2.0 in both Community and Enterprise
+VisualVM tool bundled with GraalVM 19.2.x and later in both Community and Enterprise
 editions has the ability to read JFR snapshots -- snapshots taken with JDK
 Flight Recorder (previously Java Flight Recorder). JFR is a tool for collecting
 diagnostic and profiling data about a running Java application. It is integrated
@@ -105,9 +105,7 @@ usage, etc..
 * _Recording tab_ lists the recording settings and basic snapshot telemetry like
 number of events, total recording time, etc..
 
-**Warning:** The support of JDK Flight Recorder is **experimental**. Experimental features might
-never be included in a production version, or might change significantly before
-being considered production-ready. Some advanced features like
+**Warning:** The support of JDK Flight Recorder is currently [experimental](https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html). Some advanced features like
 analyzing JVM internals, showing event stack traces or support for creating JFR
 snapshots from live processes are not available in this preview version and will
 be addressed incrementally in the following releases.

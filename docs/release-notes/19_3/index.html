@@ -9,7 +9,7 @@
 
   <title>
     
-      Scala
+      GraalVM 19.3.x
     
   </title>
   <meta
@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="/resources/styles/extra.css">
   <link rel="stylesheet" href="https://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css>
 
-  <link rel="canonical" href="https://www.graalvm.org/docs/reference-manual/languages/scala/getting-started/">
+  <link rel="canonical" href="https://www.graalvm.org/docs/release-notes/19_3/">
   <!-- <script src="/resources/lib/jquery/jquery-3.2.1.min.js"></script> -->
   <script src="https://maps.oracle.com/mapviewer/jslib/v2.3/oraclemapsv2.js"></script>
   <link rel="stylesheet" href="https://elocation.oracle.com/mapviewer/jslib/v2.3/css/oraclemapsv2.css">
@@ -312,6 +312,14 @@ $(document).ready(function(){
 <ul class="toc-bullets">
 
   
+
+  
+
+  
+
+  
+
+  
     
 
     
@@ -397,6 +405,100 @@ $(document).ready(function(){
         
 
 
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/version-roadmap/">
+              Version Roadmap
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub toc-bullets-highlight">
+          
+            
+            <a href="/docs/release-notes/19_3/">
+              GraalVM 19.3.x
+            </a>
+          </li>
+
+          
+            <div>
+    <script>
+      var scriptElement = document.currentScript;
+      var div = $(scriptElement.parentElement);
+      $(window).on("load", function() {
+        $("#content-wrapper h1, #content-wrapper h2").each(function() {
+          var li = $("<li></li>", { class: "toc-bullets-sub toc-bullets-sub-3" });
+          var a = $("<a></a>", { href: "#" + $(this).attr("id") });
+          a.text($(this).text());
+          li.append(a);
+          div.append(li);
+        });
+      });
+    </script>
+  </div>
+  
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_2/">
+              GraalVM 19.2.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_1/">
+              GraalVM 19.1.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/19_0/">
+              GraalVM 19.0.x
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/release-candidates/">
+              Release Candidates
+            </a>
+          </li>
+
+          
+        
+          
+          <li class="toc-bullets-sub dsdsd">
+          
+            
+            <a href="/docs/release-notes/known-issues/">
+              Known Issues
+            </a>
+          </li>
+
+          
         
       
     
@@ -495,14 +597,6 @@ $(document).ready(function(){
 
   
 
-  
-
-  
-
-  
-
-  
-
 </ul>
 <!-- Search form -->
 <form class="search-container" action="/docs/search" autocomplete="on" method="get">
@@ -518,98 +612,335 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <h3 id="running-scala-on-graalvm">Running Scala on GraalVM</h3>
+                <h2 id="1930">19.3.0</h2>
+<p>(2019-11-19)</p>
 
-<p>GraalVM is a JVM, so you can run Java and Scala programs normally using the <code>java</code> command:</p>
+<p>GraalVM 19.3 is the first planned long-term support (LTS) release built from the
+main line of the project. This is also a major feature release and it is a
+recommended upgrade. The LTS status assures that stability, security, and
+performance fixes will be backported from the current branch until the next LTS
+release that should occur as the last major release of 2020. The LTS designation
+should provide a level of stability for developers to work with.</p>
 
-<pre><code>export GRAALVM_HOME=&lt;path to GraalVM&gt;/Content/Home
-export PATH=$GRAALVM_HOME/bin:$PATH
+<h3 id="graalvm-jdk-11-basedbuilds">GraalVM JDK 11 Based Builds</h3>
+<p>With the major update to the 19.3 version, we announce the first release of
+GraalVM based on JDK 11! This represents a substantial milestone given the
+differences between JDK 8 and JDK 11. In particular, the Java Platform Module
+System (JPMS) introduced in JDK 9 means GraalVM now uses <a href="https://openjdk.java.net/projects/jigsaw/spec/sotms/#accessibility">module encapsulation</a> to isolate code to isolate code such as JVMCI, the GraalVM compiler and the Truffle API from application code. In addition, it means GraalVM on JDK 11 includes all the
+JDK changes since JDK 8. These are detailed in the release notes for <a href="https://docs.oracle.com/javase/9/whatsnew/toc.htm">JDK 9</a>,
+<a href="https://www.oracle.com/technetwork/java/javase/10u-relnotes-4108739.html">JDK 10</a>
+and <a href="https://www.oracle.com/technetwork/java/javase/11u-relnotes-5093844.html">JDK 11</a>.</p>
 
-$GRAALVM_HOME/bin/java -version
-java version "1.8.0_231"
-Java(TM) SE Runtime Environment (build 1.8.0_231-b11)
-Java HotSpot(TM) 64-Bit GraalVM EE 19.3.0 (build 25.231-b11-jvmci-19.3-b05, mixed mode)
+<p>In terms of languages, GraalVM on JDK11 supports all JVM languages (Java, Scala etc.) as
+well as all guest languages currently supported in GraalVM on JDK8.
+Due to the modular structure of the base JDK, there is no more <em>$GRAALVM_HOME/jre/</em> directory
+in the GraalVM package based on JDK 11. This has an impact on the path to the languages location,
+e.g., <em>$GRAALVM_HOME/jre/languages/js</em> now becomes <em>$GRAALVM_HOME/languages/js</em>):</p>
+
+<p><img src="/docs/img/jdk11-package-comparison.png" alt="" /></p>
+
+<p><a href="/docs/reference-manual/native-image/">GraalVM Native Image</a>
+on JDK 11 allows usage of all JDK 8 command line options. Currently the native
+image builder (<code>$GRAALVM_HOME/bin/native-image</code>) does not support the Java
+Platform Module System (JPMS) and has no module introspection at image run time.</p>
+
+<p>Pease note, currently GraalVM Updater cannot rebuild images (<code>$GRAALVM_HOME/bin/gu rebuild-images</code>) with GraalVM Enterprise and Community editions on JDK11. Even if GraalVM Native Image <a href="https://www.graalvm.org/docs/reference-manual/native-image/#install-native-image">is installed</a>, a user will encounter the following error while rebuilding:</p>
+<pre><code>$ $GRAALVM_HOME/bin/gu rebuild-images ruby
+Error: rebuild-images utility is not available. You may need to install "native-image" component.
+Please refer to documentation for the details.
+</code></pre>
+<p>A possible workaround is to rebuild images invoking <code>rebuild-images</code> command directly, e.g.:</p>
+<pre><code>$GRAALVM_HOME/lib/svm/bin/rebuild-images ruby
 </code></pre>
 
-<p>If you’re using sbt as the build tool, you can specify <code>JAVA_HOME</code> it will use from the command line:</p>
+<h3 id="graalvm-jdk-11-on-arm64">GraalVM JDK 11 on ARM64</h3>
+<p>We provide a preview of <strong>GraalVM Community Edition on JDK 11 for ARM64</strong>
+architecture. It includes the support for all JVM languages. The support for the
+other languages should follow soon after. This distribution includes GraalVM
+Native Image off the shelf to build instantly starting applications which
+consume less memory in ARM64 environments.</p>
 
-<pre><code>sbt -java-home $GRAALVM_HOME
+<p>There are some known limitations at the moment:</p>
+<ul>
+  <li><code>npm</code> and <code>node</code> do not support runtime code installation (Truffle
+compilations). To avoid failing with <code>java.lang.NullPointerException</code>, disable
+Truffle compilations with <code>npm --vm.Dgraal.TruffleCompilation=false</code> or <code>node
+--vm.Dgraal.TruffleCompilation=false</code>.</li>
+  <li><code>npm</code> and <code>node</code> crash with  a <code>free(): invalid pointer</code> error.</li>
+</ul>
+
+<h3 id="native-image">Native Image</h3>
+<p>GraalVM 19.3 switched to using the JDK native code instead of manual
+substitutions. For GraalVM Native Image this switch to Java Native Interface
+(JNI) platform enabled the possibility to provide support for JDK 11 and
+extended support for Windows OS. It has no impact on startup time or memory
+footprint, and eliminates the need for shipping JDK libraries such as
+<code>libsunec.so</code> along with native images that use Java crypto services. GraalVM
+now ships with statically linkable version of the JDK libraries.</p>
+
+<p>Note that the <code>sunec</code> native library of SunEC provider gets statically
+linked into an image if required (see
+<a href="https://github.com/oracle/graal/issues/951">#951</a>). Thus native images do not
+depend on the <code>sunec</code> shared library anymore at runtime.</p>
+
+<h3 id="native-image-maven-plugin">Native Image Maven Plugin</h3>
+<p>Support for using GraalVM Native Image with Maven was introduced with the
+<a href="https://search.maven.org/search?q=native-image-maven-plugin">Native Image Maven Plugin</a>. It means a
+user can build a project and its native image directly with Maven using the <code>mvn
+package</code> command. As of the GraalVM version 19.3, the Maven <code>&lt;groupId&gt;</code> for the
+GraalVM Native Image related artifacts, including the plugin, changed from
+<code>com.oracle.substratevm</code> to <code>org.graalvm.nativeimage</code>:</p>
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.graalvm.nativeimage&lt;/groupId&gt;
+    &lt;artifactId&gt;native-image-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;19.3.0&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;native-image&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+    &lt;configuration&gt;
+        &lt;skip&gt;false&lt;/skip&gt;
+        &lt;buildArgs&gt;
+            --no-fallback
+        &lt;/buildArgs&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+<p>To use the plugin make sure GraalVM home is set as your <code>JAVA_HOME</code> environment and <a href="https://www.graalvm.org/docs/reference-manual/native-image/#install-native-image">Native Image is installed</a>. Using the plugin without GraalVM is not recommend.</p>
+
+<h3 id="graalvm-compiler">GraalVM Compiler</h3>
+<ul>
+  <li>We have improved <code>System.arraycopy</code> to eliminate store checks when copying to
+<code>Object[]</code>. That improvement fixes slowdowns (versus C2) on some Eclipse
+Collections benchmarks.</li>
+  <li>A performance regression when creating List values in Scala has been fixed by
+more optimized inlining.</li>
+  <li>Fixed an issue that could prevent a method from being compiled that contains the JSR bytecode produced by older <code>javac</code> versions (see <a href="https://github.com/oracle/graal/issues/1699">#1699</a>).</li>
+</ul>
+
+<h3 id="javascript">JavaScript</h3>
+<p>The Node.js runtime available with GraalVM was updated to the 12.10.0 version, which brought some breaking changes.</p>
+
+<p>Additional proposals for ECMAScript 2020 have been implemented (<a href="https://github.com/tc39/proposal-promise-allSettled"><code>Promise.allSettled</code></a> and <a href="https://github.com/tc39/proposal-nullish-coalescing">Nullish coalescing</a>) and are available in ECMAScript 2020 mode (<code>--js.ecmascript-version=2020</code>).</p>
+
+<p>To provide better compatibility with the ECMAScript specification, some extensions are now disabled by default, some depending on the launcher (<code>js</code>, <code>node</code>, or via GraalVM Polyglot Context). This includes the <code>print</code> and <code>printErr</code> functions (the <code>js.print</code> flag), the <code>global</code> built-in (superseded by <code>globalThis</code>, use the <code>js.global-property</code> flag to reenable), or the <code>performance</code> global property (the <code>js.performance</code> flag).</p>
+
+<p>More details can be found in the project <a href="https://github.com/graalvm/graaljs/blob/master/CHANGELOG.md#version-1930">changelog</a> on GitHub.</p>
+
+<h3 id="llvm-interpreter">LLVM Interpreter</h3>
+<p>In GraalVM 19.3 clang and other LLVM tools are no longer required to be
+installed for building the GraalVM LLVM runtime. The <a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">LLVM toolchain</a> bundled with GraalVM is used.
+Also the LLVM toolchain is not an “experimental” feature any more and is used by other languages.</p>
+
+<p>For example, save this native code demonstrating the interoperability with Java as a <em>polyglot.c</em> file:</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;polyglot.h&gt;
+
+int main() {
+    void *arrayType = polyglot_java_type("int[]");
+    void *array = polyglot_new_instance(arrayType, 4);
+    polyglot_set_array_element(array, 2, 42);
+    int element = polyglot_as_i32(polyglot_get_array_element(array, 2));
+    printf("%d\n", element);
+    return element;
+}
 </code></pre>
 
-<p>GraalVM performs really well on the Scala benchmarks, for example you can look at <a href="https://renaissance.dev/">Renaissance benchmarks suite</a>. Note that Scala compiler is a Scala application as well, and it benefits from GraalVM runtime and runs faster too.</p>
+<p>Now you can compile it using GraalVM drop-in replacement of traditional <code>clang</code>:</p>
 
-<h3 id="native-image-of-scala-compiler">Native Image of Scala Compiler</h3>
-
-<p>In this guide, you will learn how to get started with running Scala programs on
-top of GraalVM and build a native image of <code>scalac</code> – the Scala compiler.</p>
-
-<ol>
-  <li>Make <code>SCALA_HOME</code> and <code>GRAALVM_HOME</code> environment variables resolve to Scala 2.12.x and GraalVM respectively
-on macOS:
-    <pre><code>export GRAALVM_HOME=&lt;path to GraalVM&gt;/Content/Home
-export SCALA_HOME=/usr/local/opt/scala
+<pre><code>$GRAALVM_HOME/jre/languages/llvm/native/bin/clang polyglot.c -o polyglot
 </code></pre>
-    <p>and on Linux platforms:</p>
-    <pre><code>export GRAALVM_HOME=&lt;path to GraalVM&gt;
-export SCALA_HOME=/usr/local/share
+
+<p>Then run the executable (<code>polyglot</code>) with its dependencies encoded in GraalVM LLVM runtime:</p>
+
+<pre><code>lli polyglot
 </code></pre>
+
+<p>List of features that have also been added:</p>
+<ul>
+  <li>Preliminary support for parsing bitcode produced by LLVM 9</li>
+  <li>Added intrinsics for pthread thread management functions</li>
+  <li>Support for <em>pthreads</em> LLVM bitcode</li>
+</ul>
+
+<p>Refer to the component <a href="https://github.com/oracle/graal/blob/master/sulong/CHANGELOG.md#version-1930">changelog</a> on GitHub.</p>
+
+<h3 id="python">Python</h3>
+<ul>
+  <li>Updated Python standard library to 3.7.4.</li>
+  <li>Implemented support for NumPy 1.16.4 and Pandas 0.25.0, that can be installed with:</li>
+</ul>
+
+<pre><code>$ graalpython -m ginstall install numpy
+$ graalpython -m ginstall install pandas
+</code></pre>
+
+<ul>
+  <li>With the help of Weblogic Scripting Team in conversion of Jython into GraalVM Python,
+added Jython compatibility (enabled with <code>--python.EmulateJython</code>) that allows importing of
+Java classes and catching of Java exceptions in Python the same way Jython allows it.</li>
+</ul>
+
+<pre><code>$ graalpython --jvm --experimental-option --python.EmulateJython
+&gt;&gt;&gt; import sun.misc.Signal
+&gt;&gt;&gt; from java.lang import Integer, NumberFormatException
+&gt;&gt;&gt; try:
+...   Integer.parseInt("99", 8)
+... except NumberFormatException as e:
+...   pass
+</code></pre>
+
+<ul>
+  <li>Added support for basic sockets. Note that SSL is not implemented, thus there is no <code>https</code> yet:</li>
+</ul>
+
+<pre><code>import urllib.request
+print(urllib.request.urlopen("http://google.com").read())
+</code></pre>
+
+<ul>
+  <li>Implemented missing functions and fixed bugs to run various modules (<code>timeit</code>, <code>socket</code>, <code>pytest</code>).</li>
+  <li>Improved performance of Java interoperability, exceptions that do not escape,
+various C API functions, and the parser. The parser is ~20% faster now, sometimes up
+to ~40%, the performance in micro benchmarks is 5x faster, micro benchmarks for
+C API are 5x faster, but there is no change to NumPy performance numbers.</li>
+</ul>
+
+<p>To see a complete list of changes, please refer to the project <a href="https://github.com/graalvm/graalpython/blob/master/CHANGELOG.md#version-1930">changelog</a>.</p>
+
+<h3 id="r">R</h3>
+
+<ul>
+  <li>FastR has been updated to R version 3.6.1.</li>
+  <li>In this release, FastR does not ship with GCC runtime libraries. Use the following commands to install the necessary dependencies:
+    <ul>
+      <li>Ubuntu 18.04 and 19.04: <code>apt-get install libgfortran3 libgomp1</code></li>
+      <li>Oracle Linux 7: <code>yum install libgfortran libgomp</code></li>
+      <li>Oracle Linux 8: <code>yum install compat-libgfortran-48</code></li>
+      <li>MacOS: <code>brew install gcc@4.9</code></li>
+    </ul>
   </li>
-  <li>Clone or download the repository and navigate to the <em>scalac-native</em> directory:
-    <pre><code>git clone https://github.com/graalvm/graalvm-demos
-cd graalvm-demos/scala-days-2018/scalac-native
-</code></pre>
+  <li>Preview of support for LLVM based execution of <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">R native extensions</a>.
+    <ul>
+      <li>FastR is configured to use the <a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">GraalVM LLVM toolchain</a> to compile the C/C++ and Fortran code of R packages. The resulting binaries
+will contain both the native code and the LLVM bitcode. The R packages that are shipped with FastR were also compiled
+using the GraalVM LLVM toolchain and their binaries contain the LLVM bitcode.</li>
+      <li>FastR loads and runs the R extensions native code by default, but when run with the option <code>--R.BackEnd=llvm</code>,
+it will load and run the LLVM bitcode if available. You can use the LLVM backend selectively for specific R packages via <code>--R.BackEndLLVM=pkg1,pkg2</code>.</li>
+      <li>If you encounter any issues when installing R packages, you can switch back from the GraalVM LLVM toolchain
+to the native toolchain by running <code>fastr.setToolchain("native")</code> or by manually editing the <code>$FASTR_HOME/etc/Makeconf</code> file.</li>
+    </ul>
   </li>
-  <li>Build the <code>sbt</code> project from the <em>scalac-substitutions</em> directory:
-    <pre><code>cd scalac-substitutions
-sbt package
-cd ../
+  <li>Fixed memory leaks <a href="https://github.com/oracle/fastr/issues/85">reported on GitHub</a>.</li>
+  <li>Fixed failures when working with large vectors (&gt;1GB).</li>
+  <li>Implemented <code>grepRaw</code>, but only for <code>fixed=T</code>.</li>
+</ul>
+
+<p>We encourage the users to experiment with the new LLVM support and report any
+issues to <a href="https://github.com/oracle/fastr/issues">GitHub</a>. To see the
+complete list of changes, please refer to the project
+<a href="https://github.com/oracle/fastr/blob/master/CHANGELOG.md#1930">changelog</a>.</p>
+
+<h3 id="ruby">Ruby</h3>
+<p>A comprehensive list of changes to the Ruby language component is available on <a href="https://github.com/oracle/truffleruby/releases/tag/vm-19.3.0">GitHub</a>.</p>
+
+<p>The focus has been on improving compatibility with Ruby on Rails applications.
+Major changes include:</p>
+<ul>
+  <li>Compilation of C extensions is now done with an internal LLVM toolchain producing both native code and bitcode. This means more C extensions should compile out of the box and this should resolve most linker-related issues.</li>
+  <li>It is no longer necessary to install LLVM for installing C extensions on TruffleRuby.</li>
+  <li>It is no longer necessary to install libc++ and libc++abi for installing C++ extensions on TruffleRuby.</li>
+  <li>On macOS, it is no longer necessary to install the system headers package (<a href="https://github.com/oracle/truffleruby/issues/1417">#1417</a>).</li>
+  <li>License updated to EPL 2.0/GPL 2.0/LGPL 2.1 like recent JRuby.</li>
+  <li>Installing <code>sassc</code> now works due to using the LLVM toolchain (<a href="https://github.com/oracle/truffleruby/issues/1753">#1753</a>).</li>
+  <li>Include executables of default gems, needed for <code>rails new</code> in Rails 6.</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<h4 id="code-coverage-command-line-tool">Code Coverage Command Line Tool</h4>
+<p>As of version 19.3 GraalVM provides a code coverage command line tool to record
+and analyze the source code coverage of a particular execution of code for
+languages implemented with the Truffle framework. Enable it with <code>--codecoverage</code>
+option, for example <code>js --codecoverage</code>. Visit the <a href="/docs/reference-manual/tools/">tool reference documentation</a> for more
+information.</p>
+
+<h4 id="graalvm-visualvm">GraalVM VisualVM</h4>
+<ul>
+  <li>Previously, to view the JFR files you had to install a plugin. Now GraalVM VisualVM contains the viewer in the tool core. Other JFR viewer improvements include new views for Exceptions and GC, improved performance and accuracy.</li>
+  <li>The tool is now able to monitor and profile AArch64 Java and Java 13 processes.</li>
+</ul>
+
+<h4 id="debugger">Debugger</h4>
+<ul>
+  <li>Enabled support for functional breakpoints and memory tools in Chrome Inspector.</li>
+</ul>
+
+<h3 id="visual-studio-code-extensions">Visual Studio Code Extensions</h3>
+<p>VSCode extensions are provided as VSIX packages. GraalVM team created the first
+VSIX extension based on Python implementation. The extension installs with <code>npm</code>
+package manager and upon the extension installation, the user is requested to
+point the PATH environment variable to GraalVM home directory.</p>
+
+<ul>
+  <li>The evaluation of GraalVM Language Server Protocol in VSCode has been implemented.</li>
+  <li>VSCode now supports also GraalVM Python development.</li>
+</ul>
+
+<h3 id="changes-for-graalvm-embedders-sdk">Changes for GraalVM Embedders (SDK)</h3>
+<ul>
+  <li>Added new APIs for statement count resource limits:</li>
+</ul>
+
+<pre><code>ResourceLimits.newBuilder()
+ResourceLimits.newBuilder()
+    .statementLimit(1000, null)
+    .build();
+              Duration.ofMillis(10))
+    .statementLimit(1000, null)
+.build();
+
+try (Context context = Context.newBuilder()
+                .resourceLimits(limits).build()) {
+    context.eval("js", "while(true);");
+    assert false;
+} catch (PolyglotException e) {
+    assert e.isCancelled();
+}
 </code></pre>
-  </li>
-  <li>Build the native image of the Scala compiler by running:
-    <pre><code>./scalac-image.sh
-</code></pre>
-    <p>The script <code>scalac-native.sh</code> calls the generated compiler and passes all the required parameters.
-If you check the directory, the produced native image, called <code>scalac</code>, with no dependencies on the JDK, should have appeared.</p>
-  </li>
-  <li>Compare the execution time to the JVM:</li>
-</ol>
 
-<pre><code>$ time $SCALA_HOME/bin/scalac HelloWorld.scala
+<ul>
+  <li>The default temporary directory can now be configured by FileSystem. A <code>getTempDirectory()</code>
+method of <code>FileSystem</code> interface will return the default temporary directory.</li>
+  <li>Added the <code>org.graalvm.home.Version</code> version utility that allows to create, validate and compare GraalVM versions.</li>
+  <li>Added support for detecting and mapping polyglot exception values. Exceptions can be detected using <code>Value.isException()</code>.</li>
+  <li>Added default target type mapping from guest language exceptions to <code>PolyglotException</code>.</li>
+</ul>
 
-real	0m2.315s
-user	0m5.868s
-sys	0m0.248s
+<h3 id="changes-for-graalvm-language-or-tool-implementers-truffle">Changes for GraalVM Language or Tool Implementers (Truffle)</h3>
+<ul>
+  <li>Added standard block node for language implementations. The block node usage allows the optimizing
+runtime to group elements of a block into multiple block compilation units. This optimization may be
+enabled using <code>--engine.PartialBlockCompilation</code> (on by default) and configured
+using <code>--engine.PartialBlockCompilationSize</code> (default 3000).</li>
+  <li>Merged new experimental inlining heuristic. Inlining budgets are now based on Graal IR node
+counts and no longer Truffle Node counts.</li>
+  <li>Support boolean literals in Truffle DSL expressions. Use <code>true</code> or <code>false</code> in expressions,
+e.g. <code>isFunction(value) == false</code>.</li>
+  <li>Added support for temporary files and directories.</li>
+  <li>Threads created by the embedder may now be collected by the GC before they can
+be disposed. If languages hold onto thread objects exposed via
+<code>initializeThread</code> they now need to do so with <code>WeakReference</code>. This avoids
+leaking thread instances.</li>
+  <li>Added the new execute method to <code>LoopNode</code>, which allows loops to return values.</li>
+</ul>
 
-&amp; time ./scalac-native HelloWorld.scala
-
-real	0m0.177s
-user	0m0.129s
-sys	0m0.034s
-</code></pre>
-
-<p>When the Scala compiler is ahead-of-time compiled with the profile-guided
-optimization (PGO) enabled, the native <code>scalac</code> is as fast as the one running on
-the JVM (the C2 compiler).</p>
-
-<p><strong>Important:</strong> Profile-guided optimizations are available with GraalVM Enterprise Edition.</p>
-
-<h3 id="support-for-scala-macros">Support for Scala Macros</h3>
-
-<p>To support <strong>macros</strong> – functions that are called by the compiler during compilation –
-the macro classes must be known to the native image builder of the Scala compiler.
-To build a scalac native image that includes macros run:</p>
-<pre><code>./scalac-native macros/GreetingMacros.scala -d macros/
-./scalac-image-macros.sh
-</code></pre>
-
-<p>Now you can compile a project that uses macros from <code>GreetingMacros.scala</code>:</p>
-<pre><code>./scalac-native -cp macros/ HelloMacros.scala
-</code></pre>
-
-<p>Run the compiled program with:</p>
-<pre><code>$ scala HelloMacros
-Hello, World!
-</code></pre>
+<p>To see the full list of changes to the APIs, proceed to the
+<a href="https://github.com/oracle/graal/blob/master/truffle/CHANGELOG.md#version-1930">GraalVM Truffle changelog</a>.</p>
 
               </div>
 

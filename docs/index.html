@@ -521,10 +521,9 @@ $(document).ready(function(){
                 <h1 id="a-short-introduction-to-graalvm">A short introduction to GraalVM</h1>
 
 <p>GraalVM is an ecosystem and shared runtime offering performance advantages
-not only to JVM-based languages such as Java, Scala, Groovy, and
+not only to JVM-based languages such as Java, Scala, and
 Kotlin, but also to other programming languages such as JavaScript, Ruby, Python, and R.
-Additionally, it enables the execution of native code on the JVM via an LLVM front-end.
-GraalVM 19.2.1 is based on JDK 8.</p>
+Additionally, it enables the execution of native code on the JVM via an LLVM front-end.</p>
 
 <p><img src="/docs/img/graalvm_architecture.png" alt="GraalVM system diagram" /></p>
 
@@ -539,6 +538,36 @@ and pass data back and forth in the same memory space.</p>
 <p>The bottom part demonstrates the applicability range. GraalVM can either run standalone,
 be embedded as part of the OpenJDK or Node.js platforms,
 or even execute inside <a href="https://oracle.github.io/oracle-db-mle/">Oracle Database</a>.</p>
+
+<h2 id="graalvm-distributions">GraalVM Distributions</h2>
+
+<p>GraalVM 19.3 is distributed as the <strong>Community Edition</strong>
+and the <strong>Enterprise Edition</strong> bundled for Linux, macOS and Windows platforms on
+x86 64-bit systems. GraalVM builds are based on JDK 8 and on JDK 11. GraalVM
+bundles based on JDK 11 become available as of version <strong>19.3.0</strong>.</p>
+
+<p>The following distributions are available for <a href="(/docs/img/graalvm_architecture.png)">download</a>:</p>
+<ul>
+  <li><strong>graalvm-ee-java8-linux-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java8-linux-amd64-19.3</strong></li>
+  <li><strong>graalvm-ee-java8-darwin-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java8-darwin-amd64-19.3</strong></li>
+  <li><strong>graalvm-ee-java11-linux-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java11-linux-amd64-19.3</strong></li>
+  <li><strong>graalvm-ee-java11-darwin-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java11-darwin-amd64-19.3</strong></li>
+</ul>
+
+<p>GraalVM support on Windows platforms is currently under development, but
+the below pre-built binaries are provided for evaluation and testing use:</p>
+<ul>
+  <li><strong>graalvm-ee-java8-windows-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java8-windows-amd64-19.3</strong></li>
+  <li><strong>graalvm-ee-java11-windows-amd64-19.3</strong></li>
+  <li><strong>graalvm-ce-java11-windows-amd64-19.3</strong></li>
+</ul>
+
+<p><strong>Warning:</strong> The support for Windows platform is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</p>
 
 <h2 id="distribution-components-list">Distribution Components List</h2>
 
@@ -577,16 +606,16 @@ languages to your needs and gives you better performance using fewer resources.<
 
 <p>GraalVM base installation can be extended with the <strong>optional components</strong>:</p>
 <ul>
-  <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> functionality which allows scripted applications to be compiled ahead-of-time into a native machine-code binary. <strong>Warning:</strong> GraalVM Native Image is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>, meaning it can be used in production and will be supported by Oracle as part of the Oracle GraalVM Enterprise Edition subscription, but is not covered by Oracle’s standard warranty.</li>
+  <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> functionality which allows scripted applications to be compiled ahead-of-time into a native machine-code binary. <strong>Warning:</strong> GraalVM Native Image is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>.</li>
+  <li><a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">LLVM toolchain</a> –  a set of tools and APIs for compiling native programs to bitcode that can be executed with the GraalVM LLVM runtime.</li>
   <li>Python interpreter –  a Python 3.7 compliant implementation.</li>
   <li>Ruby interpreter – the Ruby engine based on the standard implementation of Ruby, MRI, version 2.6.2.</li>
-  <li>R interpreter – a GNU R 3.5.1 compatible implementation of the R programming language.</li>
+  <li>R interpreter – a GNU R 3.6.1 compatible implementation of the R programming language.</li>
 </ul>
 
-<p><strong>Warning:</strong> The support for Ruby, R and Python languages is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.</p>
+<p><strong>Warning:</strong> The support for Ruby, R and Python languages is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</p>
 
 <h2 id="graalvm-features">GraalVM Features</h2>
-
 <p>GraalVM lets you:</p>
 
 <ul>
@@ -598,7 +627,6 @@ languages to your needs and gives you better performance using fewer resources.<
 </ul>
 
 <h2 id="graalvm-documentation">GraalVM Documentation</h2>
-
 <p>Whether you are here to try running an application with GraalVM for the first
 time or ready to start coding with the GraalVM Polyglot APIs, check out our
 documentation to help you on your way.</p>

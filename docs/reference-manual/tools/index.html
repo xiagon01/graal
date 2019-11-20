@@ -1129,8 +1129,7 @@ is false.</li>
 
 <h3 id="memory-tracer-command-options">Memory Tracer Command Options</h3>
 
-<p><strong>Warning</strong>: The memory tracer tool is experimental. Experimental features might never be included in a production version, or might change significantly before being considered production-ready.
-Make sure to prepend <code>--experimental-options</code> flag to enable <code>--memtracer</code>.</p>
+<p><strong>Warning</strong>: The memory tracer tool is currently an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a> tool. Make sure to prepend <code>--experimental-options</code> flag to enable <code>--memtracer</code>.</p>
 
 <ul>
   <li><code>--experimental-options --memtracer</code>: enables the memory tracer. Disabled by default.</li>
@@ -1144,6 +1143,254 @@ Make sure to prepend <code>--experimental-options</code> flag to enable <code>--
   <li><code>--memtracer.TraceRoots=&lt;Boolean&gt;</code>: captures roots when tracing. The default is true.</li>
   <li><code>--memtracer.TraceStatements</code>: captures statements when tracing. The default is false.</li>
 </ul>
+
+<h2 id="code-coverage">Code Coverage</h2>
+<p>As of version 19.3.0 GraalVM provides a <strong>Code coverage command line tool</strong>
+that lets record and analyse the source code coverage of a particular execution
+of code.</p>
+
+<p>Code coverage, as a percentage of source code lines, functions or statements
+covered, is an important metric for understanding a particular source code execution, and is commonly associated with test quality (test coverage).
+Providing a visual coverage overview for individual lines of code shows
+the developer which code paths are covered and which are not, giving insight
+into the character of the execution which can, for example, inform further
+testing efforts.</p>
+
+<p>In this section, we use an example application to demonstrate the code
+coverage capabilities that GraalVM offers. This example application defines a
+<code>getPrime</code> function that calculates the n-th prime using a basic prime number
+calculator based on the ancient <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a> algorithm. It also has a somewhat naive cache of the first 20 prime numbers.</p>
+
+<p>1.Copy the following code into a new file named <code>primes.js</code>:</p>
+
+<pre><code class="language-javascript">class AcceptFilter {
+    accept(n) {
+        return true
+    }
+}
+class DivisibleByFilter {
+    constructor(number, next) {
+        this.number = number;
+        this.next = next;
+    }
+    accept(n) {
+        var filter = this;
+        while (filter != null) {
+            if (n % filter.number === 0) {
+                    return false;
+            }
+            filter = filter.next;
+        }
+        return true;
+    }
+}
+class Primes {
+    constructor() {
+        this.number = 2;
+        this.filter = new AcceptFilter();
+    }
+    next() {
+        while (!this.filter.accept(this.number)) {
+            this.number++;
+        }
+        this.filter = new DivisibleByFilter(this.number, this.filter);
+        return this.number;
+    }
+}
+function calculatePrime(n) {
+    var primes = new Primes();
+    var primesArray = [];
+    for (let i = 0; i &lt; n; i++) {
+        primesArray.push(primes.next());
+    }
+    return primesArray[n-1];
+}
+function getPrime(n) {
+    var cache = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71];
+    var n = arguments[0];
+    if (n &gt; cache.length) { return calculatePrime(n); }
+    return cache[n-1];
+}
+// TESTS
+console.assert(getPrime(1) == 2);
+console.assert(getPrime(10) == 29);
+</code></pre>
+
+<p>Notice that the last couple of lines are assertions which we will, for illustration, treat as unit tests.</p>
+
+<p>2.Run <code>js primes.js</code>. The example application should print no output, since all the assertions pass. But how well do the assertions test the implementation?</p>
+
+<p>3.Run <code>js primes.js --coverage</code> to enable code coverage. The code coverage tool should print output for the example application as follows:</p>
+
+<pre><code>$ js primes.js --coverage
+--------------------------------------------------------
+Code coverage histogram.
+Shows what percent of each element was covered during execution
+--------------------------------------------------------
+ Path               |  Statements |    Lines |    Roots
+--------------------------------------------------------
+ /path/to/primes.js |      20.69% |   26.67% |   22.22%
+--------------------------------------------------------
+</code></pre>
+<p>The tracer prints a coverage histogram for each source file. We can see that
+statement coverage is roughly 20%, line coverage is 26% and root coverage (the
+term root covers functions, methods, etc.) is 22.22%. This tells us that our
+simple tests are not particularly good at exercising the source code.  Now we
+will figure out what parts of the code are not covered.</p>
+
+<p>4.Run <code>js primes.js --coverage --coverage.Output=detailed</code>. Prepare for a somewhat verbose output.
+Specifying the output as <code>detailed</code> will print all the source code lines with a
+coverage annotation at the beginning. Due to potentially large output it is
+recommended to combine this output mode with the <code>--coverage.OutputFile</code> option
+which prints the output directly to a file. The output for our example
+application is as follows:</p>
+
+<pre><code>$ js primes.js --coverage --coverage.Output=detailed
+--------------------------------------------------------
+Code coverage per line of code and what percent of each element was covered during execution (per source)
+  + indicates the line is covered during execution
+  - indicates the line is not covered during execution
+  p indicates the line is part of a statement that was incidentally covered during execution
+    e.g. a not-taken branch of a covered if statement
+--------------------------------------------------------
+ Path               |  Statements |    Lines |    Roots
+ /path/to/primes.js |      20.69% |   26.67% |   22.22%
+
+  class AcceptFilter {
+      accept(n) {
+-         return true
+      }
+  }
+  class DivisibleByFilter {
+      constructor(number, next) {
+-         this.number = number;
+-         this.next = next;
+      }
+      accept(n) {
+-         var filter = this;
+-         while (filter != null) {
+-             if (n % filter.number === 0) {
+-                     return false;
+-             }
+-             filter = filter.next;
+          }
+-         return true;
+      }
+  }
+  class Primes {
+      constructor() {
+-         this.number = 2;
+-         this.filter = new AcceptFilter();
+      }
+      next() {
+-         while (!this.filter.accept(this.number)) {
+-             this.number++;
+          }
+-         this.filter = new DivisibleByFilter(this.number, this.filter);
+-         return this.number;
+      }
+  }
+  function calculatePrime(n) {
+-     var primes = new Primes();
+-     var primesArray = [];
+-     for (let i = 0; i &lt; n; i++) {
+-         primesArray.push(primes.next());
+      }
+-     return primesArray[n-1];
+  }
+  function getPrime(n) {
++     var cache = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71];
++     var n = arguments[0];
+p     if (n &gt; cache.length) { return calculatePrime(n); }
++     return cache[n-1];
+  }
+  // TESTS
++ console.assert(getPrime(1) == 2);
++ console.assert(getPrime(10) == 29);
+--------------------------------------------------------
+</code></pre>
+
+<p>As the legend at the beginning of the output explains, lines that are covered by
+the execution are preceded with a <code>+</code>, lines not covered by the execution are
+preceded with a <code>-</code>. Lines that are covered partially (e.g. when an <code>if</code>
+statement is covered, but only one branch is taken, we consider the other bench
+to be incidentally covered) are preceded with <code>p</code>.</p>
+
+<p>Looking at the output we can see that the <code>calculatePrime</code> function and all its
+calls are never executed. Looking again at the assertions and the <code>getPrime</code>
+function it becomes clear that our tests always hit the cache, thus most of the
+code is never executed. Let’s improve on that.</p>
+
+<p>5.Add <code>console.assert(getPrime(30) == 113);</code> to the end of the <code>primes.js</code> file
+and run <code>js primes.js --coverage</code>. Since the new assertion added calls
+<code>getPrime</code> with 30 (our cache only has 20 entries) our coverage will look like
+this:</p>
+
+<pre><code>$ js primes.js --coverage
+-------------------------------------------------------
+Code coverage histogram.
+  Shows what percent of each element was covered during execution
+-------------------------------------------------------
+ Path               |  Statements |    Lines |    Roots
+-------------------------------------------------------
+ /path/to/primes.js |     100.00% |  100.00% |  100.00%
+-------------------------------------------------------
+</code></pre>
+
+<h3 id="integrating-with-other-tools">Integrating with other tools</h3>
+
+<p>The code coverage tool provides ways to integrate with other tools. Running
+with <code>--coverage.Output=lcov</code> produces output in the commonly used
+<a href="https://linux.die.net/man/1/lcov">lcov</a> format which is used by multiple tools
+(e.g. <code>genhtml</code>) to display coverage data. Take a look at the next example that
+shows how to visualise coverage of a Node.js app with Visual Studio Code.</p>
+
+<p>1.Copy the following code into a new file named <code>nodeapp.js</code>:</p>
+
+<pre><code>const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) =&gt; {
+  res.send('Hello World!')
+})
+
+app.get('/neverCalled', (req, res) =&gt; {
+  res.send('You should not be here')
+})
+
+app.get('/shutdown', (req, res) =&gt; {
+  process.exit();
+})
+app.listen(port, () =&gt; console.log(`Example app listening on port ${port}!`))
+</code></pre>
+
+<p>2.Install the express module dependency: <code>npm install express</code>.</p>
+
+<p>3.Launch Visual Studio Code and install a code coverage plugin that supports <em>lcov</em>.
+We use <a href="https://marketplace.visualstudio.com/items?itemName=brainfit.vscode-coverage-highlighter">Code Coverage Highlighter</a> for this example, but other plugins should work similarly.</p>
+
+<p>4.Run the <em>nodeapp.js</em> file with coverage enabled and configured:</p>
+
+<pre><code>node --coverage --coverage.Output=lcov \
+--coverage.OutputFile=coverage/lcov.info \
+nodeapp.js
+</code></pre>
+
+<p>Note that the Code Coverage Highlighter plugin looks for the <code>lcov.info</code> file in
+the <code>coverage</code> directory by default, so we direct the output of the code
+coverage tool there.</p>
+
+<p>5.Visit <a href="http://localhost:3000/">localhost:3000/</a> in your browser, then visit <a href="http://localhost:3000/shutdown">localhost:3000/shutdown</a> to close the app.</p>
+
+<p>6.Open Visual Studio Code and open the folder containing the <code>nodeapp.js</code> file
+and <code>coverage</code> directory and you should be greeted with an image similar to the following.</p>
+
+<p><img src="/docs/img/vscode-coverage.png" alt="" /></p>
+
+<p>If you wish to integrate the data gathered by the GraalVM code coverage tool
+with your own visualisation, the <code>--coverage.Output=json</code> option results in
+the output being a JSON file with the raw data gathered by the tracker.</p>
 
 <h2 id="graalvm-visualvm">GraalVM VisualVM</h2>
 <p>GraalVM comes with <strong>GraalVM VisualVM</strong>, an enhanced version of the popular
@@ -1208,7 +1455,7 @@ textually by clicking the HTML toolbar button.</p>
 <p><img src="/docs/img/HeapViewer_thread.png" alt="" title="GraalVM VisualVM Heap Viewer - analyzing thread" /></p>
 
 <h3 id="reading-jfr-snapshots">Reading JFR Snapshots</h3>
-<p>VisualVM tool bundled with GraalVM 19.2.0 in both Community and Enterprise
+<p>VisualVM tool bundled with GraalVM 19.2.x and later in both Community and Enterprise
 editions has the ability to read JFR snapshots – snapshots taken with JDK
 Flight Recorder (previously Java Flight Recorder). JFR is a tool for collecting
 diagnostic and profiling data about a running Java application. It is integrated
@@ -1259,125 +1506,13 @@ usage, etc..</li>
 number of events, total recording time, etc..</li>
 </ul>
 
-<p><strong>Warning:</strong> The support of JDK Flight Recorder is <strong>experimental</strong>. Experimental features might
-never be included in a production version, or might change significantly before
-being considered production-ready. Some advanced features like
+<p><strong>Warning:</strong> The support of JDK Flight Recorder is currently <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>. Some advanced features like
 analyzing JVM internals, showing event stack traces or support for creating JFR
 snapshots from live processes are not available in this preview version and will
 be addressed incrementally in the following releases.</p>
 
-<h2 id="ideal-graph-visualizer">Ideal Graph Visualizer</h2>
-<p>Ideal Graph Visualizer or IGV is a developer tool, currently maintained as part of the GraalVM compiler, recommended for performance issues investigation.</p>
-
-<p>The tool is essential for any language implementers building on top of <strong>GraalVM Enterprise Edition</strong>.
-It is available as a separate download on <a href="https://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a> and requires accepting the Oracle Technology Network Developer License.</p>
-
-<p>Ideal Graph Visualizer is developed to view and inspect interim graph representations from GraalVM and Truffle compilations.</p>
-
-<p>1.Unzip the downloaded package and enter <code>bin</code> directory:</p>
-
-<pre><code>$ cd idealgraphvisualizer/bin
-</code></pre>
-
-<p>2.Launch the tool:</p>
-
-<pre><code>$ idealgraphvisualizer
-</code></pre>
-
-<p>3.Save the following code snippet as  <code>Test.rb</code>:</p>
-
-<pre><code>require 'json'
-
-obj = {
-  time: Time.now,
-  msg: 'Hello World',
-  payload: (1..10).to_a
-}
-
-encoded = JSON.dump(obj)
-
-js_obj = Polyglot.eval('js', 'JSON.parse').call(encoded)
-
-puts js_obj[:time]
-puts js_obj[:msg]
-puts js_obj[:payload].join(' ')
-</code></pre>
-
-<p>4.From another console window, make sure <code>ruby</code> component is installed in GraalVM,
-and connect <code>Test.rb</code> script to the running IGV:</p>
-
-<pre><code class="language-shell">$ gu list
-$ ruby --jvm --vm.Dgraal.Dump=:1 --vm.Dgraal.PrintGraph=Network Test.rb
-</code></pre>
-<p>This causes GraalVM to dump compiler graphs in IGV format over the network to an IGV process listening
-on <code>127.0.0.1:4445</code>. Once the connection is made, you are able to see the graphs in the Outline window.
-Find e.g. <code>java.lang.String.char(int)</code> folder and open its <em>After parsing</em> graph by double-clicking.
-If the node has <code>sourceNodePosition</code> property, then the Processing Window will attempt to display its location and the entire stacktrace.</p>
-
-<h3 id="browsing-graphs">Browsing Graphs</h3>
-<p>Once a specific graph is opened, you can search for nodes by name, ID, or by <code>property=value</code> data, and all matching results will be shown.
-Another cool feature of this tool is the ability to navigate to the original guest language source code!
-Select a node in graph and press ‘go to source’ button in the Stack View window.</p>
-
-<p><img src="/docs/img/IGV_navigate_to_source.png" alt="" /></p>
-
-<p>Graphs navigation is available also from the context menu, enabled by focusing
-and right-clicking a specific graph node. Extract nodes option will re-render
-a graph and display just selected nodes and their neighbours.</p>
-
-<p><img src="/docs/img/IGV_context_menu.png" alt="" /></p>
-
-<p>If the graph is larger than the screen, manipulate with the ‘satellite’ view button
-in the main toolbar to move the viewport rectangle.</p>
-
-<p><img src="/docs/img/IGV_satellite_view.png" alt="" /></p>
-
-<p>For user preference, the graph color scheme is adjustable by editing
-the Coloring filter, enabled by default in the left sidebar.</p>
-
-<h3 id="viewing-source-code">Viewing Source Code</h3>
-
-<p>Source code views can be opened in manual and assisted modes. Once you select a node
-in the graph view, the Processing View will open. If IGV knows where the source code
-for the current frame is, the green ‘go to source’ arrow is enabled. If IGV does not
-know where the source is, the line is grayed out and a ‘looking glass’ button appears.</p>
-
-<p><img src="/docs/img/IGV_add_source.png" alt="" /></p>
-
-<p>Press it and select “Locate in Java project” to locate the correct project in the dialog.
-IGV hides projects which do not contain the required source file.
-The “Source Collections” serves to display the stand alone roots added by “Add root of sources” general action.
-If the source is located using the preferred method (i.e., from a Java project),
-its project can be later managed on the Project tab. That one is initially hidden,
-but you can display the list of opened projects using Window - Projects.</p>
-
-<h3 id="dumping-graphs">Dumping Graphs</h3>
-
-<p>The IGV tool is developed to allow GraalVM language implementers
-to optimize their languages assembled with the Truffle framework. As a development
-tool it should not be installed to production environments.</p>
-
-<p>To dump the GraalVM compiler graphs from an embedded Java application to IGV,
-you need to add options to GraalVM based processes. Depending on the language/VM
-used, you may need to prefix the options by <code>--vm</code>. See the particular
-language’s documentation for the details. The main option to add is
-<code>-Dgraal.Dump=:1</code>. This will dump graphs in an IGV readable format to the local
-file system. To send the dumps directly to IGV over the network, add
-<code>-Dgraal.PrintGraph=Network</code> when starting a GraalVM instance. Optionally a
-port can be specified. Then dumps are sent to IGV from the running GraalVM on
-localhost. If IGV does not listen on localhost, options “Ideal Graph Settings|
-Accept Data from network” can be checked. If there is not an IGV instance
-listening on <code>127.0.0.1</code> or it cannot be connected to, the dumps will be
-redirected to the local file system. The file system location is <code>graal_dumps/</code>
-under the current working directory of the process and can be changed with the
-<code>-Dgraal.DumpPath</code> option.</p>
-
-<p>In case an older GraalVM is used, you may need to explicitly request that dumps
-include the <code>nodeSourcePosition</code> property. This is done by adding the
-<code>-XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints</code> options.</p>
-
 <h2 id="visual-studio-code-extensions-for-graalvm">Visual Studio Code Extensions for GraalVM</h2>
-<p>This page explains how to start using <strong>Visual Studio Code support for
+<p>This section explains how to start using <strong>Visual Studio Code support for
 GraalVM</strong>, introduced in the 19.2 version. Visual Studio Code (from now on
 VS Code) is a source-code editor  that provides embedded Git and GitHub control,
 syntax highlighting, code refactoring etc.. To enable a polyglot environment in
@@ -1385,52 +1520,17 @@ VS Code, we created extensions for GraalVM supported languages:  JS, Ruby, R,
 Python. This allows a simple registration of GraalVM as a runtime, code editing
 and debugging of polyglot applications.</p>
 
-<p>The following extensions are available:</p>
+<p>The following extensions are available from <a href="https://marketplace.visualstudio.com/">VSCode Marketplace</a>:</p>
 <ul>
-  <li><em>graalvm</em> – a VS Code extension providing the basic environment for editing and debugging programs running on GraalVM and includes JavaScript and Node.js support by default.</li>
-  <li><em>graalvm-r</em> – a VS Code extension providing the basic support for editing and debugging R programs running on GraalVM.</li>
-  <li><em>graalvm-ruby</em> – a VS Code extension providing the basic support for editing and debugging Ruby programs on GraalVM.</li>
-  <li><em>graalvm-python</em> – a VS Code extension providing the basic support for editing and debugging Python programs running on GraalVM.</li>
+  <li><em>GraalVM</em> – a VS Code extension providing the basic environment for editing and debugging programs running on GraalVM and includes JavaScript and Node.js support by default.</li>
+  <li><em>GraalVM R</em> – a VS Code extension providing the basic support for editing and debugging R programs running on GraalVM.</li>
+  <li><em>Graalvm Ruby</em> – a VS Code extension providing the basic support for editing and debugging Ruby programs on GraalVM.</li>
+  <li><em>GraalVM Python</em> – a VS Code extension providing the basic support for editing and debugging Python programs running on GraalVM.</li>
+  <li><em>GraalVM Extensions Pack</em> – pack of all above listed extensions for simpler installation.</li>
 </ul>
 
 <h3 id="install-extensions">Install Extensions</h3>
-
-<p>To start using the extensions in VS Code, take the following steps.</p>
-<ol>
-  <li>Download the <strong>vs-code-extensions-tech-preview.zip</strong>
-from <a href="https://github.com/oracle/graal/releases">Github</a>, extract an archive and enter it. Inside the folder you see VSIX packages built for you:
-    <pre><code>graalvm-&lt;version&gt;.vsix
-graalvm-r-&lt;version&gt;.vsix
-graalvm-ruby-&lt;version&gt;.vsix
-graalvm-python-&lt;version&gt;.vsix
-</code></pre>
-    <p>1.1. As an alternative, you can build VSIX packages yourself.
-Clone the extensions source and enter it:</p>
-    <pre><code>git clone https://github.com/oracle/graal.git
-cd graal/vs-code
-</code></pre>
-    <p>1.2. Install <code>vsce</code> (short for “Visual Studio Code Extension Manager”), a command-line tool
-for packaging, publishing and managing VS Code extensions:</p>
-    <pre><code>npm install -g vsce
-</code></pre>
-    <p>1.3. Build VSIX packages that could be manually installed later:</p>
-    <pre><code>cd graalvm; npm install; vsce package
-cd graalvm-r; npm install; vsce package
-cd graalvm-ruby; npm install; vsce package
-cd graalvm-python; npm install; vsce package
-</code></pre>
-  </li>
-  <li>Install each package into VS Code with <code>code --install-extension &lt;extension.vsix&gt;</code> syntax:
-    <pre><code>code --install-extension graalvm-&lt;version&gt;.vsix
-code --install-extension graalvm-r-&lt;version&gt;.vsix
-code --install-extension graalvm-ruby-&lt;version&gt;.vsix
-code --install-extension graalvm-python-&lt;version&gt;.vsix
-</code></pre>
-    <p>Alternatively to the manual installation, use the <em>Install from VSIX…</em> action: open Extensions (<code>Ctrl+Shift+X</code>) -&gt; More Actions (three dots in the upper right corner) -&gt; Install from VSIX.</p>
-  </li>
-</ol>
-
-<p><img src="/docs/img/manual_install.png" alt="" /></p>
+<p>GraalVM VSCode extensions can be simply installed from VSCode IDE Extensions panel by searching for <em>GraalVM</em></p>
 
 <h3 id="graalvm-extension">GraalVM Extension</h3>
 <p>Upon the <em>graalvm</em> extension installation, launch VS Code by
@@ -1545,6 +1645,116 @@ install the Ruby component manually.</p>
 configuration can be used to run the Python script in a debug mode.</p>
 
 <p>Python VS Code extension requires a default <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python">Python language support</a> and GraalVM extension in VS Code.</p>
+
+<h2 id="ideal-graph-visualizer">Ideal Graph Visualizer</h2>
+<p>Ideal Graph Visualizer or IGV is a developer tool, currently maintained as part of the GraalVM compiler, recommended for performance issues investigation.</p>
+
+<p>The tool is essential for any language implementers building on top of <strong>GraalVM Enterprise Edition</strong>.
+It is available as a separate download on <a href="https://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html">Oracle Technology Network</a> and requires accepting the Oracle Technology Network Developer License.</p>
+
+<p>Ideal Graph Visualizer is developed to view and inspect interim graph representations from GraalVM and Truffle compilations.</p>
+
+<p>1.Unzip the downloaded package and enter <code>bin</code> directory:</p>
+
+<pre><code>$ cd idealgraphvisualizer/bin
+</code></pre>
+
+<p>2.Launch the tool:</p>
+
+<pre><code>$ idealgraphvisualizer
+</code></pre>
+
+<p>3.Save the following code snippet as  <code>Test.rb</code>:</p>
+
+<pre><code>require 'json'
+
+obj = {
+  time: Time.now,
+  msg: 'Hello World',
+  payload: (1..10).to_a
+}
+
+encoded = JSON.dump(obj)
+
+js_obj = Polyglot.eval('js', 'JSON.parse').call(encoded)
+
+puts js_obj[:time]
+puts js_obj[:msg]
+puts js_obj[:payload].join(' ')
+</code></pre>
+
+<p>4.From another console window, make sure <code>ruby</code> component is installed in GraalVM,
+and connect <code>Test.rb</code> script to the running IGV:</p>
+
+<pre><code class="language-shell">$ gu list
+$ ruby --jvm --vm.Dgraal.Dump=:1 --vm.Dgraal.PrintGraph=Network Test.rb
+</code></pre>
+<p>This causes GraalVM to dump compiler graphs in IGV format over the network to an IGV process listening
+on <code>127.0.0.1:4445</code>. Once the connection is made, you are able to see the graphs in the Outline window.
+Find e.g. <code>java.lang.String.char(int)</code> folder and open its <em>After parsing</em> graph by double-clicking.
+If the node has <code>sourceNodePosition</code> property, then the Processing Window will attempt to display its location and the entire stacktrace.</p>
+
+<h3 id="browsing-graphs">Browsing Graphs</h3>
+<p>Once a specific graph is opened, you can search for nodes by name, ID, or by <code>property=value</code> data, and all matching results will be shown.
+Another cool feature of this tool is the ability to navigate to the original guest language source code!
+Select a node in graph and press ‘go to source’ button in the Stack View window.</p>
+
+<p><img src="/docs/img/IGV_navigate_to_source.png" alt="" /></p>
+
+<p>Graphs navigation is available also from the context menu, enabled by focusing
+and right-clicking a specific graph node. Extract nodes option will re-render
+a graph and display just selected nodes and their neighbours.</p>
+
+<p><img src="/docs/img/IGV_context_menu.png" alt="" /></p>
+
+<p>If the graph is larger than the screen, manipulate with the ‘satellite’ view button
+in the main toolbar to move the viewport rectangle.</p>
+
+<p><img src="/docs/img/IGV_satellite_view.png" alt="" /></p>
+
+<p>For user preference, the graph color scheme is adjustable by editing
+the Coloring filter, enabled by default in the left sidebar.</p>
+
+<h3 id="viewing-source-code">Viewing Source Code</h3>
+
+<p>Source code views can be opened in manual and assisted modes. Once you select a node
+in the graph view, the Processing View will open. If IGV knows where the source code
+for the current frame is, the green ‘go to source’ arrow is enabled. If IGV does not
+know where the source is, the line is grayed out and a ‘looking glass’ button appears.</p>
+
+<p><img src="/docs/img/IGV_add_source.png" alt="" /></p>
+
+<p>Press it and select “Locate in Java project” to locate the correct project in the dialog.
+IGV hides projects which do not contain the required source file.
+The “Source Collections” serves to display the stand alone roots added by “Add root of sources” general action.
+If the source is located using the preferred method (i.e., from a Java project),
+its project can be later managed on the Project tab. That one is initially hidden,
+but you can display the list of opened projects using Window - Projects.</p>
+
+<h3 id="dumping-graphs">Dumping Graphs</h3>
+
+<p>The IGV tool is developed to allow GraalVM language implementers
+to optimize their languages assembled with the Truffle framework. As a development
+tool it should not be installed to production environments.</p>
+
+<p>To dump the GraalVM compiler graphs from an embedded Java application to IGV,
+you need to add options to GraalVM based processes. Depending on the language/VM
+used, you may need to prefix the options by <code>--vm</code>. See the particular
+language’s documentation for the details. The main option to add is
+<code>-Dgraal.Dump=:1</code>. This will dump graphs in an IGV readable format to the local
+file system. To send the dumps directly to IGV over the network, add
+<code>-Dgraal.PrintGraph=Network</code> when starting a GraalVM instance. Optionally a
+port can be specified. Then dumps are sent to IGV from the running GraalVM on
+localhost. If IGV does not listen on localhost, options “Ideal Graph Settings|
+Accept Data from network” can be checked. If there is not an IGV instance
+listening on <code>127.0.0.1</code> or it cannot be connected to, the dumps will be
+redirected to the local file system. The file system location is <code>graal_dumps/</code>
+under the current working directory of the process and can be changed with the
+<code>-Dgraal.DumpPath</code> option.</p>
+
+<p>In case an older GraalVM is used, you may need to explicitly request that dumps
+include the <code>nodeSourcePosition</code> property. This is done by adding the
+<code>-XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints</code> options.</p>
 
 
               </div>

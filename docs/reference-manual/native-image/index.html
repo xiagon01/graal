@@ -714,7 +714,7 @@ This functionality can be added to the core installation with <a href="/docs/ref
 <p>For GraalVM Enterprise Edition users, download the Native Image component JAR
 file from <a href="https://www.oracle.com/downloads/graalvm-downloads.html">Oracle Technology Network</a> and install it
 by running <code>gu -L install component.jar</code>, where <code>-L</code> option, equivalent to
-<code>--local-file</code>, tells to install a component from a downloaded archive.</p>
+<code>--local-file</code> or <code>--file</code>, tells to install a component from a downloaded archive.</p>
 
 <p>For GraalVM Community Edition users, install a component from the GitHub catalog by
 its name <code>gu install native-image</code>.</p>
@@ -955,7 +955,7 @@ Enterprise Edition? Run this command:</p>
 </code></pre>
 
 <p>The expected output should match the following:</p>
-<pre><code>com.oracle.svm.core.VM GraalVM 19.2.1 CE
+<pre><code>com.oracle.svm.core.VM GraalVM 19.3 CE
 </code></pre>
 
 <h2 id="profile-guided-optimizations">Profile-guided Optimizations</h2>

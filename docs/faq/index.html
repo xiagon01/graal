@@ -545,10 +545,10 @@ recommend checking the <a href="https://github.com/oracle/graal#license">license
 the individual GraalVM components (which are generally derivative of the license of a particular language). GraalVM Community is free to use for any purpose and comes with no strings attached, but also no guarantees or
 support.</p>
 
-<p>Oracle GraalVM Enterprise Edition is licensed under either the <a href="https://www.oracle.com/technetwork/licenses/graalvm-otn-license-5486575.html">GraalVM OTN License Agreement</a>, 
+<p>Oracle GraalVM Enterprise Edition is licensed under either the <a href="https://www.oracle.com/technetwork/licenses/graalvm-otn-license-5486575.html">GraalVM OTN License Agreement</a>,
 which is free for testing, evaluation, or for developing non-production applications, or under the terms of the Oracle Master License Agreement for customers.</p>
 
-<p>The Native Image plugin is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>. 
+<p>The Native Image plugin is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>.
 It can be used in production and is supported by Oracle as part of your GraalVM Enterprise subscription. However, it is not covered by Oracle’s standard warranty as Oracle
 reserves the right to force you to migrate to newer versions in order to get support.</p>
 
@@ -585,7 +585,7 @@ or enhancement requests should be reported using <a href="https://support.oracle
 <p>We always listen to input and feedback from the community and will address issues there time permitting.</p>
 
 <h3 id="how-do-i-contribute-to-graalvm">How do I contribute to GraalVM?</h3>
-<p>We welcome contributions to GraalVM from the community and are thankful for past contributions both big and small. We are happy to accept pull requests at <a href="https://github.com/oracle/graal/pulls">GitHub Pulls</a>. 
+<p>We welcome contributions to GraalVM from the community and are thankful for past contributions both big and small. We are happy to accept pull requests at <a href="https://github.com/oracle/graal/pulls">GitHub Pulls</a>.
 We require contributors to sign the <a href="http://www.oracle.com/technetwork/community/oca-486395.html">Oracle Contributor Agreement</a>.</p>
 
 <h3 id="how-can-i-receive-updates-about-graalvm">How can I receive updates about GraalVM?</h3>
@@ -663,9 +663,9 @@ not only runs on GraalVM, but also applies the R language to visualize a plot of
 GraalVM polyglot capabilities.</p>
 
 <p>Spring Framework support of <a href="https://www.graalvm.org/docs/reference-manual/aot-compilation/">GraalVM Native Image</a>
-technology is in its <a href="https://github.com/spring-projects/spring-framework/wiki/GraalVM-native-image-support">initial stages</a>. 
-The ability of GraalVM to create executable native images of Spring applications is not currently supported. 
-GraalVM Native Image has <a href="https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md">limitations</a> on what Java functionality it can compile ahead-of-time. 
+technology is in its <a href="https://github.com/spring-projects/spring-framework/wiki/GraalVM-native-image-support">initial stages</a>.
+The ability of GraalVM to create executable native images of Spring applications is only partially supported.
+GraalVM Native Image has <a href="https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md">limitations</a> on what Java functionality it can compile ahead-of-time.
 The GraalVM team is investigating what can be done to fully support compiling Spring applications to native images.</p>
 
 <h3 id="what-is-the-status-of-ide-integration">What is the status of IDE integration?</h3>
@@ -680,15 +680,8 @@ across languages. You can get a multilingual stacktrace that way.</p>
 <h3 id="what-are-existing-real-world-production-deployments-of-graalvm">What are existing real-world production deployments of GraalVM?</h3>
 <p>Several production deployments of GraalVM exist today. For example, Christian Thalinger from Twitter describes the production deployment of
 GraalVM at Twitter and how it can help save money via improved performance in
-his interview <a href="https://www.oracle.com/tools/graalvm-enterprise-edition.html?bcid=5772128098001">Accelerating Processing at Twitter </a> and how they save money using GraalVM. 
+his interview <a href="https://www.oracle.com/tools/graalvm-enterprise-edition.html?bcid=5772128098001">Accelerating Processing at Twitter </a> and how they save money using GraalVM.
 We thank early adopters of our technology who give us feedback on the project and help us develop new features.</p>
-
-<h3 id="does-graalvm-support-java-11">Does GraalVM support Java 11?</h3>
-<p>Currently, GraalVM does not support Java 11. We are actively working on getting
-Java 11 support completed. This is being performed in parallel with continued
-development on Java 8. Here is a sample Maven project that shows how to run the
-<a href="https://github.com/graalvm/graal-js-jdk11-maven-demo">GraalVM JavaScript engine</a> on JDK11 both
-through the scripting API and the polyglot API.</p>
 
               </div>
 

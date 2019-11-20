@@ -678,14 +678,13 @@ $(document).ready(function(){
 
             <div class="col-sm-9">
               <div id="content-wrapper" class="docs-content docs-content--with-sidebar">
-                <p>GraalVM provides an early-stage implementation of Python 3.7.
-<strong>Warning:</strong> The support for Python is experimental.
+                <p>GraalVM provides an early-stage implementation of Python 3.7. A primary goal is
+to support SciPy and its constituent libraries. At this point, the Python
+implementation is made available for experimentation and curious end-users.</p>
+
+<p><strong>Warning:</strong> The support for Python is experimental.
 Experimental features might never be included in a production version, or might
 change significantly before being considered production-ready.</p>
-
-<p>A primary goal is to support SciPy and its constituent
-libraries. At this point, the Python implementation is made available for
-experimentation and curious end-users.</p>
 
 <h2 id="installing-python">Installing Python</h2>
 
@@ -693,7 +692,7 @@ experimentation and curious end-users.</p>
 
 <h2 id="running-python">Running Python</h2>
 
-<p>Our implementation of Python targets Python 3.7 compatibility at the moment. While support for
+<p>GraalVM implementation of Python targets Python 3.7 compatibility at the moment. While support for
 the Python language is still limited, you can run simple Python scripts or commands
 with the <code>graalpython</code> binary:</p>
 
@@ -703,10 +702,41 @@ with the <code>graalpython</code> binary:</p>
 <p>If no program file or command is given, you are dropped into a simple REPL.</p>
 
 <p>GraalVM supports some of the same options as Python 3.7 and some additional
-options to control the underlying Python implementation and the GraalVM tools and
-execution engine. These can be viewed using the following command:</p>
+options to control the underlying Python implementation, the GraalVM tools
+and the execution engine. These can be viewed using the following command:</p>
 
 <pre><code class="language-shell">$ graalpython --help --help:tools --help:languages
+</code></pre>
+
+<h2 id="installing-supported-packages">Installing Supported Packages</h2>
+
+<p>Python comes with a tool called <code>ginstall</code> used to install a small list of
+packages known to work to some extent with GraalVM implementation of Python.
+It is recommended to always create a virtual environment first, using the
+standard Python module <code>venv</code>. Creating such an environment avoids any
+incompatible interaction with the local user’s packages that may have been
+installed using a system installation of CPython:</p>
+
+<pre><code class="language-shell">$ graalpython -m venv my_new_venv
+$ source my_new_venv/bin/activate
+</code></pre>
+
+<p>To see the list of installable packages, run:</p>
+
+<pre><code class="language-shell">$ graalpython -m ginstall install --help
+</code></pre>
+
+<p>This will print a short help including a comma-separated list of packages you
+can install. The installation works as described in that help:</p>
+
+<pre><code class="language-shell">$ graalpython -m ginstall install pandas
+</code></pre>
+
+<p>Note that when using the GraalVM implementation of Python from Java, the
+polyglot shell, or another language, you should always evaluate the piece of
+Python code first to make installed packages available:</p>
+
+<pre><code class="language-shell">import site
 </code></pre>
 
 <h2 id="interoperability">Interoperability</h2>
@@ -842,26 +872,17 @@ compatible with.</p>
 
 <h2 id="python-command-options">Python Command Options</h2>
 
-<p>Python is run using <code>graalpython [option] ... (-c cmd | file) [arg] ...</code>
-and supports some of the same options as the standard Python interpreter:</p>
+<p>Python is run using the <code>graalpython [option] ... (-c cmd | file) [arg] ...</code> command
+sequence and supports some of the same options as the standard Python
+interpreter including, but not limited to:</p>
 <ul>
-  <li><code>-c cmd</code>: program passed in as string (terminates option list)</li>
-  <li><code>-h</code>: print this help message and exit (also <code>--help</code>)</li>
-  <li><code>-i</code>: inspect interactively after running script; forces a prompt even if
-stdin does not appear to be a terminal; also PYTHONINSPECT=x</li>
-  <li><code>-V</code>: Print the Python version number and exit (also <code>--version</code>)</li>
-  <li><code>file</code>: Program read from script file</li>
-  <li><code>arg ...</code>: Arguments passed to program in sys.argv[1:]</li>
-</ul>
-
-<p>Here are some GraalVM-specific options:</p>
-<ul>
-  <li><code>--python.PythonInspectFlag</code>: This is equivalent to Python’s <code>-i</code> option
-(see above).</li>
-  <li><code>-CC</code>: Run <code>clang</code> and then <code>opt</code> with the arguments required to build a
-GraalVM and Sulong compatible LLVM bitcode file.</li>
-  <li><code>-LD</code>: Run <code>llvm-link</code> with the appropriate options to bind multiple LLVM
-bitcode files into one that can be used on GraalVM with Sulong.</li>
+  <li><code>-c cmd</code>: pass a program as String and terminate options list</li>
+  <li><code>-h</code>, <code>--help</code>: print the help message and exit</li>
+  <li><code>-i</code>, <code>PYTHONINSPECT=x</code>: inspect interactively after running a script and force a prompt even if
+<code>stdin</code> does not appear to be a terminal</li>
+  <li><code>-V</code>, <code>--version</code>: print the Python version number and exit</li>
+  <li><code>file</code>: read a program from the script file</li>
+  <li><code>arg ...</code>: arguments passed to program in <code>sys.argv[1:]</code></li>
 </ul>
 
 <p>The following options are mostly useful for developers of the language or to
@@ -875,12 +896,6 @@ Python will use. Usually this is in a under <code>lib-python/3</code> in the
 GraalVM distribution, but any Python 3.7 standard library location may work.</li>
   <li><code>--python.WithJavaStacktrace</code>: Prints a Java-level stack trace besides the
 normal Python stack when errors occur.</li>
-  <li><code>--python.LazyInit</code>: Load the core library after the Python context has
-been initialized. This only affects certain tools such as the Chrome
-debugger and lets these tools also see the code in the Python core library.</li>
-  <li><code>--python.SharedCore</code>: This option is not fully implemented, yet. It will
-allow sharing parts of the core library across multiple Python contexts,
-which will improve startup time of subsequent contexts.</li>
 </ul>
 
 <p>There are a few other debugging options used by the developers of GraalVM,

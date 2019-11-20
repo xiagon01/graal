@@ -685,9 +685,7 @@ downloaded and installed separately. These include:</p>
 <ul>
   <li><a href="/docs/reference-manual/aot-compilation/">GraalVM Native Image</a> – a technology to compile an application ahead-of-time into a binary that runs natively on the system. <strong>Warning:</strong> The Native Image plugin is available as an <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">Early Adopter technology</a>.</li>
   <li>Python, R, and Ruby languages interpreters. <strong>Warning:</strong> The support for Python, R and Ruby languages is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</li>
-  <li><a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">The LLVM toolchain</a> –  a set of tools and APIs for compiling native programs to
-bitcode that can be executed with the GraalVM LLVM runtime.<br />
- <strong>Warning:</strong> Toolchain support is <a href="https://docs.oracle.com/en/graalvm/enterprise/19/guide/overview/license/licensing-information.html">experimental</a>.</li>
+  <li><a href="/docs/reference-manual/languages/llvm/#llvm-toolchain">LLVM toolchain</a> –  a set of tools and APIs for compiling native programs to bitcode that can be executed with the GraalVM LLVM runtime.</li>
 </ul>
 
 <p>To assist you with the installation, these features are pre-packaged as
@@ -708,7 +706,7 @@ Run <code>gu &lt;command&gt; -h</code> to get help specific for the particular c
 
 <p><strong>Manual Installation</strong></p>
 
-<p>Depending on the GraalVM distribution, you download a component package from <a href="https://github.com/oracle/graal/releases">GitHub</a> or <a href="https://www.oracle.com/downloads/graalvm-downloads.html">Oracle Technology Network</a> and GraalVM Updater will install it. The following pre-built packages are at your disposal:</p>
+<p>Depending on the GraalVM distribution, you download a component package from <a href="https://github.com/graalvm/graalvm-ce-builds/releases">GitHub</a> or <a href="https://www.oracle.com/downloads/graalvm-downloads.html">Oracle Technology Network</a> and GraalVM Updater will install it. The following pre-built packages are at your disposal:</p>
 <ul>
   <li><em>native-image.jar</em></li>
   <li><em>python-installable.jar</em></li>
@@ -720,7 +718,7 @@ Run <code>gu &lt;command&gt; -h</code> to get help specific for the particular c
 <p>With the already downloaded component JAR file, the component can be installed as</p>
 <pre><code>gu -L install component.jar
 </code></pre>
-<p>where <code>-L</code> option, equivalent to <code>--local-file</code>, tells to install from a downloaded component archive.</p>
+<p>where <code>-L</code> option, equivalent to <code>--local-file</code> or <code>--file</code>, tells to install from a downloaded component archive.</p>
 
 <p><strong>Warning:</strong> For GraalVM Enterprise Edition users, a manual installation is required to
 prevent the use of a “community” component version.</p>
@@ -742,12 +740,42 @@ download the actual component package and installs it.</p>
 If you want to see more verbose messages during installation, you may use the
 <code>-v</code> or <code>--verbose</code> switch to see the download progress bar and verbose messages.</p>
 
-<p><strong>Warning:</strong> The installation of the R language and LLVM toolchain components is possible only
-from catalog.</p>
+<p><strong>Warning:</strong> The installation of the R language component is possible only from catalog.</p>
 
 <p>Installed on your machine components can be printed with:</p>
+
 <pre><code>gu list
 </code></pre>
+
+<p>The installation command of GraalVM Updater accepts multiple options and parameters and allows this syntax:</p>
+<pre><code>gu install [-0cCfFiLnorsuvyxY] param [param ...]
+</code></pre>
+<p>The following options are currently supported:</p>
+<ul>
+  <li><code>-0, --dry-run</code>: dry run, do not change anything</li>
+  <li><code>-c, --catalog</code>: treat parameters as component IDs from the GraalVM components catalog. This is the default</li>
+  <li><code>-C, --custom-catalog &lt;url&gt;</code>: use a specific catalog URL to locate components</li>
+  <li><code>-L, --local-file</code>: treat parameters as local filenames of packaged components</li>
+  <li><code>-f, --force</code>: force overwrite, bypass version checks</li>
+  <li><code>-i, --fail-existing</code>: fail on an existing component</li>
+  <li><code>-n, --no-progress</code>: do not display the downloading progress</li>
+  <li><code>-o, --overwrite</code>: overwrite different files</li>
+  <li><code>-r, --replace</code>: replace existing components</li>
+  <li><code>-s, --no-verify-jars</code>: skip integrity verification of component archives</li>
+  <li><code>-u, --url</code>: interpret parameters as URLs of packaged components</li>
+  <li><code>-v, --verbose</code>: be verbose. Prints versions and dependency information</li>
+  <li><code>-x, --ignore</code>: ignore failures</li>
+  <li><code>-y, --only-validate</code>: do not install, just check compatibility and conflicting files</li>
+  <li><code>-Y, --validate-before</code>: download, verify, check file conflicts before any disk change is made</li>
+</ul>
+
+<p>Finally, customers using Oracle GraalVM Enterprise Edition could need to pass an
+additional verification step to login to Oracle components repository. GraalVM
+Updater tool provides options for that:</p>
+<ul>
+  <li><code>--public-key / -k &lt;path&gt;</code> to set the path to a custom GPG public key path;</li>
+  <li><code>--username/-U</code> to enter a username.</li>
+</ul>
 
 <h2 id="rebuilding-images">Rebuilding Images</h2>
 <p>GraalVM components used to create guest language implementations may change over
@@ -788,7 +816,7 @@ distribution and/or desktop environment documentation for the details.</p>
 component if a component with the same ID is already installed. But the
 installed component may be <strong>replaced</strong>. GraalVM Updater first uninstalls the
 component and then installs the new package. To replace a component, use the
-<code>-r</code> option. The <code>-L</code> option tells to treat parameters as local filename of a packaged component.</p>
+<code>-r</code> option. The <code>-L</code> option, equivalent to <code>--file</code> or <code>--local-file</code>, tells to treat parameters as local filename of a packaged component.</p>
 <pre><code>gu install -L -r component.jar
 gu install -r ruby
 </code></pre>

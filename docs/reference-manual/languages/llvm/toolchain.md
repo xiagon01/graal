@@ -13,10 +13,6 @@ goal is to produce a GraalVM LLVM runtime executable by simply pointing the
 build system to those launchers, for example via `CC`/`CXX` environment
 variables or by setting `PATH`.
 
-**Warning:** Toolchain support is **experimental**. Experimental features might never be
-included in a production version, or might change significantly before being
-considered production-ready.
-
 The LLVM toolchain is pre-packaged as a component and can be installed with [GraalVM Updater]({{"/docs/reference-manual/graal-updater/" | relative_url }}) tool:
 ```
 gu install llvm-toolchain

@@ -44,7 +44,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-dev</b><br>3ccc3142991f4f4bf7de96cb44df56869f147817</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-dev</b><br>6751e28d24ab5ceee2063d512fbf6807d85739dd</div>
 </div>
 <div class="subNav">
 <ul class="navList">
@@ -161,6 +161,12 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html?is
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html#FULL_UNROLL_UNTIL_RETURN">FULL_UNROLL_UNTIL_RETURN</a></span></code>
+<div class="block">Like <a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html#FULL_UNROLL"><code>ExplodeLoop.LoopExplosionKind.FULL_UNROLL</code></a>, but in addition loop unrolling duplicates loop exits in every
+ iteration instead of merging them.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html#MERGE_EXPLODE">MERGE_EXPLODE</a></span></code>
 <div class="block">like <a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html#FULL_EXPLODE"><code>ExplodeLoop.LoopExplosionKind.FULL_EXPLODE</code></a>, but copies of the loop body that have the exact same state
  (all local variables have the same value) are merged.</div>
@@ -237,6 +243,26 @@ the order they are declared.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>0.15</dd>
+</dl>
+</li>
+</ul>
+<a name="FULL_UNROLL_UNTIL_RETURN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>FULL_UNROLL_UNTIL_RETURN</h4>
+<pre>public static final&nbsp;<a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html" title="enum in com.oracle.truffle.api.nodes">ExplodeLoop.LoopExplosionKind</a> FULL_UNROLL_UNTIL_RETURN</pre>
+<div class="block">Like <a href="../../../../../com/oracle/truffle/api/nodes/ExplodeLoop.LoopExplosionKind.html#FULL_UNROLL"><code>ExplodeLoop.LoopExplosionKind.FULL_UNROLL</code></a>, but in addition loop unrolling duplicates loop exits in every
+ iteration instead of merging them. Code after a loop exit is duplicated for every loop
+ exit and every loop iteration. For example, a loop with 4 iterations and 2 loop exits
+ (exit1 and exit2, where exit1 is an early return inside a loop) leads to 4 copies of the
+ loop body and 4 copies of exit1 and 1 copy if exit2. After each exit all code until a
+ return is duplicated per iteration. Beware of break statements inside loops since they
+ cause additional loop exits leading to code duplication along exit2.</div>
+<dl>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>20.0</dd>
 </dl>
 </li>
 </ul>
@@ -354,7 +380,7 @@ the order they are declared.</div>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html">Help</a></li>
 </ul>
-<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-dev</b><br>3ccc3142991f4f4bf7de96cb44df56869f147817</div>
+<div class="aboutLanguage"><b>GraalVM Truffle Java API Reference<br>20.0.0-dev</b><br>6751e28d24ab5ceee2063d512fbf6807d85739dd</div>
 </div>
 <div class="subNav">
 <ul class="navList">

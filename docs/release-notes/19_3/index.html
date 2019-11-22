@@ -653,6 +653,16 @@ Please refer to documentation for the details.
 <pre><code>$GRAALVM_HOME/bin/rebuild-images ruby
 </code></pre>
 
+<p>Please be informed, to have GraalVM <strong>JDK 11</strong> based build on macOS listed by <code>/usr/libexec/java_home -V</code> you need to:</p>
+<ol>
+  <li>extract the GraalVM archive to <code>/Library/Java/JavaVirtualMachines/</code> location</li>
+  <li><code>mkdir /Library/Java/JavaVirtualMachines/graalvm-ce-java11-19.3.0/Contents/MacOS</code></li>
+  <li><code>cd /Library/Java/JavaVirtualMachines/graalvm-ce-java11-19.3.0/Contents/MacOS</code></li>
+  <li><code>ln -s ../Home/lib/jli/libjli.dylib</code></li>
+</ol>
+
+<p>This issue will be fixed in the next release.</p>
+
 <h3 id="graalvm-jdk-11-on-arm64">GraalVM JDK 11 on ARM64</h3>
 <p>We provide a preview of <strong>GraalVM Community Edition on JDK 11 for ARM64</strong>
 architecture. It includes the support for all JVM languages. The support for the

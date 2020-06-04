@@ -197,6 +197,11 @@ public class SubstrateMethod implements SharedRuntimeMethod, Replaced {
     }
 
     @Override
+    public boolean hasCalleeSavedRegisters() {
+        return false;
+    }
+
+    @Override
     public SubstrateMethod[] getImplementations() {
         if (implementations == null) {
             return new SubstrateMethod[0];
@@ -321,7 +326,7 @@ public class SubstrateMethod implements SharedRuntimeMethod, Replaced {
 
     @Override
     public Annotation[] getAnnotations() {
-        return AnnotationsEncoding.decodeAnnotations(annotationsEncoding);
+        return AnnotationsEncoding.decodeAnnotations(annotationsEncoding).getAnnotations();
     }
 
     @Override
@@ -331,7 +336,7 @@ public class SubstrateMethod implements SharedRuntimeMethod, Replaced {
 
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-        return AnnotationsEncoding.decodeAnnotation(annotationsEncoding, annotationClass);
+        return AnnotationsEncoding.decodeAnnotations(annotationsEncoding).getAnnotation(annotationClass);
     }
 
     @Override

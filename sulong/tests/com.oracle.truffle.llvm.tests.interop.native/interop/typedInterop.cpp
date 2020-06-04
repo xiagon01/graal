@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -44,6 +44,90 @@ extern "C" int distSquared(void *a, void *b) {
   return distX * distX + distY * distY;
 }
 
+struct DoublePoint {
+  double x;
+  double y;
+};
+
+extern "C" int distSquaredDesugared(struct DoublePoint a, struct DoublePoint b) {
+  int distX = b.x - a.x;
+  int distY = b.y - a.y;
+  return distX * distX + distY * distY;
+}
+
+struct ByValPoint {
+  int x;
+  long a;
+  long b;
+  int y;
+};
+
+extern "C" int distSquaredByVal(struct ByValPoint a, struct ByValPoint b) {
+  int distX = b.x - a.x;
+  int distY = b.y - a.y;
+  return distX * distX + distY * distY;
+}
+
+extern "C" long byValGet(struct ByValPoint a) {
+  return a.a + a.b;
+}
+
+struct NestedPoint {
+  int x;
+  struct {
+    long a;
+    long b;
+  } nested;
+  int y;
+};
+
+extern "C" int distSquaredNestedByVal(struct NestedPoint a, struct NestedPoint b) {
+  int distX = b.x - a.x;
+  int distY = b.y - a.y;
+  return distX * distX + distY * distY;
+}
+
+extern "C" long nestedByValGetNested(struct NestedPoint a) {
+  return a.nested.a + a.nested.b;
+}
+
+struct SmallNested {
+  int x;
+  struct {
+    int y;
+  } nested;
+};
+
+extern "C" long nestedByValGetSmallNested(struct SmallNested a) {
+  return a.x + a.nested.y;
+}
+
+struct ArrStruct {
+  int a;
+  int b;
+  int x[2];
+};
+
+extern "C" int arrStructSum(struct ArrStruct s) {
+  return s.a + s.b + s.x[0] + s.x[1];
+}
+
+struct BigArrStruct {
+  int a;
+  int b;
+  int x[5];
+};
+
+extern "C" int bigArrStructSum(struct BigArrStruct s) {
+  int sum = 0;
+
+  for (int i = 0; i < 5; i++) {
+    sum += s.x[i];
+  }
+
+  return sum;
+}
+
 extern "C" void flipPoint(void *value) {
   struct Point *point = polyglot_as_Point(value);
   int tmp = point->x;
@@ -81,7 +165,7 @@ extern "C" double modifyAndCall(void *value) {
 }
 
 extern "C" struct Point *addAndSwapPoint(struct Point *point, int ix, int iy) {
-  struct Point incr = {ix, iy};
+  struct Point incr = { ix, iy };
   struct Point *ret = point->add(&incr);
   int tmp = ret->x;
   ret->x = ret->y;
@@ -122,8 +206,8 @@ struct BitFields {
 POLYGLOT_DECLARE_STRUCT(BitFields)
 
 extern "C" int accessBitFields(void *arg) {
-	struct BitFields *obj = polyglot_as_BitFields(arg);
-	return obj->x + obj->y + obj->z;
+  struct BitFields *obj = polyglot_as_BitFields(arg);
+  return obj->x + obj->y + obj->z;
 }
 
 struct FusedArray {
@@ -154,11 +238,11 @@ struct Complex {
 POLYGLOT_DECLARE_STRUCT(Complex)
 
 extern "C" long readTypeMismatch(struct Complex *c) {
-  long *ptr = (long*) c;
+  long *ptr = (long *)c;
   return *ptr;
 }
 
 extern "C" void writeTypeMismatch(struct Complex *c, long rawValue) {
-  long *ptr = (long*) c;
+  long *ptr = (long *)c;
   *ptr = rawValue;
 }

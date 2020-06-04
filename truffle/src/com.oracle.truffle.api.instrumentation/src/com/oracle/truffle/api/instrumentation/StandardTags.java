@@ -44,7 +44,9 @@ import com.oracle.truffle.api.Scope;
 import com.oracle.truffle.api.TruffleException;
 import com.oracle.truffle.api.frame.Frame;
 import com.oracle.truffle.api.frame.FrameSlot;
+import com.oracle.truffle.api.interop.InteropLibrary;
 import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.source.SourceSection;
 
 /**
  * Set of standard tags usable by language agnostic tools. Language should {@link ProvidedTags
@@ -58,7 +60,8 @@ public final class StandardTags {
         /* No instances */
     }
 
-    @SuppressWarnings({"rawtypes"}) static final Class[] ALL_TAGS = new Class[]{StatementTag.class, CallTag.class, RootTag.class, RootBodyTag.class, ExpressionTag.class, TryBlockTag.class};
+    @SuppressWarnings({"rawtypes"}) static final Class[] ALL_TAGS = new Class[]{StatementTag.class, CallTag.class, RootTag.class, RootBodyTag.class, ExpressionTag.class, TryBlockTag.class,
+                    ReadVariableTag.class, WriteVariableTag.class};
 
     /**
      * Marks program locations that represent a statement of a language.
@@ -239,6 +242,91 @@ public final class StandardTags {
         public static final String CATCHES = "catches";
 
         private TryBlockTag() {
+            /* No instances */
+        }
+
+    }
+
+    /**
+     * Marks program locations to be considered as reads of variables of the languages.
+     * <p>
+     * Use case descriptions:
+     * <ul>
+     * <li><b>Language Server Protocol:</b> Marks every read of a variable to support the
+     * <i>documentHighlight</i>, <i>hover</i>, <i>definition</i> and <i>references</i> requests.
+     * </li>
+     * </ul>
+     * To determine the name of the variable, it is required that a node tagged with
+     * {@link ReadVariableTag} also provides a {@link InstrumentableNode#getNodeObject() node
+     * object} that has {@link ReadVariableTag#NAME} property. The value of that property is either:
+     * <ul>
+     * <li>a String name of the variable (in that case the node's {@link Node#getSourceSection()
+     * source section} is considered as the variable's source section),
+     * <li>an object that provides name and {@link SourceSection} via
+     * {@link InteropLibrary#asString(Object)} and {@link InteropLibrary#getSourceLocation(Object)}
+     * respectively,
+     * <li>an array of objects when multiple variables are being read, where each array element
+     * provides name and {@link SourceSection} as specified above.
+     * </ul>
+     * Furthermore, nodes tagged with {@link ReadVariableTag} have to provide a
+     * {@link Node#getSourceSection() source section}.
+     *
+     * @since 20.0.0
+     */
+    @Tag.Identifier("READ_VARIABLE")
+    public static final class ReadVariableTag extends Tag {
+
+        /**
+         * Property of the node object that contains name of the variable.
+         *
+         * @since 20.0.0
+         */
+        public static final String NAME = "readVariableName";
+
+        private ReadVariableTag() {
+            /* No instances */
+        }
+
+    }
+
+    /**
+     * Marks program locations to be considered as writes of variables of the languages.
+     * <p>
+     * Use case descriptions:
+     * <ul>
+     * <li><b>Language Server Protocol:</b> Marks every write of a variable to support the
+     * <i>documentHighlight</i>, <i>hover</i>, <i>definition</i> and <i>references</i> requests.
+     * </li>
+     * </ul>
+     * To determine the name of the variable, it is required that a node tagged with
+     * {@link WriteVariableTag} also provides a {@link InstrumentableNode#getNodeObject() node
+     * object} that has {@link WriteVariableTag#NAME} property. The value of that property is
+     * either:
+     * <ul>
+     * <li>a String name of the variable (in that case the node's {@link Node#getSourceSection()
+     * source section} is considered as the variable's source section),
+     * <li>an object that provides name and {@link SourceSection} via
+     * {@link InteropLibrary#asString(Object)} and {@link InteropLibrary#getSourceLocation(Object)}
+     * respectively,
+     * <li>an array of objects when multiple variables are being read, where each array element
+     * provides name and {@link SourceSection} as specified above.
+     * </ul>
+     * Furthermore, nodes tagged with {@link WriteVariableTag} have to provide a
+     * {@link Node#getSourceSection() source section}.
+     *
+     * @since 20.0.0
+     */
+    @Tag.Identifier("WRITE_VARIABLE")
+    public static final class WriteVariableTag extends Tag {
+
+        /**
+         * Property of the node object that contains name of the variable.
+         *
+         * @since 20.0.0
+         */
+        public static final String NAME = "writeVariableName";
+
+        private WriteVariableTag() {
             /* No instances */
         }
 

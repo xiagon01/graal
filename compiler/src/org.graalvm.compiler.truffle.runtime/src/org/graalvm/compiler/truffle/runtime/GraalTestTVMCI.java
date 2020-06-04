@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -42,14 +42,16 @@ final class GraalTestTVMCI extends TVMCI.Test<GraalTestContext, OptimizedCallTar
 
     static final class GraalTestContext implements Closeable {
 
-        private final TruffleDebugContext debug;
-        private final GraphOutput<Void, ?> output;
+        private final String testName;
+        private final GraalTruffleRuntime runtime;
+        private TruffleDebugContext debug;
+        private GraphOutput<Void, ?> output;
 
         private static GraphOutput<Void, ?> beginGroup(TruffleDebugContext debug, String testName) {
             GraphOutput<Void, ?> output = null;
             try {
                 if (debug.isDumpEnabled()) {
-                    output = debug.buildOutput(GraphOutput.newBuilder(VoidGraphStructure.INSTANCE).protocolVersion(6, 0));
+                    output = debug.buildOutput(GraphOutput.newBuilder(VoidGraphStructure.INSTANCE).protocolVersion(7, 0));
                     output.beginGroup(null, testName, testName, null, 0, debug.getVersionProperties());
                     return output;
                 }
@@ -61,18 +63,26 @@ final class GraalTestTVMCI extends TVMCI.Test<GraalTestContext, OptimizedCallTar
             return null;
         }
 
-        private GraalTestContext(String testName, TruffleDebugContext debug) {
-            this.debug = debug;
-            /*
-             * Open a dump group around all compilations happening during the execution of a unit
-             * test. This group will contain one sub-group for every compiled CallTarget of the unit
-             * test.
-             */
-            this.output = beginGroup(this.debug, testName);
+        private GraalTestContext(String testName, GraalTruffleRuntime runtime) {
+            this.testName = testName;
+            this.runtime = runtime;
+        }
+
+        private synchronized void init(OptimizedCallTarget target) {
+            if (debug == null) {
+                final Map<String, Object> optionsMap = TruffleRuntimeOptions.getOptionsForCompiler(target);
+                debug = runtime.getTruffleCompiler(target).openDebugContext(optionsMap, null);
+                /*
+                 * Open a dump group around all compilations happening during the execution of a
+                 * unit test. This group will contain one sub-group for every compiled CallTarget of
+                 * the unit test.
+                 */
+                this.output = beginGroup(this.debug, testName);
+            }
         }
 
         @Override
-        public void close() throws IOException {
+        public synchronized void close() throws IOException {
             try {
                 if (output != null) {
                     try {
@@ -93,14 +103,14 @@ final class GraalTestTVMCI extends TVMCI.Test<GraalTestContext, OptimizedCallTar
 
     @Override
     protected GraalTestContext createTestContext(String testName) {
-        final Map<String, Object> optionsMap = TruffleRuntimeOptions.getOptionsForCompiler();
-        TruffleDebugContext debugContext = truffleRuntime.getTruffleCompiler().openDebugContext(optionsMap, null);
-        return new GraalTestContext(testName, debugContext);
+        return new GraalTestContext(testName, truffleRuntime);
     }
 
     @Override
     public OptimizedCallTarget createTestCallTarget(GraalTestContext testContext, RootNode testNode) {
-        return (OptimizedCallTarget) truffleRuntime.createCallTarget(testNode);
+        OptimizedCallTarget target = (OptimizedCallTarget) truffleRuntime.createCallTarget(testNode);
+        testContext.init(target);
+        return target;
     }
 
     @SuppressWarnings("try")

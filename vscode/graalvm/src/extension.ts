@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
@@ -8,8 +8,14 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { toggleCodeCoverage, activeTextEditorChaged } from './graalVMCoverage';
+import { GraalVMConfigurationProvider, GraalVMDebugAdapterTracker } from './graalVMDebug';
 import { installGraalVM, installGraalVMComponent, selectInstalledGraalVM } from './graalVMInstall';
+import { startLanguageServer, stopLanguageServer } from './graalVMLanguageServer';
+import { installRPackage, rConfig, R_LANGUAGE_SERVER_PACKAGE_NAME } from './graalVMR';
+import { installRubyGem, rubyConfig, RUBY_LANGUAGE_SERVER_GEM_NAME } from './graalVMRuby';
 import { addNativeImageToPOM } from './graalVMNativeImage';
+import { pythonConfig } from './graalVMPython';
 
 const OPEN_SETTINGS: string = 'Open Settings';
 const INSTALL_GRAALVM: string = 'Install GraalVM';
@@ -29,15 +35,34 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('extension.graalvm.addNativeImageToPOM', () => {
 		addNativeImageToPOM();
 	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.graalvm.toggleCodeCoverage', () => {
+		toggleCodeCoverage(context);
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.graalvm.installRLanguageServer', () => {
+		installRPackage(R_LANGUAGE_SERVER_PACKAGE_NAME);
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.graalvm.installRubyLanguageServer', () => {
+		installRubyGem(RUBY_LANGUAGE_SERVER_GEM_NAME);
+	}));
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
+		if (e) {
+			activeTextEditorChaged(e);
+		}
+	}));
 	const configurationProvider = new GraalVMConfigurationProvider();
 	context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('graalvm', configurationProvider));
 	context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('node', configurationProvider));
+	context.subscriptions.push(vscode.debug.registerDebugAdapterTrackerFactory('graalvm', new GraalVMDebugAdapterTracker()));
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 		if (e.affectsConfiguration('graalvm.home')) {
 			config();
+			stopLanguageServer().then(() => startLanguageServer(vscode.workspace.getConfiguration('graalvm').get('home') as string));
+		} else if (e.affectsConfiguration('graalvm.languageServer.currentWorkDir') || e.affectsConfiguration('graalvm.languageServer.inProcessServer')) {
+			stopLanguageServer().then(() => startLanguageServer(vscode.workspace.getConfiguration('graalvm').get('home') as string));
 		}
 	}));
-	if (!vscode.workspace.getConfiguration('graalvm').get('home')) {
+	const graalVMHome = vscode.workspace.getConfiguration('graalvm').get('home') as string;
+	if (!graalVMHome) {
 		vscode.window.showInformationMessage('No path to GraalVM home specified.', SELECT_GRAALVM, INSTALL_GRAALVM, OPEN_SETTINGS).then(value => {
 			switch (value) {
 				case SELECT_GRAALVM:
@@ -53,10 +78,14 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	} else {
 		config();
+		startLanguageServer(graalVMHome);
 	}
 }
 
-export function deactivate() { }
+export function deactivate(): Thenable<void> {
+	return stopLanguageServer();
+}
+
 
 function config() {
 	const graalVMHome = vscode.workspace.getConfiguration('graalvm').get('home') as string;
@@ -85,34 +114,8 @@ function config() {
 				}
 			});
 		}
-	}
-}
-
-function updatePath(path: string | undefined, graalVMBin: string): string {
-	if (!path) {
-		return graalVMBin;
-	}
-	let pathItems = path.split(':');
-	let idx = pathItems.indexOf(graalVMBin);
-	if (idx < 0) {
-		pathItems.unshift(graalVMBin);
-	}
-	return pathItems.join(':');
-}
-
-class GraalVMConfigurationProvider implements vscode.DebugConfigurationProvider {
-
-	resolveDebugConfiguration(_folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, _token?: vscode.CancellationToken): vscode.ProviderResult<vscode.DebugConfiguration> {
-		const graalVMHome = vscode.workspace.getConfiguration('graalvm').get('home') as string;
-		if (graalVMHome) {
-			config.graalVMHome = graalVMHome;
-			const graalVMBin = path.join(graalVMHome, 'bin');
-			if (config.env) {
-				config.env['PATH'] = updatePath(config.env['PATH'], graalVMBin);
-			} else {
-				config.env = { 'PATH': graalVMBin };
-			}
-		}
-		return config;
+		pythonConfig(graalVMHome);
+		rConfig(graalVMHome);
+		rubyConfig(graalVMHome);
 	}
 }

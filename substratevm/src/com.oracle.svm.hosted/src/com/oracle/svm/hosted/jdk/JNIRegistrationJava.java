@@ -24,6 +24,12 @@
  */
 package com.oracle.svm.hosted.jdk;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.graalvm.compiler.nodes.graphbuilderconf.GraphBuilderConfiguration.Plugins;
 import org.graalvm.compiler.phases.util.Providers;
 import org.graalvm.compiler.serviceprovider.JavaVersionUtil;
@@ -36,6 +42,7 @@ import com.oracle.svm.core.graal.GraalFeature;
 import com.oracle.svm.core.jdk.JNIRegistrationUtil;
 import com.oracle.svm.core.jdk.PlatformNativeLibrarySupport;
 import com.oracle.svm.core.jni.JNIRuntimeAccess;
+import com.oracle.svm.hosted.FeatureImpl;
 import com.oracle.svm.hosted.FeatureImpl.BeforeAnalysisAccessImpl;
 import com.oracle.svm.hosted.c.NativeLibraries;
 
@@ -46,6 +53,11 @@ import com.oracle.svm.hosted.c.NativeLibraries;
 @AutomaticFeature
 class JNIRegistrationJava extends JNIRegistrationUtil implements GraalFeature {
 
+    private static final Consumer<DuringAnalysisAccess> CORESERVICES_LINKER = (duringAnalysisAccess -> {
+        FeatureImpl.DuringAnalysisAccessImpl accessImpl = (FeatureImpl.DuringAnalysisAccessImpl) duringAnalysisAccess;
+        accessImpl.getNativeLibraries().addDynamicNonJniLibrary("-framework CoreServices");
+    });
+
     @Override
     public void registerGraphBuilderPlugins(Providers providers, Plugins plugins, boolean analysis, boolean hosted) {
         JNIRegistrationSupport.singleton().registerNativeLibrary(providers, plugins, System.class, "loadLibrary");
@@ -54,16 +66,6 @@ class JNIRegistrationJava extends JNIRegistrationUtil implements GraalFeature {
     @Override
     public void duringSetup(DuringSetupAccess a) {
         ImageSingletons.add(JNIRegistrationSupport.class, new JNIRegistrationSupport());
-
-        rerunClassInit(a, "java.io.RandomAccessFile", "java.lang.ProcessEnvironment");
-        if (JavaVersionUtil.JAVA_SPEC <= 8) {
-            if (isPosix()) {
-                rerunClassInit(a, "java.lang.UNIXProcess");
-            }
-        } else {
-            rerunClassInit(a, "java.lang.ProcessImpl", "java.lang.ProcessHandleImpl",
-                            "java.io.FilePermission");
-        }
     }
 
     @Override
@@ -137,6 +139,37 @@ class JNIRegistrationJava extends JNIRegistrationUtil implements GraalFeature {
             /* Resolve calls to sun_security_provider_NativeSeedGenerator* as built-in. */
             PlatformNativeLibrarySupport.singleton().addBuiltinPkgNativePrefix("sun_security_provider_NativeSeedGenerator");
         }
+        if (isDarwin()) {
+            List<Method> darwinMethods = Arrays.asList(
+                            method(a, "apple.security.KeychainStore", "_scanKeychain"),
+                            method(a, "apple.security.KeychainStore", "_releaseKeychainItemRef", long.class),
+                            method(a, "apple.security.KeychainStore", "_addItemToKeychain", String.class, boolean.class, byte[].class, char[].class),
+                            method(a, "apple.security.KeychainStore", "_removeItemFromKeychain", long.class),
+                            method(a, "apple.security.KeychainStore", "_getEncodedKeyData", long.class, char[].class));
+            if (JavaVersionUtil.JAVA_SPEC >= 11) {
+                /*
+                 * JNI method implementations depending on CoreService are present in the following
+                 * jdk classes sun.nio.fs.MacOXFileSystemProvider (9+),
+                 * sun.net.spi.DefaultProxySelector (9+)
+                 */
+                ArrayList<Method> methods = new ArrayList<>(darwinMethods);
+                methods.addAll(Arrays.asList(method(a, "sun.nio.fs.MacOSXFileSystemProvider", "getFileTypeDetector"),
+                                method(a, "sun.net.spi.DefaultProxySelector", "getSystemProxies", String.class, String.class),
+                                method(a, "sun.net.spi.DefaultProxySelector", "init")));
+
+                a.registerReachabilityHandler(CORESERVICES_LINKER, methods.toArray(new Object[]{}));
+            } else {
+                a.registerReachabilityHandler(CORESERVICES_LINKER, darwinMethods.toArray(new Object[]{}));
+            }
+        }
+
+        if (JavaVersionUtil.JAVA_SPEC >= 11) {
+            a.registerReachabilityHandler(JNIRegistrationJava::registerProcessHandleImplInfoInitIDs, method(a, "java.lang.ProcessHandleImpl$Info", "initIDs"));
+        }
+    }
+
+    private static void registerProcessHandleImplInfoInitIDs(DuringAnalysisAccess a) {
+        JNIRuntimeAccess.register(fields(a, "java.lang.ProcessHandleImpl$Info", "command", "commandLine", "arguments", "startTime", "totalTime", "user"));
     }
 
     private static void registerRandomAccessFileInitIDs(DuringAnalysisAccess a) {

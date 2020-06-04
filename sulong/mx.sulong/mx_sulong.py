@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016, 2019, Oracle and/or its affiliates.
+# Copyright (c) 2016, 2020, Oracle and/or its affiliates.
 #
 # All rights reserved.
 #
@@ -102,27 +102,6 @@ basicLLVMDependencies = [
     mx_buildtools.Opt.OPT
 ]
 
-# the file paths that we want to check with clang-format
-clangFormatCheckPaths = [
-    join(_suite.dir, "include"),
-    join(_root, "com.oracle.truffle.llvm.libraries.bitcode", "src"),
-    join(_root, "com.oracle.truffle.llvm.libraries.bitcode", "include"),
-    join(_testDir, "com.oracle.truffle.llvm.tests.pipe.native", "src"),
-    join(_testDir, "com.oracle.truffle.llvm.tests.sulong.native"),
-    join(_testDir, "com.oracle.truffle.llvm.tests.sulongcpp.native"),
-    join(_testDir, "com.oracle.truffle.llvm.tests.linker.native"),
-    join(_testDir, "interoptests"),
-    join(_testDir, "inlineassemblytests"),
-    join(_testDir, "other")
-]
-
-# the clang-format versions that can be used for formatting the test case C and C++ files
-clangFormatVersions = [
-    '3.8',
-    '3.9',
-    '4.0',
-]
-
 
 def _sulong_gate_testdist(title, test_dist, tasks, args, tags=None, testClasses=None, vmArgs=None):
     if tags is None:
@@ -163,6 +142,16 @@ def _sulong_gate_sulongsuite_unittest(title, tasks, args, tags=None, testClasses
     test_suite = 'SULONG_TEST_SUITES'
     _sulong_gate_unittest(title, test_suite, tasks, args, tags=tags, testClasses=testClasses)
 
+
+class SulongGateEnv(object):
+    """"Sets a marker environment variable."""
+    def __enter__(self):
+        os.environ['_MX_SULONG_GATE'] = "1"
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        del os.environ['_MX_SULONG_GATE']
+
+
 def _sulong_gate_runner(args, tasks):
     with Task('CheckCopyright', tasks, tags=['style']) as t:
         if t:
@@ -173,7 +162,7 @@ def _sulong_gate_runner(args, tasks):
         # needed for clang-format
         if t: build_llvm_org(args)
     with Task('ClangFormat', tasks, tags=['style', 'clangformat']) as t:
-        if t: clangformatcheck()
+        if t: clangformat([])
     _sulong_gate_testsuite('Benchmarks', 'shootout', tasks, args, tags=['benchmarks', 'sulongMisc'])
     _sulong_gate_unittest('Types', 'SULONG_TEST', tasks, args, tags=['type', 'sulongMisc', 'sulongCoverage'], testClasses=['com.oracle.truffle.llvm.tests.types.floating'])
     _sulong_gate_unittest('Pipe', 'SULONG_TEST', tasks, args, tags=['pipe', 'sulongMisc', 'sulongCoverage'], testClasses=['CaptureOutputTest'])
@@ -184,11 +173,13 @@ def _sulong_gate_runner(args, tasks):
     _sulong_gate_testsuite('GCC_CPP', 'gcc_cpp', tasks, args, tags=['gcc_cpp', 'sulongCoverage'])
     _sulong_gate_testsuite('GCC_Fortran', 'gcc_fortran', tasks, args, tags=['gcc_fortran', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('Sulong', tasks, args, testClasses='SulongSuite', tags=['sulong', 'sulongBasic', 'sulongCoverage'])
+    _sulong_gate_unittest('SulongLL', 'SULONG_LL_TEST_SUITES', tasks, args, testClasses='com.oracle.truffle.llvm.tests.bitcode.', tags=['sulongLL', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('Interop', tasks, args, testClasses='com.oracle.truffle.llvm.tests.interop', tags=['interop', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('Linker', tasks, args, testClasses='com.oracle.truffle.llvm.tests.linker', tags=['linker', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('Debug', tasks, args, testClasses='LLVMDebugTest', tags=['debug', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('IRDebug', tasks, args, testClasses='LLVMIRDebugTest', tags=['irdebug', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('BitcodeFormat', tasks, args, testClasses='BitcodeFormatTest', tags=['bitcodeFormat', 'sulongBasic', 'sulongCoverage'])
+    _sulong_gate_sulongsuite_unittest('DebugExpr', tasks, args, testClasses='LLVMDebugExprParserTest', tags=['debugexpr', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_sulongsuite_unittest('OtherTests', tasks, args, testClasses='com.oracle.truffle.llvm.tests.other', tags=['otherTests', 'sulongBasic', 'sulongCoverage'])
     _sulong_gate_testsuite('Assembly', 'inlineassemblytests', tasks, args, testClasses='InlineAssemblyTest', tags=['assembly', 'sulongMisc', 'sulongCoverage'])
     _sulong_gate_testsuite('Args', 'other', tasks, args, tags=['args', 'sulongMisc', 'sulongCoverage'], testClasses=['com.oracle.truffle.llvm.tests.MainArgsTest'])
@@ -196,8 +187,9 @@ def _sulong_gate_runner(args, tasks):
     _sulong_gate_testsuite('Varargs', 'other', tasks, args, tags=['vaargs', 'sulongMisc', 'sulongCoverage'], testClasses=['com.oracle.truffle.llvm.tests.VAArgsTest'])
     with Task('TestToolchain', tasks, tags=['toolchain', 'sulongMisc', 'sulongCoverage']) as t:
         if t:
-            mx.command_function('clean')(['--project', 'toolchain-launchers-tests'] + args.extra_build_args)
-            mx.command_function('build')(['--project', 'toolchain-launchers-tests'] + args.extra_build_args)
+            with SulongGateEnv():
+                mx.command_function('clean')(['--project', 'toolchain-launchers-tests'] + args.extra_build_args)
+                mx.command_function('build')(['--project', 'toolchain-launchers-tests'] + args.extra_build_args)
 
 
 add_gate_runner(_suite, _sulong_gate_runner)
@@ -265,23 +257,40 @@ def build_llvm_org(args=None):
     mx.command_function('build')(defaultBuildArgs + ['--project', 'LLVM_TOOLCHAIN'] + args.extra_build_args)
 
 
-def clangformatcheck(args=None):
-    """ Performs a format check on the include/truffle.h file """
-    for f in clangFormatCheckPaths:
-        checkCFiles(f)
-
-def checkCFiles(targetDir):
+@mx.command(_suite.name, "clangformat")
+def clangformat(args=None, extra_paths=None):
+    """ Runs clang-format on C/C++ files in native projects of the primary suite """
+    if not extra_paths:
+        extra_paths = []
     error = False
-    for path, _, files in os.walk(targetDir):
-        for f in files:
-            if f.endswith('.c') or f.endswith('.cpp') or f.endswith('.h') or f.endswith('.hpp'):
-                if not checkCFile(path + '/' + f):
-                    error = True
+
+    nativeProjects = [p.dir for p in mx.projects(limit_to_primary=True) if p.isNativeProject() and getattr(p, "clangFormat", True)]
+    for f in extra_paths + nativeProjects:
+        if not checkCFiles(f):
+            error = True
     if error:
         mx.log_error("found formatting errors!")
         exit(-1)
 
+
+def checkCFiles(targetDir):
+    error = False
+    files_to_check = []
+    for path, _, files in os.walk(targetDir):
+        for f in files:
+            if f.endswith('.c') or f.endswith('.cpp') or f.endswith('.h') or f.endswith('.hpp'):
+                files_to_check.append(join(path, f))
+    if not files_to_check:
+        # no files found
+        return True
+    mx.logv("clang-format: checking directory {} ({} files)".format(targetDir, len(files_to_check)))
+    for f in files_to_check:
+        if not checkCFile(f):
+            error = True
+    return not error
+
 def checkCFile(targetFile):
+    mx.logvv("  checking file " + targetFile)
     """ Checks the formatting of a C file and returns True if the formatting is okay """
     clangFormat = findBundledLLVMProgram('clang-format')
     formatCommand = [clangFormat, targetFile]
@@ -293,6 +302,7 @@ def checkCFile(targetFile):
         subprocess.check_output(formatCommand + ['-i'])
         mx.log('\n'.join(formattedContent))
         mx.log('\nmodified formatting in {0} to the format above'.format(targetFile))
+        mx.logv("command: " + " ".join(formatCommand))
         return False
     return True
 
@@ -500,14 +510,10 @@ def getCommonOptions(withAssertion, lib_args=None):
         options.append('-Dpolyglot.llvm.libraries=' + ':'.join(lib_args))
 
     options += ['-Xss56m', '-Xms4g', '-Xmx4g']
-    options.append(getLLVMRootOption())
     if withAssertion:
         options += ['-ea', '-esa']
 
     return options
-
-def getLLVMRootOption():
-    return "-Dsulongtest.projectRoot=" + _root
 
 def pullsuite(suiteDir, urls):
     name = os.path.basename(urls[0])
@@ -577,6 +583,16 @@ def get_jacoco_setting():
 
 mx_subst.path_substitutions.register_no_arg('jacoco', get_jacoco_setting)
 
+
+def _subst_get_jvm_args(dep):
+    java = mx.get_jdk().java
+    main_class = mx.distribution(dep).mainClass
+    jvm_args = [pipes.quote(arg) for arg in mx.get_runtime_jvm_args([dep])]
+    cmd = [java] + jvm_args + [main_class]
+    return " ".join(cmd)
+
+
+mx_subst.path_substitutions.register_with_arg('get_jvm_cmd_line', _subst_get_jvm_args)
 
 mx.add_argument('--jacoco-exec-file', help='the coverage result file of JaCoCo', default='jacoco.exec')
 
@@ -793,10 +809,13 @@ def create_toolchain_root_provider(name, dist):
 
 
 class ToolchainConfig(object):
+    # Please keep this list in sync with Toolchain.java (method documentation) and ToolchainImpl.java (lookup switch block).
+    _llvm_tool_map = ["ar", "nm", "objcopy", "objdump", "ranlib", "readelf", "readobj", "strip"]
     _tool_map = {
         "CC": ["graalvm-{name}-clang", "graalvm-clang", "clang", "cc", "gcc"],
         "CXX": ["graalvm-{name}-clang++", "graalvm-clang++", "clang++", "c++", "g++"],
         "LD": ["graalvm-{name}-ld", "ld", "ld.lld", "lld", "ld64"],
+        "BINUTIL": ["graalvm-{name}-binutil"] + _llvm_tool_map + ["llvm-" + i for i in _llvm_tool_map]
     }
 
     def __init__(self, name, dist, bootstrap_dist, tools, suite):
@@ -827,7 +846,7 @@ class ToolchainConfig(object):
         main = self._tool_to_main(self.exe_map[parsed_args.command])
         if "JACOCO" in os.environ:
             mx_gate._jacoco = os.environ["JACOCO"]
-        return mx.run_java(mx.get_runtime_jvm_args([self.dist]) + [main] + tool_args, out=out)
+        return mx.run_java(mx.get_runtime_jvm_args([self.dist]) + ['-Dorg.graalvm.launcher.executablename=' + parsed_args.command] + [main] + tool_args, out=out)
 
     def _supported_exes(self):
         return [exe for tool in self._supported_tools() for exe in self._tool_to_aliases(tool)]
@@ -927,9 +946,127 @@ class BootstrapToolchainLauncherBuildTask(mx.BuildTask):
         java = mx.get_jdk().java
         classpath_deps = [dep for dep in self.subject.buildDependencies if isinstance(dep, mx.ClasspathDependency)]
         jvm_args = [pipes.quote(arg) for arg in mx.get_runtime_jvm_args(classpath_deps)]
+        extra_props = ['-Dorg.graalvm.launcher.executablename="$0"']
         main_class = self.subject.suite.toolchain._tool_to_main(tool)
-        command = [java] + jvm_args + [main_class, '"$@"']
+        command = [java] + jvm_args + extra_props + [main_class, '"$@"']
         return "#!/usr/bin/env bash\n" + "exec " + " ".join(command) + "\n"
+
+
+class CMakeBuildTask(mx.NativeBuildTask):
+
+    def __str__(self):
+        return 'Building {} with CMake'.format(self.subject.name)
+
+    def _build_run_args(self):
+        cmdline, cwd, env = super(CMakeBuildTask, self)._build_run_args()
+
+        def _flatten(lst):
+            for e in lst:
+                if isinstance(e, list):
+                    for sub in _flatten(e):
+                        yield sub
+                else:
+                    yield e
+
+        # flatten cmdline to support for multiple make targets
+        return list(_flatten(cmdline)), cwd, env
+
+    def build(self):
+        # get cwd and env
+        self._configure()
+        # This is copied from the super call because we want to make it
+        # less verbose but calling super does not allow us to do that.
+        # super(CMakeBuildTask, self).build()
+        cmdline, cwd, env = self._build_run_args()
+        if mx._opts.verbose:
+            mx.run(cmdline, cwd=cwd, env=env)
+        else:
+            with open(os.devnull, 'w') as fnull:
+                mx.run(cmdline, cwd=cwd, env=env, out=fnull)
+        self._newestOutput = None
+        # END super(CMakeBuildTask, self).build()
+        source_dir = self.subject.source_dirs()[0]
+        self._write_guard(self.guard_file(), source_dir, self.subject.cmake_config())
+
+    def needsBuild(self, newestInput):
+        mx.logv('Checking whether to build {} with CMake'.format(self.subject.name))
+        need_configure, reason = self._need_configure()
+        return need_configure, "rebuild needed by CMake ({})".format(reason)
+
+    def _write_guard(self, guard_file, source_dir, cmake_config):
+        with open(guard_file, 'w') as fp:
+            fp.write(self._guard_data(source_dir, cmake_config))
+
+    def _guard_data(self, source_dir, cmake_config):
+        return source_dir + '\n' + '\n'.join(cmake_config)
+
+    def _check_cmake(self):
+        try:
+            self.run_cmake(["--version"], silent=False, nonZeroIsFatal=False)
+        except OSError as e:
+            mx.abort(str(e) + "\nError executing 'cmake --version'. Are you sure 'cmake' is installed? ")
+
+    def _need_configure(self):
+        source_dir = self.subject.source_dirs()[0]
+        guard_file = self.guard_file()
+        if not os.path.exists(os.path.join(self.subject.dir, 'Makefile')):
+            return True, "No existing Makefile - reconfigure"
+        cmake_config = self.subject.cmake_config()
+        if not os.path.exists(guard_file):
+            return True, "No guard file - reconfigure"
+        with open(guard_file, 'r') as fp:
+            if fp.read() != self._guard_data(source_dir, cmake_config):
+                return True, "Guard file changed - reconfigure"
+            return False, None
+
+    def _configure(self, silent=False):
+        need_configure, _ = self._need_configure()
+        if not need_configure:
+            return
+        _, cwd, env = self._build_run_args()
+        source_dir = self.subject.source_dirs()[0]
+        cmakefile = os.path.join(self.subject.dir, 'CMakeCache.txt')
+        if os.path.exists(cmakefile):
+            # remove cache file if it exist
+            os.remove(cmakefile)
+        cmdline = ["-G", "Unix Makefiles", source_dir] + self.subject.cmake_config()
+        self._check_cmake()
+        self.run_cmake(cmdline, silent=silent, cwd=cwd, env=env)
+        return True
+
+    def run_cmake(self, cmdline, silent, *args, **kwargs):
+        if mx._opts.verbose:
+            mx.run(["cmake"] + cmdline, *args, **kwargs)
+        else:
+            with open(os.devnull, 'w') as fnull:
+                err = fnull if silent else None
+                mx.run(["cmake"] + cmdline, out=fnull, err=err, *args, **kwargs)
+
+    def guard_file(self):
+        return os.path.join(self.subject.dir, 'mx.cmake.rebuild.guard')
+
+
+class CMakeProject(mx.NativeProject):  # pylint: disable=too-many-ancestors
+    def __init__(self, suite, name, deps, workingSets, subDir, results=None, output=None, **args):
+        projectDir = args.pop('dir', None)
+        if projectDir:
+            d = join(suite.dir, projectDir)
+        elif subDir is None:
+            d = join(suite.dir, name)
+        else:
+            d = join(suite.dir, subDir, name)
+        srcDir = args.pop('sourceDir', d)
+        if not srcDir:
+            mx.abort("Exactly on 'sourceDir' is required")
+        srcDir = mx_subst.path_substitutions.substitute(srcDir)
+        cmake_config = args.pop('cmakeConfig', {})
+        self.cmake_config = lambda: ['-D{}={}'.format(k, mx_subst.path_substitutions.substitute(v).replace('{{}}', '$')) for k, v in sorted(cmake_config.items())]
+
+        super(CMakeProject, self).__init__(suite, name, subDir, [srcDir], deps, workingSets, results, output, d, **args)
+        self.dir = self.getOutput()
+
+    def getBuildTask(self, args):
+        return CMakeBuildTask(args, self)
 
 
 _suite.toolchain = ToolchainConfig('native', 'SULONG_TOOLCHAIN_LAUNCHERS', 'SULONG_BOOTSTRAP_TOOLCHAIN',
@@ -939,6 +1076,7 @@ _suite.toolchain = ToolchainConfig('native', 'SULONG_TOOLCHAIN_LAUNCHERS', 'SULO
                                        "CC": "com.oracle.truffle.llvm.toolchain.launchers.Clang",
                                        "CXX": "com.oracle.truffle.llvm.toolchain.launchers.ClangXX",
                                        "LD": "com.oracle.truffle.llvm.toolchain.launchers.Linker",
+                                       "BINUTIL": "com.oracle.truffle.llvm.toolchain.launchers.BinUtil",
                                    },
                                    suite=_suite)
 
@@ -971,7 +1109,7 @@ mx_sdk_vm.register_graalvm_component(mx_sdk_vm.GraalVmLanguage(
 
 COPYRIGHT_HEADER_BSD = """\
 /*
- * Copyright (c) 2016, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2016, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -1008,6 +1146,17 @@ def create_asm_parser(args=None, out=None):
     """create the inline assembly parser using antlr"""
     mx.suite("truffle").extensions.create_parser("com.oracle.truffle.llvm.asm.amd64", "com.oracle.truffle.llvm.asm.amd64", "InlineAssembly", COPYRIGHT_HEADER_BSD, args, out)
 
+def create_debugexpr_parser(args=None, out=None):
+    """create the debug expression parser using antlr"""
+    mx.suite("truffle").extensions.create_parser(grammar_project="com.oracle.truffle.llvm.runtime",
+                                                 grammar_package="com.oracle.truffle.llvm.runtime.debug.debugexpr.parser.antlr",
+                                                 grammar_name="DebugExpression",
+                                                 copyright_template=COPYRIGHT_HEADER_BSD, args=args, out=out)
+
+def create_parsers(args=None, out=None):
+    create_asm_parser(args, out)
+    create_debugexpr_parser(args, out)
+
 def llirtestgen(args=None, out=None):
     return mx.run_java(mx.get_runtime_jvm_args(["LLIR_TEST_GEN"]) + ["com.oracle.truffle.llvm.tests.llirtestgen.LLIRTestGen"] + args, out=out)
 
@@ -1015,6 +1164,8 @@ mx.update_commands(_suite, {
     'lli' : [runLLVM, ''],
     'test-llvm-image' : [_test_llvm_image, 'test a pre-built LLVM image'],
     'create-asm-parser' : [create_asm_parser, 'create the inline assembly parser using antlr'],
+    'create-debugexpr-parser' : [create_debugexpr_parser, 'create the debug expression parser using antlr'],
+    'create-parsers' : [create_parsers, 'create the debug expression and the inline assembly parser using antlr'],
     'extract-bitcode' : [extract_bitcode, 'Extract embedded LLVM bitcode from object files'],
     'llvm-tool' : [llvm_tool, 'Run a tool from the LLVM.ORG distribution'],
     'llvm-dis' : [llvm_dis, 'Disassemble (embedded) LLVM bitcode to LLVM assembly'],

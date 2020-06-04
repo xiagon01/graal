@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -239,7 +239,13 @@ public class SPARCHotSpotLIRGenerator extends SPARCLIRGenerator implements HotSp
     }
 
     @Override
-    public Variable emitLogicCompareAndSwap(LIRKind accessKind, Value address, Value expectedValue, Value newValue, Value trueValue, Value falseValue) {
+    public void emitDeoptimizeWithExceptionInCaller(Value exception) {
+        Register thread = getProviders().getRegisters().getThreadRegister();
+        append(new SPARCHotSpotDeoptimizeWithExceptionCallerOp(config, exception, thread));
+    }
+
+    @Override
+    public Variable emitLogicCompareAndSwap(LIRKind accessKind, Value address, Value expectedValue, Value newValue, Value trueValue, Value falseValue, boolean useBarriers) {
         ValueKind<?> kind = newValue.getValueKind();
         assert kind.equals(expectedValue.getValueKind());
         SPARCKind memKind = (SPARCKind) kind.getPlatformKind();
@@ -249,7 +255,7 @@ public class SPARCHotSpotLIRGenerator extends SPARCLIRGenerator implements HotSp
     }
 
     @Override
-    public Variable emitValueCompareAndSwap(LIRKind accessKind, Value address, Value expectedValue, Value newValue) {
+    public Variable emitValueCompareAndSwap(LIRKind accessKind, Value address, Value expectedValue, Value newValue, boolean useBarriers) {
         ValueKind<?> kind = newValue.getValueKind();
         assert kind.equals(expectedValue.getValueKind());
         Variable result = newVariable(newValue.getValueKind());

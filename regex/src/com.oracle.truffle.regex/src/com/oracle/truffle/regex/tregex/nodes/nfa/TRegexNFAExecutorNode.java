@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -42,6 +42,7 @@
 package com.oracle.truffle.regex.tregex.nodes.nfa;
 
 import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.regex.RegexRootNode;
 import com.oracle.truffle.regex.tregex.TRegexOptions;
 import com.oracle.truffle.regex.tregex.nfa.NFA;
 import com.oracle.truffle.regex.tregex.nfa.NFAState;
@@ -56,16 +57,14 @@ import com.oracle.truffle.regex.tregex.nodes.dfa.TRegexDFAExecutorNode;
  * expression is executed {@link TRegexOptions#TRegexGenerateDFAThreshold} times, in order to avoid
  * the costly DFA generation on all expressions that are not on any hot code paths.
  */
-public class TRegexNFAExecutorNode extends TRegexExecutorNode {
+public final class TRegexNFAExecutorNode extends TRegexExecutorNode {
 
     private final NFA nfa;
-    private final int numberOfCaptureGroups;
     private final boolean searching;
 
-    public TRegexNFAExecutorNode(NFA nfa, int numberOfCaptureGroups) {
+    public TRegexNFAExecutorNode(NFA nfa) {
         this.nfa = nfa;
         nfa.setInitialLoopBack(false);
-        this.numberOfCaptureGroups = numberOfCaptureGroups;
         this.searching = !nfa.getAst().getFlags().isSticky() && !nfa.getAst().getRoot().startsWithCaret();
         for (int i = 0; i < nfa.getNumberOfTransitions(); i++) {
             if (nfa.getTransitions()[i] != null) {
@@ -78,13 +77,19 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
         return nfa;
     }
 
-    public int getNumberOfCaptureGroups() {
-        return numberOfCaptureGroups;
+    @Override
+    public boolean isForward() {
+        return true;
+    }
+
+    @Override
+    public boolean writesCaptureGroups() {
+        return true;
     }
 
     @Override
     public TRegexExecutorLocals createLocals(Object input, int fromIndex, int index, int maxIndex) {
-        return new TRegexNFAExecutorLocals(input, fromIndex, index, maxIndex, numberOfCaptureGroups, nfa.getNumberOfStates());
+        return new TRegexNFAExecutorLocals(input, fromIndex, index, maxIndex, getNumberOfCaptureGroups(), nfa.getNumberOfStates());
     }
 
     @Override
@@ -92,11 +97,10 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
         TRegexNFAExecutorLocals locals = (TRegexNFAExecutorLocals) abstractLocals;
         CompilerDirectives.ensureVirtualized(locals);
 
-        final int offset = Math.min(locals.getIndex(), nfa.getAnchoredEntry().length - 1);
-        locals.setIndex(locals.getIndex() - offset);
+        final int offset = rewindUpTo(locals, 0, nfa.getAnchoredEntry().length - 1);
         int anchoredInitialState = nfa.getAnchoredEntry()[offset].getTarget().getId();
         int unAnchoredInitialState = nfa.getUnAnchoredEntry()[offset].getTarget().getId();
-        if (unAnchoredInitialState != anchoredInitialState && locals.getIndex() == 0) {
+        if (unAnchoredInitialState != anchoredInitialState && inputAtBegin(locals)) {
             locals.addInitialState(anchoredInitialState);
         }
         if (nfa.getState(unAnchoredInitialState) != null) {
@@ -106,7 +110,10 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
             return null;
         }
         while (true) {
-            if (locals.getIndex() < getInputLength(locals)) {
+            if (CompilerDirectives.inInterpreter()) {
+                RegexRootNode.checkThreadInterrupted();
+            }
+            if (inputHasNext(locals)) {
                 findNextStates(locals);
                 // If locals.successorsEmpty() is true, then all of our paths have either been
                 // finished, discarded due to priority or failed to match. If we managed to finish
@@ -123,12 +130,13 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
                 findNextStatesAtEnd(locals);
                 return locals.getResult();
             }
-            locals.nextChar();
+            locals.nextState();
+            inputAdvance(locals);
         }
     }
 
     private void findNextStates(TRegexNFAExecutorLocals locals) {
-        char c = getChar(locals);
+        int c = inputRead(locals);
         while (locals.hasNext()) {
             expandState(locals, locals.next(), c, false);
             // If we have found a path to a final state, then we will trim all paths with lower
@@ -148,14 +156,14 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
         }
     }
 
-    private void expandState(TRegexNFAExecutorLocals locals, int stateId, char c, boolean isLoopBack) {
+    private void expandState(TRegexNFAExecutorLocals locals, int stateId, int c, boolean isLoopBack) {
         NFAState state = nfa.getState(stateId);
         // If we manage to find a path to the (unanchored) final state, then we will trim all other
         // paths leading from the current state as they all have lower priority. We do this by
         // iterating through the transitions in priority order and stopping on the first transition
         // to a final state.
         for (int i = 0; i < maxTransitionIndex(state); i++) {
-            NFAStateTransition t = state.getNext()[i];
+            NFAStateTransition t = state.getSuccessors()[i];
             NFAState target = t.getTarget();
             int targetId = t.getTarget().getId();
             int markIndex = targetId >> 6;
@@ -172,7 +180,7 @@ public class TRegexNFAExecutorNode extends TRegexExecutorNode {
     }
 
     private static int maxTransitionIndex(NFAState state) {
-        return state.hasTransitionToUnAnchoredFinalState(true) ? state.getTransitionToUnAnchoredFinalStateId(true) + 1 : state.getNext().length;
+        return state.hasTransitionToUnAnchoredFinalState(true) ? state.getTransitionToUnAnchoredFinalStateId(true) + 1 : state.getSuccessors().length;
     }
 
     private void findNextStatesAtEnd(TRegexNFAExecutorLocals locals) {

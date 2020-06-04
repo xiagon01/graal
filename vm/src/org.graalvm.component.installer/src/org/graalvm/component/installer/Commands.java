@@ -201,4 +201,28 @@ public interface Commands {
      */
     String OPTION_LOCAL_DEPENDENCIES = "D";
     String LONG_OPTION_LOCAL_DEPENDENCIES = "local-deps";
+
+    /**
+     * Ignore component dependencies.
+     */
+    String OPTION_NO_DEPENDENCIES = "M";
+    String LONG_OPTION_NO_DEPENDENCIES = "no-deps";
+
+    /**
+     * Print version and exit. Non-alnum option to indicate the short form is not defined.
+     */
+    String OPTION_PRINT_VERSION = "@";
+    String LONG_OPTION_PRINT_VERSION = "version";
+
+    /**
+     * Show version and continue. Non-alnum option to indicate the short form is not defined.
+     */
+    String OPTION_SHOW_VERSION = "#";
+    String LONG_OPTION_SHOW_VERSION = "show-version";
+
+    /**
+     * Will not fail, if at least one of the catalogs can be read.
+     */
+    String OPTION_IGNORE_CATALOG_ERRORS = "E";
+    String LONG_OPTION_IGNORE_CATALOG_ERRORS = "no-catalog-errors";
 }

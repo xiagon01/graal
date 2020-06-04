@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -33,9 +33,9 @@ import java.util.List;
 
 import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameSlot;
+import com.oracle.truffle.api.nodes.RepeatingNode;
 import com.oracle.truffle.api.nodes.RootNode;
 import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.llvm.runtime.LLVMContext.ExternalLibrary;
 import com.oracle.truffle.llvm.runtime.debug.scope.LLVMSourceLocation;
 import com.oracle.truffle.llvm.runtime.memory.LLVMAllocateNode;
 import com.oracle.truffle.llvm.runtime.memory.LLVMMemMoveNode;
@@ -47,13 +47,15 @@ import com.oracle.truffle.llvm.runtime.memory.VarargsAreaStackAllocationNode;
 import com.oracle.truffle.llvm.runtime.nodes.api.LLVMControlFlowNode;
 import com.oracle.truffle.llvm.runtime.nodes.api.LLVMExpressionNode;
 import com.oracle.truffle.llvm.runtime.nodes.api.LLVMStatementNode;
+import com.oracle.truffle.llvm.runtime.nodes.base.LLVMBasicBlockNode;
+import com.oracle.truffle.llvm.runtime.nodes.vars.LLVMWriteNode;
 import com.oracle.truffle.llvm.runtime.types.AggregateType;
 import com.oracle.truffle.llvm.runtime.types.ArrayType;
 import com.oracle.truffle.llvm.runtime.types.FunctionType;
-import com.oracle.truffle.llvm.runtime.types.PrimitiveType.PrimitiveKind;
 import com.oracle.truffle.llvm.runtime.types.StructureType;
 import com.oracle.truffle.llvm.runtime.types.Type;
 import com.oracle.truffle.llvm.runtime.types.VectorType;
+import com.oracle.truffle.llvm.runtime.types.symbols.LocalVariableDebugInfo;
 import com.oracle.truffle.llvm.runtime.types.symbols.Symbol;
 
 /**
@@ -87,11 +89,7 @@ public interface NodeFactory {
 
     LLVMStatementNode createFence();
 
-    LLVMExpressionNode createArithmeticOp(ArithmeticOperation op, Type type, LLVMExpressionNode left, LLVMExpressionNode right);
-
     LLVMExpressionNode createLiteral(Object value, Type type);
-
-    LLVMExpressionNode createSimpleConstantNoArray(Object constant, Type instructionType);
 
     LLVMExpressionNode createVectorLiteralNode(List<LLVMExpressionNode> listValues, Type type);
 
@@ -105,25 +103,13 @@ public interface NodeFactory {
                     int unwindIndex, LLVMStatementNode normalPhiWriteNodes,
                     LLVMStatementNode unwindPhiWriteNodes);
 
-    LLVMStatementNode createFrameWrite(Type llvmType, LLVMExpressionNode result, FrameSlot slot);
-
-    LLVMExpressionNode createComparison(CompareOperator operator, Type type, LLVMExpressionNode lhs, LLVMExpressionNode rhs);
-
-    LLVMExpressionNode createSignedCast(LLVMExpressionNode fromNode, Type targetType);
-
-    LLVMExpressionNode createSignedCast(LLVMExpressionNode fromNode, PrimitiveKind kind);
-
-    LLVMExpressionNode createUnsignedCast(LLVMExpressionNode fromNode, Type targetType);
-
-    LLVMExpressionNode createUnsignedCast(LLVMExpressionNode fromNode, PrimitiveKind kind);
-
-    LLVMExpressionNode createBitcast(LLVMExpressionNode fromNode, Type targetType, Type fromType);
-
-    LLVMExpressionNode createBitcast(LLVMExpressionNode fromNode, PrimitiveKind kind);
+    LLVMWriteNode createFrameWrite(Type llvmType, LLVMExpressionNode result, FrameSlot slot);
 
     LLVMExpressionNode createExtractValue(Type type, LLVMExpressionNode targetAddress);
 
-    LLVMExpressionNode createTypedElementPointer(LLVMExpressionNode aggregateAddress, LLVMExpressionNode index, long indexedTypeLength, Type targetType);
+    LLVMExpressionNode createTypedElementPointer(long indexedTypeLength, Type targetType, LLVMExpressionNode aggregateAddress, LLVMExpressionNode index);
+
+    LLVMExpressionNode createVectorizedTypedElementPointer(long indexedTypeLength, Type targetType, LLVMExpressionNode aggregateAddress, LLVMExpressionNode index);
 
     LLVMExpressionNode createSelect(Type type, LLVMExpressionNode condition, LLVMExpressionNode trueValue, LLVMExpressionNode falseValue);
 
@@ -141,6 +127,12 @@ public interface NodeFactory {
 
     LLVMExpressionNode createArrayLiteral(LLVMExpressionNode[] arrayValues, ArrayType arrayType, GetStackSpaceFactory arrayGetStackSpaceFactory);
 
+    LLVMExpressionNode createBitcast(LLVMExpressionNode fromNode, Type targetType, Type fromType);
+
+    LLVMExpressionNode createArithmeticOp(ArithmeticOperation op, Type type, LLVMExpressionNode left, LLVMExpressionNode right);
+
+    LLVMExpressionNode createUnaryOp(UnaryOperation op, Type type, LLVMExpressionNode operand);
+
     /*
      * Stack allocations with type
      */
@@ -157,14 +149,14 @@ public interface NodeFactory {
      */
     VarargsAreaStackAllocationNode createVarargsAreaStackAllocation();
 
-    LLVMExpressionNode createInsertValue(LLVMExpressionNode resultAggregate, LLVMExpressionNode sourceAggregate, int size, long offset, LLVMExpressionNode valueToInsert, Type llvmType);
+    LLVMExpressionNode createInsertValue(LLVMExpressionNode resultAggregate, LLVMExpressionNode sourceAggregate, long size, long offset, LLVMExpressionNode valueToInsert, Type llvmType);
 
-    LLVMExpressionNode createZeroNode(LLVMExpressionNode addressNode, int size);
+    LLVMExpressionNode createZeroNode(LLVMExpressionNode addressNode, long size);
 
     LLVMExpressionNode createStructureConstantNode(Type structureType, GetStackSpaceFactory getStackSpaceFactory, boolean packed, Type[] types, LLVMExpressionNode[] constants);
 
-    LLVMExpressionNode createFunctionBlockNode(FrameSlot exceptionValueSlot, List<? extends LLVMStatementNode> basicBlockNodes, UniquesRegionAllocator uniquesRegionAllocator,
-                    LLVMStatementNode[] copyArgumentsToFrame, LLVMSourceLocation location, FrameDescriptor frameDescriptor);
+    LLVMExpressionNode createFunctionBlockNode(FrameSlot exceptionValueSlot, LLVMBasicBlockNode[] basicBlockNodes, UniquesRegionAllocator uniquesRegionAllocator,
+                    LLVMStatementNode[] copyArgumentsToFrame, LLVMSourceLocation location, FrameDescriptor frameDescriptor, FrameSlot loopSuccessorSlot, LocalVariableDebugInfo debugInfo);
 
     RootNode createFunctionStartNode(LLVMExpressionNode functionBodyNode, FrameDescriptor frameDescriptor, String name, String originalName, int argumentCount, Source bcSource,
                     LLVMSourceLocation location);
@@ -180,11 +172,11 @@ public interface NodeFactory {
 
     LLVMExpressionNode createLLVMBuiltin(Symbol target, LLVMExpressionNode[] args, Type[] argsTypes, int callerArgumentCount);
 
-    LLVMStatementNode createPhi(LLVMExpressionNode[] from, FrameSlot[] to, Type[] types);
+    LLVMStatementNode createPhi(LLVMExpressionNode[] cycleFrom, LLVMWriteNode[] cycleWrites, LLVMWriteNode[] ordinaryWrites);
 
     LLVMExpressionNode createCopyStructByValue(Type type, GetStackSpaceFactory getStackSpaceFactory, LLVMExpressionNode parameterNode);
 
-    LLVMExpressionNode createVarArgCompoundValue(int length, int alignment, LLVMExpressionNode parameterNode);
+    LLVMExpressionNode createVarArgCompoundValue(long length, int alignment, LLVMExpressionNode parameterNode);
 
     LLVMMemMoveNode createMemMove();
 
@@ -199,4 +191,9 @@ public interface NodeFactory {
     LLVMExpressionNode createStackSave();
 
     LLVMExpressionNode createStackRestore(LLVMExpressionNode stackPointer);
+
+    LLVMControlFlowNode createLoop(RepeatingNode body, int[] successorIDs);
+
+    RepeatingNode createLoopDispatchNode(FrameSlot exceptionValueSlot, List<? extends LLVMStatementNode> list, LLVMBasicBlockNode[] originalBodyNodes, int headerId, int[] indexMapping,
+                    int[] successors, FrameSlot successorSlot);
 }

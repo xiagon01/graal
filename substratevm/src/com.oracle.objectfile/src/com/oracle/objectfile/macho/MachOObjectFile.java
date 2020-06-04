@@ -79,11 +79,12 @@ public final class MachOObjectFile extends ObjectFile {
     /**
      * Create an empty Mach-O object file.
      */
-    public MachOObjectFile() {
-        this(MachOCpuType.from(System.getProperty("svm.targetArch") == null ? System.getProperty("os.arch") : System.getProperty("svm.targetArch")));
+    public MachOObjectFile(int pageSize) {
+        this(pageSize, MachOCpuType.from(System.getProperty("svm.targetArch") == null ? System.getProperty("os.arch") : System.getProperty("svm.targetArch")));
     }
 
-    public MachOObjectFile(MachOCpuType cpuType) {
+    public MachOObjectFile(int pageSize, MachOCpuType cpuType) {
+        super(pageSize);
         this.cpuType = cpuType;
         switch (cpuType) {
             case X86_64:
@@ -1895,7 +1896,9 @@ public final class MachOObjectFile extends ObjectFile {
             // our constituent loadable sections.
             Map<Element, LayoutDecisionMap> decidedAboutOurElements = new HashMap<>();
             for (Element e : elementsInSegment) {
-                decidedAboutOurElements.put(e, alreadyDecided.get(e));
+                if (e instanceof MachOSection) {
+                    decidedAboutOurElements.put(e, alreadyDecided.get(e));
+                }
             }
             List<LayoutDecision> minVaddrDecisions = ObjectFile.minimalDecisionValues(decidedAboutOurElements, LayoutDecision.Kind.VADDR, new IntegerDecisionComparator(true));
             int minVaddr = (minVaddrDecisions == null || minVaddrDecisions.size() == 0) ? 0 : (int) minVaddrDecisions.get(0).getValue();

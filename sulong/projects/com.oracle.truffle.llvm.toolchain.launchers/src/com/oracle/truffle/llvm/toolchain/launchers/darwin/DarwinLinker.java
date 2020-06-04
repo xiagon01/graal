@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2019, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -73,6 +73,7 @@ public final class DarwinLinker extends Driver {
     static void runDriverWithSaveTemps(Driver driver, List<String> sulongArgs, List<String> userArgs, boolean verb, boolean hlp, boolean earlyexit, String linkerOptionPrefix, boolean needLinkerFlags,
                     int outputFlagPos) {
         Path tempDir = null;
+        int returnCode;
         try {
             if (needLinkerFlags && !earlyexit) {
                 try {
@@ -80,7 +81,7 @@ public final class DarwinLinker extends Driver {
                     String newOutput = tempDir.resolve("temp.out").toString();
                     List<String> newUserArgs = newUserArgs(userArgs, newOutput, linkerOptionPrefix, outputFlagPos);
                     driver.runDriverReturn(sulongArgs, newUserArgs, verb, hlp, earlyexit);
-                    String bcFile = newOutput + ".lto.opt.bc";
+                    String bcFile = newOutput + ".lto.bc";
                     if (Files.exists(Paths.get(bcFile))) {
                         sulongArgs.add(linkerOptionPrefix + "-sectcreate");
                         sulongArgs.add(linkerOptionPrefix + "__LLVM");
@@ -94,7 +95,12 @@ public final class DarwinLinker extends Driver {
                     }
                 }
             }
-            driver.runDriverExit(sulongArgs, userArgs, verb, hlp, earlyexit);
+            returnCode = driver.runDriverReturn(sulongArgs, userArgs, verb, hlp, earlyexit);
+        } catch (IOException e) {
+            returnCode = 1;
+        } catch (Exception e) {
+            System.err.println("Exception: " + e);
+            returnCode = 1;
         } finally {
             if (tempDir != null) {
                 try {
@@ -106,6 +112,8 @@ public final class DarwinLinker extends Driver {
                 }
             }
         }
+        // Do not call System.exit from withing the try block, otherwise finally is not executed
+        System.exit(returnCode);
     }
 
     private static List<String> newUserArgs(List<String> userArgs, String newOutput, String linkerOptionPrefix, int outputFlagPos) {

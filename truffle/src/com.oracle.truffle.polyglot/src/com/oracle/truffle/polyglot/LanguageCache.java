@@ -100,6 +100,11 @@ final class LanguageCache implements Comparable<LanguageCache> {
     private final boolean internal;
     private final Set<String> services;
     private final LanguageReflection languageReflection;
+
+    /*
+     * When building a native image, this field is reset to null so that directories from the image
+     * build do not leak into the image heap. The value is lazily recomputed at image run time.
+     */
     private String languageHome;
 
     private LanguageCache(String id, String name, String implementationName, String version, String className,
@@ -149,7 +154,8 @@ final class LanguageCache implements Comparable<LanguageCache> {
                         Collections.emptySet(),
                         null,
                         Collections.emptySet(),
-                        false, false, servicesClassNames, LanguageReflection.forLanguageInstance(new HostLanguage(), ContextPolicy.SHARED));
+                        false, false, servicesClassNames,
+                        LanguageReflection.forLanguageInstance(new HostLanguage(), ContextPolicy.SHARED));
     }
 
     static Map<String, LanguageCache> languageMimes() {
@@ -279,9 +285,18 @@ final class LanguageCache implements Comparable<LanguageCache> {
 
     String getLanguageHome() {
         if (languageHome == null) {
-            languageHome = System.getProperty(id + ".home");
+            languageHome = getLanguageHomeImpl(id);
         }
         return languageHome;
+    }
+
+    private static String getLanguageHomeImpl(String languageId) {
+        String home = System.getProperty("org.graalvm.language." + languageId + ".home");
+        if (home == null) {
+            // check legacy property
+            home = System.getProperty(languageId + ".home");
+        }
+        return home;
     }
 
     TruffleLanguage<?> loadLanguage() {
@@ -601,7 +616,7 @@ final class LanguageCache implements Comparable<LanguageCache> {
                 if (id == null) {
                     id = defaultId(name, info.getProperty(prefix + "className"));
                 }
-                String languageHome = System.getProperty(id + ".home");
+                String languageHome = getLanguageHomeImpl(id);
                 if (languageHome == null) {
                     languageHome = getLanguageHomeFromURLConnection(id, connection);
                 }
@@ -818,7 +833,7 @@ final class LanguageCache implements Comparable<LanguageCache> {
                     if (id == null || id.isEmpty()) {
                         id = defaultId(name, className);
                     }
-                    String languageHome = System.getProperty(id + ".home");
+                    String languageHome = getLanguageHomeImpl(id);
                     if (languageHome == null) {
                         URL url = provider.getClass().getClassLoader().getResource(className.replace('.', '/') + ".class");
                         if (url != null) {

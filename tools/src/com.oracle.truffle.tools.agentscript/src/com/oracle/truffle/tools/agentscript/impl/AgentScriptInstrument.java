@@ -24,40 +24,28 @@
  */
 package com.oracle.truffle.tools.agentscript.impl;
 
-import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.Option;
-import com.oracle.truffle.api.TruffleContext;
-import com.oracle.truffle.api.TruffleFile;
-import com.oracle.truffle.api.instrumentation.ContextsListener;
-import com.oracle.truffle.api.instrumentation.Instrumenter;
 import com.oracle.truffle.api.instrumentation.TruffleInstrument;
-import com.oracle.truffle.api.nodes.LanguageInfo;
 import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.tools.agentscript.AgentScript;
 import java.io.IOException;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import org.graalvm.options.OptionCategory;
 import org.graalvm.options.OptionDescriptors;
 import org.graalvm.options.OptionKey;
 import org.graalvm.options.OptionStability;
 
 // @formatter:off
+@SuppressWarnings("deprecation")
 @TruffleInstrument.Registration(
-    id = AgentScriptInstrument.ID,
-    name = AgentScriptInstrument.NAME,
-    version = AgentScriptInstrument.VERSION,
-    services = AgentScript.class
+    id = com.oracle.truffle.tools.agentscript.AgentScript.ID,
+    name = "Agent Script",
+    version = com.oracle.truffle.tools.agentscript.AgentScript.VERSION,
+    services = { Function.class, com.oracle.truffle.tools.agentscript.AgentScript.class }
 )
 // @formatter:on
-public final class AgentScriptInstrument extends TruffleInstrument implements AgentScript {
-
-    static final String NAME = "Agent Script";
-
-    @Option(stability = OptionStability.EXPERIMENTAL, name = "", help = "Use provided agent script", category = OptionCategory.USER) //
-    static final OptionKey<String> SCRIPT = new OptionKey<>("");
-
-    private Env env;
+public final class AgentScriptInstrument extends InsightInstrument implements com.oracle.truffle.tools.agentscript.AgentScript {
+    @Option(stability = OptionStability.EXPERIMENTAL, name = "", help = "Deprecated. Use --insight!", category = OptionCategory.USER) //
+    static final OptionKey<String> DEPRECATED = new OptionKey<>("");
 
     @Override
     protected OptionDescriptors getOptionDescriptors() {
@@ -65,85 +53,24 @@ public final class AgentScriptInstrument extends TruffleInstrument implements Ag
     }
 
     @Override
-    protected void onCreate(Env tmp) {
-        this.env = tmp;
-        env.registerService(this);
-        final String path = env.getOptions().get(SCRIPT);
-        if (path != null && path.length() > 0) {
-            registerAgentScript(() -> {
-                try {
-                    TruffleFile file = env.getTruffleFile(path);
-                    if (file == null || !file.exists()) {
-                        throw AgentException.notFound(file);
-                    }
-                    String mimeType = file.getMimeType();
-                    String lang = null;
-                    for (Map.Entry<String, LanguageInfo> e : env.getLanguages().entrySet()) {
-                        if (e.getValue().getMimeTypes().contains(mimeType)) {
-                            lang = e.getKey();
-                            break;
-                        }
-                    }
-                    return Source.newBuilder(lang, file).uri(file.toUri()).internal(true).name(file.getName()).build();
-                } catch (IOException ex) {
-                    throw AgentException.raise(ex);
-                }
-            });
+    OptionKey<String> option() {
+        return DEPRECATED;
+    }
+
+    @Override
+    protected void onCreate(TruffleInstrument.Env env) {
+        super.onCreate(env);
+        try {
+            env.err().write("Warning: Option --agentscript is deprecated. Use --insight option.\n".getBytes());
+        } catch (IOException ex) {
+            // ignore
         }
+        com.oracle.truffle.tools.agentscript.AgentScript as = maybeProxy(com.oracle.truffle.tools.agentscript.AgentScript.class, this);
+        env.registerService(as);
     }
 
     @Override
     public void registerAgentScript(final Source script) {
         registerAgentScript(() -> script);
-    }
-
-    private void registerAgentScript(final Supplier<Source> src) {
-        final Instrumenter instrumenter = env.getInstrumenter();
-        instrumenter.attachContextsListener(new ContextsListener() {
-            private AgentObject agent;
-
-            @Override
-            public void onContextCreated(TruffleContext context) {
-            }
-
-            @Override
-            public void onLanguageContextCreated(TruffleContext context, LanguageInfo language) {
-            }
-
-            @Override
-            public void onLanguageContextInitialized(TruffleContext context, LanguageInfo language) {
-                if (agent != null || language.isInternal()) {
-                    return;
-                }
-                try {
-                    Source script = src.get();
-                    agent = new AgentObject(env);
-                    CallTarget target = env.parse(script, "agent");
-                    target.call(agent);
-                    agent.initializationFinished();
-                } catch (IOException ex) {
-                    throw AgentException.raise(ex);
-                }
-            }
-
-            @Override
-            public void onLanguageContextFinalized(TruffleContext context, LanguageInfo language) {
-                if (agent != null) {
-                    agent.onClosed();
-                }
-            }
-
-            @Override
-            public void onLanguageContextDisposed(TruffleContext context, LanguageInfo language) {
-            }
-
-            @Override
-            public void onContextClosed(TruffleContext context) {
-            }
-        }, true);
-    }
-
-    @Override
-    protected void onDispose(Env tmp) {
     }
 }

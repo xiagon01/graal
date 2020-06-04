@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 
-import { ChromeDebugAdapter, Crdp, ErrorWithMessage, logger } from 'vscode-chrome-debug-core';
+import { ChromeDebugAdapter, ChromeDebugSession, Crdp, ErrorWithMessage, logger } from 'vscode-chrome-debug-core';
 import { DebugProtocol } from 'vscode-debugprotocol';
 import { OutputEvent } from 'vscode-debugadapter';
 
 import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
+import * as os from 'os';
 
 import { ILaunchRequestArguments, IAttachRequestArguments } from './graalVMDebugInterfaces';
 import * as utils from './utils';
@@ -24,6 +25,7 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
     private _supportsRunInTerminalRequest: boolean | undefined;
     private _lastEarlyNodeMsgSeen: boolean | undefined;
     private _captureStdOutput: boolean | undefined;
+    private _killChildProcess: boolean = true;
 
     public initialize(args: DebugProtocol.InitializeRequestArguments): DebugProtocol.Capabilities {
         this._supportsRunInTerminalRequest = args.supportsRunInTerminalRequest;
@@ -106,6 +108,10 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
             }
         }
 
+        if (runtimeArgs.find(arg => arg.startsWith('--lsp'))) {
+            this._killChildProcess = false;
+        }
+
         launchArgs = runtimeArgs.concat(launchArgs, program ? [program] : [], programArgs);
 
         this._captureStdOutput = args.outputCapture === 'std';
@@ -129,6 +135,10 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
                 format: "Unknown console type '{consoleType}'.",
                 variables: { consoleType: args.console }
             });
+        }
+
+        if (!this._killChildProcess && this._childProcessId > 0) {
+            this._session.sendEvent(new OutputEvent('childProcessID', 'telemetry', {'pid': this._childProcessId}));
         }
 
         if (!args.noDebug) {
@@ -157,7 +167,7 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
     }
 
     private killChildProcess(): void {
-        if (this._childProcessId > 0 && !this._attachMode) {
+        if (this._killChildProcess && this._childProcessId > 0 && !this._attachMode) {
             const groupPID = -this._childProcessId;
             try {
                 process.kill(groupPID, 'SIGINT');
@@ -218,26 +228,30 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
                 this.terminateSession(msg);
             });
             const noDebugMode = (<ILaunchRequestArguments>this._launchAttachArgs).noDebug;
-            childProcess.stdout.on('data', (data: string) => {
-                if ((noDebugMode || this._captureStdOutput) && !this._launchAttachArgs._suppressConsoleOutput) {
-                    let msg = data.toString();
-                    this._session.sendEvent(new OutputEvent(msg, 'stdout'));
-                }
-            });
-            childProcess.stderr.on('data', (data: string) => {
-                let msg = data.toString();
-                if (!this._lastEarlyNodeMsgSeen && !noDebugMode) {
-                    msg = msg.replace(/^\s*To start debugging, open the following URL in Chrome:\s*$/m, '');
-                    let regExp = /^\s*chrome-devtools:\/\/devtools\/bundled\/js_app\.html\?ws=\S*\s*$/m;
-                    if (msg.match(regExp)) {
-                        msg = msg.replace(regExp, '');
-                        this._lastEarlyNodeMsgSeen = true;
+            if (childProcess.stdout) {
+                childProcess.stdout.on('data', (data: string) => {
+                    if ((noDebugMode || this._captureStdOutput) && !this._launchAttachArgs._suppressConsoleOutput) {
+                        let msg = data.toString();
+                        this._session.sendEvent(new OutputEvent(msg, 'stdout'));
                     }
-                }
-                if ((noDebugMode || this._captureStdOutput) && !this._launchAttachArgs._suppressConsoleOutput) {
-                    this._session.sendEvent(new OutputEvent(msg, 'stderr'));
-                }
-            });
+                });
+            }
+            if (childProcess.stderr) {
+                childProcess.stderr.on('data', (data: string) => {
+                    let msg = data.toString();
+                    if (!this._lastEarlyNodeMsgSeen && !noDebugMode) {
+                        msg = msg.replace(/^\s*To start debugging, open the following URL in Chrome:\s*$/m, '');
+                        let regExp = /^\s*chrome-devtools:\/\/devtools\/bundled\/js_app\.html\?ws=\S*\s*$/m;
+                        if (msg.match(regExp)) {
+                            msg = msg.replace(regExp, '');
+                            this._lastEarlyNodeMsgSeen = true;
+                        }
+                    }
+                    if ((noDebugMode || this._captureStdOutput) && !this._launchAttachArgs._suppressConsoleOutput) {
+                        this._session.sendEvent(new OutputEvent(msg, 'stderr'));
+                    }
+                });
+            }
             resolve();
          });
     }
@@ -286,3 +300,9 @@ export class GraalVMDebugAdapter extends ChromeDebugAdapter {
         }));
     }
 }
+
+ChromeDebugSession.run(ChromeDebugSession.getSession({
+    adapter: GraalVMDebugAdapter,
+    extensionName: 'graalvm',
+    logFilePath: path.resolve(os.tmpdir(), 'vscode-graalvm-debug.txt'),
+}));

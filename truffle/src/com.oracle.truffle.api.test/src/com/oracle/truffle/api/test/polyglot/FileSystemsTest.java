@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -160,19 +160,19 @@ public class FileSystemsTest {
         ctx = Context.newBuilder(LANGUAGE_ID).allowIO(false).build();
         Path privateDir = createContent(Files.createTempDirectory(FileSystemsTest.class.getSimpleName()),
                         fullIO);
-        result.add(new Configuration("No IO", ctx, privateDir, Paths.get("").toAbsolutePath(), fullIO, false, false, false, false));
+        result.add(new Configuration("No IO", ctx, privateDir, Paths.get("").toAbsolutePath(), fullIO, true, false, false, false));
         // No IO under language home - public file
         ctx = Context.newBuilder(LANGUAGE_ID).allowIO(false).build();
         privateDir = createContent(Files.createTempDirectory(FileSystemsTest.class.getSimpleName()),
                         fullIO);
         setCwd(ctx, privateDir, privateDir);
-        result.add(new Configuration("No IO under language home - public file", ctx, privateDir, fullIO, false, false, false, false));
+        result.add(new Configuration("No IO under language home - public file", ctx, privateDir, fullIO, true, false, false, false));
         // No IO under language home - internal file
         ctx = Context.newBuilder(LANGUAGE_ID).allowIO(false).build();
         privateDir = createContent(Files.createTempDirectory(FileSystemsTest.class.getSimpleName()),
                         fullIO);
         setCwd(ctx, privateDir, privateDir);
-        result.add(new Configuration("No IO under language home - internal file", ctx, privateDir, privateDir, fullIO, false, true, false, false, true, (env, p) -> env.getInternalTruffleFile(p)));
+        result.add(new Configuration("No IO under language home - internal file", ctx, privateDir, privateDir, fullIO, true, true, false, false, true, (env, p) -> env.getInternalTruffleFile(p)));
         // Checked IO
         accessibleDir = createContent(Files.createTempDirectory(FileSystemsTest.class.getSimpleName()),
                         fullIO);
@@ -217,7 +217,7 @@ public class FileSystemsTest {
         fileSystem.setCurrentWorkingDirectory(workDir);
         createContent(workDir, fileSystem);
         ctx = Context.newBuilder(LANGUAGE_ID).allowIO(true).fileSystem(fileSystem).build();
-        result.add(new Configuration("Context pre-initialization filesystem build time", ctx, workDir, fileSystem, false, true, true, true));
+        result.add(new Configuration("Context pre-initialization filesystem build time", ctx, workDir, fileSystem, true, true, true, true));
 
         // PreInitializeContextFileSystem in image execution time
         fileSystem = createPreInitializeContextFileSystem();
@@ -226,7 +226,7 @@ public class FileSystemsTest {
         switchToImageExecutionTime(fileSystem, workDir);
         createContent(workDir, fileSystem);
         ctx = Context.newBuilder(LANGUAGE_ID).allowIO(true).fileSystem(fileSystem).build();
-        result.add(new Configuration("Context pre-initialization filesystem execution time", ctx, workDir, fileSystem, false, true, true, true));
+        result.add(new Configuration("Context pre-initialization filesystem execution time", ctx, workDir, fileSystem, true, true, true, true));
 
         cfgs = result;
         return result;
@@ -1268,7 +1268,7 @@ public class FileSystemsTest {
                 existing.resolve(null);
                 Assert.fail("Should not reach here.");
             } catch (Exception e) {
-                if (cfg.isDefaultFileSystem()) {
+                if (cfg.isInternal()) {
                     Assert.assertTrue(e instanceof NullPointerException);
                 } else {
                     Assert.assertTrue(TestAPIAccessor.engineAccess().isHostException(e));
@@ -1729,6 +1729,87 @@ public class FileSystemsTest {
         ctx.eval(LANGUAGE_ID, "");
     }
 
+    @Test
+    public void testVisitRelativeFolderAfterSetSurrentWorkingDirectory() {
+        final Context ctx = cfg.getContext();
+        final Path path = cfg.getPath();
+        Assume.assumeTrue(cfg.canRead() && cfg.allowsUserDir());
+        languageAction = (Env env) -> {
+            final TruffleFile folder = cfg.resolve(env, path.resolve(FOLDER_EXISTING).toString());
+            TruffleFile cwd = env.getCurrentWorkingDirectory();
+            try {
+                env.setCurrentWorkingDirectory(folder);
+
+                TruffleFile relativeFolder = env.getInternalTruffleFile(FOLDER_EXISTING_INNER1);
+                Assert.assertFalse(relativeFolder.isAbsolute());
+                Assert.assertTrue(relativeFolder.isDirectory());
+                relativeFolder.visit(new FileVisitor<TruffleFile>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(TruffleFile t, BasicFileAttributes bfa) throws IOException {
+                        Assert.assertFalse(t.isAbsolute());
+                        relativeFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(TruffleFile t, BasicFileAttributes bfa) throws IOException {
+                        Assert.assertFalse(t.isAbsolute());
+                        relativeFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(TruffleFile t, IOException ioe) throws IOException {
+                        return FileVisitResult.TERMINATE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(TruffleFile t, IOException ioe) throws IOException {
+                        Assert.assertFalse(t.isAbsolute());
+                        relativeFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+                }, Integer.MAX_VALUE);
+
+                TruffleFile absoluteFolder = folder.resolve(FOLDER_EXISTING_INNER1);
+                Assert.assertTrue(absoluteFolder.isAbsolute());
+                Assert.assertTrue(absoluteFolder.isDirectory());
+                absoluteFolder.visit(new FileVisitor<TruffleFile>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(TruffleFile t, BasicFileAttributes bfa) throws IOException {
+                        Assert.assertTrue(t.isAbsolute());
+                        absoluteFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(TruffleFile t, BasicFileAttributes bfa) throws IOException {
+                        Assert.assertTrue(t.isAbsolute());
+                        absoluteFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(TruffleFile t, IOException ioe) throws IOException {
+                        return FileVisitResult.TERMINATE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(TruffleFile t, IOException ioe) throws IOException {
+                        Assert.assertTrue(t.isAbsolute());
+                        absoluteFolder.relativize(t);
+                        return FileVisitResult.CONTINUE;
+                    }
+                }, Integer.MAX_VALUE);
+            } catch (IOException ioe) {
+                throw new AssertionError(cfg.formatErrorMessage(ioe.getMessage()), ioe);
+            } finally {
+                env.setCurrentWorkingDirectory(cwd);
+            }
+        };
+        ctx.eval(LANGUAGE_ID, "");
+    }
+
     static boolean verifyPermissions(Set<PosixFilePermission> permissions, int mode) {
         int perms = 0;
         for (PosixFilePermission perm : permissions) {
@@ -1783,7 +1864,7 @@ public class FileSystemsTest {
         private final Path path;
         private final Path userDir;
         private final FileSystem fileSystem;
-        private final boolean isDefaultFileSystem;
+        private final boolean internal;
         private final boolean readable;
         private final boolean writable;
         private final boolean allowsUserDir;
@@ -1795,11 +1876,11 @@ public class FileSystemsTest {
                         final Context context,
                         final Path path,
                         final FileSystem fileSystem,
-                        final boolean isDefaultFileSystem,
+                        final boolean internal,
                         final boolean readable,
                         final boolean writable,
                         final boolean allowsUserDir) {
-            this(name, context, path, path, fileSystem, isDefaultFileSystem, readable, writable, allowsUserDir);
+            this(name, context, path, path, fileSystem, internal, readable, writable, allowsUserDir);
         }
 
         Configuration(
@@ -1808,11 +1889,11 @@ public class FileSystemsTest {
                         final Path path,
                         final Path userDir,
                         final FileSystem fileSystem,
-                        final boolean isDefaultFileSystem,
+                        final boolean internal,
                         final boolean readable,
                         final boolean writable,
                         final boolean allowsUserDir) {
-            this(name, context, path, userDir, fileSystem, isDefaultFileSystem, readable, writable, allowsUserDir, allowsUserDir, (env, p) -> env.getPublicTruffleFile(p));
+            this(name, context, path, userDir, fileSystem, internal, readable, writable, allowsUserDir, allowsUserDir, (env, p) -> env.getPublicTruffleFile(p));
         }
 
         Configuration(
@@ -1821,7 +1902,7 @@ public class FileSystemsTest {
                         final Path path,
                         final Path userDir,
                         final FileSystem fileSystem,
-                        final boolean isDefaultFileSystem,
+                        final boolean internal,
                         final boolean readable,
                         final boolean writable,
                         final boolean allowsUserDir,
@@ -1838,7 +1919,7 @@ public class FileSystemsTest {
             this.path = path;
             this.userDir = userDir;
             this.fileSystem = fileSystem;
-            this.isDefaultFileSystem = isDefaultFileSystem;
+            this.internal = internal;
             this.readable = readable;
             this.writable = writable;
             this.allowsUserDir = allowsUserDir;
@@ -1909,8 +1990,8 @@ public class FileSystemsTest {
             return allowsAbsolutePath;
         }
 
-        boolean isDefaultFileSystem() {
-            return isDefaultFileSystem;
+        boolean isInternal() {
+            return internal;
         }
 
         String formatErrorMessage(final String message) {
@@ -1957,11 +2038,6 @@ public class FileSystemsTest {
         @Override
         protected LanguageContext createContext(Env env) {
             return new LanguageContext(env);
-        }
-
-        @Override
-        protected boolean isObjectOfLanguage(Object object) {
-            return false;
         }
 
         @Override
@@ -2091,7 +2167,7 @@ public class FileSystemsTest {
             env.setCurrentWorkingDirectory(env.getInternalTruffleFile(cwd.toString()));
         };
         if (langHome != null) {
-            System.setProperty(LANGUAGE_ID + ".home", langHome.toString());
+            System.setProperty("org.graalvm.language." + LANGUAGE_ID + ".home", langHome.toString());
             resetLanguageHomes();
         }
         ctx.eval(LANGUAGE_ID, "");

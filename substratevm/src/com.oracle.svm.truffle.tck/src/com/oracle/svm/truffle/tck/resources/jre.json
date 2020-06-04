@@ -1,5 +1,15 @@
 [
   {
+    "name" : "java.io.FileDescriptor",
+    "methods" : [
+        { "name" : "closeAll",
+          "justification" : "Safe, called with Closeable parameter by FileInputStream, FileOutputStream, RandomAccessFile to close the file handler. The Closeable is  megamorphic.",
+          "parameterTypes" : [
+              "java.io.Closeable"
+        ]}
+    ]
+  },
+  {
     "name" : "java.lang.StringCoding",
     "methods" : [
         { "name" : "encode" ,
@@ -13,6 +23,17 @@
               "byte[]",
               "int",
               "int"
+        ]}
+    ]
+  },
+  {
+    "name" : "java.lang.UNIXProcess",
+    "methods" : [
+        { "name" : "lambda$null$0" ,
+          "justification" : "UNIXProcess internal processReaperExecutor.",
+          "parameterTypes" : [
+              "java.lang.ThreadGroup",
+              "java.lang.Runnable"
         ]}
     ]
   },
@@ -41,6 +62,31 @@
     ]
   },
   {
+    "name" : "java.nio.Bits",
+    "justification" : "Bits are package private class used by direct buffers which uses Unsafe to access off heap memory.",
+    "allDeclaredMethods" : true
+  },
+  {
+    "name" : "java.nio.DirectByteBuffer",
+    "justification" : "DirectByteBuffer uses Unsafe to allocate and initialize off heap memory.",
+    "allDeclaredMethods" : true,
+    "methods" : [
+        { "name" : "<init>",
+          "parameterTypes" : [
+            "int"
+        ]}
+    ]
+  },
+  {
+    "name" : "java.nio.DirectByteBuffer$Deallocator",
+    "methods" : [
+        { "name" : "run" ,
+          "justification" : "Uses unsafe to free direct buffer off heap memory",
+          "parameterTypes" : [
+        ]}
+    ]
+  },
+  {
     "name" : "java.nio.file.spi.FileSystemProvider",
     "methods" : [
         { "name" : "checkPermission" ,
@@ -57,6 +103,25 @@
           "parameterTypes" : [
               "java.lang.Class",
               "java.net.URL"
+        ]}
+    ]
+  },
+  {
+    "name" : "java.util.concurrent.FutureTask",
+    "methods" : [
+        { "name" : "cancel" ,
+          "justification" : "Interrups the executor threads to cancel execution of FutureTask.",
+          "parameterTypes" : [
+            "boolean"
+        ]}
+    ]
+  },
+  {
+    "name" : "java.util.concurrent.ThreadPoolExecutor",
+    "methods" : [
+        { "name" : "tryTerminate" ,
+          "justification" : "Stops the thread pool threads on shutdown.",
+          "parameterTypes" : [
         ]}
     ]
   },
@@ -80,6 +145,20 @@
     "name" : "java.util.concurrent.ForkJoinPool",
     "methods" : [
         { "name" : "makeCommonPool" ,
+          "parameterTypes" : [
+        ]}
+    ]
+  },
+  {
+    "name" : "java.util.concurrent.locks.LockSupport",
+    "allDeclaredMethods" : true,
+    "justification" : "The LockSupport uses sun.misc.Unsafe"
+  },
+  {
+    "name" : "sun.nio.fs.NativeBuffer$Deallocator",
+    "methods" : [
+        { "name" : "run" ,
+          "justification" : "Uses unsafe to free direct buffer off heap memory",
           "parameterTypes" : [
         ]}
     ]
@@ -141,11 +220,27 @@
     ]
   },
   {
+    "name" : "com.oracle.svm.core.handles.ObjectHandlesImpl",
+    "allDeclaredMethods" : true,
+    "justification" : "Internal SVM implementation of JNI object handles"
+  },
+
+  {
     "name" : "com.oracle.svm.core.posix.linux.LinuxPhysicalMemory$PhysicalMemorySupportImpl",
     "methods" : [
         { "name" : "sizeFromCGroup",
           "justification" : "Native application on Linux determines heap size by reading /sys/fs/cgroup/memory/memory.limit_in_bytes at start.",
           "parameterTypes" : [
+        ]}
+    ]
+  },
+  {
+    "name" : "com.oracle.svm.core.thread.JavaVMOperation",
+    "methods" : [
+        { "name" : "operate",
+          "justification" : "The JavaVMOperation is an VM internal concept for task executed in critical sections or safe points, cannot be used by guest language.",
+          "parameterTypes" : [
+            "com.oracle.svm.core.thread.NativeVMOperationData"
         ]}
     ]
   }

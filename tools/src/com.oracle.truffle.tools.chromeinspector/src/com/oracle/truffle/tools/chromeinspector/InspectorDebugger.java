@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -56,6 +56,7 @@ import com.oracle.truffle.api.debug.Breakpoint;
 import com.oracle.truffle.api.debug.DebugException;
 import com.oracle.truffle.api.debug.DebugScope;
 import com.oracle.truffle.api.debug.DebugStackFrame;
+import com.oracle.truffle.api.debug.DebugStackTraceElement;
 import com.oracle.truffle.api.debug.DebugValue;
 import com.oracle.truffle.api.debug.Debugger;
 import com.oracle.truffle.api.debug.DebuggerSession;
@@ -86,6 +87,7 @@ import com.oracle.truffle.tools.chromeinspector.types.Location;
 import com.oracle.truffle.tools.chromeinspector.types.RemoteObject;
 import com.oracle.truffle.tools.chromeinspector.types.Scope;
 import com.oracle.truffle.tools.chromeinspector.types.Script;
+import com.oracle.truffle.tools.chromeinspector.types.StackTrace;
 import com.oracle.truffle.tools.chromeinspector.util.LineSearch;
 
 import org.graalvm.collections.Pair;
@@ -187,8 +189,21 @@ public final class InspectorDebugger extends DebuggerDomain {
     }
 
     @Override
-    public void setAsyncCallStackDepth(int maxDepth) {
+    protected void notifyDisabled() {
+        // We might call startSession() in the constructor, without doEnable().
+        // That means that doDisable() might not have been called.
+        if (debuggerSession != null) {
+            doDisable();
+        }
+    }
 
+    @Override
+    public void setAsyncCallStackDepth(int maxDepth) throws CommandProcessException {
+        if (maxDepth >= 0) {
+            debuggerSession.setAsynchronousStackDepth(maxDepth);
+        } else {
+            throw new CommandProcessException("Invalid async call stack depth: " + maxDepth);
+        }
     }
 
     @Override
@@ -377,6 +392,18 @@ public final class InspectorDebugger extends DebuggerDomain {
     }
 
     private CallFrame[] createCallFrames(Iterable<DebugStackFrame> frames, SuspendAnchor topAnchor, DebugValue returnValue) {
+        return createCallFrames(frames, topAnchor, returnValue, null);
+    }
+
+    CallFrame[] refreshCallFrames(Iterable<DebugStackFrame> frames, SuspendAnchor topAnchor, CallFrame[] oldFrames) {
+        DebugValue returnValue = null;
+        if (oldFrames.length > 0 && oldFrames[0].getReturnValue() != null) {
+            returnValue = oldFrames[0].getReturnValue().getDebugValue();
+        }
+        return createCallFrames(frames, topAnchor, returnValue, oldFrames);
+    }
+
+    private CallFrame[] createCallFrames(Iterable<DebugStackFrame> frames, SuspendAnchor topAnchor, DebugValue returnValue, CallFrame[] oldFrames) {
         List<CallFrame> cfs = new ArrayList<>();
         int depth = 0;
         int depthAll = -1;
@@ -421,6 +448,13 @@ public final class InspectorDebugger extends DebuggerDomain {
             if (dscope == null) {
                 functionSourceSection = sourceSection;
             }
+            Scope[] oldScopes;
+            if (oldFrames != null && oldFrames.length > depth) {
+                oldScopes = oldFrames[depth].getScopeChain();
+            } else {
+                oldScopes = null;
+            }
+            int scopeIndex = 0;  // index of language implementation scope
             while (dscope != null) {
                 if (wasFunction) {
                     scopeType = "closure";
@@ -430,11 +464,9 @@ public final class InspectorDebugger extends DebuggerDomain {
                     thisValue = dscope.getReceiver();
                     wasFunction = true;
                 }
-                if (dscope.isFunctionScope() || dscope.getDeclaredValues().iterator().hasNext()) {
-                    // provide only scopes that have some variables
-                    scopes.add(createScope(scopeType, dscope));
-                }
+                addScope(scopes, dscope, scopeType, scopeIndex, oldScopes);
                 dscope = getParent(dscope);
+                scopeIndex++;
             }
             try {
                 dscope = debuggerSession.getTopScope(source.getLanguage());
@@ -446,11 +478,9 @@ public final class InspectorDebugger extends DebuggerDomain {
                 }
             }
             while (dscope != null) {
-                if (dscope.getDeclaredValues().iterator().hasNext()) {
-                    // provide only scopes that have some variables
-                    scopes.add(createScope("global", dscope));
-                }
+                addScope(scopes, dscope, "global", scopeIndex, oldScopes);
                 dscope = getParent(dscope);
+                scopeIndex++;
             }
             RemoteObject returnObj = null;
             if (depthAll == 0 && returnValue != null) {
@@ -470,10 +500,30 @@ public final class InspectorDebugger extends DebuggerDomain {
         return cfs.toArray(new CallFrame[cfs.size()]);
     }
 
-    private Scope createScope(String scopeType, DebugScope dscope) {
-        RemoteObject scopeVars = new RemoteObject(dscope);
+    private void addScope(List<Scope> scopes, DebugScope dscope, String scopeType, int scopeIndex, Scope[] oldScopes) {
+        if (dscope.isFunctionScope() || dscope.getDeclaredValues().iterator().hasNext()) {
+            // provide only scopes that have some variables
+            String lastId = getLastScopeId(oldScopes, scopeIndex);
+            // Create the new scope with the ID of the old one to refresh the content
+            scopes.add(createScope(scopeType, dscope, scopeIndex, lastId));
+        }
+    }
+
+    private static String getLastScopeId(Scope[] oldScopes, int scopeIndex) {
+        if (oldScopes != null) {
+            for (Scope scope : oldScopes) {
+                if (scope.getInternalIndex() == scopeIndex) {
+                    return scope.getObject().getId();
+                }
+            }
+        }
+        return null;
+    }
+
+    private Scope createScope(String scopeType, DebugScope dscope, int index, String lastId) {
+        RemoteObject scopeVars = new RemoteObject(dscope, lastId);
         context.getRemoteObjectsHandler().register(scopeVars);
-        return new Scope(scopeType, scopeVars, dscope.getName(), null, null);
+        return new Scope(scopeType, scopeVars, dscope.getName(), null, null, index);
     }
 
     private DebugScope getParent(DebugScope dscope) {
@@ -643,6 +693,7 @@ public final class InspectorDebugger extends DebuggerDomain {
                     if (value == null) {
                         try {
                             value = cf.getFrame().eval(expression);
+                            suspendedInfo.refreshFrames();
                         } catch (IllegalStateException ex) {
                             // Not an interactive language
                         }
@@ -667,7 +718,7 @@ public final class InspectorDebugger extends DebuggerDomain {
                             }
                         }
                         RemoteObject ro = new RemoteObject(value, generatePreview, context);
-                        context.getRemoteObjectsHandler().register(ro);
+                        context.getRemoteObjectsHandler().register(ro, objectGroup);
                         json.put("result", ro.toJSON());
                     }
                     return json;
@@ -1012,13 +1063,14 @@ public final class InspectorDebugger extends DebuggerDomain {
                         returnValue = null;
                     }
                     CallFrame[] callFrames = createCallFrames(se.getStackFrames(), se.getSuspendAnchor(), returnValue);
-                    suspendedInfo = new DebuggerSuspendedInfo(se, callFrames);
+                    suspendedInfo = new DebuggerSuspendedInfo(InspectorDebugger.this, se, callFrames);
                     context.setSuspendedInfo(suspendedInfo);
                     if (commandLazyResponse != null) {
                         paused = commandLazyResponse.getResponse(suspendedInfo);
                         commandLazyResponse = null;
                     } else {
                         jsonParams.put("callFrames", getFramesParam(callFrames));
+                        jsonParams.putOpt("asyncStackTrace", findAsyncStackTrace(se.getAsynchronousStacks()));
                         List<Breakpoint> breakpoints = se.getBreakpoints();
                         JSONArray bpArr = new JSONArray();
                         Set<Breakpoint.Kind> kinds = new HashSet<>(1);
@@ -1180,6 +1232,14 @@ public final class InspectorDebugger extends DebuggerDomain {
             array.put(cf.toJSON());
         }
         return array;
+    }
+
+    private JSONObject findAsyncStackTrace(List<List<DebugStackTraceElement>> asyncStacks) {
+        if (asyncStacks.isEmpty()) {
+            return null;
+        }
+        StackTrace stackTrace = new StackTrace(context, asyncStacks);
+        return stackTrace.toJSON();
     }
 
     private interface CommandLazyResponse {

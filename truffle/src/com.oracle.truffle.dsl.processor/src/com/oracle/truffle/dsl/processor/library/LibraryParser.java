@@ -94,6 +94,9 @@ public class LibraryParser extends AbstractParser<LibraryData> {
             return model;
         }
 
+        model.setDefaultExportLookupEnabled(ElementUtils.getAnnotationValue(Boolean.class, mirror, "defaultExportLookupEnabled"));
+        model.setDynamicDispatchEnabled(ElementUtils.getAnnotationValue(Boolean.class, mirror, "dynamicDispatchEnabled"));
+
         boolean defaultExportReachable = true;
         List<AnnotationMirror> defaultExports = ElementUtils.getRepeatedAnnotation(element.getAnnotationMirrors(), types.GenerateLibrary_DefaultExport);
         for (AnnotationMirror defaultExport : defaultExports) {
@@ -119,6 +122,7 @@ public class LibraryParser extends AbstractParser<LibraryData> {
                 defaultExportReachable = false;
             }
         }
+
         parseAssertions(element, mirror, type, model);
 
         List<ExecutableElement> allMethods = ElementFilter.methodsIn(CompilerFactory.getCompiler(type).getEnclosedElementsInDeclarationOrder(type));
@@ -150,8 +154,8 @@ public class LibraryParser extends AbstractParser<LibraryData> {
                 continue;
             }
 
-            if (visibility == Modifier.PROTECTED || visibility == null) {
-                message.addError("Library messages must be public.");
+            if (visibility == null) {
+                message.addError("Library messages must be public or protected. Annotate with @GenerateLibrary.Ignore to ignore this method for generation. ");
             }
 
             if (executable.getParameters().isEmpty()) {

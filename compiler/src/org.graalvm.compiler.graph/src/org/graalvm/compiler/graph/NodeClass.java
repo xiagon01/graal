@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -164,8 +164,8 @@ public final class NodeClass<T> extends FieldIntrospection<T> {
     private static final Class<?> INPUT_LIST_CLASS = NodeInputList.class;
     private static final Class<?> SUCCESSOR_LIST_CLASS = NodeSuccessorList.class;
 
-    private static AtomicInteger nextIterableId = new AtomicInteger();
-    private static AtomicInteger nextLeafId = new AtomicInteger();
+    private static final AtomicInteger nextIterableId = new AtomicInteger();
+    private static final AtomicInteger nextLeafId = new AtomicInteger();
 
     private final InputEdges inputs;
     private final SuccessorEdges successors;
@@ -231,7 +231,7 @@ public final class NodeClass<T> extends FieldIntrospection<T> {
             inputsIteration = computeIterationMask(inputs.type(), inputs.getDirectCount(), inputs.getOffsets());
         }
         try (DebugCloseable t1 = Init_Data.start(debug)) {
-            data = new Fields(fs.data);
+            data = Fields.create(fs.data);
         }
 
         isLeafNode = inputs.getCount() + successors.getCount() == 0;
@@ -308,6 +308,17 @@ public final class NodeClass<T> extends FieldIntrospection<T> {
             assert size != null;
             debug.log("Node cost for node of type __| %s |_, cycles:%s,size:%s", clazz, cycles, size);
         }
+        assert verifyMemoryEdgeInvariant(fs) : "Nodes participating in the memory graph should have at most 1 optional memory input.";
+    }
+
+    private static boolean verifyMemoryEdgeInvariant(NodeFieldsScanner fs) {
+        int optionalMemoryInputs = 0;
+        for (InputInfo info : fs.inputs) {
+            if (info.optional && info.inputType == InputType.Memory) {
+                optionalMemoryInputs++;
+            }
+        }
+        return optionalMemoryInputs <= 1;
     }
 
     private final NodeCycles cycles;

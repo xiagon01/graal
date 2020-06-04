@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2016, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -35,6 +35,8 @@ import java.util.List;
 
 import com.oracle.truffle.api.CompilerAsserts;
 import com.oracle.truffle.llvm.parser.metadata.MDAttachment;
+import com.oracle.truffle.llvm.parser.metadata.MDString;
+import com.oracle.truffle.llvm.parser.metadata.MDSubprogram;
 import com.oracle.truffle.llvm.parser.metadata.MetadataAttachmentHolder;
 import com.oracle.truffle.llvm.parser.metadata.debuginfo.SourceFunction;
 import com.oracle.truffle.llvm.parser.model.SymbolImpl;
@@ -53,7 +55,7 @@ import com.oracle.truffle.llvm.runtime.types.symbols.LLVMIdentifier;
 
 public final class FunctionDefinition extends FunctionSymbol implements Constant, MetadataAttachmentHolder {
 
-    private static final InstructionBlock[] EMPTY = new InstructionBlock[0];
+    public static final InstructionBlock[] EMPTY = new InstructionBlock[0];
 
     private final List<FunctionParameter> parameters = new ArrayList<>();
     private final Visibility visibility;
@@ -64,13 +66,13 @@ public final class FunctionDefinition extends FunctionSymbol implements Constant
     private InstructionBlock[] blocks = EMPTY;
     private int currentBlock = 0;
 
-    private FunctionDefinition(FunctionType type, String name, Linkage linkage, Visibility visibility, AttributesCodeEntry paramAttr) {
-        super(type, name, linkage, paramAttr);
+    private FunctionDefinition(FunctionType type, String name, Linkage linkage, Visibility visibility, AttributesCodeEntry paramAttr, int index) {
+        super(type, name, linkage, paramAttr, index);
         this.visibility = visibility;
     }
 
-    public FunctionDefinition(FunctionType type, Linkage linkage, Visibility visibility, AttributesCodeEntry paramAttr) {
-        this(type, LLVMIdentifier.UNKNOWN, linkage, visibility, paramAttr);
+    public FunctionDefinition(FunctionType type, Linkage linkage, Visibility visibility, AttributesCodeEntry paramAttr, int index) {
+        this(type, LLVMIdentifier.UNKNOWN, linkage, visibility, paramAttr, index);
     }
 
     @Override
@@ -89,6 +91,24 @@ public final class FunctionDefinition extends FunctionSymbol implements Constant
     public String getSourceName() {
         final String scopeName = sourceFunction.getName();
         return SourceFunction.DEFAULT_SOURCE_NAME.equals(scopeName) ? null : scopeName;
+    }
+
+    public String getDisplayName() {
+        /*
+         * For LLVM code produced from C++ sources, function.name stores the linkage name, but not
+         * 'original' C++ name.
+         */
+        if (mdAttachments != null && mdAttachments.size() > 0) {
+            for (MDAttachment mdAttachment : mdAttachments) {
+                if (mdAttachment.getValue() instanceof MDSubprogram) {
+                    MDSubprogram mdSubprogram = (MDSubprogram) mdAttachment.getValue();
+                    if (mdSubprogram.getName() instanceof MDString) {
+                        return ((MDString) mdSubprogram.getName()).getString();
+                    }
+                }
+            }
+        }
+        return getSourceName();
     }
 
     @Override
@@ -114,8 +134,9 @@ public final class FunctionDefinition extends FunctionSymbol implements Constant
     }
 
     public FunctionParameter createParameter(Type t) {
-        final AttributesGroup attrGroup = getParameterAttributesGroup(parameters.size());
-        final FunctionParameter parameter = new FunctionParameter(t, attrGroup);
+        final int argIndex = parameters.size();
+        final AttributesGroup attrGroup = getParameterAttributesGroup(argIndex);
+        final FunctionParameter parameter = new FunctionParameter(t, attrGroup, argIndex);
         parameters.add(parameter);
         return parameter;
     }

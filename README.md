@@ -1,6 +1,6 @@
 # GraalVM
 
-[![https://graalvm.slack.com](https://img.shields.io/badge/slack-join%20channel-inactive)](https://join.slack.com/t/graalvm/shared_invite/enQtNzk0NTc5MzUyNzg5LTAwY2YyODQ4MzJjMGJjZGQzMWY2ZDA3NWI3YzEzNDRlNGQ1MTZkYzkzM2JkYjIxMTY2NGQzNjUxOGQzZGExZmU)
+[![https://graalvm.slack.com](https://img.shields.io/badge/slack-join%20channel-active)](https://www.graalvm.org/slack-invitation/)
 
 GraalVM is a universal virtual machine for running applications written in JavaScript, Python, Ruby, R, JVM-based languages like Java, Scala, Clojure, Kotlin, and LLVM-based languages such as C and C++.
 
@@ -25,6 +25,8 @@ compilation of Java applications under closed-world assumption into executable
 images or shared objects.
 
 * [Sulong](sulong/README.md) is an engine for running LLVM bitcode on GraalVM.
+
+* [GraalWasm](wasm/README.md) is an engine for running WebAssembly programs on GraalVM.
 
 * [TRegex](regex/README.md) is an implementation of regular expressions which leverages GraalVM for efficient compilation of automata.
 
@@ -56,5 +58,6 @@ Each GraalVM component is licensed:
 * [GraalVM compiler](/compiler/) is licensed under the [GPL 2 with Classpath exception](compiler/LICENSE.md).
 * [Substrate VM](/substratevm/) is licensed under the [GPL 2 with Classpath exception](substratevm/LICENSE).
 * [Sulong](/sulong/) is licensed under [3-clause BSD](sulong/LICENSE).
+* [GraalWasm](/wasm/) is licensed under the [Universal Permissive License](wasm/LICENSE).
 * [VM](/vm/) is licensed under the [GPL 2 with Classpath exception](vm/LICENSE_GRAALVM_CE).
 * [VS Code](/vscode/) extensions are distributed under the [UPL 1.0 license](/vscode/graalvm/LICENSE.txt).

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -40,6 +40,7 @@ import com.oracle.truffle.llvm.runtime.nodes.api.LLVMNode;
 import com.oracle.truffle.llvm.runtime.nodes.api.LLVMToNativeNode;
 import com.oracle.truffle.llvm.runtime.pointer.LLVMPointer;
 import com.oracle.truffle.llvm.runtime.types.StructureType;
+import com.oracle.truffle.llvm.runtime.types.Type.TypeOverflowException;
 
 public final class AllocateReadOnlyGlobalsBlockNode extends LLVMNode implements LLVMAllocateNode {
 
@@ -50,11 +51,11 @@ public final class AllocateReadOnlyGlobalsBlockNode extends LLVMNode implements 
 
     private final TruffleObject allocateGlobalsBlock;
 
-    public AllocateReadOnlyGlobalsBlockNode(LLVMContext context, StructureType type, DataLayout dataLayout) {
+    public AllocateReadOnlyGlobalsBlockNode(LLVMContext context, StructureType type, DataLayout dataLayout) throws TypeOverflowException {
         this.size = type.getSize(dataLayout);
         this.toNative = LLVMToNativeNode.createToNativeWithTarget();
 
-        NFIContextExtension nfiContextExtension = context.getLanguage().getContextExtensionOrNull(NFIContextExtension.class);
+        NFIContextExtension nfiContextExtension = context.getContextExtensionOrNull(NFIContextExtension.class);
         this.allocateGlobalsBlock = nfiContextExtension.getNativeFunction(context, "__sulong_allocate_globals_block", "(UINT64):POINTER");
         this.interop = InteropLibrary.getFactory().create(allocateGlobalsBlock);
     }

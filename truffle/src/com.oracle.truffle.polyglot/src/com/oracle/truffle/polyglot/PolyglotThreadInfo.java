@@ -51,8 +51,10 @@ import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 
 final class PolyglotThreadInfo {
 
-    static final PolyglotThreadInfo NULL = new PolyglotThreadInfo(null);
+    static final PolyglotThreadInfo NULL = new PolyglotThreadInfo(null, null);
+    private static final Object NULL_CLASS_LOADER = new Object();
 
+    private final PolyglotContextImpl context;
     private final Reference<Thread> thread;
 
     private int enteredCount;
@@ -60,11 +62,16 @@ final class PolyglotThreadInfo {
     volatile boolean cancelled;
     private volatile long lastEntered;
     private volatile long timeExecuted;
+    private boolean deprioritized;
+    private Object originalContextClassLoader = NULL_CLASS_LOADER;
+    private ClassLoaderEntry prevContextClassLoader;
 
     private static volatile ThreadMXBean threadBean;
 
-    PolyglotThreadInfo(Thread thread) {
+    PolyglotThreadInfo(PolyglotContextImpl context, Thread thread) {
+        this.context = context;
         this.thread = new WeakReference<>(thread);
+        this.deprioritized = false;
     }
 
     Thread getThread() {
@@ -77,10 +84,28 @@ final class PolyglotThreadInfo {
 
     void enter(PolyglotEngineImpl engine) {
         assert Thread.currentThread() == getThread();
+        if (!engine.noPriorityChangeNeeded.isValid() && !deprioritized) {
+            lowerPriority();
+            deprioritized = true;
+        }
         int count = ++enteredCount;
         if (!engine.noThreadTimingNeeded.isValid() && count == 1) {
             lastEntered = getTime();
         }
+        if (!engine.customHostClassLoader.isValid()) {
+            setContextClassLoader();
+        }
+    }
+
+    @TruffleBoundary
+    private void lowerPriority() {
+        getThread().setPriority(Thread.MIN_PRIORITY);
+    }
+
+    @TruffleBoundary
+    private void raisePriority() {
+        // this will be ineffective unless the JVM runs with corresponding system privileges
+        getThread().setPriority(Thread.NORM_PRIORITY);
     }
 
     void resetTiming() {
@@ -130,11 +155,19 @@ final class PolyglotThreadInfo {
     void leave(PolyglotEngineImpl engine) {
         assert Thread.currentThread() == getThread();
         int count = --enteredCount;
+        if (!engine.customHostClassLoader.isValid()) {
+            restoreContextClassLoader();
+        }
         if (!engine.noThreadTimingNeeded.isValid() && count == 0) {
             long last = this.lastEntered;
             this.lastEntered = 0;
             this.timeExecuted += getTime() - last;
         }
+        if (!engine.noPriorityChangeNeeded.isValid() && deprioritized && count == 0) {
+            raisePriority();
+            deprioritized = false;
+        }
+
     }
 
     boolean isLastActive() {
@@ -149,5 +182,45 @@ final class PolyglotThreadInfo {
     @Override
     public String toString() {
         return super.toString() + "[thread=" + getThread() + ", enteredCount=" + enteredCount + ", cancelled=" + cancelled + "]";
+    }
+
+    @TruffleBoundary
+    private void setContextClassLoader() {
+        ClassLoader hostClassLoader = context.config.hostClassLoader;
+        if (hostClassLoader != null) {
+            Thread t = getThread();
+            ClassLoader original = t.getContextClassLoader();
+            assert originalContextClassLoader != NULL_CLASS_LOADER || prevContextClassLoader == null;
+            if (originalContextClassLoader != NULL_CLASS_LOADER) {
+                prevContextClassLoader = new ClassLoaderEntry((ClassLoader) originalContextClassLoader, prevContextClassLoader);
+            }
+            originalContextClassLoader = original;
+            t.setContextClassLoader(hostClassLoader);
+        }
+    }
+
+    @TruffleBoundary
+    private void restoreContextClassLoader() {
+        if (originalContextClassLoader != NULL_CLASS_LOADER) {
+            assert context.config.hostClassLoader != null;
+            Thread t = getThread();
+            t.setContextClassLoader((ClassLoader) originalContextClassLoader);
+            if (prevContextClassLoader != null) {
+                originalContextClassLoader = prevContextClassLoader.classLoader;
+                prevContextClassLoader = prevContextClassLoader.next;
+            } else {
+                originalContextClassLoader = NULL_CLASS_LOADER;
+            }
+        }
+    }
+
+    private static final class ClassLoaderEntry {
+        final ClassLoader classLoader;
+        final ClassLoaderEntry next;
+
+        ClassLoaderEntry(ClassLoader classLoader, ClassLoaderEntry next) {
+            this.classLoader = classLoader;
+            this.next = next;
+        }
     }
 }

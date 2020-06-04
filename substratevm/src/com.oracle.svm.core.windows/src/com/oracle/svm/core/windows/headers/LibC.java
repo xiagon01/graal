@@ -28,6 +28,7 @@ import org.graalvm.nativeimage.Platform;
 import org.graalvm.nativeimage.Platforms;
 import org.graalvm.nativeimage.c.CContext;
 import org.graalvm.nativeimage.c.function.CFunction;
+import org.graalvm.nativeimage.c.struct.CPointerTo;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.word.PointerBase;
 import org.graalvm.word.UnsignedWord;
@@ -66,4 +67,14 @@ public class LibC {
 
     @CFunction(value = "_strdup", transition = CFunction.Transition.NO_TRANSITION)
     public static native CCharPointer strdup(CCharPointer src);
+
+    @CPointerTo(nameOfCType = "wchar_t")
+    public interface WCharPointer extends PointerBase {
+    }
+
+    @CFunction(transition = CFunction.Transition.NO_TRANSITION)
+    public static native WCharPointer _wgetenv(WCharPointer varname);
+
+    @CFunction(transition = CFunction.Transition.NO_TRANSITION)
+    public static native UnsignedWord wcslen(WCharPointer varname);
 }

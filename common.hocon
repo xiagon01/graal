@@ -1,19 +1,13 @@
-# overlay version
-overlay = 66a6d5b786a13ffa8d683174192c466d4c94ea5f
+specVersion = "2"
 
 # oraclejdk* are released OracleJDK binaries
 # oraclejdk* are JDKs based on OracleJDK binaries
 # openjdk8 JDKs on Linux are built by Oracle Labs
 # openjdk8 JDKs on macOS are based on AdoptOpenJDK binaries
-jdks: {
-  oraclejdk8:      {name : oraclejdk, version : "8u231-jvmci-19.3-b05", platformspecific: true}
-  openjdk8:        {name : openjdk,   version : "8u232-jvmci-19.3-b05", platformspecific: true}
-  oraclejdk8Debug: {name : oraclejdk, version : "8u231-jvmci-19.3-b05-fastdebug", platformspecific: true}
-  oraclejdk11:     {name : oraclejdk, version : "11.0.3+12", platformspecific: true}
-  openjdk11:       {name : openjdk,   version : "11.0.3+7", platformspecific: true}
-  labsjdk-ce-11:   {name : labsjdk,   version : "ce-11.0.5+10-jvmci-19.3-b05", platformspecific: true}
-  labsjdk-ee-11:   {name : labsjdk,   version : "ee-11.0.5+10-jvmci-19.3-b05", platformspecific: true}
-}
+include "common.json"
+
+# overlay version
+overlay = ${ci.overlay}
 
 # This must always point to HEAD in the master branch but can be used to point
 # to another branch/commit in a Graal PR when mx changes are required for the PR.
@@ -37,6 +31,7 @@ oraclejdk8OnlyDebug : { downloads : { JAVA_HOME : ${jdks.oraclejdk8Debug} }}
 openjdk8 :          { downloads : { JAVA_HOME : ${jdks.openjdk8} }}
 
 oraclejdk11 :       { downloads : { JAVA_HOME : ${jdks.oraclejdk11} }}
+oraclejdk15 :       { downloads : { JAVA_HOME : ${jdks.oraclejdk15} }}
 openjdk11 :         { downloads : { JAVA_HOME : ${jdks.openjdk11} }}
 
 labsjdk-ce-11 :         { downloads : { JAVA_HOME : ${jdks.labsjdk-ce-11} }}
@@ -44,12 +39,15 @@ labsjdk-ee-11 :         { downloads : { JAVA_HOME : ${jdks.labsjdk-ee-11} }}
 
 common : ${mx} {
   timelimit : "30:00"
+  environment : {
+    MX_PYTHON: "python3"
+  }
   catch_files : [
     "Graal diagnostic output saved in (?P<filename>.+\.zip)"
   ]
   packages : {
-    "pip:astroid" : "==1.1.0"
-    "pip:pylint" : "==1.1.0"
+    "pip:logilab-common ": "==1.4.4"
+    "pip:pylint" : "==1.9.3"
     "pip:ninja_syntax" : "==1.7.2"
   }
 }
@@ -71,6 +69,11 @@ solaris : ${common} {
 }
 
 darwin : ${common} {
+  environment : {
+    # Required to keep pylint happy on Darwin
+    # https://coderwall.com/p/-k_93g/mac-os-x-valueerror-unknown-locale-utf-8-in-python
+    LC_ALL : "en_US.UTF-8"
+  }
 }
 
 windows : ${common} {
@@ -106,7 +109,7 @@ LARGE_YOUNG_GEN_SIZE : "27G"
 
 eclipse : {
   downloads : {
-    ECLIPSE : {name: eclipse, version: "4.5.2", platformspecific: true}
+    ECLIPSE : {name: eclipse, version: "4.14.0", platformspecific: true}
   }
   environment : {
     ECLIPSE_EXE : "$ECLIPSE/eclipse"
@@ -115,7 +118,7 @@ eclipse : {
 
 jdt : {
   downloads : {
-    JDT : {name: ecj, version: "4.5.1", platformspecific: false}
+    JDT : {name: ecj, version: "4.14.0", platformspecific: false}
   }
 }
 
@@ -150,11 +153,14 @@ svm-common: ${mx} {
   }
   logs: [
     "../.native-image/*/*/*/*.log"
+    "../*/*/*.log"
+    "*/*.log"
     "*/svmbuild/*.log"
     "*/svmbuild/images/*.log"
     "*/*/stripped/*.map"
     "*/callgrind.*"
     "*.bgv"
+    "*.log"
   ]
 }
 
@@ -207,6 +213,12 @@ svm-common-windows: ${svm-common} ${windows-amd64} {
 windows-devkit-jdk11: {
   packages : {
     "devkit:VS2017-15.5.5+1" : "==0"
+  }
+}
+
+windows-devkit-jdk15: {
+  packages : {
+    "devkit:VS2019-16.5.3+1" : "==0"
   }
 }
 

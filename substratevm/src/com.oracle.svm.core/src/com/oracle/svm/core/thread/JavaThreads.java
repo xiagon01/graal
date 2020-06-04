@@ -51,23 +51,23 @@ import org.graalvm.nativeimage.c.struct.RawField;
 import org.graalvm.nativeimage.c.struct.RawStructure;
 import org.graalvm.word.PointerBase;
 
-import com.oracle.svm.core.MonitorSupport;
 import com.oracle.svm.core.SubstrateOptions;
-import com.oracle.svm.core.annotate.ForceFixedRegisterReads;
+import com.oracle.svm.core.SubstrateUtil;
 import com.oracle.svm.core.annotate.NeverInline;
 import com.oracle.svm.core.annotate.RestrictHeapAccess;
 import com.oracle.svm.core.annotate.Uninterruptible;
-import com.oracle.svm.core.heap.FeebleReferenceList;
 import com.oracle.svm.core.heap.Heap;
+import com.oracle.svm.core.heap.ReferenceHandler;
+import com.oracle.svm.core.heap.ReferenceHandlerThreadFeature;
 import com.oracle.svm.core.jdk.ManagementSupport;
 import com.oracle.svm.core.jdk.StackTraceUtils;
 import com.oracle.svm.core.jdk.UninterruptibleUtils;
 import com.oracle.svm.core.jdk.UninterruptibleUtils.AtomicReference;
 import com.oracle.svm.core.locks.VMMutex;
 import com.oracle.svm.core.log.Log;
+import com.oracle.svm.core.monitor.MonitorSupport;
 import com.oracle.svm.core.nodes.CFunctionEpilogueNode;
 import com.oracle.svm.core.nodes.CFunctionPrologueNode;
-import com.oracle.svm.core.thread.ParkEvent.WaitResult;
 import com.oracle.svm.core.thread.VMThreads.StatusSupport;
 import com.oracle.svm.core.threadlocal.FastThreadLocalFactory;
 import com.oracle.svm.core.threadlocal.FastThreadLocalObject;
@@ -105,7 +105,7 @@ public abstract class JavaThreads {
     /** The default group for new Threads that are attached without an explicit group. */
     final ThreadGroup mainGroup;
     /** The root group for all threads. */
-    final ThreadGroup systemGroup;
+    public final ThreadGroup systemGroup;
     /**
      * The preallocated thread object for the main thread, to avoid expensive allocations and
      * ThreadGroup operations immediately at startup.
@@ -173,10 +173,15 @@ public abstract class JavaThreads {
         return toTarget(thread).sleepParkEvent;
     }
 
-    @Uninterruptible(reason = "Called from uninterruptible code.")
+    @Uninterruptible(reason = "Called from uninterruptible code.", mayBeInlined = true)
     protected static boolean wasStartedByCurrentIsolate(IsolateThread thread) {
         Thread javaThread = currentThread.get(thread);
-        return toTarget(javaThread).wasStartedByCurrentIsolate;
+        return wasStartedByCurrentIsolate(javaThread);
+    }
+
+    @Uninterruptible(reason = "Called from uninterruptible code.", mayBeInlined = true)
+    protected static boolean wasStartedByCurrentIsolate(Thread thread) {
+        return toTarget(thread).wasStartedByCurrentIsolate;
     }
 
     /* End of accessor functions. */
@@ -188,6 +193,14 @@ public abstract class JavaThreads {
     @SuppressFBWarnings(value = "BC", justification = "Cast for @TargetClass")
     static Target_java_lang_ThreadGroup toTarget(ThreadGroup threadGroup) {
         return Target_java_lang_ThreadGroup.class.cast(threadGroup);
+    }
+
+    /** Before detaching a thread, run any Java cleanup code. */
+    static void cleanupBeforeDetach(IsolateThread thread) {
+        VMError.guarantee(thread.equal(CurrentIsolate.getCurrentThread()), "Cleanup must execute in detaching thread");
+
+        Target_java_lang_Thread javaThread = SubstrateUtil.cast(currentThread.get(thread), Target_java_lang_Thread.class);
+        javaThread.exit();
     }
 
     /**
@@ -211,9 +224,9 @@ public abstract class JavaThreads {
      */
     @NeverInline("Must not be inlined in a caller that has an exception handler: We only support InvokeNode and not InvokeWithExceptionNode between a CFunctionPrologueNode and CFunctionEpilogueNode")
     private static void joinAllNonDaemonsTransition(int expectedNonDaemonThreads) {
-        CFunctionPrologueNode.cFunctionPrologue();
+        CFunctionPrologueNode.cFunctionPrologue(StatusSupport.STATUS_IN_NATIVE);
         joinAllNonDaemonsInNative(expectedNonDaemonThreads);
-        CFunctionEpilogueNode.cFunctionEpilogue();
+        CFunctionEpilogueNode.cFunctionEpilogue(StatusSupport.STATUS_IN_NATIVE);
     }
 
     @Uninterruptible(reason = "Must not stop while in native.")
@@ -268,7 +281,6 @@ public abstract class JavaThreads {
      */
     public static boolean ensureJavaThread(String name, ThreadGroup group, boolean asDaemon) {
         if (currentThread.get() == null) {
-            Heap.getHeap().attachThread(CurrentIsolate.getCurrentThread());
             assignJavaThread(JavaThreads.fromTarget(new Target_java_lang_Thread(name, group, asDaemon)), true);
             return true;
         }
@@ -301,7 +313,6 @@ public abstract class JavaThreads {
     }
 
     @Uninterruptible(reason = "Called during isolate initialization")
-    @ForceFixedRegisterReads
     public void initializeIsolate() {
         /* The thread that creates the isolate is considered the "main" thread. */
         currentThread.set(mainThread);
@@ -334,8 +345,6 @@ public abstract class JavaThreads {
     public static void detachThread(IsolateThread vmThread) {
         VMThreads.THREAD_MUTEX.assertIsOwner("Must hold the VMThreads mutex");
         assert StatusSupport.isStatusIgnoreSafepoints(vmThread) || VMOperation.isInProgress();
-
-        Heap.getHeap().detachThread(vmThread);
 
         // Detach ParkEvents for this thread, if any.
         final Thread thread = currentThread.get(vmThread);
@@ -488,7 +497,6 @@ public abstract class JavaThreads {
     @SuppressFBWarnings(value = "Ru", justification = "We really want to call Thread.run and not Thread.start because we are in the low-level thread start routine")
     protected static void threadStartRoutine(ObjectHandle threadHandle) {
         Thread thread = ObjectHandles.getGlobal().get(threadHandle);
-        Heap.getHeap().attachThread(CurrentIsolate.getCurrentThread());
         assignJavaThread(thread, false);
         ObjectHandles.getGlobal().destroy(threadHandle);
 
@@ -528,8 +536,14 @@ public abstract class JavaThreads {
 
     protected abstract void yield();
 
-    protected static void interruptVMCondVars() {
-        FeebleReferenceList.interruptWaiters();
+    /**
+     * Wake a thread which is waiting by other means, such as VM-internal condition variables, so
+     * that they can check their interrupted status.
+     */
+    protected static void wakeUpVMConditionWaiters(Thread thread) {
+        if (ReferenceHandler.useDedicatedThread() && thread == ImageSingletons.lookup(ReferenceHandlerThreadFeature.class).getThread()) {
+            Heap.getHeap().wakeUpReferencePendingListWaiters();
+        }
     }
 
     static StackTraceElement[] getStackTrace(Thread thread) {
@@ -643,54 +657,56 @@ public abstract class JavaThreads {
     }
 
     /** Interruptibly park the current thread. */
-    static WaitResult park() {
-        VMOperationControl.guaranteeOkayToBlock("[UnsafeParkSupport.park(): Should not park when it is not okay to block.]");
+    static void park() {
+        VMOperationControl.guaranteeOkayToBlock("[JavaThreads.park(): Should not park when it is not okay to block.]");
         final Thread thread = Thread.currentThread();
+        if (thread.isInterrupted()) { // avoid state changes and synchronization
+            return;
+        }
+        /*
+         * We can defer assigning a ParkEvent to here because Thread.interrupt() is guaranteed to
+         * assign and unpark one if it doesn't yet exist, otherwise we could lose a wakeup.
+         */
         final ParkEvent parkEvent = ensureUnsafeParkEvent(thread);
-
         // Change the Java thread state while parking.
         final int oldStatus = JavaThreads.getThreadStatus(thread);
-        int newStatus = MonitorSupport.maybeAdjustNewParkStatus(ThreadStatus.PARKED);
+        int newStatus = MonitorSupport.singleton().maybeAdjustNewParkStatus(ThreadStatus.PARKED);
         JavaThreads.setThreadStatus(thread, newStatus);
         try {
-            return parkEvent.condWait();
+            parkEvent.condWait();
         } finally {
             JavaThreads.setThreadStatus(thread, oldStatus);
         }
     }
 
     /** Interruptibly park the current thread for the given number of nanoseconds. */
-    static WaitResult park(long delayNanos) {
-        VMOperationControl.guaranteeOkayToBlock("[UnsafeParkSupport.park(long): Should not park when it is not okay to block.]");
+    static void park(long delayNanos) {
+        VMOperationControl.guaranteeOkayToBlock("[JavaThreads.park(long): Should not park when it is not okay to block.]");
         final Thread thread = Thread.currentThread();
+        if (thread.isInterrupted()) { // avoid state changes and synchronization
+            return;
+        }
+        /*
+         * We can defer assigning a ParkEvent to here because Thread.interrupt() is guaranteed to
+         * assign and unpark one if it doesn't yet exist, otherwise we could lose a wakeup.
+         */
         final ParkEvent parkEvent = ensureUnsafeParkEvent(thread);
-
-        final long startNanos = System.nanoTime();
-        /* Can not park past the end of a 64-bit nanosecond epoch. */
-        final long endNanos = TimeUtils.addOrMaxValue(startNanos, delayNanos);
-
         final int oldStatus = JavaThreads.getThreadStatus(thread);
-        int newStatus = MonitorSupport.maybeAdjustNewParkStatus(ThreadStatus.PARKED_TIMED);
+        int newStatus = MonitorSupport.singleton().maybeAdjustNewParkStatus(ThreadStatus.PARKED_TIMED);
         JavaThreads.setThreadStatus(thread, newStatus);
         try {
-            // How much longer should I sleep?
-            long remainingNanos = delayNanos;
-            while (0L < remainingNanos) {
-                WaitResult result = parkEvent.condTimedWait(remainingNanos);
-                if (result == WaitResult.INTERRUPTED || result == WaitResult.UNPARKED) {
-                    return result;
-                }
-                // If the sleep returns early, how much longer should I delay?
-                remainingNanos = endNanos - System.nanoTime();
-            }
-            return WaitResult.TIMED_OUT;
-
+            parkEvent.condTimedWait(delayNanos);
         } finally {
             JavaThreads.setThreadStatus(thread, oldStatus);
         }
     }
 
-    /** Unpark a Thread. */
+    /**
+     * Unpark a Thread.
+     *
+     * @see #park()
+     * @see #park(long)
+     */
     static void unpark(Thread thread) {
         ensureUnsafeParkEvent(thread).unpark();
     }
@@ -701,46 +717,41 @@ public abstract class JavaThreads {
     }
 
     /** Sleep for the given number of nanoseconds, dealing with early wakeups and interruptions. */
-    static WaitResult sleep(long delayNanos) {
-        VMOperationControl.guaranteeOkayToBlock("[SleepSupport.sleep(long): Should not sleep when it is not okay to block.]");
+    static void sleep(long delayNanos) {
+        VMOperationControl.guaranteeOkayToBlock("[JavaThreads.sleep(long): Should not sleep when it is not okay to block.]");
         final Thread thread = Thread.currentThread();
-        final ParkEvent sleepEvent = ensureSleepEvent(thread);
-
-        final long startNanos = System.nanoTime();
-        /* Can not sleep past the end of a 64-bit nanosecond epoch. */
-        final long endNanos = TimeUtils.addOrMaxValue(startNanos, delayNanos);
-
+        final ParkEvent sleepEvent = ParkEvent.initializeOnce(JavaThreads.getSleepParkEvent(thread), true);
+        sleepEvent.reset();
+        /*
+         * It is critical to reset the event *before* checking for an interrupt to avoid losing a
+         * wakeup in the race. This requires that updates to the event's unparked status and updates
+         * to the thread's interrupt status cannot be reordered with regard to each other. Another
+         * important aspect is that the thread must have a sleepParkEvent assigned to it *before*
+         * the interrupted check because if not, the interrupt code will not assign one and the
+         * wakeup will be lost, too.
+         */
+        if (thread.isInterrupted()) {
+            return; // likely leaves a stale unpark which will be reset before the next sleep()
+        }
         final int oldStatus = JavaThreads.getThreadStatus(thread);
         JavaThreads.setThreadStatus(thread, ThreadStatus.SLEEPING);
         try {
-            // How much longer should I sleep?
-            long remainingNanos = delayNanos;
-            while (0L < remainingNanos) {
-                final WaitResult result = sleepEvent.condTimedWait(remainingNanos);
-                if (result == WaitResult.INTERRUPTED || result == WaitResult.UNPARKED) {
-                    return result;
-                }
-                // If the sleep returns early, how much longer should I delay?
-                remainingNanos = endNanos - System.nanoTime();
-            }
-            return WaitResult.TIMED_OUT;
-
+            sleepEvent.condTimedWait(delayNanos);
         } finally {
             JavaThreads.setThreadStatus(thread, oldStatus);
         }
     }
 
-    /** Interrupt a sleeping thread. */
+    /**
+     * Interrupt a sleeping thread.
+     *
+     * @see #sleep(long)
+     */
     static void interrupt(Thread thread) {
         final ParkEvent sleepEvent = JavaThreads.getSleepParkEvent(thread).get();
         if (sleepEvent != null) {
             sleepEvent.unpark();
         }
-    }
-
-    /** Get the Sleep event for a thread, lazily initializing if needed. */
-    private static ParkEvent ensureSleepEvent(Thread thread) {
-        return ParkEvent.initializeOnce(JavaThreads.getSleepParkEvent(thread), true);
     }
 
     /**

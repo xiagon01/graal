@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,45 +40,44 @@
  */
 package com.oracle.truffle.regex.tregex.matchers;
 
-import static com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
-import static com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-
 import com.oracle.truffle.api.CompilerAsserts;
+import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
+import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.ExplodeLoop;
-import com.oracle.truffle.regex.charset.CharSet;
+import com.oracle.truffle.regex.charset.CharMatchers;
 
 /**
  * Character range matcher using a sorted list of ranges.
  */
 public abstract class RangeListMatcher extends InvertibleCharMatcher {
 
-    @CompilationFinal(dimensions = 1) private final char[] ranges;
+    @CompilationFinal(dimensions = 1) private final int[] ranges;
 
     /**
      * Constructs a new {@link RangeListMatcher}.
-     * 
+     *
      * @param invert see {@link InvertibleCharMatcher}.
      * @param ranges a sorted array of character ranges in the form [lower inclusive bound of range
      *            0, higher inclusive bound of range 0, lower inclusive bound of range 1, higher
      *            inclusive bound of range 1, ...]. The array contents are not modified by this
      *            method.
      */
-    RangeListMatcher(boolean invert, char[] ranges) {
+    RangeListMatcher(boolean invert, int[] ranges) {
         super(invert);
         this.ranges = ranges;
     }
 
-    public static RangeListMatcher create(boolean invert, char[] ranges) {
+    public static RangeListMatcher create(boolean invert, int[] ranges) {
         return RangeListMatcherNodeGen.create(invert, ranges);
     }
 
     @Specialization
     @ExplodeLoop(kind = ExplodeLoop.LoopExplosionKind.FULL_UNROLL)
-    public boolean match(char c, boolean compactString) {
+    public boolean match(int c, boolean compactString) {
         for (int i = 0; i < ranges.length; i += 2) {
-            final char lo = ranges[i];
-            final char hi = ranges[i + 1];
+            final int lo = ranges[i];
+            final int hi = ranges[i + 1];
             if (compactString && lo > 255) {
                 return result(false);
             }
@@ -105,13 +104,13 @@ public abstract class RangeListMatcher extends InvertibleCharMatcher {
         return result(false);
     }
 
-    private static boolean isSingleChar(char lo, char hi) {
+    private static boolean isSingleChar(int lo, int hi) {
         CompilerAsserts.partialEvaluationConstant(lo);
         CompilerAsserts.partialEvaluationConstant(hi);
         return lo == hi;
     }
 
-    private static boolean isTwoChars(char lo, char hi) {
+    private static boolean isTwoChars(int lo, int hi) {
         CompilerAsserts.partialEvaluationConstant(lo);
         CompilerAsserts.partialEvaluationConstant(hi);
         return lo + 1 == hi;
@@ -125,6 +124,6 @@ public abstract class RangeListMatcher extends InvertibleCharMatcher {
     @Override
     @TruffleBoundary
     public String toString() {
-        return "list " + modifiersToString() + "[" + CharSet.rangesToString(ranges) + "]";
+        return "list " + modifiersToString() + "[" + CharMatchers.rangesToString(ranges) + "]";
     }
 }

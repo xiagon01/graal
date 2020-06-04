@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -29,9 +29,6 @@
  */
 package com.oracle.truffle.llvm.runtime.types;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
@@ -39,25 +36,66 @@ import com.oracle.truffle.llvm.runtime.datalayout.DataLayout;
 import com.oracle.truffle.llvm.runtime.types.symbols.LLVMIdentifier;
 import com.oracle.truffle.llvm.runtime.types.visitors.TypeVisitor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public final class StructureType extends AggregateType {
 
     private final String name;
     private final boolean isPacked;
+    private final boolean isNamed;
     @CompilationFinal(dimensions = 1) private final Type[] types;
-    private int size = -1;
+    private long size = -1;
 
-    public StructureType(String name, boolean isPacked, Type[] types) {
+    private StructureType(String name, boolean isPacked, boolean isNamed, Type[] types) {
         this.name = name;
         this.isPacked = isPacked;
+        this.isNamed = isNamed;
         this.types = types;
     }
 
-    public StructureType(boolean isPacked, Type[] types) {
-        this(LLVMIdentifier.UNKNOWN, isPacked, types);
+    /**
+     * Creates a named structure type with known element types.
+     *
+     * <b>Attention!</b> the {@code types} array will be copied. Modifications to the original array
+     * are not propagated. Use {@link #setElementType} to modify the types. If you want create a
+     * structure with unknown element types use {@link #StructureType(String, boolean, int)}
+     * instead.
+     */
+    public static StructureType createNamedByCopy(String name, boolean isPacked, Type[] types) {
+        return new StructureType(name, isPacked, true, types.clone());
     }
 
-    public Type[] getElementTypes() {
-        return types;
+    /**
+     * @see #createNamedByCopy(String, boolean, Type[])
+     */
+    public static StructureType createNamedByCopy(String name, boolean isPacked, ArrayList<Type> types) {
+        return new StructureType(name, isPacked, true, types.toArray(Type.EMPTY_ARRAY));
+    }
+
+    /**
+     * Creates an unnamed structure type with known element types.
+     *
+     * <b>Attention!</b> the {@code types} array will be copied. Modifications to the original array
+     * are not propagated. Use {@link #setElementType} to modify the types. If you want create a
+     * structure with unknown element types use {@link #StructureType(boolean, int)} instead.
+     */
+    public static StructureType createUnnamedByCopy(boolean isPacked, Type[] types) {
+        return new StructureType(LLVMIdentifier.UNKNOWN, isPacked, false, types.clone());
+    }
+
+    public StructureType(String name, boolean isPacked, int numElements) {
+        this(name, isPacked, true, new Type[numElements]);
+    }
+
+    public StructureType(boolean isPacked, int numElements) {
+        this(LLVMIdentifier.UNKNOWN, isPacked, false, new Type[numElements]);
+    }
+
+    public void setElementType(int idx, Type type) {
+        verifyCycleFree(type);
+        types[idx] = type;
     }
 
     public boolean isPacked() {
@@ -68,10 +106,18 @@ public final class StructureType extends AggregateType {
         return name;
     }
 
+    public boolean isNamed() {
+        return isNamed;
+    }
+
     @Override
-    public int getBitSize() {
+    public long getBitSize() throws TypeOverflowException {
         if (isPacked) {
-            return Arrays.stream(types).mapToInt(Type::getBitSize).sum();
+            try {
+                return Arrays.stream(types).mapToLong(Type::getBitSizeUnchecked).reduce(0, Type::addUnsignedExactUnchecked);
+            } catch (TypeOverflowExceptionUnchecked e) {
+                throw e.getCause();
+            }
         } else {
             CompilerDirectives.transferToInterpreter();
             throw new UnsupportedOperationException("TargetDataLayout is necessary to compute Padding information!");
@@ -84,7 +130,11 @@ public final class StructureType extends AggregateType {
     }
 
     @Override
-    public int getNumberOfElements() {
+    public long getNumberOfElements() {
+        return types.length;
+    }
+
+    public int getNumberOfElementsInt() {
         return types.length;
     }
 
@@ -100,39 +150,39 @@ public final class StructureType extends AggregateType {
     }
 
     @Override
-    public int getSize(DataLayout targetDataLayout) {
+    public long getSize(DataLayout targetDataLayout) throws TypeOverflowException {
         if (size != -1) {
             return size;
         }
-        int sumByte = 0;
+        long sumByte = 0;
         for (final Type elementType : types) {
             if (!isPacked) {
-                sumByte += Type.getPadding(sumByte, elementType, targetDataLayout);
+                sumByte = addUnsignedExact(sumByte, Type.getPadding(sumByte, elementType, targetDataLayout));
             }
-            sumByte += elementType.getSize(targetDataLayout);
+            sumByte = addUnsignedExact(sumByte, elementType.getSize(targetDataLayout));
         }
 
-        int padding = 0;
+        long padding = 0;
         if (!isPacked && sumByte != 0) {
             padding = Type.getPadding(sumByte, getAlignment(targetDataLayout));
         }
-        size = sumByte + padding;
+        size = Math.addExact(sumByte, padding);
         return size;
     }
 
     @Override
-    public long getOffsetOf(long index, DataLayout targetDataLayout) {
-        int offset = 0;
+    public long getOffsetOf(long index, DataLayout targetDataLayout) throws TypeOverflowException {
+        long offset = 0;
         for (int i = 0; i < index; i++) {
             final Type elementType = types[i];
             if (!isPacked) {
-                offset += Type.getPadding(offset, elementType, targetDataLayout);
+                offset = addUnsignedExact(offset, Type.getPadding(offset, elementType, targetDataLayout));
             }
-            offset += elementType.getSize(targetDataLayout);
+            offset = addUnsignedExact(offset, elementType.getSize(targetDataLayout));
         }
         if (!isPacked && getSize(targetDataLayout) > offset) {
             assert index == (int) index;
-            offset += Type.getPadding(offset, types[(int) index], targetDataLayout);
+            offset = Math.addExact(offset, Type.getPadding(offset, types[(int) index], targetDataLayout));
         }
         return offset;
     }
@@ -148,7 +198,7 @@ public final class StructureType extends AggregateType {
     @Override
     @TruffleBoundary
     public String toString() {
-        if (LLVMIdentifier.UNKNOWN.equals(name)) {
+        if (!isNamed()) {
             return Arrays.stream(types).map(String::valueOf).collect(Collectors.joining(", ", "%{", "}"));
         } else {
             return name;
@@ -189,9 +239,7 @@ public final class StructureType extends AggregateType {
         } else if (!name.equals(other.name)) {
             return false;
         }
-        if (!Arrays.equals(types, other.types)) {
-            return false;
-        }
-        return true;
+        return Arrays.equals(types, other.types);
     }
+
 }

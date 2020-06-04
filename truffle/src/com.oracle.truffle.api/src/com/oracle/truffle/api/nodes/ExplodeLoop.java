@@ -170,11 +170,12 @@ public @interface ExplodeLoop {
      *
      * @since 0.15
      */
-    LoopExplosionKind kind() default LoopExplosionKind.FULL_UNROLL;
+    LoopExplosionKind kind() default LoopExplosionKind.FULL_UNROLL_UNTIL_RETURN;
 
 }
 
 @SuppressFBWarnings("UC")
+@SuppressWarnings("static-method")
 class Snippets {
     // BEGIN: loopEndsExits
     int loopEndExits() {
@@ -231,6 +232,7 @@ class Snippets {
     }
     // END: unrollVsExplodeLoopUnrolled
 
+    @SuppressWarnings("unused")
     // BEGIN: unrollVsExplodeLoopExploded
     void unrollVsExplodeLoopExploded() {
         int state = 1;

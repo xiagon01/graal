@@ -26,19 +26,6 @@ package com.oracle.svm.truffle.tck;
 
 import static com.oracle.graal.pointsto.reports.ReportUtils.report;
 
-import com.oracle.graal.pointsto.BigBang;
-import com.oracle.graal.pointsto.flow.InvokeTypeFlow;
-import com.oracle.graal.pointsto.meta.AnalysisMethod;
-import com.oracle.graal.pointsto.meta.AnalysisType;
-import com.oracle.svm.core.SubstrateOptions;
-import com.oracle.svm.core.annotate.AutomaticFeature;
-import com.oracle.svm.core.annotate.Substitute;
-import com.oracle.svm.core.annotate.TargetClass;
-import com.oracle.svm.core.option.HostedOptionKey;
-import com.oracle.svm.core.util.UserError;
-import com.oracle.svm.hosted.FeatureImpl;
-import com.oracle.svm.hosted.ImageClassLoader;
-import com.oracle.svm.hosted.config.ConfigurationParserUtils;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -61,8 +48,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
-import jdk.vm.ci.meta.ResolvedJavaMethod;
-import jdk.vm.ci.meta.ResolvedJavaType;
+
 import org.graalvm.compiler.debug.DebugContext;
 import org.graalvm.compiler.graph.NodeInputList;
 import org.graalvm.compiler.nodes.Invoke;
@@ -76,6 +62,23 @@ import org.graalvm.compiler.options.OptionValues;
 import org.graalvm.nativeimage.ImageSingletons;
 import org.graalvm.nativeimage.hosted.Feature;
 
+import com.oracle.graal.pointsto.BigBang;
+import com.oracle.graal.pointsto.flow.InvokeTypeFlow;
+import com.oracle.graal.pointsto.meta.AnalysisMethod;
+import com.oracle.graal.pointsto.meta.AnalysisType;
+import com.oracle.svm.core.SubstrateOptions;
+import com.oracle.svm.core.annotate.Substitute;
+import com.oracle.svm.core.annotate.TargetClass;
+import com.oracle.svm.core.option.HostedOptionKey;
+import com.oracle.svm.core.util.UserError;
+import com.oracle.svm.hosted.FeatureImpl;
+import com.oracle.svm.hosted.ImageClassLoader;
+import com.oracle.svm.hosted.SVMHost;
+import com.oracle.svm.hosted.config.ConfigurationParserUtils;
+
+import jdk.vm.ci.meta.ResolvedJavaMethod;
+import jdk.vm.ci.meta.ResolvedJavaType;
+
 /**
  * A Truffle TCK {@code Feature} detecting privileged calls done by Truffle language. The
  * {@code PermissionsFeature} finds calls of privileged methods originating in Truffle language. The
@@ -88,7 +91,6 @@ import org.graalvm.nativeimage.hosted.Feature;
  * packages by {@code -H:TruffleTCKPermissionsLanguagePackages} option. You also need to disable
  * folding of {@code System.getSecurityManager} using {@code -H:-FoldSecurityManagerGetter} option.
  */
-@AutomaticFeature
 public class PermissionsFeature implements Feature {
 
     private static final String CONFIG = "truffle-language-permissions-config.json";
@@ -162,6 +164,9 @@ public class PermissionsFeature implements Feature {
             UserError.abort("Path to report file must be given by -H:TruffleTCKPermissionsReportFile option.");
         }
         reportFilePath = Paths.get(reportFile);
+
+        FeatureImpl.DuringSetupAccessImpl accessImpl = (FeatureImpl.DuringSetupAccessImpl) access;
+        accessImpl.getHostVM().keepAnalysisGraphs();
     }
 
     @Override
@@ -190,7 +195,9 @@ public class PermissionsFeature implements Feature {
                 UserError.abort("Cannot load ReflectionProxy type");
             }
             whiteList = parser.getLoadedWhiteList();
-            Set<AnalysisMethod> importantMethods = findMethods(bigbang, SecurityManager.class, (m) -> m.getName().startsWith("check"));
+            Set<AnalysisMethod> importantMethods = new HashSet<>();
+            importantMethods.addAll(findMethods(bigbang, SecurityManager.class, (m) -> m.getName().startsWith("check")));
+            importantMethods.addAll(findMethods(bigbang, sun.misc.Unsafe.class, (m) -> m.isPublic()));
             if (!importantMethods.isEmpty()) {
                 Map<AnalysisMethod, Set<AnalysisMethod>> cg = callGraph(bigbang, importantMethods, debugContext);
                 List<List<AnalysisMethod>> report = new ArrayList<>();
@@ -276,7 +283,8 @@ public class PermissionsFeature implements Feature {
                         visited.put(callee, parents);
                         if (targets.contains(callee)) {
                             parents.add(m);
-                            return true;
+                            callPathContainsTarget = true;
+                            continue;
                         }
                         boolean add = callGraphImpl(callee, targets, visited, path, debugContext);
                         if (add) {
@@ -284,7 +292,7 @@ public class PermissionsFeature implements Feature {
                             debugContext.log(DebugContext.VERY_DETAILED_LEVEL, "Added callee: %s for %s.", calleeName, mName);
                         }
                         callPathContainsTarget |= add;
-                    } else if (!isBacktrace(callee, path) || hasLanguageMethodOnCallPath(callee, path)) {
+                    } else if (!isBacktrace(callee, path) || isBackTraceOverLanguageMethod(callee, path)) {
                         parents.add(m);
                         debugContext.log(DebugContext.VERY_DETAILED_LEVEL, "Added backtrace callee: %s for %s.", calleeName, mName);
                         callPathContainsTarget = true;
@@ -313,19 +321,31 @@ public class PermissionsFeature implements Feature {
     }
 
     /**
-     * Checks if the call path up to given {@code method} frame contains a language method.
+     * Checks if the back call of given method crosses some language method on given call path. If
+     * the back call crosses a language method the call has to be included into the call graph, the
+     * crossed language method is the start method of a violation. Example: P privileged method, L
+     * language method.
      *
-     * @param method the method to stop on
+     * <pre>
+     * G((A,L),(A,P),(L,C),(C,A),(C,D))
+     * </pre>
+     *
+     * The violation is L->C->A->P
+     *
+     * @param method the method being invoked
      * @param path the current call path
-     * @return {@code true} if the call path up to given {@code method} contains a language method.
+     * @return {@code true} if the call of given method crosses some language method.
      */
-    private static boolean hasLanguageMethodOnCallPath(AnalysisMethod method, Deque<AnalysisMethod> path) {
+    private static boolean isBackTraceOverLanguageMethod(AnalysisMethod method, Deque<AnalysisMethod> path) {
+        if (!isCompilerClass(method) && !isSystemClass(method)) {
+            return false;
+        }
+        boolean found = false;
         for (Iterator<AnalysisMethod> it = path.descendingIterator(); it.hasNext();) {
             AnalysisMethod pe = it.next();
             if (method.equals(pe)) {
-                return false;
-            }
-            if (!isCompilerClass(pe) && !isSystemClass(pe)) {
+                found = true;
+            } else if (found && !isCompilerClass(pe) && !isSystemClass(pe)) {
                 return true;
             }
         }
@@ -537,10 +557,13 @@ public class PermissionsFeature implements Feature {
      */
     private static final class SafeInterruptRecognizer implements CallGraphFilter {
 
+        private final SVMHost hostVM;
         private final ResolvedJavaMethod threadInterrupt;
         private final ResolvedJavaMethod threadCurrentThread;
 
         SafeInterruptRecognizer(BigBang bigBang) {
+            this.hostVM = (SVMHost) bigBang.getHostVM();
+
             Set<AnalysisMethod> methods = findMethods(bigBang, Thread.class, (m) -> m.getName().equals("interrupt"));
             if (methods.size() != 1) {
                 throw new IllegalStateException("Failed to lookup Thread.interrupt().");
@@ -557,7 +580,7 @@ public class PermissionsFeature implements Feature {
         public boolean test(AnalysisMethod method, AnalysisMethod caller, LinkedHashSet<AnalysisMethod> trace) {
             Boolean res = null;
             if (threadInterrupt.equals(method)) {
-                StructuredGraph graph = caller.getTypeFlow().getGraph();
+                StructuredGraph graph = hostVM.getAnalysisGraph(caller);
                 for (Invoke invoke : graph.getInvokes()) {
                     if (threadInterrupt.equals(invoke.callTarget().targetMethod())) {
                         ValueNode node = invoke.getReceiver();
@@ -581,9 +604,11 @@ public class PermissionsFeature implements Feature {
      */
     private final class SafePrivilegedRecognizer implements CallGraphFilter {
 
+        private final SVMHost hostVM;
         private final Set<AnalysisMethod> dopriviledged;
 
         SafePrivilegedRecognizer(BigBang bigbang) {
+            this.hostVM = (SVMHost) bigbang.getHostVM();
             this.dopriviledged = findMethods(bigbang, java.security.AccessController.class, (m) -> m.getName().equals("doPrivileged") || m.getName().equals("doPrivilegedWithCombiner"));
         }
 
@@ -596,7 +621,7 @@ public class PermissionsFeature implements Feature {
             if (safeClass) {
                 return true;
             }
-            StructuredGraph graph = caller.getTypeFlow().getGraph();
+            StructuredGraph graph = hostVM.getAnalysisGraph(caller);
             for (Invoke invoke : graph.getInvokes()) {
                 if (method.equals(invoke.callTarget().targetMethod())) {
                     NodeInputList<ValueNode> args = invoke.callTarget().arguments();

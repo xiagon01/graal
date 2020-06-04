@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2007, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2007, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020, 2020, Red Hat Inc. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,6 +27,9 @@ package com.oracle.svm.core.jdk;
 
 import static com.oracle.svm.core.annotate.RecomputeFieldValue.Kind.Reset;
 import static com.oracle.svm.core.snippets.KnownIntrinsics.readHub;
+import static org.graalvm.compiler.nodes.extended.BranchProbabilityNode.FAST_PATH_PROBABILITY;
+import static org.graalvm.compiler.nodes.extended.BranchProbabilityNode.LUDICROUSLY_SLOW_PATH_PROBABILITY;
+import static org.graalvm.compiler.nodes.extended.BranchProbabilityNode.probability;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +37,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.IdentityHashMap;
@@ -46,7 +49,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 import org.graalvm.compiler.core.common.SuppressFBWarnings;
-import org.graalvm.compiler.serviceprovider.GraalUnsafeAccess;
 import org.graalvm.compiler.word.ObjectAccess;
 import org.graalvm.compiler.word.Word;
 import org.graalvm.nativeimage.ImageSingletons;
@@ -56,9 +58,9 @@ import org.graalvm.nativeimage.c.function.CFunction;
 import org.graalvm.nativeimage.c.function.CLibrary;
 import org.graalvm.nativeimage.impl.InternalPlatform;
 import org.graalvm.word.UnsignedWord;
+import org.graalvm.word.WordBase;
 import org.graalvm.word.WordFactory;
 
-import com.oracle.svm.core.MonitorSupport;
 import com.oracle.svm.core.SubstrateOptions;
 import com.oracle.svm.core.SubstrateUtil;
 import com.oracle.svm.core.annotate.Alias;
@@ -70,9 +72,12 @@ import com.oracle.svm.core.annotate.RecomputeFieldValue.CustomFieldValueComputer
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
 import com.oracle.svm.core.annotate.TargetElement;
+import com.oracle.svm.core.config.ConfigurationValues;
+import com.oracle.svm.core.config.ObjectLayout;
 import com.oracle.svm.core.hub.ClassForNameSupport;
 import com.oracle.svm.core.hub.DynamicHub;
 import com.oracle.svm.core.log.Log;
+import com.oracle.svm.core.monitor.MonitorSupport;
 import com.oracle.svm.core.snippets.KnownIntrinsics;
 import com.oracle.svm.core.util.VMError;
 
@@ -109,24 +114,24 @@ final class Target_java_lang_Object {
     @Substitute
     @TargetElement(name = "wait")
     private void waitSubst(long timeoutMillis) throws InterruptedException {
-        ImageSingletons.lookup(MonitorSupport.class).wait(this, timeoutMillis);
+        MonitorSupport.singleton().wait(this, timeoutMillis);
     }
 
     @Substitute
     @TargetElement(name = "notify")
     private void notifySubst() {
-        ImageSingletons.lookup(MonitorSupport.class).notify(this, false);
+        MonitorSupport.singleton().notify(this, false);
     }
 
     @Substitute
     @TargetElement(name = "notifyAll")
     private void notifyAllSubst() {
-        ImageSingletons.lookup(MonitorSupport.class).notify(this, true);
+        MonitorSupport.singleton().notify(this, true);
     }
 }
 
-@TargetClass(className = "java.lang.ClassLoaderHelper")
-final class Target_java_lang_ClassLoaderHelper {
+@TargetClass(classNameProvider = Package_jdk_internal_loader_helper.class, className = "ClassLoaderHelper")
+final class Target_jdk_internal_loader_ClassLoaderHelper {
     @Alias
     static native File mapAlternativeName(File lib);
 }
@@ -292,26 +297,28 @@ final class Target_java_lang_System {
         if (obj == null) {
             return 0;
         }
-        DynamicHub hub = KnownIntrinsics.readHub(obj);
-        int hashCodeOffset = hub.getHashCodeOffset();
-        if (hashCodeOffset == 0) {
+
+        // Try to fold the identity hashcode offset to a constant.
+        int hashCodeOffset;
+        ObjectLayout layout = ConfigurationValues.getObjectLayout();
+        if (layout.getInstanceIdentityHashCodeOffset() >= 0 && layout.getInstanceIdentityHashCodeOffset() == layout.getArrayIdentityHashcodeOffset()) {
+            hashCodeOffset = layout.getInstanceIdentityHashCodeOffset();
+        } else {
+            DynamicHub hub = KnownIntrinsics.readHub(obj);
+            hashCodeOffset = hub.getHashCodeOffset();
+        }
+
+        if (probability(LUDICROUSLY_SLOW_PATH_PROBABILITY, hashCodeOffset == 0)) {
             throw VMError.shouldNotReachHere("identityHashCode called on illegal object");
         }
+
         UnsignedWord hashCodeOffsetWord = WordFactory.unsigned(hashCodeOffset);
-        int hashCode = ObjectAccess.readInt(obj, hashCodeOffsetWord);
-        if (hashCode != 0) {
+        int hashCode = ObjectAccess.readInt(obj, hashCodeOffsetWord, IdentityHashCodeSupport.IDENTITY_HASHCODE_LOCATION);
+        if (probability(FAST_PATH_PROBABILITY, hashCode != 0)) {
             return hashCode;
         }
 
-        /* On the first invocation for an object create a new hash code. */
-        hashCode = IdentityHashCodeSupport.generateHashCode();
-
-        if (!GraalUnsafeAccess.getUnsafe().compareAndSwapInt(obj, hashCodeOffset, 0, hashCode)) {
-            /* We lost the race, so there now must be a hash code installed from another thread. */
-            hashCode = ObjectAccess.readInt(obj, hashCodeOffsetWord);
-        }
-        VMError.guarantee(hashCode != 0, "Missing identity hash code");
-        return hashCode;
+        return IdentityHashCodeSupport.generateIdentityHashCode(obj, hashCodeOffset);
     }
 
     /* Ensure that we do not leak the full set of properties from the image generator. */
@@ -387,90 +394,179 @@ final class Target_java_lang_System {
 }
 
 @TargetClass(java.lang.StrictMath.class)
-@CLibrary(value = "strictmath", requireStatic = true)
 final class Target_java_lang_StrictMath {
+
+    @Substitute
+    private static double sin(double a) {
+        return StrictMathInvoker.sin(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double cos(double a) {
+        return StrictMathInvoker.cos(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double tan(double a) {
+        return StrictMathInvoker.tan(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double asin(double a) {
+        return StrictMathInvoker.asin(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double acos(double a) {
+        return StrictMathInvoker.acos(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double atan(double a) {
+        return StrictMathInvoker.atan(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    @TargetElement(onlyWith = JDK8OrEarlier.class)
+    private static double exp(double a) {
+        return StrictMathInvoker.exp(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double log(double a) {
+        return StrictMathInvoker.log(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double log10(double a) {
+        return StrictMathInvoker.log10(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    private static double sqrt(double a) {
+        return StrictMathInvoker.sqrt(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
+    @Substitute
+    @TargetElement(onlyWith = JDK8OrEarlier.class)
+    private static double cbrt(double a) {
+        return StrictMathInvoker.cbrt(WordFactory.nullPointer(), WordFactory.nullPointer(), a);
+    }
+
     // Checkstyle: stop
-
     @Substitute
-    @CFunction(value = "StrictMath_sin", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double sin(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_cos", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double cos(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_tan", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double tan(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_asin", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double asin(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_acos", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double acos(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_atan", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double atan(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_exp", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double exp(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_log", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double log(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_log10", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double log10(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_sqrt", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double sqrt(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_cbrt", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double cbrt(double a);
-
-    @Substitute
-    @CFunction(value = "StrictMath_IEEEremainder", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double IEEEremainder(double f1, double f2);
-
-    @Substitute
-    @CFunction(value = "StrictMath_atan2", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double atan2(double y, double x);
-
-    @Substitute
-    @CFunction(value = "StrictMath_pow", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double pow(double a, double b);
-
-    @Substitute
-    @CFunction(value = "StrictMath_sinh", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double sinh(double x);
-
-    @Substitute
-    @CFunction(value = "StrictMath_cosh", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double cosh(double x);
-
-    @Substitute
-    @CFunction(value = "StrictMath_tanh", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double tanh(double x);
-
-    @Substitute
-    @CFunction(value = "StrictMath_hypot", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double hypot(double x, double y);
-
-    @Substitute
-    @CFunction(value = "StrictMath_expm1", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double expm1(double x);
-
-    @Substitute
-    @CFunction(value = "StrictMath_log1p", transition = CFunction.Transition.NO_TRANSITION)
-    private static native double log1p(double x);
+    private static double IEEEremainder(double f1, double f2) {
+        return StrictMathInvoker.IEEEremainder(WordFactory.nullPointer(), WordFactory.nullPointer(), f1, f2);
+    }
     // Checkstyle: resume
+
+    @Substitute
+    private static double atan2(double y, double x) {
+        return StrictMathInvoker.atan2(WordFactory.nullPointer(), WordFactory.nullPointer(), y, x);
+    }
+
+    @Substitute
+    @TargetElement(onlyWith = JDK8OrEarlier.class)
+    private static double pow(double a, double b) {
+        return StrictMathInvoker.pow(WordFactory.nullPointer(), WordFactory.nullPointer(), a, b);
+    }
+
+    @Substitute
+    private static double sinh(double x) {
+        return StrictMathInvoker.sinh(WordFactory.nullPointer(), WordFactory.nullPointer(), x);
+    }
+
+    @Substitute
+    private static double cosh(double x) {
+        return StrictMathInvoker.cosh(WordFactory.nullPointer(), WordFactory.nullPointer(), x);
+    }
+
+    @Substitute
+    private static double tanh(double x) {
+        return StrictMathInvoker.tanh(WordFactory.nullPointer(), WordFactory.nullPointer(), x);
+    }
+
+    @Substitute
+    @TargetElement(onlyWith = JDK8OrEarlier.class)
+    private static double hypot(double x, double y) {
+        return StrictMathInvoker.hypot(WordFactory.nullPointer(), WordFactory.nullPointer(), x, y);
+    }
+
+    @Substitute
+    private static double expm1(double x) {
+        return StrictMathInvoker.expm1(WordFactory.nullPointer(), WordFactory.nullPointer(), x);
+    }
+
+    @Substitute
+    private static double log1p(double x) {
+        return StrictMathInvoker.log1p(WordFactory.nullPointer(), WordFactory.nullPointer(), x);
+    }
+}
+
+@CLibrary(value = "java", requireStatic = true, dependsOn = "fdlibm")
+final class StrictMathInvoker {
+
+    @CFunction(value = "Java_java_lang_StrictMath_sin", transition = CFunction.Transition.NO_TRANSITION)
+    static native double sin(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_cos", transition = CFunction.Transition.NO_TRANSITION)
+    static native double cos(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_tan", transition = CFunction.Transition.NO_TRANSITION)
+    static native double tan(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_asin", transition = CFunction.Transition.NO_TRANSITION)
+    static native double asin(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_acos", transition = CFunction.Transition.NO_TRANSITION)
+    static native double acos(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_atan", transition = CFunction.Transition.NO_TRANSITION)
+    static native double atan(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_exp", transition = CFunction.Transition.NO_TRANSITION)
+    static native double exp(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_log", transition = CFunction.Transition.NO_TRANSITION)
+    static native double log(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_log10", transition = CFunction.Transition.NO_TRANSITION)
+    static native double log10(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_sqrt", transition = CFunction.Transition.NO_TRANSITION)
+    static native double sqrt(WordBase jnienv, WordBase clazz, double a);
+
+    @CFunction(value = "Java_java_lang_StrictMath_cbrt", transition = CFunction.Transition.NO_TRANSITION)
+    static native double cbrt(WordBase jnienv, WordBase clazz, double a);
+
+    // Checkstyle: stop
+    @CFunction(value = "Java_java_lang_StrictMath_IEEEremainder", transition = CFunction.Transition.NO_TRANSITION)
+    static native double IEEEremainder(WordBase jnienv, WordBase clazz, double f1, double f2);
+    // Checkstyle: resume
+
+    @CFunction(value = "Java_java_lang_StrictMath_atan2", transition = CFunction.Transition.NO_TRANSITION)
+    static native double atan2(WordBase jnienv, WordBase clazz, double y, double x);
+
+    @CFunction(value = "Java_java_lang_StrictMath_pow", transition = CFunction.Transition.NO_TRANSITION)
+    static native double pow(WordBase jnienv, WordBase clazz, double a, double b);
+
+    @CFunction(value = "Java_java_lang_StrictMath_sinh", transition = CFunction.Transition.NO_TRANSITION)
+    static native double sinh(WordBase jnienv, WordBase clazz, double x);
+
+    @CFunction(value = "Java_java_lang_StrictMath_cosh", transition = CFunction.Transition.NO_TRANSITION)
+    static native double cosh(WordBase jnienv, WordBase clazz, double x);
+
+    @CFunction(value = "Java_java_lang_StrictMath_tanh", transition = CFunction.Transition.NO_TRANSITION)
+    static native double tanh(WordBase jnienv, WordBase clazz, double x);
+
+    @CFunction(value = "Java_java_lang_StrictMath_hypot", transition = CFunction.Transition.NO_TRANSITION)
+    static native double hypot(WordBase jnienv, WordBase clazz, double x, double y);
+
+    @CFunction(value = "Java_java_lang_StrictMath_expm1", transition = CFunction.Transition.NO_TRANSITION)
+    static native double expm1(WordBase jnienv, WordBase clazz, double x);
+
+    @CFunction(value = "Java_java_lang_StrictMath_log1p", transition = CFunction.Transition.NO_TRANSITION)
+    static native double log1p(WordBase jnienv, WordBase clazz, double x);
 }
 
 /**
@@ -518,26 +614,12 @@ final class Target_java_lang_ClassValue {
     }
 }
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 @TargetClass(java.lang.Compiler.class)
 final class Target_java_lang_Compiler {
     @Substitute
     static Object command(Object arg) {
-        if (arg instanceof Object[]) {
-            Object[] args = (Object[]) arg;
-            if (args.length > 0) {
-                Object arg0 = args[0];
-                if (arg0 instanceof String) {
-                    String cmd = (String) arg0;
-                    Object[] cmdargs = Arrays.copyOfRange(args, 1, args.length);
-                    RuntimeSupport rs = RuntimeSupport.getRuntimeSupport();
-                    return rs.runCommand(cmd, cmdargs);
-                }
-            }
-        }
-        throw new IllegalArgumentException("Argument to java.lang.Compiler.command(Object) must be an Object[] " +
-                        "with the first element being a String providing the name of the SVM command to run " +
-                        "and subsequent elements being the arguments to the command");
+        return null;
     }
 
     @SuppressWarnings({"unused"})

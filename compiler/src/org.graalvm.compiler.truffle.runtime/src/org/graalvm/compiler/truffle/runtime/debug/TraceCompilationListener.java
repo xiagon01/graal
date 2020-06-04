@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -23,9 +23,6 @@
  * questions.
  */
 package org.graalvm.compiler.truffle.runtime.debug;
-
-import static org.graalvm.compiler.truffle.runtime.PolyglotCompilerOptions.TraceCompilation;
-import static org.graalvm.compiler.truffle.runtime.PolyglotCompilerOptions.TraceCompilationDetails;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -59,24 +56,26 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
         runtime.addListener(new TraceCompilationListener(runtime));
     }
 
+    private static Map<String, Object> defaultProperties(OptimizedCallTarget target) {
+        Map<String, Object> properties = new LinkedHashMap<>();
+        properties.putAll(target.getDebugProperties(null));
+        properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
+        return properties;
+    }
+
     @Override
     public void onCompilationQueued(OptimizedCallTarget target) {
         if (target.engine.traceCompilationDetails) {
-            Map<String, Object> properties = new LinkedHashMap<>();
-            properties.putAll(target.getDebugProperties(null));
-            properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
-            runtime.logEvent(0, "opt queued", target.toString(), properties);
+            runtime.logEvent(target, 0, "opt queued", defaultProperties(target));
         }
     }
 
     @Override
     public void onCompilationDequeued(OptimizedCallTarget target, Object source, CharSequence reason) {
         if (target.engine.traceCompilationDetails) {
-            Map<String, Object> properties = new LinkedHashMap<>();
-            properties.putAll(target.getDebugProperties(null));
+            Map<String, Object> properties = defaultProperties(target);
             properties.put("Reason", reason);
-            properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
-            runtime.logEvent(0, "opt unqueued", target.toString(), properties);
+            runtime.logEvent(target, 0, "opt unqueued", properties);
         }
     }
 
@@ -85,6 +84,10 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
         if (target.engine.traceCompilation || target.engine.traceCompilationDetails) {
             if (!isPermanentFailure(bailout, permanentBailout)) {
                 onCompilationDequeued(target, null, "Non permanent bailout: " + reason);
+            } else {
+                Map<String, Object> properties = defaultProperties(target);
+                properties.put("Reason", reason);
+                runtime.logEvent(target, 0, "opt failed", properties);
             }
             currentCompilation.set(null);
         }
@@ -93,7 +96,7 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
     @Override
     public void onCompilationStarted(OptimizedCallTarget target) {
         if (target.engine.traceCompilationDetails) {
-            runtime.logEvent(0, "opt start", target.toString(), target.getDebugProperties(null));
+            runtime.logEvent(target, 0, "opt start", defaultProperties(target));
         }
 
         if (target.engine.traceCompilation || target.engine.traceCompilationDetails) {
@@ -104,10 +107,7 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
     @Override
     public void onCompilationDeoptimized(OptimizedCallTarget target, Frame frame) {
         if (target.engine.traceCompilation || target.engine.traceCompilationDetails) {
-            Map<String, Object> properties = new LinkedHashMap<>();
-            properties.putAll(target.getDebugProperties(null));
-            properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
-            runtime.logEvent(0, "opt deopt", target.toString(), properties);
+            runtime.logEvent(target, 0, "opt deopt", defaultProperties(target));
         }
     }
 
@@ -163,7 +163,7 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
         }
         properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
 
-        runtime.logEvent(0, "opt done", target.toString(), properties);
+        runtime.logEvent(target, 0, "opt done", properties);
 
         currentCompilation.set(null);
     }
@@ -177,12 +177,10 @@ public final class TraceCompilationListener extends AbstractGraalTruffleRuntimeL
 
     @Override
     public void onCompilationInvalidated(OptimizedCallTarget target, Object source, CharSequence reason) {
-        if (target.getOptionValue(TraceCompilation) || target.getOptionValue(TraceCompilationDetails)) {
-            Map<String, Object> properties = new LinkedHashMap<>();
-            properties.putAll(target.getDebugProperties(null));
+        if (target.engine.traceCompilation || target.engine.traceCompilationDetails) {
+            Map<String, Object> properties = defaultProperties(target);
             properties.put("Reason", reason);
-            properties.put("Source", formatSourceSection(target.getRootNode().getSourceSection()));
-            runtime.logEvent(0, "opt invalidated", target.toString(), properties);
+            runtime.logEvent(target, 0, "opt invalidated", properties);
         }
     }
 

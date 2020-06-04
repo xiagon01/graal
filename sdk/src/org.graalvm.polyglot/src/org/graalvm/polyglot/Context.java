@@ -42,6 +42,7 @@ package org.graalvm.polyglot;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
@@ -778,6 +779,8 @@ public final class Context implements AutoCloseable {
         private ResourceLimits resourceLimits;
         private Map<String, String> environment;
         private ZoneId zone;
+        private Path currentWorkingDirectory;
+        private ClassLoader hostClassLoader;
 
         Builder(String... onlyLanguages) {
             Objects.requireNonNull(onlyLanguages);
@@ -970,12 +973,14 @@ public final class Context implements AutoCloseable {
          * {@link #allowHostAccess(org.graalvm.polyglot.HostAccess) host access policy} needs to be
          * set or {@link #allowAllAccess(boolean) all access} needs to be set to <code>true</code>.
          * <p>
-         * To load new classes the context uses the the {@link Thread#getContextClassLoader()
-         * context class loader} that will be captured when the context is {@link #build() built}.
-         * If an explicit {@link #engine(Engine) engine} was specified, then the context class
-         * loader at engine {@link Engine.Builder#build() build-time} will be used instead. When the
-         * Java module system is available (>= JDK 9) then only classes are accessible that are
-         * exported to the unnamed module of the captured class loader.
+         * To load new classes the context uses the
+         * {@link Context.Builder#hostClassLoader(java.lang.ClassLoader) hostClassLoader} if
+         * specified or the {@link Thread#getContextClassLoader() context class loader} that will be
+         * captured when the context is {@link #build() built}. If an explicit
+         * {@link #engine(Engine) engine} was specified, then the context class loader at engine
+         * {@link Engine.Builder#build() build-time} will be used instead. When the Java module
+         * system is available (>= JDK 9) then only classes are accessible that are exported to the
+         * unnamed module of the captured class loader.
          * <p>
          * <h3>Example usage with JavaScript:</h3>
          *
@@ -1357,6 +1362,45 @@ public final class Context implements AutoCloseable {
         }
 
         /**
+         * Sets the current working directory used by the guest application to resolve relative
+         * paths. When the Context is built, the given directory is set as the current working
+         * directory on the Context's file system using the
+         * {@link FileSystem#setCurrentWorkingDirectory(java.nio.file.Path)
+         * FileSystem.setCurrentWorkingDirectory} method.
+         *
+         * @param workingDirectory the new current working directory
+         * @throws NullPointerException when {@code workingDirectory} is {@code null}
+         * @throws IllegalArgumentException when {@code workingDirectory} is a relative path
+         * @since 20.0.0
+         */
+        public Builder currentWorkingDirectory(Path workingDirectory) {
+            Objects.requireNonNull(workingDirectory, "WorkingDirectory must be non null.");
+            if (!workingDirectory.isAbsolute()) {
+                throw new IllegalArgumentException("WorkingDirectory must be an absolute path.");
+            }
+            this.currentWorkingDirectory = workingDirectory;
+            return this;
+        }
+
+        /**
+         * Sets a host class loader. If set the given {@code classLoader} is used to load host
+         * classes and it's also set as a {@link Thread#setContextClassLoader(java.lang.ClassLoader)
+         * context ClassLoader} during code execution. Otherwise the ClassLoader that was captured
+         * when the context was {@link #build() built} is used to to load host classes and the
+         * {@link Thread#setContextClassLoader(java.lang.ClassLoader) context ClassLoader} is not
+         * set during code execution. Setting the hostClassLoader has a negative effect on enter and
+         * leave performance.
+         *
+         * @param classLoader the host class loader
+         * @since 20.1.0
+         */
+        public Builder hostClassLoader(ClassLoader classLoader) {
+            Objects.requireNonNull(classLoader, "ClassLoader must be non null.");
+            this.hostClassLoader = classLoader;
+            return this;
+        }
+
+        /**
          * Creates a new context instance from the configuration provided in the builder. The same
          * context builder can be used to create multiple context instances.
          *
@@ -1419,6 +1463,7 @@ public final class Context implements AutoCloseable {
             if (!io && customFileSystem != null) {
                 throw new IllegalStateException("Cannot install custom FileSystem when IO is disabled.");
             }
+            String localCurrentWorkingDirectory = currentWorkingDirectory == null ? null : currentWorkingDirectory.toString();
             Engine engine = this.sharedEngine;
             if (engine == null) {
                 org.graalvm.polyglot.Engine.Builder engineBuilder = Engine.newBuilder().options(options == null ? Collections.emptyMap() : options);
@@ -1445,7 +1490,8 @@ public final class Context implements AutoCloseable {
                 Context ctx = engine.impl.createContext(null, null, null, hostClassLookupEnabled, hostAccess, polyglotAccess, nativeAccess, createThread,
                                 io, hostClassLoading, experimentalOptions,
                                 localHostLookupFilter, Collections.emptyMap(), arguments == null ? Collections.emptyMap() : arguments,
-                                onlyLanguages, customFileSystem, customLogHandler, createProcess, processHandler, environmentAccess, environment, zone, limits);
+                                onlyLanguages, customFileSystem, customLogHandler, createProcess, processHandler, environmentAccess, environment, zone, limits,
+                                localCurrentWorkingDirectory, hostClassLoader);
                 return ctx;
             } else {
                 if (messageTransport != null) {
@@ -1454,12 +1500,14 @@ public final class Context implements AutoCloseable {
                 return engine.impl.createContext(out, err, in, hostClassLookupEnabled, hostAccess, polyglotAccess, nativeAccess, createThread,
                                 io, hostClassLoading, experimentalOptions,
                                 localHostLookupFilter, options == null ? Collections.emptyMap() : options, arguments == null ? Collections.emptyMap() : arguments,
-                                onlyLanguages, customFileSystem, customLogHandler, createProcess, processHandler, environmentAccess, environment, zone, limits);
+                                onlyLanguages, customFileSystem, customLogHandler, createProcess, processHandler, environmentAccess, environment, zone, limits,
+                                localCurrentWorkingDirectory, hostClassLoader);
             }
         }
 
         private boolean orAllAccess(Boolean optionalBoolean) {
             return optionalBoolean != null ? optionalBoolean : allowAllAccess;
         }
+
     }
 }

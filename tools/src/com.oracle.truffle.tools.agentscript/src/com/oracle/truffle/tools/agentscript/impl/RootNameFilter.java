@@ -29,42 +29,48 @@ import com.oracle.truffle.api.interop.ArityException;
 import com.oracle.truffle.api.interop.InteropLibrary;
 import com.oracle.truffle.api.interop.UnsupportedMessageException;
 import com.oracle.truffle.api.interop.UnsupportedTypeException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 final class RootNameFilter implements Predicate<String> {
     private final Object fn;
-    private final AtomicBoolean initializationFinished;
     private final ThreadLocal<Boolean> querying;
+    private final Map<String, Boolean> cache;
 
-    RootNameFilter(Object fn, AtomicBoolean initializationFinished) {
+    RootNameFilter(Object fn) {
         this.fn = fn;
-        this.initializationFinished = initializationFinished;
         this.querying = new ThreadLocal<>();
+        this.cache = Collections.synchronizedMap(new HashMap<>());
     }
 
     @CompilerDirectives.TruffleBoundary
     @Override
     public boolean test(String rootName) {
-        if (!initializationFinished.get()) {
-            return false;
-        }
         if (rootName == null) {
             return false;
+        }
+        Boolean computed = cache.get(rootName);
+        if (computed != null) {
+            return computed;
         }
         Boolean prev = this.querying.get();
         try {
             if (Boolean.TRUE.equals(prev)) {
-                return false;
+                computed = false;
+            } else {
+                this.querying.set(true);
+                final InteropLibrary iop = InteropLibrary.getFactory().getUncached();
+                Object res = iop.execute(fn, rootName);
+                computed = (Boolean) res;
             }
-            this.querying.set(true);
-            final InteropLibrary iop = InteropLibrary.getFactory().getUncached();
-            Object res = iop.execute(fn, rootName);
-            return (Boolean) res;
         } catch (UnsupportedMessageException | UnsupportedTypeException | ArityException ex) {
-            return false;
+            computed = false;
         } finally {
             this.querying.set(prev);
         }
+        cache.put(rootName, computed);
+        return computed;
     }
 }

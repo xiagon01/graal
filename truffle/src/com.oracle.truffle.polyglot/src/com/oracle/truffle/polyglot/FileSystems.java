@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -74,6 +74,7 @@ import java.util.function.Function;
 
 import com.oracle.truffle.api.TruffleFile;
 import java.nio.charset.Charset;
+import org.graalvm.nativeimage.ImageInfo;
 import org.graalvm.polyglot.io.FileSystem;
 
 final class FileSystems {
@@ -108,8 +109,12 @@ final class FileSystems {
         return new LanguageHomeFileSystem();
     }
 
-    static boolean isDefaultFileSystem(FileSystem fileSystem) {
-        return fileSystem != null && fileSystem.getClass() == NIOFileSystem.class && FILE_SCHEME.equals(((NIOFileSystem) fileSystem).delegate.getScheme());
+    static boolean hasAllAccess(FileSystem fileSystem) {
+        return fileSystem instanceof InternalFileSystem && ((InternalFileSystem) fileSystem).hasAllAccess();
+    }
+
+    static boolean isInternal(FileSystem fileSystem) {
+        return fileSystem instanceof InternalFileSystem;
     }
 
     static boolean hasNoIOFileSystem(TruffleFile file) {
@@ -120,7 +125,7 @@ final class FileSystems {
         if (fileSystem.getClass() == LanguageHomeFileSystem.class) {
             Path path = EngineAccessor.LANGUAGE.getPath(file);
             LanguageHomeFileSystem lhfs = (LanguageHomeFileSystem) fileSystem;
-            return !lhfs.inLanguageHome(lhfs.toAbsolutePathInternal(path));
+            return !lhfs.inLanguageHome(lhfs.toNormalizedAbsolutePath(path));
         }
         return false;
     }
@@ -135,6 +140,21 @@ final class FileSystems {
      */
     static void resetDefaultFileSystemProvider() {
         DEFAULT_FILE_SYSTEM_PROVIDER.set(null);
+    }
+
+    static String getRelativePathInLanguageHome(TruffleFile file) {
+        FileSystem fs = EngineAccessor.LANGUAGE.getFileSystem(file);
+        Path path = EngineAccessor.LANGUAGE.getPath(file);
+        for (LanguageCache cache : LanguageCache.languages().values()) {
+            final String languageHome = cache.getLanguageHome();
+            if (languageHome != null) {
+                Path languageHomePath = fs.parsePath(languageHome);
+                if (path.startsWith(languageHomePath)) {
+                    return languageHomePath.relativize(path).toString();
+                }
+            }
+        }
+        return null;
     }
 
     private static FileSystem newFileSystem(final FileSystemProvider fileSystemProvider) {
@@ -171,7 +191,7 @@ final class FileSystems {
         return true;
     }
 
-    static final class PreInitializeContextFileSystem implements FileSystem {
+    static final class PreInitializeContextFileSystem implements InternalFileSystem {
 
         private FileSystem delegate; // effectively final after patch context
         private Function<Path, PreInitializePath> factory;
@@ -190,6 +210,37 @@ final class FileSystems {
             Objects.requireNonNull(newDelegate, "NewDelegate must be non null.");
             this.delegate = newDelegate;
             this.factory = new ImageExecutionTimeFactory();
+        }
+
+        String pathToString(Path path) {
+            if (delegate != INVALID_FILESYSTEM) {
+                return path.toString();
+            }
+            verifyImageState();
+            return ((PreInitializePath) path).resolve(newDefaultFileSystem()).toString();
+        }
+
+        URI absolutePathtoURI(Path path) {
+            if (delegate != INVALID_FILESYSTEM) {
+                return path.toUri();
+            }
+            verifyImageState();
+            Path resolved = ((PreInitializePath) path).resolve(newDefaultFileSystem());
+            if (!resolved.isAbsolute()) {
+                throw new IllegalArgumentException("Path must be absolute.");
+            }
+            return resolved.toUri();
+        }
+
+        private static void verifyImageState() {
+            if (ImageInfo.inImageBuildtimeCode()) {
+                throw new IllegalStateException("Reintroducing absolute path into an image heap.");
+            }
+        }
+
+        @Override
+        public boolean hasAllAccess() {
+            return delegate instanceof InternalFileSystem && ((InternalFileSystem) delegate).hasAllAccess();
         }
 
         @Override
@@ -376,30 +427,37 @@ final class FileSystems {
         }
 
         private final class PreInitializePath implements Path {
-            private Object delegatePath;
+
+            private volatile Object delegatePath;
 
             PreInitializePath(Path delegatePath) {
                 this.delegatePath = delegatePath;
             }
 
             private Path getDelegate() {
-                if (delegatePath instanceof Path) {
-                    return (Path) delegatePath;
-                } else if (delegatePath instanceof ImageHeapPath) {
-                    ImageHeapPath imageHeapPath = (ImageHeapPath) delegatePath;
+                Path result = resolve(delegate);
+                delegatePath = result;
+                return result;
+            }
+
+            private Path resolve(FileSystem fs) {
+                Object current = delegatePath;
+                if (current instanceof Path) {
+                    return (Path) current;
+                } else if (current instanceof ImageHeapPath) {
+                    ImageHeapPath imageHeapPath = (ImageHeapPath) current;
                     String languageId = imageHeapPath.languageId;
                     String path = imageHeapPath.path;
                     Path result;
                     String newLanguageHome;
                     if (languageId != null && (newLanguageHome = LanguageCache.languages().get(languageId).getLanguageHome()) != null) {
-                        result = delegate.parsePath(newLanguageHome).resolve(path);
+                        result = fs.parsePath(newLanguageHome).resolve(path);
                     } else {
-                        result = delegate.parsePath(path);
+                        result = fs.parsePath(path);
                     }
-                    delegatePath = result;
                     return result;
                 } else {
-                    throw new IllegalStateException("Unknown delegate " + String.valueOf(delegatePath));
+                    throw new IllegalStateException("Unknown delegate " + String.valueOf(current));
                 }
             }
 
@@ -581,7 +639,7 @@ final class FileSystems {
         }
     }
 
-    private static final class NIOFileSystem implements FileSystem {
+    private static final class NIOFileSystem implements InternalFileSystem {
 
         private final FileSystemProvider delegate;
         private final boolean explicitUserDir;
@@ -601,6 +659,11 @@ final class FileSystems {
             this.delegate = fileSystemProvider;
             this.explicitUserDir = explicitUserDir;
             this.userDir = userDir;
+        }
+
+        @Override
+        public boolean hasAllAccess() {
+            return FILE_SCHEME.equals(delegate.getScheme());
         }
 
         @Override
@@ -663,7 +726,21 @@ final class FileSystems {
 
         @Override
         public DirectoryStream<Path> newDirectoryStream(Path dir, DirectoryStream.Filter<? super Path> filter) throws IOException {
-            return delegate.newDirectoryStream(resolveRelative(dir), filter);
+            Path cwd = userDir;
+            Path resolvedPath;
+            boolean relativize;
+            if (!dir.isAbsolute() && cwd != null) {
+                resolvedPath = cwd.resolve(dir);
+                relativize = true;
+            } else {
+                resolvedPath = dir;
+                relativize = false;
+            }
+            DirectoryStream<Path> result = delegate.newDirectoryStream(resolvedPath, filter);
+            if (relativize) {
+                result = new RelativizeDirectoryStream(cwd, result);
+            }
+            return result;
         }
 
         @Override
@@ -738,11 +815,58 @@ final class FileSystems {
         private Path resolveRelative(Path path) {
             return !path.isAbsolute() && userDir != null ? toAbsolutePath(path) : path;
         }
+
+        private static final class RelativizeDirectoryStream implements DirectoryStream<Path> {
+
+            private final Path folder;
+            private final DirectoryStream<? extends Path> delegateDirectoryStream;
+
+            RelativizeDirectoryStream(Path folder, DirectoryStream<? extends Path> delegateDirectoryStream) {
+                this.folder = folder;
+                this.delegateDirectoryStream = delegateDirectoryStream;
+            }
+
+            @Override
+            public Iterator<Path> iterator() {
+                return new RelativizeIterator(folder, delegateDirectoryStream.iterator());
+            }
+
+            @Override
+            public void close() throws IOException {
+                delegateDirectoryStream.close();
+            }
+
+            private static final class RelativizeIterator implements Iterator<Path> {
+
+                private final Path folder;
+                private final Iterator<? extends Path> delegateIterator;
+
+                RelativizeIterator(Path folder, Iterator<? extends Path> delegateIterator) {
+                    this.folder = folder;
+                    this.delegateIterator = delegateIterator;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return delegateIterator.hasNext();
+                }
+
+                @Override
+                public Path next() {
+                    return folder.relativize(delegateIterator.next());
+                }
+            }
+        }
     }
 
-    private static class DeniedIOFileSystem implements FileSystem {
+    private static class DeniedIOFileSystem implements InternalFileSystem {
 
         DeniedIOFileSystem() {
+        }
+
+        @Override
+        public boolean hasAllAccess() {
+            return false;
         }
 
         @Override
@@ -822,6 +946,21 @@ final class FileSystems {
         public Path getTempDirectory() {
             throw forbidden(null);
         }
+
+        @Override
+        public void createLink(Path link, Path existing) throws IOException {
+            throw forbidden(link);
+        }
+
+        @Override
+        public void createSymbolicLink(Path link, Path target, FileAttribute<?>... attrs) throws IOException {
+            throw forbidden(link);
+        }
+
+        @Override
+        public Path readSymbolicLink(Path link) throws IOException {
+            throw forbidden(link);
+        }
     }
 
     private static class LanguageHomeFileSystem extends DeniedIOFileSystem {
@@ -835,7 +974,7 @@ final class FileSystems {
 
         @Override
         public void checkAccess(Path path, Set<? extends AccessMode> modes, LinkOption... linkOptions) throws IOException {
-            Path absolutePath = toAbsolutePathInternal(path);
+            Path absolutePath = toNormalizedAbsolutePath(path);
             if (inLanguageHome(absolutePath)) {
                 if (modes.contains(AccessMode.WRITE)) {
                     throw new IOException("Read-only file");
@@ -859,7 +998,7 @@ final class FileSystems {
             }
             if (!write) {
                 assert read;
-                Path absolutePath = toAbsolutePathInternal(inPath);
+                Path absolutePath = toNormalizedAbsolutePath(inPath);
                 if (inLanguageHome(absolutePath)) {
                     return fullIO.newByteChannel(absolutePath, options, attrs);
                 }
@@ -869,7 +1008,7 @@ final class FileSystems {
 
         @Override
         public DirectoryStream<Path> newDirectoryStream(Path dir, DirectoryStream.Filter<? super Path> filter) throws IOException {
-            Path absoluteDir = toAbsolutePathInternal(dir);
+            Path absoluteDir = toNormalizedAbsolutePath(dir);
             if (inLanguageHome(absoluteDir)) {
                 return fullIO.newDirectoryStream(absoluteDir, filter);
             }
@@ -878,7 +1017,7 @@ final class FileSystems {
 
         @Override
         public Map<String, Object> readAttributes(Path path, String attributes, LinkOption... options) throws IOException {
-            Path absolutePath = toAbsolutePathInternal(path);
+            Path absolutePath = toNormalizedAbsolutePath(path);
             if (inLanguageHome(absolutePath)) {
                 return fullIO.readAttributes(absolutePath, attributes, options);
             }
@@ -887,11 +1026,16 @@ final class FileSystems {
 
         @Override
         public Path toAbsolutePath(Path path) {
-            return toAbsolutePathInternal(path);
+            return fullIO.toAbsolutePath(path);
         }
 
-        private Path toAbsolutePathInternal(Path path) {
-            return fullIO.toAbsolutePath(path);
+        private Path toNormalizedAbsolutePath(Path path) {
+            if (path.isAbsolute()) {
+                return path;
+            }
+            boolean needsToNormalize = !isNormalized(path);
+            Path absolutePath = fullIO.toAbsolutePath(path);
+            return needsToNormalize ? absolutePath.normalize() : absolutePath;
         }
 
         @Override
@@ -935,9 +1079,24 @@ final class FileSystems {
             }
             return res;
         }
+
+        private static boolean isNormalized(Path path) {
+            for (Path name : path) {
+                String strName = name.toString();
+                if (".".equals(strName) || "..".equals(strName)) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
-    private static final class InvalidFileSystem implements FileSystem {
+    private static final class InvalidFileSystem implements InternalFileSystem {
+
+        @Override
+        public boolean hasAllAccess() {
+            return false;
+        }
 
         @Override
         public Path parsePath(URI uri) {
@@ -1053,6 +1212,10 @@ final class FileSystems {
             }
             return detectors;
         }
+    }
+
+    private interface InternalFileSystem extends FileSystem {
+        boolean hasAllAccess();
     }
 
     private static SecurityException forbidden(final Path path) {

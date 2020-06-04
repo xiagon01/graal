@@ -25,6 +25,8 @@
 package com.oracle.svm.core.graal.aarch64;
 
 import org.graalvm.compiler.core.common.spi.ForeignCallsProvider;
+import org.graalvm.compiler.core.common.spi.MetaAccessExtensionProvider;
+import org.graalvm.compiler.nodes.spi.PlatformConfigurationProvider;
 import org.graalvm.compiler.phases.util.Providers;
 import org.graalvm.compiler.replacements.DefaultJavaLoweringProvider;
 import org.graalvm.compiler.replacements.TargetGraphBuilderPlugins;
@@ -40,6 +42,7 @@ import com.oracle.svm.core.graal.code.SubstrateBackend;
 import com.oracle.svm.core.graal.code.SubstrateBackendFactory;
 import com.oracle.svm.core.graal.code.SubstrateLoweringProviderFactory;
 import com.oracle.svm.core.graal.code.SubstrateRegisterConfigFactory;
+import com.oracle.svm.core.graal.code.SubstrateSuitesCreatorProvider;
 import com.oracle.svm.core.graal.meta.SubstrateRegisterConfig.ConfigKind;
 
 import jdk.vm.ci.code.RegisterConfig;
@@ -60,7 +63,7 @@ class SubstrateAArch64Feature implements Feature {
             }
         });
 
-        if (SubstrateOptions.CompilerBackend.getValue().equals("lir")) {
+        if (!SubstrateOptions.useLLVMBackend()) {
             ImageSingletons.add(SubstrateBackendFactory.class, new SubstrateBackendFactory() {
                 @Override
                 public SubstrateBackend newBackend(Providers newProviders) {
@@ -70,12 +73,14 @@ class SubstrateAArch64Feature implements Feature {
 
             ImageSingletons.add(SubstrateLoweringProviderFactory.class, new SubstrateLoweringProviderFactory() {
                 @Override
-                public DefaultJavaLoweringProvider newLoweringProvider(MetaAccessProvider metaAccess, ForeignCallsProvider foreignCalls, TargetDescription target) {
-                    return new SubstrateAArch64LoweringProvider(metaAccess, foreignCalls, target);
+                public DefaultJavaLoweringProvider newLoweringProvider(MetaAccessProvider metaAccess, ForeignCallsProvider foreignCalls, PlatformConfigurationProvider platformConfig,
+                                MetaAccessExtensionProvider metaAccessExtensionProvider, TargetDescription target) {
+                    return new SubstrateAArch64LoweringProvider(metaAccess, foreignCalls, platformConfig, metaAccessExtensionProvider, target);
                 }
             });
 
             ImageSingletons.add(TargetGraphBuilderPlugins.class, new AArch64GraphBuilderPlugins());
+            ImageSingletons.add(SubstrateSuitesCreatorProvider.class, new SubstrateAArch64SuitesCreatorProvider());
         }
     }
 }

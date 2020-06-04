@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2019, Oracle and/or its affiliates.
+ * Copyright (c) 2017, 2020, Oracle and/or its affiliates.
  *
  * All rights reserved.
  *
@@ -32,13 +32,15 @@ package com.oracle.truffle.llvm.runtime.nodes.intrinsics.llvm.debug;
 import java.util.function.Function;
 
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
+import com.oracle.truffle.api.utilities.AssumedValue;
+import com.oracle.truffle.llvm.runtime.CommonNodeFactory;
 import com.oracle.truffle.llvm.runtime.LLVMContext;
-import com.oracle.truffle.llvm.runtime.LLVMLanguage;
 import com.oracle.truffle.llvm.runtime.debug.LLDBSupport;
 import com.oracle.truffle.llvm.runtime.debug.value.LLVMDebugTypeConstants;
 import com.oracle.truffle.llvm.runtime.debug.value.LLVMDebugValue;
 import com.oracle.truffle.llvm.runtime.global.LLVMGlobal;
 import com.oracle.truffle.llvm.runtime.pointer.LLVMNativePointer;
+import com.oracle.truffle.llvm.runtime.pointer.LLVMPointer;
 
 final class LLDBGlobalConstant implements LLVMDebugValue {
 
@@ -56,7 +58,9 @@ final class LLDBGlobalConstant implements LLVMDebugValue {
     }
 
     private boolean canRead(long bitOffset, int bits, LLVMDebugValue currentValue) {
-        return context.getGlobalStorage().containsKey(global) && currentValue != null && currentValue.canRead(bitOffset, bits);
+        int index = global.getSymbolIndex(false);
+        AssumedValue<LLVMPointer>[] globals = context.findSymbolTable(global.getBitcodeID(false));
+        return globals[index].get() != null && currentValue != null && currentValue.canRead(bitOffset, bits);
     }
 
     private Object doRead(long offset, int size, String kind, Function<LLVMDebugValue, Object> readOperation) {
@@ -164,14 +168,18 @@ final class LLDBGlobalConstant implements LLVMDebugValue {
     }
 
     private LLVMDebugValue getCurrentValue() {
+        int index = global.getSymbolIndex(false);
+        AssumedValue<LLVMPointer>[] globals = context.findSymbolTable(global.getBitcodeID(false));
         if (isInNative()) {
-            return new LLDBMemoryValue(LLVMNativePointer.cast(context.getGlobalStorage().get(global)));
+            return new LLDBMemoryValue(LLVMNativePointer.cast(globals[index].get()));
         } else {
-            return LLVMLanguage.getLLDBSupport().createDebugValueBuilder().build(context.getGlobalStorage().get(global));
+            return CommonNodeFactory.createDebugValueBuilder().build(globals[index].get());
         }
     }
 
     private boolean isInNative() {
-        return LLVMNativePointer.isInstance(context.getGlobalStorage().get(global));
+        int index = global.getSymbolIndex(false);
+        AssumedValue<LLVMPointer>[] globals = context.findSymbolTable(global.getBitcodeID(false));
+        return LLVMNativePointer.isInstance(globals[index].get());
     }
 }

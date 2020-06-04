@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -24,8 +24,6 @@
  */
 package org.graalvm.compiler.truffle.runtime;
 
-import static org.graalvm.compiler.truffle.runtime.TruffleRuntimeOptions.overrideOptions;
-
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -39,8 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.graalvm.compiler.truffle.common.TruffleCompilationTask;
-import org.graalvm.compiler.truffle.runtime.TruffleRuntimeOptions.TruffleRuntimeOptionsOverrideScope;
-import org.graalvm.options.OptionValues;
+import org.graalvm.compiler.truffle.options.PolyglotCompilerOptions;
 
 /**
  * The compilation queue accepts compilation requests, and schedules compilations.
@@ -57,8 +54,10 @@ public class BackgroundCompileQueue {
     private final AtomicLong idCounter;
     private volatile ExecutorService compilationExecutorService;
     private boolean shutdown = false;
+    protected final GraalTruffleRuntime runtime;
 
-    public BackgroundCompileQueue() {
+    public BackgroundCompileQueue(GraalTruffleRuntime runtime) {
+        this.runtime = runtime;
         this.idCounter = new AtomicLong();
     }
 
@@ -85,22 +84,33 @@ public class BackgroundCompileQueue {
             }
             threads = Math.max(1, threads);
 
-            TruffleCompilerThreadFactory factory = new TruffleCompilerThreadFactory("TruffleCompilerThread");
+            ThreadFactory factory = newThreadFactory("TruffleCompilerThread", callTarget);
 
-            return compilationExecutorService = new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
+            long compilerIdleDelay = runtime.getCompilerIdleDelay();
+            long keepAliveTime = compilerIdleDelay >= 0 ? compilerIdleDelay : 0;
+            ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(threads, threads,
+                            keepAliveTime, TimeUnit.MILLISECONDS,
                             new PriorityBlockingQueue<>(), factory) {
                 @Override
                 protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
                     return new RequestFutureTask<>((RequestImpl<T>) callable);
                 }
             };
+            if (compilerIdleDelay >= 0) {
+                threadPoolExecutor.allowCoreThreadTimeOut(true);
+            }
+            return compilationExecutorService = threadPoolExecutor;
         }
     }
 
+    @SuppressWarnings("unused")
+    protected ThreadFactory newThreadFactory(String threadNamePrefix, OptimizedCallTarget callTarget) {
+        return new TruffleCompilerThreadFactory(threadNamePrefix, runtime);
+    }
+
     public CancellableCompileTask submitTask(Priority priority, OptimizedCallTarget target, Request request) {
-        final OptionValues optionOverrides = TruffleRuntimeOptions.getCurrentOptionOverrides();
         CancellableCompileTask cancellable = new CancellableCompileTask(priority == Priority.LAST_TIER);
-        RequestImpl<Void> requestImpl = new RequestImpl<>(nextId(), priority, optionOverrides, target, cancellable, request);
+        RequestImpl<Void> requestImpl = new RequestImpl<>(nextId(), priority, target, cancellable, request);
         cancellable.setFuture(getExecutorService(target).submit(requestImpl));
         return cancellable;
     }
@@ -160,15 +170,13 @@ public class BackgroundCompileQueue {
 
         private final long id;
         private final Priority priority;
-        private final OptionValues optionOverrides;
         private final TruffleCompilationTask task;
         private final WeakReference<OptimizedCallTarget> targetRef;
         private final Request request;
 
-        RequestImpl(long id, Priority priority, OptionValues optionOverrides, OptimizedCallTarget callTarget, TruffleCompilationTask task, Request request) {
+        RequestImpl(long id, Priority priority, OptimizedCallTarget callTarget, TruffleCompilationTask task, Request request) {
             this.id = id;
             this.priority = priority;
-            this.optionOverrides = optionOverrides;
             this.targetRef = new WeakReference<>(callTarget);
             this.task = task;
             this.request = request;
@@ -186,9 +194,7 @@ public class BackgroundCompileQueue {
         @SuppressWarnings("try")
         @Override
         public V call() {
-            try (TruffleRuntimeOptionsOverrideScope scope = optionOverrides != null ? overrideOptions(optionOverrides) : null) {
-                request.execute(task, targetRef);
-            }
+            request.execute(task, targetRef);
             return null;
         }
 
@@ -219,18 +225,25 @@ public class BackgroundCompileQueue {
 
     private static final class TruffleCompilerThreadFactory implements ThreadFactory {
         private final String namePrefix;
+        private final GraalTruffleRuntime runtime;
 
-        TruffleCompilerThreadFactory(final String namePrefix) {
+        TruffleCompilerThreadFactory(final String namePrefix, GraalTruffleRuntime runtime) {
             this.namePrefix = namePrefix;
+            this.runtime = runtime;
         }
 
         @Override
         public Thread newThread(Runnable r) {
             final Thread t = new Thread(r) {
+                @SuppressWarnings("try")
                 @Override
                 public void run() {
                     setContextClassLoader(getClass().getClassLoader());
-                    super.run();
+                    try (AutoCloseable scope = runtime.openCompilerThreadScope()) {
+                        super.run();
+                    } catch (Exception e) {
+                        throw new InternalError(e);
+                    }
                 }
             };
             t.setName(namePrefix + "-" + t.getId());

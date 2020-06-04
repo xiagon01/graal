@@ -24,9 +24,12 @@
  */
 package com.oracle.svm.configure.trace;
 
+import static com.oracle.svm.configure.trace.LazyValueUtils.lazyValue;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.oracle.svm.configure.config.ConfigurationMemberKind;
 import com.oracle.svm.configure.config.ConfigurationMethod;
@@ -34,7 +37,8 @@ import com.oracle.svm.configure.config.ProxyConfiguration;
 import com.oracle.svm.configure.config.ResourceConfiguration;
 import com.oracle.svm.configure.config.SignatureUtil;
 import com.oracle.svm.configure.config.TypeConfiguration;
-import org.graalvm.compiler.phases.common.LazyValue;
+
+import jdk.vm.ci.meta.MetaUtil;
 
 class ReflectionProcessor extends AbstractProcessor {
     private final AccessAdvisor advisor;
@@ -79,26 +83,32 @@ class ReflectionProcessor extends AbstractProcessor {
             case "getSystemResourceAsStream":
             case "getResources":
             case "getSystemResources":
-                resourceConfiguration.add(singleElement(args));
+                String literal = singleElement(args);
+                String regex = Pattern.quote(literal);
+                resourceConfiguration.addResourcePattern(regex);
                 return;
         }
-        String clazz = (String) entry.get("class");
         String callerClass = (String) entry.get("caller_class");
-        if (advisor.shouldIgnore(new LazyValue<>(() -> callerClass))) {
+        boolean isLoadClass = function.equals("loadClass");
+        if (isLoadClass || function.equals("forName")) {
+            String name = singleElement(args);
+            if (isLoadClass) { // different array syntax
+                name = MetaUtil.internalNameToJava(MetaUtil.toInternalName(name), true, true);
+            }
+            if (!advisor.shouldIgnore(lazyValue(name), lazyValue(callerClass)) &&
+                            !(isLoadClass && advisor.shouldIgnoreLoadClass(lazyValue(name), lazyValue(callerClass)))) {
+                configuration.getOrCreateType(name);
+            }
+            return;
+        }
+        String clazz = (String) entry.get("class");
+        if (advisor.shouldIgnore(lazyValue(clazz), lazyValue(callerClass))) {
             return;
         }
         ConfigurationMemberKind memberKind = ConfigurationMemberKind.PUBLIC;
         boolean unsafeAccess = false;
         String clazzOrDeclaringClass = entry.containsKey("declaring_class") ? (String) entry.get("declaring_class") : clazz;
         switch (function) {
-            case "forName": {
-                assert clazz.equals("java.lang.Class");
-                expectSize(args, 1);
-                String name = (String) args.get(0);
-                configuration.getOrCreateType(name);
-                break;
-            }
-
             case "getDeclaredFields": {
                 configuration.getOrCreateType(clazz).setAllDeclaredFields();
                 break;
@@ -182,7 +192,23 @@ class ReflectionProcessor extends AbstractProcessor {
             }
 
             case "newInstance": {
-                configuration.getOrCreateType(clazz).addMethod(ConfigurationMethod.CONSTRUCTOR_NAME, "()V", ConfigurationMemberKind.DECLARED);
+                if (clazz.equals("java.lang.reflect.Array")) { // reflective array instantiation
+                    String qualifiedJavaName = MetaUtil.internalNameToJava((String) args.get(0), true, true);
+                    configuration.getOrCreateType(qualifiedJavaName);
+                } else {
+                    configuration.getOrCreateType(clazz).addMethod(ConfigurationMethod.CONSTRUCTOR_NAME, "()V", ConfigurationMemberKind.DECLARED);
+                }
+                break;
+            }
+
+            case "getBundleImplJDK8OrEarlier": {
+                expectSize(args, 4);
+                resourceConfiguration.addBundle((String) args.get(0));
+                break;
+            }
+            case "getBundleImplJDK11OrLater": {
+                expectSize(args, 5);
+                resourceConfiguration.addBundle((String) args.get(2));
                 break;
             }
         }

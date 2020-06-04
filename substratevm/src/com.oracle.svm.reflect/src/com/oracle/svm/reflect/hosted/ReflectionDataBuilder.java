@@ -71,8 +71,6 @@ public class ReflectionDataBuilder implements RuntimeReflectionSupport {
         UNSAFE_ACCESSIBLE,
     }
 
-    private static final EnumSet<FieldFlag> NO_FIELD_FLAGS = EnumSet.noneOf(FieldFlag.class);
-
     private boolean modified;
     private boolean sealed;
 
@@ -138,19 +136,26 @@ public class ReflectionDataBuilder implements RuntimeReflectionSupport {
     public void register(boolean finalIsWritable, boolean allowUnsafeAccess, Field... fields) {
         checkNotSealed();
         for (Field field : fields) {
-            boolean writable = finalIsWritable || !Modifier.isFinal(field.getModifiers());
-            EnumSet<FieldFlag> flags = writable && allowUnsafeAccess ? EnumSet.of(FieldFlag.FINAL_BUT_WRITABLE, FieldFlag.UNSAFE_ACCESSIBLE)
-                            : writable ? EnumSet.of(FieldFlag.FINAL_BUT_WRITABLE)
-                                            : allowUnsafeAccess ? EnumSet.of(FieldFlag.UNSAFE_ACCESSIBLE)
-                                                            : NO_FIELD_FLAGS;
+            EnumSet<FieldFlag> flags = EnumSet.noneOf(FieldFlag.class);
+            if (finalIsWritable) {
+                flags.add(FieldFlag.FINAL_BUT_WRITABLE);
+            }
+            if (allowUnsafeAccess) {
+                flags.add(FieldFlag.UNSAFE_ACCESSIBLE);
+            }
+
             reflectionFields.compute(field, (key, existingFlags) -> {
-                boolean unregistered = existingFlags == null;
-                if (unregistered) {
+                if (existingFlags == null || !existingFlags.containsAll(flags)) {
                     modified = true;
                 }
-                if (writable && (unregistered || !existingFlags.contains(FieldFlag.FINAL_BUT_WRITABLE))) {
+                if (existingFlags != null) {
+                    /* Preserve flags of existing registration. */
+                    flags.addAll(existingFlags);
+                }
+
+                if (finalIsWritable && (existingFlags == null || !existingFlags.contains(FieldFlag.FINAL_BUT_WRITABLE))) {
                     UserError.guarantee(!analyzedFinalFields.contains(field),
-                                    "A field that was already processed by the analysis cannot be re-registered as writable: " + field);
+                                    "A field that was already processed by the analysis cannot be re-registered as writable: %s", field);
                 }
                 return flags;
             });
@@ -183,14 +188,21 @@ public class ReflectionDataBuilder implements RuntimeReflectionSupport {
          * here, and we assume that user code that requires reflection support is not using
          * substitutions.
          */
-        for (AnalysisType aType : access.getUniverse().getTypes()) {
-            Class<?> originalClass = aType.getJavaClass();
+        for (AnalysisType type : access.getUniverse().getTypes()) {
+            Class<?> originalClass = type.getJavaClass();
             if (originalClass != null) {
                 if (processedClasses.contains(originalClass)) {
                     /* Class has already been processed. */
                     continue;
                 }
-                if (originalClass.isArray() || enclosingMethodOrConstructor(originalClass) != null) {
+                if (type.isArray() && !access.isReachable(type)) {
+                    /*
+                     * We don't want the array type (and its elemental type) to become reachable as
+                     * a result of initializing its reflection data.
+                     */
+                    continue;
+                }
+                if (type.isArray() || enclosingMethodOrConstructor(originalClass) != null) {
                     /*
                      * This type is either an array or it has an enclosing method or constructor. In
                      * either case we process the class, i.e., initialize its reflection data, mark
@@ -226,15 +238,6 @@ public class ReflectionDataBuilder implements RuntimeReflectionSupport {
     private void processClass(DuringAnalysisAccessImpl access, Class<?> clazz) {
         AnalysisType type = access.getMetaAccess().lookupJavaType(clazz);
         DynamicHub hub = access.getHostVM().dynamicHub(type);
-
-        if (type.isArray()) {
-            /*
-             * Array types allocated reflectively need to be registered as instantiated. Otherwise
-             * the isInstantiated check in AllocationSnippets.checkDynamicHub() will fail at runtime
-             * when the array is *only* allocated through Array.newInstance().
-             */
-            type.registerAsInHeap();
-        }
 
         if (reflectionClasses.contains(clazz)) {
             ClassForNameSupport.registerClass(clazz);
@@ -401,9 +404,9 @@ public class ReflectionDataBuilder implements RuntimeReflectionSupport {
 
     boolean inspectFinalFieldWritableForAnalysis(Field field) {
         assert Modifier.isFinal(field.getModifiers());
-        EnumSet<FieldFlag> flags = reflectionFields.getOrDefault(field, NO_FIELD_FLAGS);
+        EnumSet<FieldFlag> flags = reflectionFields.get(field);
         analyzedFinalFields.add(field);
-        return flags.contains(FieldFlag.FINAL_BUT_WRITABLE);
+        return flags != null && flags.contains(FieldFlag.FINAL_BUT_WRITABLE);
     }
 
     static final class ReflectionDataAccessors {

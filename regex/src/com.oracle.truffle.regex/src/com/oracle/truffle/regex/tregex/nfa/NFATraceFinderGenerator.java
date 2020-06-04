@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -50,6 +50,7 @@ import com.oracle.truffle.regex.result.PreCalculatedResultFactory;
 import com.oracle.truffle.regex.tregex.TRegexOptions;
 import com.oracle.truffle.regex.tregex.parser.Counter;
 import com.oracle.truffle.regex.tregex.parser.ast.GroupBoundaries;
+import com.oracle.truffle.regex.tregex.string.Encodings.Encoding;
 
 /**
  * Used for pre-calculating and finding the result of tree-like regular expressions. A regular
@@ -188,11 +189,11 @@ public final class NFATraceFinderGenerator {
         }
 
         public boolean hasNextTransition() {
-            return i < transition.getTarget().getNext().length;
+            return i < transition.getTarget().getSuccessors().length;
         }
 
         public NFAStateTransition getNextTransition() {
-            return transition.getTarget().getNext()[i++];
+            return transition.getTarget().getSuccessors()[i++];
         }
     }
 
@@ -200,10 +201,10 @@ public final class NFATraceFinderGenerator {
         NFAState dummyInitialState = copy(originalNFA.getDummyInitialState());
         NFAStateTransition newAnchoredEntry = copyEntry(dummyInitialState, originalNFA.getReverseAnchoredEntry());
         NFAStateTransition newUnAnchoredEntry = copyEntry(dummyInitialState, originalNFA.getReverseUnAnchoredEntry());
-        dummyInitialState.setPrev(new NFAStateTransition[]{newAnchoredEntry, newUnAnchoredEntry});
+        dummyInitialState.setPredecessors(new NFAStateTransition[]{newAnchoredEntry, newUnAnchoredEntry});
         ArrayList<PathElement> graphPath = new ArrayList<>();
         for (NFAStateTransition entry : new NFAStateTransition[]{originalNFA.getAnchoredEntry()[0], originalNFA.getUnAnchoredEntry()[0]}) {
-            for (NFAStateTransition t : entry.getTarget().getNext()) {
+            for (NFAStateTransition t : entry.getTarget().getSuccessors()) {
                 // All paths start from the original initial states, which will be duplicated and
                 // become leaf nodes in the tree.
                 PathElement curElement = new PathElement(t);
@@ -229,27 +230,28 @@ public final class NFATraceFinderGenerator {
                         NFAState lastCopied = copy(entry.getTarget(), resultID);
                         PreCalculatedResultFactory result = resultFactory();
                         // create a copy of the graph path
-                        int i = 0;
-                        for (; i < graphPath.size(); i++) {
+                        int iResult = 0;
+                        for (int i = 0; i < graphPath.size(); i++) {
                             final NFAStateTransition pathTransition = graphPath.get(i).getTransition();
                             NFAState copy = copy(pathTransition.getTarget(), resultID);
-                            createTransition(lastCopied, copy, pathTransition, result, i);
+                            createTransition(lastCopied, copy, pathTransition, result, iResult);
+                            iResult += getEncodedSize(copy);
                             lastCopied = copy;
                         }
                         // link the copied path to the existing tree
-                        createTransition(lastCopied, duplicate, curElement.getTransition(), result, i);
+                        createTransition(lastCopied, duplicate, curElement.getTransition(), result, iResult);
                         // traverse the existing tree to the root to complete the pre-calculated
                         // result.
                         NFAState treeNode = duplicate;
-                        while (!treeNode.isForwardFinalState()) {
-                            i++;
-                            assert treeNode.getNext().length == 1;
+                        while (!treeNode.isFinalState()) {
+                            iResult += getEncodedSize(treeNode);
+                            assert treeNode.getSuccessors().length == 1;
                             treeNode.addPossibleResult(resultID);
-                            treeNode.getNext()[0].getGroupBoundaries().applyToResultFactory(result, i);
-                            treeNode = treeNode.getNext()[0].getTarget();
+                            treeNode.getSuccessors()[0].getGroupBoundaries().applyToResultFactory(result, iResult);
+                            treeNode = treeNode.getSuccessors()[0].getTarget();
                         }
                         treeNode.addPossibleResult(resultID);
-                        result.setLength(i);
+                        result.setLength(iResult);
                         PreCalculatedResultFactory existingResult = resultDeDuplicationMap.get(result);
                         if (existingResult == null) {
                             resultDeDuplicationMap.put(result, result);
@@ -279,7 +281,7 @@ public final class NFATraceFinderGenerator {
             preCalculatedResults = resultList.toArray(new PreCalculatedResultFactory[0]);
         }
         for (NFAState s : states) {
-            s.linkPrev();
+            s.linkPredecessors();
         }
         return new NFA(originalNFA.getAst(), dummyInitialState, null, null, newAnchoredEntry, newUnAnchoredEntry, states, stateID, transitionID, preCalculatedResults);
     }
@@ -287,7 +289,7 @@ public final class NFATraceFinderGenerator {
     private void createTransition(NFAState source, NFAState target, NFAStateTransition originalTransition,
                     PreCalculatedResultFactory preCalcResult, int preCalcResultIndex) {
         originalTransition.getGroupBoundaries().applyToResultFactory(preCalcResult, preCalcResultIndex);
-        source.setNext(new NFAStateTransition[]{new NFAStateTransition((short) transitionID.inc(), source, target, originalTransition.getGroupBoundaries())}, true);
+        source.setSuccessors(new NFAStateTransition[]{new NFAStateTransition((short) transitionID.inc(), source, target, originalTransition.getGroupBoundaries())}, true);
     }
 
     private PreCalculatedResultFactory resultFactory() {
@@ -317,5 +319,11 @@ public final class NFATraceFinderGenerator {
         duplicatedStatesMap[original.getId()].add(copy);
         states.add(copy);
         assert states.get(copy.getId()) == copy;
+    }
+
+    private int getEncodedSize(NFAState s) {
+        Encoding encoding = originalNFA.getAst().getEncoding();
+        assert encoding.isFixedCodePointWidth(s.getCharSet());
+        return encoding.getEncodedSize(s.getCharSet().getMin());
     }
 }

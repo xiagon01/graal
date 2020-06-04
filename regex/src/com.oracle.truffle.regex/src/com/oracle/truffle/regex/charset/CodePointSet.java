@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -43,16 +43,17 @@ package com.oracle.truffle.regex.charset;
 import java.util.Arrays;
 
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.regex.tregex.buffer.CompilationBuffer;
 import com.oracle.truffle.regex.tregex.buffer.IntRangesBuffer;
 import com.oracle.truffle.regex.tregex.util.json.Json;
 import com.oracle.truffle.regex.tregex.util.json.JsonConvertible;
 import com.oracle.truffle.regex.tregex.util.json.JsonValue;
 
-public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConvertible {
+public final class CodePointSet extends ImmutableSortedListOfIntRanges implements Comparable<CodePointSet>, JsonConvertible {
 
+    public static final int MIN_VALUE = Character.MIN_CODE_POINT;
+    public static final int MAX_VALUE = Character.MAX_CODE_POINT;
     private static final CodePointSet CONSTANT_EMPTY = new CodePointSet(new int[0]);
-    private static final CodePointSet CONSTANT_FULL = new CodePointSet(new int[]{Character.MIN_CODE_POINT, Character.MAX_CODE_POINT});
+    private static final CodePointSet CONSTANT_FULL = new CodePointSet(new int[]{MIN_VALUE, MAX_VALUE});
 
     private static final CodePointSet[] CONSTANT_ASCII = new CodePointSet[128];
     private static final CodePointSet[] CONSTANT_INVERSE_ASCII = new CodePointSet[128];
@@ -70,12 +71,9 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
         }
     }
 
-    private final int[] ranges;
-
     private CodePointSet(int[] ranges) {
-        this.ranges = ranges;
-        assert (ranges.length & 1) == 0 : "ranges array must have an even length!";
-        assert rangesAreSortedAndDisjoint();
+        super(ranges);
+        assert ranges.length == 0 || ranges[0] >= MIN_VALUE && ranges[ranges.length - 1] <= MAX_VALUE;
     }
 
     public int[] getRanges() {
@@ -90,16 +88,23 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
         return CONSTANT_FULL;
     }
 
+    public static CodePointSet createNoDedup(int... ranges) {
+        return new CodePointSet(ranges);
+    }
+
+    public static CodePointSet create(int single) {
+        if (single < 128) {
+            return CONSTANT_ASCII[single];
+        }
+        return new CodePointSet(new int[]{single, single});
+    }
+
     public static CodePointSet create(int... ranges) {
         CodePointSet constant = checkConstants(ranges, ranges.length);
         if (constant == null) {
             return new CodePointSet(ranges);
         }
         return constant;
-    }
-
-    public static CodePointSet createNoDedup(int... ranges) {
-        return new CodePointSet(ranges);
     }
 
     public static CodePointSet create(IntRangesBuffer buf) {
@@ -114,12 +119,6 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
         if (length == 0) {
             return CONSTANT_EMPTY;
         }
-        if (length == 1) {
-            if (ranges[0] < 128) {
-                return CONSTANT_ASCII[ranges[0]];
-            }
-            return new CodePointSet(new int[]{ranges[0], ranges[0]});
-        }
         if (length == 2) {
             if (ranges[0] == ranges[1] && ranges[0] < 128) {
                 return CONSTANT_ASCII[ranges[0]];
@@ -129,34 +128,17 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
             }
         }
         if (length == 4) {
-            CodePointSet ret = checkInverseAndCaseFoldAscii(ranges[0], ranges[1], ranges[2], ranges[3]);
-            if (ret != null) {
-                return ret;
+            if (ranges[0] == Character.MIN_CODE_POINT && ranges[3] == Character.MAX_CODE_POINT && ranges[2] <= 128 && ranges[1] + 2 == ranges[2]) {
+                return CONSTANT_INVERSE_ASCII[ranges[1] + 1];
+            }
+            if (ranges[0] == ranges[1] && ranges[0] >= 'A' && ranges[0] <= 'Z' && ranges[2] == ranges[3] && ranges[2] == (ranges[0] | 0x20)) {
+                return CONSTANT_CASE_FOLD_ASCII[ranges[0] - 'A'];
             }
         }
         for (CodePointSet predefCC : Constants.CONSTANT_CODE_POINT_SETS) {
             if (predefCC.ranges.length == length && rangesEqual(predefCC.ranges, ranges, length)) {
                 return predefCC;
             }
-        }
-        return null;
-    }
-
-    private static boolean rangesEqual(int[] a, int[] b, int length) {
-        for (int i = 0; i < length; i++) {
-            if (a[i] != b[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static CodePointSet checkInverseAndCaseFoldAscii(int lo0, int hi0, int lo1, int hi1) {
-        if (lo0 == Character.MIN_CODE_POINT && hi1 == Character.MAX_CODE_POINT && lo1 <= 128 && hi0 + 2 == lo1) {
-            return CONSTANT_INVERSE_ASCII[hi0 + 1];
-        }
-        if (lo0 == hi0 && lo0 >= 'A' && lo0 <= 'Z' && lo1 == hi1 && lo1 == Character.toLowerCase(lo0)) {
-            return CONSTANT_CASE_FOLD_ASCII[lo0 - 'A'];
         }
         return null;
     }
@@ -181,70 +163,20 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
     }
 
     @Override
-    public int getMinValue() {
-        return Character.MIN_CODE_POINT;
-    }
-
-    @Override
-    public int getMaxValue() {
-        return Character.MAX_CODE_POINT;
-    }
-
-    @Override
-    public int getLo(int i) {
-        return ranges[i * 2];
-    }
-
-    @Override
-    public int getHi(int i) {
-        return ranges[(i * 2) + 1];
-    }
-
-    @Override
-    public int size() {
-        return ranges.length / 2;
-    }
-
-    @Override
-    public IntRangesBuffer getBuffer1(CompilationBuffer compilationBuffer) {
-        return compilationBuffer.getIntRangesBuffer1();
-    }
-
-    @Override
-    public IntRangesBuffer getBuffer2(CompilationBuffer compilationBuffer) {
-        return compilationBuffer.getIntRangesBuffer2();
-    }
-
-    @Override
-    public IntRangesBuffer getBuffer3(CompilationBuffer compilationBuffer) {
-        return compilationBuffer.getIntRangesBuffer3();
-    }
-
-    @Override
-    public IntRangesBuffer createTempBuffer() {
-        return new IntRangesBuffer();
-    }
-
-    @Override
-    public void appendRangesTo(RangesBuffer buffer, int startIndex, int endIndex) {
-        int bulkLength = (endIndex - startIndex) * 2;
-        if (bulkLength == 0) {
-            return;
-        }
-        assert buffer instanceof IntRangesBuffer;
-        IntRangesBuffer buf = (IntRangesBuffer) buffer;
-        int newSize = buf.length() + bulkLength;
-        buf.ensureCapacity(newSize);
-        assert buf.isEmpty() || rightOf(startIndex, buf, buf.size() - 1);
-        System.arraycopy(ranges, startIndex * 2, buf.getBuffer(), buf.length(), bulkLength);
-        buf.setLength(newSize);
-    }
-
-    @Override
     public boolean equalsBuffer(RangesBuffer buffer) {
         assert buffer instanceof IntRangesBuffer;
         IntRangesBuffer buf = (IntRangesBuffer) buffer;
         return ranges.length == buf.length() && rangesEqual(ranges, buf.getBuffer(), ranges.length);
+    }
+
+    @Override
+    public int getMinValue() {
+        return MIN_VALUE;
+    }
+
+    @Override
+    public int getMaxValue() {
+        return MAX_VALUE;
     }
 
     @SuppressWarnings("unchecked")
@@ -260,25 +192,45 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
             return getFull();
         }
         if (src.matchesSingleAscii()) {
-            return CONSTANT_INVERSE_ASCII[src.getLo(0)];
+            return CONSTANT_INVERSE_ASCII[src.getMin()];
         }
-        int[] invRanges = new int[src.sizeOfInverse() * 2];
-        int i = 0;
-        if (src.getLo(0) > src.getMinValue()) {
-            setRange(invRanges, i++, src.getMinValue(), src.getLo(0) - 1);
-        }
-        for (int ia = 1; ia < src.size(); ia++) {
-            setRange(invRanges, i++, src.getHi(ia - 1) + 1, src.getLo(ia) - 1);
-        }
-        if (src.getHi(src.size() - 1) < src.getMaxValue()) {
-            setRange(invRanges, i++, src.getHi(src.size() - 1) + 1, src.getMaxValue());
-        }
-        return new CodePointSet(invRanges);
+        return new CodePointSet(createInverseArray(src));
     }
 
-    private static void setRange(int[] arr, int i, int lo, int hi) {
-        arr[i * 2] = lo;
-        arr[i * 2 + 1] = hi;
+    @Override
+    public int compareTo(CodePointSet o) {
+        if (this == o) {
+            return 0;
+        }
+        if (matchesEverything()) {
+            if (o.matchesEverything()) {
+                return 0;
+            }
+            return 1;
+        }
+        if (matchesNothing()) {
+            if (o.matchesNothing()) {
+                return 0;
+            }
+            return -1;
+        }
+        if (o.matchesEverything()) {
+            return -1;
+        }
+        if (o.matchesNothing()) {
+            return 1;
+        }
+        int cmp = size() - o.size();
+        if (cmp != 0) {
+            return cmp;
+        }
+        for (int i = 0; i < size(); i++) {
+            cmp = getLo(i) - o.getLo(i);
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+        return cmp;
     }
 
     @Override
@@ -307,14 +259,41 @@ public final class CodePointSet implements ImmutableSortedListOfRanges, JsonConv
     }
 
     @TruffleBoundary
+    @Override
+    public String toString() {
+        return defaultToString();
+    }
+
+    @TruffleBoundary
     public String dumpRaw() {
         StringBuilder sb = new StringBuilder(size() * 20);
         for (int i = 0; i < size(); i++) {
             if (i > 0) {
-                sb.append(", ");
+                sb.append(",");
             }
             sb.append(String.format("0x%06x, 0x%06x", getLo(i), getHi(i)));
         }
         return sb.toString();
+    }
+
+    @Override
+    public int[] toArray() {
+        return getRanges();
+    }
+
+    public char[] inverseToCharArray() {
+        char[] array = new char[inverseValueCount()];
+        int index = 0;
+        int lastHi = -1;
+        for (int i = 0; i < size(); i++) {
+            for (int j = lastHi + 1; j < getLo(i); j++) {
+                array[index++] = (char) j;
+            }
+            lastHi = getHi(i);
+        }
+        for (int j = lastHi + 1; j <= getMaxValue(); j++) {
+            array[index++] = (char) j;
+        }
+        return array;
     }
 }

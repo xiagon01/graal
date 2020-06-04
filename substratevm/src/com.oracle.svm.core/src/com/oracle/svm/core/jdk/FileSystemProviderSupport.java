@@ -397,3 +397,76 @@ class WindowsFileSystemAccessors {
         that.needsReinitialization = NeedsReinitializationProvider.STATUS_REINITIALIZED;
     }
 }
+
+@TargetClass(className = "java.io.UnixFileSystem")
+@Platforms({Platform.LINUX.class, Platform.DARWIN.class})
+final class Target_java_io_UnixFileSystem {
+
+    @Alias @InjectAccessors(UserDirAccessors.class) //
+    @TargetElement(onlyWith = JDK11OrLater.class)//
+    private String userDir;
+
+    @Alias @RecomputeFieldValue(kind = Kind.NewInstance, declClassName = "java.io.ExpiringCache") //
+    private Target_java_io_ExpiringCache cache;
+
+    /*
+     * The prefix cache on Linux/MacOS only caches elements in the Java home directory, which does
+     * not exist at image run time. So we disable that cache completely, which is done by
+     * substituting the value of FileSystem.useCanonPrefixCache to false in the substitution below.
+     */
+    @Delete //
+    private String javaHome;
+    /*
+     * Ideally, we would mark this field as @Delete too. However, the javaHomePrefixCache is cleared
+     * from various methods, and we do not want to change those methods.
+     */
+    @Alias @RecomputeFieldValue(kind = Kind.NewInstance, declClassName = "java.io.ExpiringCache") //
+    private Target_java_io_ExpiringCache javaHomePrefixCache;
+}
+
+@TargetClass(className = "java.io.FileSystem")
+final class Target_java_io_FileSystem {
+
+    /*
+     * Linux/MacOS only: disable the usage of the javaHomePrefixCache. On Windows, the prefix cache
+     * is not specific to the Java home directory and therefore can remain enabled.
+     */
+    @Platforms({Platform.LINUX.class, Platform.DARWIN.class}) //
+    @Alias @RecomputeFieldValue(kind = Kind.FromAlias, isFinal = true) //
+    static boolean useCanonPrefixCache = false;
+
+    @Alias
+    native String normalize(String path);
+}
+
+class UserDirAccessors {
+    @SuppressWarnings("unused")
+    static String getUserDir(Target_java_io_FileSystem that) {
+        /*
+         * Note that on Windows, we normalize the property value (JDK-8198997) and do not use the
+         * `StaticProperty.userDir()` like the rest (JDK-8066709).
+         */
+        return Platform.includedIn(Platform.WINDOWS.class)
+                        ? that.normalize(System.getProperty("user.dir"))
+                        : ImageSingletons.lookup(SystemPropertiesSupport.class).userDir();
+    }
+}
+
+@TargetClass(className = "java.io.WinNTFileSystem")
+@Platforms(Platform.WINDOWS.class)
+final class Target_java_io_WinNTFileSystem {
+
+    @Alias @InjectAccessors(UserDirAccessors.class) //
+    @TargetElement(onlyWith = JDK11OrLater.class) //
+    private String userDir;
+
+    @Alias @RecomputeFieldValue(kind = Kind.NewInstance, declClassName = "java.io.ExpiringCache") //
+    private Target_java_io_ExpiringCache cache;
+
+    @Alias @RecomputeFieldValue(kind = Kind.NewInstance, declClassName = "java.io.ExpiringCache") //
+    private Target_java_io_ExpiringCache prefixCache;
+}
+
+@TargetClass(className = "java.io.ExpiringCache")
+final class Target_java_io_ExpiringCache {
+}
